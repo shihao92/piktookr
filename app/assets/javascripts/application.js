@@ -13,6 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
+//= require bower/bootstrap/dist/js/bootstrap
+//= require bower/requirejs/require
+
 
 
 
