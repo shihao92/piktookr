@@ -15,7 +15,7 @@
         <nav class="navbar navbar-default navbar-fixed-top topnav" role="navigation">
             <div class="container">
                 <div class="navbar-header">
-                  <a class="navbar-brand" href=" ">
+                  <a class="navbar-brand" href="/">
                       PiktoOKR
                   </a>
                 </div>
@@ -28,7 +28,7 @@
                       </a>
                       <ul class="dropdown-menu">
                           <li>
-                              <a href="users/sign_out" class="btn btn-default"> 
+                              <a href="/users/sign_out" class="btn btn-default"> 
                                 Sign out
                               </a>
                           </li>
@@ -46,10 +46,12 @@
       </div>
     </header>
 
-    <div class="center_div">
-      <%= yield %>
+    <div class="container">
+      <div class="center_div">
+        <%= yield %>
+      </div>
     </div>
-
+    
     <footer>
       <div class="container">
           <div class="row">

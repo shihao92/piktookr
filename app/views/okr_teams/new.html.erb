@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="row">
+        <ul class="breadcrumb">
+          <li><a href="/app/dashboard">Dashboard</a></li>
+          <li>Create Team</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h2>Create Team</h2>
+
+        <%= render 'form', okr_team: @okr_team %>
+
+        <%= link_to 'Back', okr_teams_path %>
+    </div>
+</div>
+
+
+<!--Page specific script-->
+<script src="/dist/dashboard-webpack.js"></script>

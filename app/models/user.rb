@@ -1,9 +1,14 @@
 class User < ActiveRecord::Base
 
-  self.table_name = "users"
+  #self.table_name = "users"
 
-  has_many :okr_user_roles
-  has_and_belongs_to_many :okr_roles, :through => :okr_user_roles
+  # Linkage to role module
+  has_one :okr_user_role
+  has_one :okr_role, :through => :okr_user_role
+  
+  # Linkage to team module
+  has_one :team
+  has_many :okr_team, :through => :okr_user_team
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

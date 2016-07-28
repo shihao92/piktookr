@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160721063113) do
+ActiveRecord::Schema.define(version: 20160728063327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,11 +20,34 @@ ActiveRecord::Schema.define(version: 20160721063113) do
     t.string "description"
   end
 
+  create_table "okr_teams", force: :cascade do |t|
+    t.string   "name",        default: "", null: false
+    t.string   "description"
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
   create_table "okr_user_roles", force: :cascade do |t|
     t.integer "user_id"
     t.integer "okr_role_id"
     t.index ["okr_role_id"], name: "index_okr_user_roles_on_okr_role_id", using: :btree
     t.index ["user_id"], name: "index_okr_user_roles_on_user_id", using: :btree
+  end
+
+  create_table "okr_user_teams", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "okr_team_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["okr_team_id"], name: "index_okr_user_teams_on_okr_team_id", using: :btree
+    t.index ["user_id"], name: "index_okr_user_teams_on_user_id", using: :btree
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string   "name",       default: "", null: false
+    t.string   "status"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,10 +69,15 @@ ActiveRecord::Schema.define(version: 20160721063113) do
     t.datetime "avatar_updated_at"
     t.string   "name"
     t.string   "status"
+    t.integer  "teams_id"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["teams_id"], name: "index_users_on_teams_id", using: :btree
   end
 
   add_foreign_key "okr_user_roles", "okr_roles"
   add_foreign_key "okr_user_roles", "users"
+  add_foreign_key "okr_user_teams", "okr_teams"
+  add_foreign_key "okr_user_teams", "users"
+  add_foreign_key "users", "teams", column: "teams_id"
 end
