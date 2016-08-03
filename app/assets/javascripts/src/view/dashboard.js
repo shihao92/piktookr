@@ -6,11 +6,18 @@ define(function(){
     // Control the admin related content visibility
     function adminControl()
     {
-        document.getElementById('adminRegister').style.display = "block";
+        document.getElementById('admin_register').style.display = "block";
+    }
+
+    //Control the team lead related content visibility
+    function teamLeadControl()
+    {
+        document.getElementById('team_lead_functions').style.display = "block";
     }
 
     return {
-        adminControl: adminControl
+        adminControl: adminControl,
+        teamLeadControl: teamLeadControl
     }
 
 });

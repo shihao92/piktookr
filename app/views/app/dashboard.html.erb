@@ -1,12 +1,40 @@
-<div class="container">
+<div class="container" id="dashboard">
     <h1>Dashboard</h1>
-    <div id="adminRegister" class="row" style="display:none;">
-        <a href="/users/new">New user registrations</a><br/>
-        <a href="/users">View registered users</a><br/>
-        <a href="/okr_teams">PiktoOKR Team Management Module</a><br/>
+    <div class="col-lg-6">
+        <div id="admin_register" class="row" style="display:none;">
+            <h2>Admin Function</h2>
+            <a href="/users/new">New user registrations</a><br/>
+            <a href="/users">View registered users</a><br/>
+            <a href="/okr_teams">PiktoOKR Team Management Module</a><br/>
+            <a href="/timeframes">Timeframe Management</a>
+        </div>
+        <div class="row">
+            <h3>Company Objectives</h3>
+            <a href="/company_objectives">Company Objective Management</a>
+        </div>
+        <div class="row">
+            <h3>Company Key Results</h3>
+            <a href="/company_key_results">Company Key Result Management</a>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div id="team_lead_functions" class="row" style="display:none;">
+            <h2>Team Lead Function</h2>
+            <h3>Team Objectives</h3>
+            <a href="/team_objectives">Team Objective Management</a>
+            <h3>Team Key Results</h3>
+            <a href="/team_key_results">Team Key Result Management</a>
+        </div>
+        <hr/>
+        <div id="employee_functions" class="row">
+            <h2>Employee Function</h2>
+            <h3>Personal Objectives</h3>
+            <a href="/personal_objectives">Personal Objective Management</a>
+            <h3>Personal Key Results</h3>
+            <a href="/personal_key_results">Personal Key Result Management</a>
+        </div>
     </div>
 </div>
 
 <!--Page specific script-->
-<script src="/dist/dashboard-webpack.js"></script>
 

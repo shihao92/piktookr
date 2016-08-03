@@ -18,4 +18,8 @@ private
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :name, :status, :avatar ])
   end 
+
+  def set_timezone(&action)
+    Time.use_zone(current_user.time_zone, &action)
+  end
 end

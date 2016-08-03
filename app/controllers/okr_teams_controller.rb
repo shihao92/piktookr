@@ -14,6 +14,7 @@ class OkrTeamsController < ApplicationController
 
   # GET /okr_teams/new
   def new
+    @users = User.all
     @okr_team = OkrTeam.new
   end
 

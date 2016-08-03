@@ -16,7 +16,7 @@ define (['jquery'], function () {
                 resolve(xhttp.responseText);
               }
             };
-            xhttp.open("GET", serverURL + "/app/checkRole", true);
+            xhttp.open("GET", serverURL + "/app/check_role", true);
             xhttp.send();
         });
     }

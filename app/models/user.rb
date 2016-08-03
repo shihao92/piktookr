@@ -8,7 +8,8 @@ class User < ActiveRecord::Base
   
   # Linkage to team module
   has_one :team
-  has_many :okr_team, :through => :okr_user_team
+  has_many :okr_user_teams
+  has_many :okr_teams, :through => :okr_user_teams
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

@@ -1,5 +1,6 @@
 class OkrTeam < ApplicationRecord
 
-    has_and_belongs_to_many :users
+    has_many    :users, :through => :okr_user_teams
+    has_many   :team_objectives
 
 end

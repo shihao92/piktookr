@@ -6,13 +6,13 @@ define(function () {
     // Control the user utility dropdown on header
     function utilityVisibility()
     {
-        document.getElementById('userUtility').style.display = "block";
+        document.getElementById('user_utility').style.display = "block";
     }
     
     // Control the user role display 
     function roleDisplay(role)
     {
-        document.getElementById('userRole').innerHTML = role;
+        document.getElementById('user_role').innerHTML = role;
     }
 
     // Control the admin related header controls visibility

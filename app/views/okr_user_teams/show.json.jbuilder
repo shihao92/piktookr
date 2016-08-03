@@ -1,1 +1,0 @@
-json.partial! "okr_user_teams/okr_user_team", okr_user_team: @okr_user_team

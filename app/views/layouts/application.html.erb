@@ -3,12 +3,10 @@
   <head>
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application' %>
     <script src="https://www.promisejs.org/polyfills/promise-done-7.0.4.min.js"></script>
   </head>
-
   <body>
     <header>
       <div class="container">
@@ -19,10 +17,10 @@
                       PiktoOKR
                   </a>
                 </div>
-                <div id="userUtility" style="display:none;">
+                <div id="user_utility" style="display:none;">
                   <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
-                      <a class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                      <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                           User
                           <span class="caret"></span>
                       </a>
@@ -35,7 +33,7 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                      <a id="userRole">
+                      <a id="user_role">
                         Role
                       </a>
                     </li>
@@ -49,6 +47,7 @@
     <div class="container">
       <div class="center_div">
         <%= yield %>
+        <script src="/dist/role-webpack.js"></script>
       </div>
     </div>
     

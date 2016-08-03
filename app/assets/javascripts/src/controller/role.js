@@ -2,7 +2,7 @@
 // This JS file that acts as controller for the role module. 
 
 require(['jquery','model/role','view/header','view/dashboard'], 
-    function(jqueryParam,roleParam,headerParam,dashboardParam){
+function(jqueryParam,roleParam,headerParam,dashboardParam){
     
     //Set the utility dropdown visible
     headerParam.utilityVisibility();
@@ -21,6 +21,13 @@ require(['jquery','model/role','view/header','view/dashboard'],
             //Activate all admin controls
             headerParam.adminControl();
             dashboardParam.adminControl();
+            //Admin also able to view team lead controls
+            dashboardParam.teamLeadControl();
+        }
+        else if(userRoleName["name"] == "Team Lead")
+        {
+            //Activate all team lead controls
+            dashboardParam.teamLeadControl();
         }
     });
     

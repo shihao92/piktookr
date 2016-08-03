@@ -10,6 +10,6 @@ class RegistrationsController < Devise::RegistrationsController
           role_id = params[:role][:role_id]
           OkrUserRole.create!(user_id: resource.id, okr_role_id: role_id)
         end
-        flash[:notice] = "Successfully created User."
+        flash[:notice] = "Successfully created user."
     end
 end

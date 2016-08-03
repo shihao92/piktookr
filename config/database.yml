@@ -41,9 +41,9 @@ development:
 test:
   adapter: postgresql
   encoding: unicode
-  database: sample_postgres_test
+  database: pikto_okr_test
   pool: 5
-  username: sample_postgres
+  username: piktochart
   password:
 
 production:

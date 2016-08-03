@@ -3,8 +3,9 @@ const path = require('path');
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      dashboard:'controller/role.js',
-
+      role:'controller/role.js',
+      team_key_result: 'controller/objective_key_result/team_key_result',
+      personal_objective: 'controller/objective_key_result/personal_objective'
     },
     output: {
       path: __dirname + '/public/dist',
@@ -15,6 +16,8 @@ module.exports = {
       root: [
         // register root here
         path.resolve('./app/assets/javascripts/src'),
+        path.resolve('./app/assets/images'),
+        path.resolve('./app/assets/stylesheets'),
         // path.resolve()
       ],
     },
@@ -23,7 +26,8 @@ module.exports = {
     },
     module: {
       loaders: [
-        { test: /\.css$/, loader: 'style!css' },
+        { test: /\.(css|scss)$/, loader: 'style!css' },
+        { test: /\.(png|jpg|jpeg)$/, loader: 'file'},
         {
           test: /\.js$/,
           exclude: /(node_modules)/,

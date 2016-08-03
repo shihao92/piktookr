@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    
   end
 
   # GET /users/new
@@ -28,12 +29,26 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save
-        role_id = params[:role][:role_id]
-        OkrUserRole.create!(user_id: @user.id, okr_role_id: role_id)
-        format.html { redirect_to @user, notice: 'Admin register was successfully created.' }
+        @user.build_okr_user_role( okr_role_id: params[:role][:role_id] ).save
+        format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :new }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # POST /users/edit_team
+  # POST /users.json
+  def edit_team
+    respond_to do |format|
+      if @user.update(user_params)
+        @user.build_okr_user_team( okr_team_id: params[:team][:team_id] ).save
+        format.html { redirect_to @user, notice: 'User was successfully added into the team.' }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
     end
@@ -44,7 +59,9 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'Admin register was successfully updated.' }
+        @user.build_okr_user_role( okr_role_id: params[:role][:role_id] ).save
+        OkrUserTeam.create!( user_id: @user.id, okr_team_id: params[:team][:team_id] )
+        format.html { redirect_to @user, notice: 'User was successfully updated.' }
         format.json { render :show, status: :ok, location: @user }
       else
         format.html { render :edit }
@@ -72,6 +89,6 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :name, :status, :avatar, :role)
+      params.require(:user).permit(:email, :password, :password_confirmation, :name, :status, :avatar, :role, :team)
     end
 end
