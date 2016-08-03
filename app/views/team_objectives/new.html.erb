@@ -1,0 +1,63 @@
+<div class="container">
+    <div class="row">
+        <ul class="breadcrumb">
+          <li><a href="/app/dashboard">Dashboard</a></li>
+          <li>Company OKR</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h2>Create Team Objective</h2>
+
+        <%= form_for @team_objective do |f| %>
+          <% if @team_objective.errors.any? %>
+            <div id="error_explanation">
+              <h2><%= pluralize(@team_objective.errors.count, "error") %> prohibited this team_objective from being saved:</h2>      
+
+              <ul>
+              <% @team_objective.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+          <% end %>     
+
+          <div class="form-group">
+            <%= f.label :objective %><br />
+            <%= f.text_field :objective, autofocus: true, class: "form-control" %>
+          </div> 
+      
+          <!--Company Key Result alignment-->
+          <% kr_array = CompanyKeyResult.all.map { |kr| [kr.key_result, kr.id] } %>
+          <div class="form-group">
+            <%= f.label :company_key_result_alignment %><br />
+            <%= select("company_key_result", "kr_id", kr_array, {include_blank: false}, {class: 'form-control'}) %>
+          </div>
+
+          <!--User-belongs Team Selection-->
+          <% @user = User.where(id: current_user.id) %>
+          <% team_array = @user[0].okr_teams.all.map { |team| [team.name, team.id] }%>
+          <div class="form-group">
+            <%= f.label :team %><br />
+            <%= select("team", "team_id", team_array, {include_blank: false}, {class: 'form-control'}) %>
+          </div>
+          
+          <div class="form-group">
+            <div class="text-right">
+              <%= f.submit "Submit", class: "btn btn-primary"%>
+            </div>
+          </div>
+
+        <% end %>       
+
+        <%= link_to 'Back', team_objectives_path %>
+
+    </div>
+</div>
+
+
+<!--Page specific script-->
+
+
+
+
+

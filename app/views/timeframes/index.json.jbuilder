@@ -1,0 +1,1 @@
+json.array! @timeframes, partial: 'timeframes/timeframe', as: :timeframe

@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Personal Key Results</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Key Result</th>
+      <th>Progress</th>
+      <th>Link to(Personal Objective)</th>
+      <th colspan="3">Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @personal_key_results.each do |personal_key_result| %>
+      <tr>
+        <td><%= personal_key_result.key_result%></td>
+        <td><%= personal_key_result.progress%></td>
+        <td><%= personal_key_result.personal_objective.objective%></td>
+        <td><%= link_to 'Show', personal_key_result %></td>
+        <td><%= link_to 'Edit', edit_personal_key_result_path(personal_key_result) %></td>
+        <td><%= link_to 'Destroy', personal_key_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Personal Key Result', new_personal_key_result_path %>

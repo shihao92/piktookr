@@ -1,0 +1,22 @@
+<div class="container">
+    <div class="row">
+        <ul class="breadcrumb">
+          <li><a href="/app/dashboard">Dashboard</a></li>
+          <li>Company OKR</li>
+        </ul>
+    </div>
+    <div class="row">
+        <h2>Edit Company Objective</h2>
+
+        <%= render 'form', company_objective: @company_objective %>
+
+        <%= link_to 'Show', @company_objective %> |
+        <%= link_to 'Back', company_objectives_path %>
+
+    </div>
+</div>
+
+
+<!--Page specific script-->
+
+

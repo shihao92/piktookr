@@ -1,0 +1,37 @@
+<%= form_for(team_objective) do |f| %>
+  <% if team_objective.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(team_objective.errors.count, "error") %> prohibited this team_objective from being saved:</h2>
+
+      <ul>
+      <% team_objective.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :key_result %><br />
+    <%= f.text_field :key_result, autofocus: true, class: "form-control" %>
+  </div> 
+
+  <!--Company Key Result alignment-->
+  <% kr_array = CompanyKeyResult.all.map { |kr| [kr.objective, kr.id] } %>
+  <div class="form-group">
+    <%= f.label :company_key_result_alignment %><br />
+    <%= select("company_key_result", "company_key_result_id", kr_array, {include_blank: false}, {class: 'form-control'}) %>
+  </div>
+  
+  <div class="form-group">
+    <%= f.label :progress %><br />
+    <%= f.text_field :progress, autofocus: true, class: "form-control" %>
+  </div>
+  
+  <div class="form-group">
+    <div class="text-right">
+      <%= f.submit "Submit", class: "btn btn-primary"%>
+    </div>
+  </div>
+
+<% end %>

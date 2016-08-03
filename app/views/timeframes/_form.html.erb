@@ -1,0 +1,19 @@
+<%= form_for @timeframe do |f| %>
+  <% year_array = ['2016'],['2017'],['2018']  %>
+  <div class="form-group">
+    <%= f.label :year %>
+    <%= select("timeframe", "year", year_array, {include_blank: false}, {class: 'form-control'}) %>
+  </div>
+
+  <% type_array = ['Yearly'],['Half Yearly'],['Quarterly']  %>
+  <div class="form-group">
+    <%= f.label :type %>
+    <%= select("timeframe", "timeframe_type", type_array, {include_blank: false}, {class: 'form-control'}) %>
+  </div>
+
+  <div class="form-group">
+    <div class="text-right">
+      <%= f.submit "Submit", class: "btn btn-primary" %>
+    </div>
+  </div>
+<% end %>

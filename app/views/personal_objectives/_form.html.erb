@@ -1,0 +1,51 @@
+<%= form_for(personal_objective) do |f| %>
+  <% if personal_objective.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(personal_objective.errors.count, "error") %> prohibited this personal_objective from being saved:</h2>
+
+      <ul>
+      <% personal_objective.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :objective %><br />
+    <%= f.text_field :objective, autofocus: true, class: "form-control" %>
+  </div> 
+      
+  <!--User-belongs Team Selection-->
+  <% @user = User.where(id: current_user.id) %>
+  <% team_array = @user[0].okr_teams.all.map { |team| [team.name, team.id] }%>
+  <div class="form-group">
+    <%= f.label :team %><br />
+    <%= select("team", "team_id", team_array, {include_blank: false}, {class: 'form-control'}) %>
+  </div>
+
+  <!--User-belonged Team Objectives Selection-->
+  <!--Load all the objective of the particular team-->
+  <div class="form-group">
+    <%= f.label :team_objective_alignment %><br />
+    <select id="team_objective_id" name="team_objective[id]" class="form-control">
+    </select>
+  </div>
+
+  <!--Load all the key result of the particular team-->
+  <div class="form-group">
+    <%= f.label :team_key_result_alignment %><br />
+    <select id="team_key_result_id" name="team_key_result[id]" class="form-control">
+    </select>
+  </div>    
+  
+  <div class="form-group">
+    <div class="text-right">
+      <%= f.submit "Submit", class: "btn btn-primary"%>
+    </div>
+  </div>
+
+<% end %>
+
+<!--Page specific script-->
+<script src="/dist/personal_objective-webpack.js"></script>

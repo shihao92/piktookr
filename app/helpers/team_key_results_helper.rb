@@ -1,0 +1,2 @@
+module TeamKeyResultsHelper
+end

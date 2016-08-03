@@ -1,0 +1,1 @@
+json.partial! "timeframes/timeframe", timeframe: @timeframe

@@ -1,0 +1,30 @@
+<%= form_for(company_objective) do |f| %>
+  <% if company_objective.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(company_objective.errors.count, "error") %> prohibited this company_objective from being saved:</h2>
+
+      <ul>
+      <% company_objective.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :objective %><br />
+    <%= f.text_field :objective, autofocus: true, class: "form-control" %>
+  </div> 
+
+  <div class="form-group">
+    <%= f.label :progress %><br />
+    <%= f.text_field :progress, autofocus: true, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <div class="text-right">
+      <%= f.submit "Submit", class: "btn btn-primary"%>
+    </div>
+  </div>
+
+<% end %>

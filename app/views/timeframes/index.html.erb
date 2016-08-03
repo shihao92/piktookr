@@ -1,0 +1,28 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Timeframes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Timeframe</th>
+      <th colspan="3"> Actions</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @timeframes.each do |timeframe| %>
+      <tr>
+        <td><%= timeframe.year %></td>
+        <td><%= timeframe.timeframe_type %></td>
+        <td><%= link_to 'Show', timeframe %></td>
+        <td><%= link_to 'Destroy', timeframe, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Timeframe', new_timeframe_path %>
