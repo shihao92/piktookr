@@ -24,7 +24,8 @@ class TeamObjectivesController < ApplicationController
   # POST /team_objectives
   # POST /team_objectives.json
   def create
-    @team_objective = TeamObjective.new(team_objective_params.merge(progress: 0.0))
+    @log = current_timeframe_log_id;
+    @team_objective = TeamObjective.new(team_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id,okr_team_id: params[:team][:team_id]))
     respond_to do |format|
       if @team_objective.save
         OkrCompanyTeam.create!(team_objective_id: @team_objective.id,company_key_result_id: params[:company_key_result][:kr_id])
@@ -70,8 +71,7 @@ class TeamObjectivesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def team_objective_params
-      @log = current_timeframe_log_id;
-      params.require(:team_objective).permit(:objective,:progress,:timeframe_log_id,:okr_team_id).merge(timeframe_log_id: @log[0].id,okr_team_id: params[:team][:team_id]);
+      params.require(:team_objective).permit(:objective,:progress,:timeframe_log_id,:okr_team_id);
     end
 
     # Obtain the current timeframe log id based on the current date

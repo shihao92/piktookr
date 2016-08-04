@@ -24,7 +24,7 @@ class TeamKeyResultsController < ApplicationController
   # POST /team_key_results
   # POST /team_key_results.json
   def create
-    @team_key_result = TeamKeyResult.new(team_key_result_params.merge(progress: 0.0))
+    @team_key_result = TeamKeyResult.new(team_key_result_params.merge(progress: 0.0,team_objective_id: params[:team_objective][:id]))
     
     respond_to do |format|
       if @team_key_result.save
@@ -76,6 +76,6 @@ class TeamKeyResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def team_key_result_params
-      params.require(:team_key_result).permit(:key_result,:progress,:team_objective_id).merge(team_objective_id: params[:team_objective][:id]);
+      params.require(:team_key_result).permit(:key_result,:progress,:team_objective_id);
     end
 end

@@ -24,7 +24,7 @@ class CompanyKeyResultsController < ApplicationController
   # POST /company_key_results
   # POST /company_key_results.json
   def create
-    @company_key_result = CompanyKeyResult.new(company_key_result_params.merge(progress: 0.0))
+    @company_key_result = CompanyKeyResult.new(company_key_result_params.merge(progress: 0.0,company_objective_id: params[:company_objective][:company_objective_id]))
 
     respond_to do |format|
       if @company_key_result.save
@@ -69,6 +69,6 @@ class CompanyKeyResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_key_result_params
-      params.require(:company_key_result).permit(:key_result,:progress,:company_objective_id).merge(company_objective_id: params[:company_objective][:company_objective_id])
+      params.require(:company_key_result).permit(:key_result,:progress,:company_objective_id)
     end
 end

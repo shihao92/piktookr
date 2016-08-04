@@ -12,12 +12,12 @@
   <% end %>
 
   <div class="form-group">
-    <%= f.label :key_result %><br />
-    <%= f.text_field :key_result, autofocus: true, class: "form-control" %>
+    <%= f.label  :objective %><br />
+    <%= f.text_field :objective, autofocus: true, class: "form-control" %>
   </div> 
 
   <!--Company Key Result alignment-->
-  <% kr_array = CompanyKeyResult.all.map { |kr| [kr.objective, kr.id] } %>
+  <% kr_array = CompanyKeyResult.all.map { |kr| [kr.key_result, kr.id] } %>
   <div class="form-group">
     <%= f.label :company_key_result_alignment %><br />
     <%= select("company_key_result", "company_key_result_id", kr_array, {include_blank: false}, {class: 'form-control'}) %>

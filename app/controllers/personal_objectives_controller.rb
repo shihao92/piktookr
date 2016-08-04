@@ -24,7 +24,8 @@ class PersonalObjectivesController < ApplicationController
   # POST /personal_objectives
   # POST /personal_objectives.json
   def create
-    @personal_objective = PersonalObjective.new(personal_objective_params.merge(progress: 0.0))
+    @log = current_timeframe_log_id;
+    @personal_objective = PersonalObjective.new(personal_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id, user_id: current_user.id))
     respond_to do |format|
       if @personal_objective.save
         OkrTeamPersonal.create!(team_key_result_id: params[:team_key_result][:id], personal_objective_id: @personal_objective.id)
@@ -75,9 +76,7 @@ class PersonalObjectivesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def personal_objective_params
-      params.fetch(:personal_objective, {})
-      @log = current_timeframe_log_id;
-      params.require(:personal_objective).permit(:objective,:progress,:timeframe_log_id,:user_id).merge(timeframe_log_id: @log[0].id, user_id: current_user.id);
+      params.require(:personal_objective).permit(:objective,:progress,:timeframe_log_id,:user_id);
     end
 
     # Obtain the current timeframe log id based on the current date
