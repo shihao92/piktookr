@@ -1,7 +1,7 @@
 // Date : 2 Aug 2016
 // This JS file controls the pages for team key result. 
 
-define(function () {
+define(['jquery'], function () {
 
     function populateTeamObjectives(team_objectives)
     {
@@ -28,8 +28,18 @@ define(function () {
         }
     }
 
+    function teamSelectionOnChange()
+    {
+        $('#team_team_id').change(function(){
+            let teamSelection = document.getElementById('team_team_id');
+            let teamId = teamSelection.options[teamSelection.selectedIndex].value;
+            teamObjectiveSelection(teamId);
+        });
+    }
+
     return {
-        populateTeamObjectives: populateTeamObjectives
+        populateTeamObjectives: populateTeamObjectives,
+        teamSelectionOnChange: teamSelectionOnChange
     }
 
 });

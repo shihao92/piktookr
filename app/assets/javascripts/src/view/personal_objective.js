@@ -1,7 +1,7 @@
 // Date : 2 Aug 2016
 // This JS file controls the pages for the personal objective. 
 
-define(function(){
+define(['jquery'],function(){
 
     function populateTeamObjectives(team_objectives)
     {
@@ -52,9 +52,29 @@ define(function(){
         }
     }
 
+    function teamSelectionOnChange()
+    {
+        $('#team_team_id').change(function(){
+            let teamSelection = document.getElementById('team_team_id');
+            let teamId = teamSelection.options[teamSelection.selectedIndex].value;
+            teamObjectiveSelections(teamId);
+        });
+    }
+
+    function teamObjectiveSelectionOnChange()
+    {
+        $('#team_objective_id').change(function(){
+            let teamObjectiveSelection = document.getElementById('team_objective_id');
+            let teamObjectiveId = teamObjectiveSelection.options[teamObjectiveSelection.selectedIndex].value;
+            teamKeyResultSelections(teamObjectiveId);
+        });
+    }
+
     return {
         populateTeamObjectives: populateTeamObjectives,
-        populateTeamKeyResults: populateTeamKeyResults
+        populateTeamKeyResults: populateTeamKeyResults,
+        teamSelectionOnChange: teamSelectionOnChange,
+        teamObjectiveSelectionOnChange: teamObjectiveSelectionOnChange
     }
 
 });

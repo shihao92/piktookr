@@ -5,11 +5,8 @@ require(['jquery','model/role','model/team_objective_key_result','view/header','
 function(jqueryParam,roleParam,teamOKRModelParam,headerParam,teamKeyResultViewParam){
     
     $(document).ready(function(){
-        $('#team_team_id').change(function(){
-            let teamSelection = document.getElementById('team_team_id');
-            let teamId = teamSelection.options[teamSelection.selectedIndex].value;
-            teamObjectiveSelection(teamId);
-        });
+
+        teamKeyResultViewParam.teamSelectionOnChange();
 
         function teamObjectiveSelection(team_id)
         {

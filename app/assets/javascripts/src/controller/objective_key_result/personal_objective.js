@@ -5,17 +5,10 @@ require(['jquery','model/role','model/team_objective_key_result','view/header','
 function(jqueryParam,roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
 
     $(document).ready(function(){
-        $('#team_team_id').change(function(){
-            let teamSelection = document.getElementById('team_team_id');
-            let teamId = teamSelection.options[teamSelection.selectedIndex].value;
-            teamObjectiveSelections(teamId);
-        });
 
-        $('#team_objective_id').change(function(){
-            let teamObjectiveSelection = document.getElementById('team_objective_id');
-            let teamObjectiveId = teamObjectiveSelection.options[teamObjectiveSelection.selectedIndex].value;
-            teamKeyResultSelections(teamObjectiveId);
-        });
+        personalObjectiveViewParam.teamSelectionOnChange();
+
+        personalObjectiveViewParam.teamObjectiveSelectionOnChange();
 
         function teamObjectiveSelections(team_id)
         {
