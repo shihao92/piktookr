@@ -4,7 +4,7 @@
 // Declarations here
 const serverURL = "http://localhost:3000";
 
-define (['jquery'], function () {
+define (function () {
 
     // Get team objectives for the use of team key results alignment
     function getTeamObjectivesPromise(okr_team_id)

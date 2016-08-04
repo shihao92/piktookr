@@ -13,7 +13,9 @@ class ApplicationController < ActionController::Base
   #     stored_location_for(resource) || request.referer || root_path
   #   end
   # end
-  
+  def after_sign_in_path_for(resource)
+    request.env['omniauth.origin'] || root_path
+  end
 private
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :password, :name, :status, :avatar ])

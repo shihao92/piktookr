@@ -20,7 +20,7 @@ Rails.application.routes.draw do
   # Role module
   # -----------
   # URL to check for role based on input ID
-  get 'app/check_role'
+  get 'app/check_role' 
   
   # ---------------
   # OKR Team Module
