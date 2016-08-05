@@ -47,6 +47,7 @@ Rails.application.routes.draw do
   # -------------------
   resources :personal_objectives
   resources :personal_key_results
+  
   # Personal contributions upon update the key results progress
   resources :contributions
 

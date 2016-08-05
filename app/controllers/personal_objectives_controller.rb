@@ -85,4 +85,5 @@ class PersonalObjectivesController < ApplicationController
       @log = TimeframeLog.where("(start_date, end_date) OVERLAPS ('" + @current_date + "'::DATE, '" + @current_date + "'::DATE)");
       return @log;
     end
+
 end
