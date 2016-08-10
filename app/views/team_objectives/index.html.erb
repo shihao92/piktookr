@@ -8,6 +8,7 @@
       <th>Objective</th>
       <th>Progress</th>
       <th>Team</th>
+      <th>Linked Company KR</th>
       <th colspan="3">Actions</th>
     </tr>
   </thead>
@@ -18,6 +19,9 @@
         <td><%= team_objective.objective %></td>
         <td><%= team_objective.progress %></td>
         <td><%= team_objective.okr_team.name %></td>
+        <% @okr_company_team = OkrCompanyTeam.where(team_objective_id: team_objective.id) %>
+        <% @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id) %>
+        <td><%= @company_key_result[0].key_result %></td>
         <td><%= link_to 'Show', team_objective %></td>
         <td><%= link_to 'Edit', edit_team_objective_path(team_objective) %></td>
         <td><%= link_to 'Destroy', team_objective, method: :delete, data: { confirm: 'Are you sure?' } %></td>

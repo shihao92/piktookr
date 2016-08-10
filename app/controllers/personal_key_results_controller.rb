@@ -1,3 +1,7 @@
+# Date : 5 August 2016
+# Completed module : Create, Read and Update feature for OKR Module
+# To be completed module : Delete OKR
+
 class PersonalKeyResultsController < ApplicationController
   before_action :set_personal_key_result, only: [:show, :edit, :update, :destroy]
 
@@ -73,9 +77,9 @@ class PersonalKeyResultsController < ApplicationController
   def destroy
     # Set the progress back to 0 first then only destroy
     # Activate the cascade OKR update functions
-    update_okr_modules(@personal_key_result.personal_objective_id,@personal_key_result.id,0.00)
-
+    # update_okr_modules(@personal_key_result.personal_objective_id,@personal_key_result.id,0.00)
     @personal_key_result.destroy
+    update_personal_objective_progress_delete_func(@personal_key_result.personal_objective_id)
     respond_to do |format|
       format.html { redirect_to personal_key_results_url, notice: 'Personal key result was successfully destroyed.' }
       format.json { head :no_content }
@@ -133,10 +137,49 @@ class PersonalKeyResultsController < ApplicationController
 
     end
 
+    # Delete functions catered for delete Personal Key Result
+    def delete_personal_key_result(personal_objective_id)
+
+      # Reduce the number of key result and drop the progress
+      @personal_objective_progress = update_personal_objective_progress_delete_func(personal_objective_id)
+
+      # Update the progress of the personal objective
+      PersonalObjective.where(id: personal_objective_id).update_all(progress: @personal_objective_progress)
+      
+      # Search for the related team key result id
+      @okr_team_personals = OkrTeamPersonal.where(personal_objective_id: personal_objective_id)
+      @team_key_result_id = @okr_team_personals[0].team_key_result_id
+      @team_key_result_progress = update_team_key_result_progress(@team_key_result_id,personal_objective_id)
+      # Update the progress of the team key results
+      TeamKeyResult.where(id: @team_key_result_id).update_all(progress: @team_key_result_progress)
+
+      # Search for the related team objective id
+      @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
+      @team_objective_id = @team_key_result[0].team_objective_id
+      @team_objective_progress = update_team_objective_progress(@team_objective_id, @team_key_result_id)
+      # Update the progress of the team objectives
+      TeamObjective.where(id: @team_objective_id).update_all(progress: @team_objective_progress)
+
+      # Search for the related company key result id
+      @okr_company_team = OkrCompanyTeam.where(team_objective_id: @team_objective_id)
+      @company_key_result_id = @okr_company_team[0].company_key_result_id
+      @company_key_result_progress = update_company_key_result_progress(@company_key_result_id,@team_objective_id)
+      # Update the progress of the company key results
+      CompanyKeyResult.where(id: @company_key_result_id).update_all(progress: @company_key_result_progress)
+
+      # Search for the related company objective id
+      @company_key_result = CompanyKeyResult.where(id: @company_key_result_id)
+      @company_objective_id = @company_key_result[0].company_objective_id
+      @company_objective_progress = update_company_objective_progress(@company_objective_id,@company_key_result_id)
+      # Update the progress of the company objective
+      CompanyObjective.where(id: @company_objective_id).update_all(progress: @company_objective_progress)
+
+    end
+
     # --------------------------------------------------------
     # Core Algorithm for Personal OKR Calculations and Updates
     # --------------------------------------------------------
-    # Perform action whenever the progress is being updated
+    # Perform action whenever the progress is being updated or created or deleted
     # Lowest layer: Update the Personal Objective Progress
     def update_personal_objective_progress(personal_objective_id,personal_key_result_id,personal_key_result_progress)
       
@@ -163,6 +206,29 @@ class PersonalKeyResultsController < ApplicationController
 
       return @personal_objective_progress
 
+    end
+
+    def update_personal_objective_progress_delete_func(personal_objective_id)
+      # 1st calculate how many key results are tied to the linked objective
+      @personal_key_result_amt = PersonalKeyResult.where(personal_objective_id: personal_objective_id).count
+
+      # Divide personal objective progress with the key result amount
+      @total_progress = 100.00
+      @personal_objective_progress = 0.00
+      @personal_objective_progress_portion = @total_progress / @personal_key_result_amt
+
+      # Remove the progress of the current key result
+
+      # Check and obtain the other related key result progress and objective portion progress
+      PersonalKeyResult.where(personal_objective_id: personal_objective_id).each do |kr|
+  
+          @other_key_result_overall_progress = (kr.progress / 100.00) * @personal_objective_progress_portion
+          @personal_objective_progress = @other_key_result_overall_progress + @personal_objective_progress
+        
+      end 
+      
+      return @personal_objective_progress
+      
     end
 
     # 2nd Layer: Update the progress for the team key results

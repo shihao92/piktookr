@@ -8,6 +8,7 @@
       <th>Objective</th>
       <th>Progress</th>
       <th>Timeframe</th>
+      <th>Linked Team KR</th>
       <th colspan="3">Actions</th>
     </tr>
   </thead>
@@ -18,6 +19,9 @@
         <td><%= personal_objective.objective %></td>
         <td><%= personal_objective.progress %></td>
         <td><%= personal_objective.timeframe_log.quarter %></td>
+        <% @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: personal_objective.id)%>
+        <% @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id)%>
+        <td><%= @team_key_result[0].key_result%></td>
         <td><%= link_to 'Show', personal_objective %></td>
         <td><%= link_to 'Edit', edit_personal_objective_path(personal_objective) %></td>
         <td><%= link_to 'Destroy', personal_objective, method: :delete, data: { confirm: 'Are you sure?' } %></td>
