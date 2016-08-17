@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      role:'controller/role.js',
+      shared: 'controller/shared.js',
+      role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',
       personal_objective: 'controller/objective_key_result/personal_objective'
     },

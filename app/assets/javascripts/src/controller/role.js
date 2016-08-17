@@ -5,7 +5,7 @@ require(['jquery','model/role','view/header','view/dashboard'],
 function(jqueryParam,roleParam,headerParam,dashboardParam){
     
     //Set the utility dropdown visible
-    headerParam.utilityVisibility();
+    //headerParam.utilityVisibility();
 
     // Obtain user role data from database
     const userRoleDataPromise = roleParam.getRolePromise();
@@ -13,13 +13,13 @@ function(jqueryParam,roleParam,headerParam,dashboardParam){
     userRoleDataPromise.then(response => {
         //Filter the role data and obtain the role name only
         userRoleName = JSON.parse(response);
-        headerParam.roleDisplay(userRoleName["name"]);
+        //headerParam.roleDisplay(userRoleName["name"]);
         
         //Check if the user is admin, if yes enter admin mode
         if(userRoleName["name"] == "Admin")
         {
             //Activate all admin controls
-            headerParam.adminControl();
+            //headerParam.adminControl();
             dashboardParam.adminControl();
             //Admin also able to view team lead controls
             dashboardParam.teamLeadControl();
