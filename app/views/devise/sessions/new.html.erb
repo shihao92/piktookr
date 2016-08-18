@@ -1,42 +1,53 @@
-<div class="container">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      Login
-    </div>
-    <div class="panel-body">
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-        <div class="form-group">
-          <%= f.label :email %><br />
-          <%= f.email_field :email, autofocus: true, class: "form-control" %>
-        </div>
-
-        <div class="form-group">
-          <%= f.label :password %><br />
-          <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
-        </div>
-
-        <% if devise_mapping.rememberable? -%>
-          <div class="form-group">
-           <label>
-              <%= f.check_box :remember_me%> Remember me
-           </label> 
-          </div>
-        <% end -%>
-
-        <div class="form-group">
-          <div class="text-right">
-            <%= f.submit "Log in", class: "btn btn-primary" %>
-          </div>
-        </div>
-      <% end %>
-
-      <!--%= render "devise/shared/links" %-->
+<div class="login-wrapper">
+  <div class="bg-pic">
+    <img src="/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src="/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" data-src-retina="/assets/img/demo/new-york-city-buildings-sunrise-morning-hd-wallpaper.jpg" alt="" class="lazy">
+    <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
+      <h2 class="semi-bold text-white">
+			Pages make it easy to enjoy what matters the most in the life</h2>
+      <p class="small">
+        images Displayed are solely for representation purposes only, All work copyright of respective owner, otherwise © 2013-2014 REVOX.
+      </p>
     </div>
   </div>
+  <!-- Login Background -->
+  <div class="login-container bg-white">
+    <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
+      <img src="/assets/img/logo.png" alt="logo" data-src="/assets/img/logo.png" data-src-retina="/assets/img/logo_2x.png" width="78" height="22">
+      <p class="p-t-35">Sign into your PiktoOKR account</p>
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "p-t-15") do |f| %>
+        <div class="form-group form-group-default">
+          <%= f.label :login %><br />
+          <div class="controls">
+            <%= f.email_field :email, autofocus: true, class: "form-control", required: true, placeholder: "Email" %>
+          </div>
+        </div>    
 
-  
+        <div class="form-group form-group-default">
+          <%= f.label :password %><br />
+          <div class="controls">
+            <%= f.password_field :password, autocomplete: "off", class: "form-control", required: true, placeholder: "Credentials" %>
+          </div>
+        </div>    
 
-  
+        <div class="row">
+          <div class="col-md-6 no-padding">
+            <% if devise_mapping.rememberable? -%>
+              <div class="checkbox">
+                <%= f.check_box :remember_me%>
+                <%= f.label :remember_me %>
+              </div>
+            <% end -%> 
+          </div>
+          <div class="col-md-6 text-right">
+            <a href="#" class="text-info small">Help? Contact Support</a>
+          </div>
+        </div>   
 
+        <%= f.submit "Sign in", class: "btn btn-primary btn-cons btn-rounded m-t-10" %>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+
 
