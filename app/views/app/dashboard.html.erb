@@ -1,42 +1,63 @@
-<div class="container" id="dashboard">
-    <h1>Dashboard</h1>
-    <div class="col-lg-6">
-        <div id="admin_register" class="row" style="display:none;">
-            <div class="row">
-                <h2>Admin Function</h2>
-                <a href="/users/new">New user registrations</a><br/>
-                <a href="/users">View registered users</a><br/>
-                <a href="/okr_teams">PiktoOKR Team Management Module</a><br/>
-                <a href="/timeframes">Timeframe Management</a>
-            </div>
-            <div class="row">
-                <h3>Company Objectives</h3>
-                <a href="/company_objectives">Company Objective Management</a>
-            </div>
-            <div class="row">
-                <h3>Company Key Results</h3>
-                <a href="/company_key_results">Company Key Result Management</a>
-            </div>
-        </div>
+<!-- START JUMBOTRON -->
+<div class="jumbotron" data-pages="parallax">
+  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ul class="breadcrumb">
+        <li>
+          <p>HOME</p>
+        </li>
+        <li><a href="/" class="active">Dashboard</a>
+        </li>
+      </ul>
+      <!-- END BREADCRUMB -->
     </div>
-    <div class="col-lg-6">
-        <div id="team_lead_functions" class="row" style="display:none;">
-            <h2>Team Lead Function</h2>
-            <h3>Team Objectives</h3>
-            <a href="/team_objectives">Team Objective Management</a>
-            <h3>Team Key Results</h3>
-            <a href="/team_key_results">Team Key Result Management</a>
-        </div>
-        <hr/>
-        <div id="employee_functions" class="row">
-            <h2>Employee Function</h2>
-            <h3>Personal Objectives</h3>
-            <a href="/personal_objectives">Personal Objective Management</a>
-            <h3>Personal Key Results</h3>
-            <a href="/personal_key_results">Personal Key Result Management</a>
-        </div>
-    </div>
+  </div>
 </div>
+<!-- END JUMBOTRON -->
+<!-- START CONTAINER FLUID -->
+<div class="container-fluid container-fixed-lg">
+  <!-- BEGIN PlACE PAGE CONTENT HERE -->
+  <h1 class="semi-bold">Dashboard</h1>
+  <div class="col-lg-6">
+      <div id="admin_register" class="row" style="display:none;">
+          <div class="row">
+              <h2>Admin Function</h2>
+              <a href="/users/new">New user registrations</a><br/>
+              <a href="/users">View registered users</a><br/>
+              <a href="/okr_teams">PiktoOKR Team Management Module</a><br/>
+              <a href="/timeframes">Timeframe Management</a>
+          </div>
+          <div class="row">
+              <h3>Company Objectives</h3>
+              <a href="/company_objectives">Company Objective Management</a>
+          </div>
+          <div class="row">
+              <h3>Company Key Results</h3>
+              <a href="/company_key_results">Company Key Result Management</a>
+          </div>
+      </div>
+  </div>
+  <div class="col-lg-6">
+      <div id="team_lead_functions" class="row" style="display:none;">
+          <h2>Team Lead Function</h2>
+          <h3>Team Objectives</h3>
+          <a href="/team_objectives">Team Objective Management</a>
+          <h3>Team Key Results</h3>
+          <a href="/team_key_results">Team Key Result Management</a>
+      </div>
+      <hr/>
+      <div id="employee_functions" class="row">
+          <h2>Employee Function</h2>
+          <h3>Personal Objectives</h3>
+          <a href="/personal_objectives">Personal Objective Management</a>
+          <h3>Personal Key Results</h3>
+          <a href="/personal_key_results">Personal Key Result Management</a>
+      </div>
+  </div>
+  <!-- END PLACE PAGE CONTENT HERE -->
+</div>
+<!-- END CONTAINER FLUID -->
 
 <!--Page specific script-->
 

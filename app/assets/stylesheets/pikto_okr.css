@@ -1,4 +1,54 @@
-.center_div {
-    margin-top: 80px;
-    margin-bottom: 10%;
-}
+.centralize {
+  position: relative;
+  top: 60%;
+  transform: translateY(50%); }
+
+.accordion-item-title {
+  font-family: 'Montserrat';
+  display: inline-block;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  padding: 0;
+  line-height: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-text-stroke: 0px;
+  filter: alpha(opacity=40);
+  -webkit-transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease; }
+
+.padding-body {
+  padding-top: 10px; }
+
+.padding-accordion-group {
+  padding-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px; }
+
+.panel-title-custom {
+  width: 100%; }
+
+.panel-heading-a {
+  width: 90%; }
+
+.accordion-item {
+  border: 1px solid rgba(230, 230, 230, 0.7);
+  padding-left: 5px;
+  min-height: 48px;
+  width: 100%;
+  padding-top: 5px; }
+
+.item-content {
+  padding-left: 0px; }
+
+.btn-accordion {
+  outline: none;
+  border: 0px; }
+
+.btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
+  border: 0px;
+  background: none; }
+
+/*# sourceMappingURL=pikto_okr.css.map */
