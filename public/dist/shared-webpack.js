@@ -95,7 +95,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("// Date : 16 August 2016\n// This JS file that centralize all JS files from template.\n\n__webpack_require__.e/* require */(5, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(7), __webpack_require__(9)]; (function () {}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));});\n\n/*****************\n ** WEBPACK FOOTER\n ** /Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/controller/shared.js\n ** module id = 0\n ** module chunks = 4\n **/\n//# sourceURL=webpack:////Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/controller/shared.js?");
+	eval("// Date : 16 August 2016\n// This JS file that centralize all JS files from template.\n\n__webpack_require__.e/* require */(5, function(__webpack_require__) { var __WEBPACK_AMD_REQUIRE_ARRAY__ = [__webpack_require__(7), __webpack_require__(17), __webpack_require__(19), __webpack_require__(20), __webpack_require__(21), __webpack_require__(23), __webpack_require__(27)]; (function (promiseParam, jqueryParam, ionParam, noUISliderParam, liblinkParam, blankParam, contributionParam) {\n\n    $(document).ready(function () {\n        contributionParam.showPopup();\n        contributionParam.contributionSliderControl();\n    });\n}.apply(null, __WEBPACK_AMD_REQUIRE_ARRAY__));});\n\n/*****************\n ** WEBPACK FOOTER\n ** /Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/controller/shared.js\n ** module id = 0\n ** module chunks = 4\n **/\n//# sourceURL=webpack:////Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/controller/shared.js?");
 
 /***/ }
 /******/ ]);

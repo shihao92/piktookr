@@ -1,12 +1,39 @@
 // Stylesheets customized for the application
 
-// Layout
+// ---------------------
+//      Declaration
+// ---------------------
+$light-grey : #eeeeee;
+$dark-grey : #c7c7c7;
+
+$icon-light-grey : #b3b3b3;
+
+// ---------------------
+//        Layout
+// ---------------------
 .centralize {
     position: relative;
-    top: 60%;
-    transform: translateY(50%);
+    top: 50%;
+    transform: translateY(30%);
 }
-// Font 
+.padding-body {
+    padding-top: 10px;
+}
+.padding-accordion-group {
+    padding-top: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.panel-title-custom {
+    width: 100%;
+}
+.panel-heading-a {
+    width: 90%;
+}
+
+// ---------------------
+//         Font
+// ---------------------
 .accordion-item-title{
     font-family: 'Montserrat';
     display: inline-block;
@@ -24,35 +51,51 @@
     transition: opacity 0.3s ease;
 }
 
-.padding-body {
-    padding-top: 10px;
-}
-.padding-accordion-group {
-    padding-top: 20px;
-    margin-left: 10px;
-    margin-right: 10px;
-}
-.panel-title-custom {
-    width: 100%;
-}
-.panel-heading-a {
-    width: 90%;
-}
+// ---------------------
+//       Controls
+// ---------------------
+// Accordion
 .accordion-item {
     border: 1px solid rgba(230, 230, 230, 0.7);
     padding-left: 5px;
     min-height: 48px; 
     width: 100%;
     padding-top: 5px;
+    background: $light-grey;
+}
+.accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
+    background: $dark-grey;
+}
+.add-row {
+    background: transparent;
+}
+.add-row:hover, .add-row:active {
+    background: transparent;
 }
 .item-content {
     padding-left: 0px;
 }
+// Button
 .btn-accordion {
     outline: none;
     border: 0px;
+    background: transparent;
 }
 .btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
     border: 0px;
     background: none;
+    background: transparent;
+}
+// Icon
+.icon-light-grey {
+    color: $icon-light-grey;
+}
+// input
+.header .search-link .custom-search {
+    border: 0;
+    width: 200px;
+    font-size: 16px;
+}
+.form-group-default .textarea-custom {
+    height: 100px;
 }

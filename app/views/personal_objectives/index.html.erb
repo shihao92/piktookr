@@ -67,9 +67,9 @@
     <!-- All the progress bars -->
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p65">
+        <div class="c100 p100">
           <span>
-            65% <br/>
+            <span id="okr_aligned_percentage">100%</span> <br/>
             <p>aligned</p>
           </span>
           <div class="slice">
@@ -81,7 +81,7 @@
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p50">
           <span>
-            8/16 <br/>
+            <span id="completed_objective_portion">8/16</span> <br/>
             <p>objectives</p>
           </span>
           <div class="slice">
@@ -93,8 +93,8 @@
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p100">
           <span>
-            100% <br/>
-            <p>progress</p>
+            <span id="overall_okr_progress">100%</span> <br/>
+            <p>overall progress</p>
           </span>
           <div class="slice">
             <div class="bar"></div>
@@ -105,8 +105,8 @@
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p80">
           <span>
-            14 <br/>
-            <p>days left</p>
+            <span id="last_updated">14</span>  
+            <p>days ago</p> 
           </span>
           <div class="slice">
             <div class="bar"></div>
@@ -145,7 +145,7 @@
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
                       <div class="text-center">
-                        <p class="small">Last updated</p>
+                        <p class="small">Days left</p>
                         <div class="text-center">
                           <span class="bold">55</span>
                         </div>
@@ -185,42 +185,57 @@
                 <div class="col-lg-11 col-md-11 col-sm-11">
                   <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
-                      <div class="accordion-item-title centralize">
-                        <%= item.key_result %>
+                      <div class="accordion-item-title">
+                        <div class="checkbox checkbox-primary">
+                          <input type="checkbox" value="<%= item.id %>" id="personal_kr_<%= item.id %>"/>
+                          <label for="personal_kr_<%= item.id %>"><%= item.key_result %></label>
+                        </div> 
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="text-center">
+                      <div class="text-center centralize">
                         <span class="bold">21%</span>
                       </div>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
-                      <div class="text-center">
+                      <div class="text-center centralize">
                         <span class="bold">5</span>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
-                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center small") %>
-                      <div class="col-md-8 disable-hover-scale no-padding m-t-20">
-                        <div class="bg-master m-b-10" id="slider-tooltips" data-value="<%= item.progress %>">
+                      <div class="centralize">
+                        <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center small") %>
+                        <div class="progress">
+                          <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <div class="col-lg-1 col-md-1 col-sm-1">
-                  <div class="pull-right">
-           	        <button class="btn btn-accordion">
+                  <div class="dropdown pull-right">
+           	        <button class="btn btn-accordion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            	          <i class="pg-menu"></i>
            	        </button>
+                    <div class="dropdown-menu">
+                      <li>
+                        <!-- JS : Contribution page -->
+                        <a href="#" data-toggle="search">
+                          <i class="fa fa-fw fa-plus"></i> 
+                           Progress update
+                        </a>
+                      </li>
+                    </div>
+                    <!-- <a href="#" class="search-link" data-toggle="contribution"> -->
            	      </div>
                 </div>
               </div>
             <% end %>
 
             <!-- New row for the add in of new key results over here -->
-            <div class="row accordion-item">
-              
+            <div class="row accordion-item add-row">
+              <div class="panel-heading" role="tab">
+              </div>
             </div>
 
           </div>
@@ -244,11 +259,80 @@
         </div>
       </div>
     <% end %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          Add new objective
+        </h4>
+      </div>
+    </div>
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->
 
 </div>
 <!-- END CONTAINER FLUID -->
+
+<!-- Popup for the contribution module -->
+<div class="overlay hide" data-pages="search" id="contribution_popup">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="#" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+    </div>
+    <div class="container-fluid">
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="row">
+          <h5 class="m-b-5">
+            <span class="semi-bold result-name">
+            	Confirm progress update for: <br/>
+              <span class="bold">xxxxxx</span>
+            </span>
+          </h5>
+        </div>
+        <div class="row">
+          <div class="no-padding m-t-50">
+            <div class="bg-master" id="slider-tooltips">
+            </div>
+          </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="row">
+          <form role="form">
+            <div class="row">           
+              <div class="form-group form-group-default">
+                <label>WHAT DID YOU CONTRIBUTE TO THIS OKR?</label>
+                <textarea class="form-control textarea-custom" required></textarea>
+              </div>
+            </div>
+            <div class="row">
+              <div class="pull-left">
+                <div class="checkbox checkbox-success">
+                  <input type="checkbox" id="checkbox_kr_done" value="complete_kr"/>
+                  <label for="checkbox_kr_done">Mark KR as completed</label>
+                </div>
+              </div>
+              <div class="pull-right">
+                <button class="btn btn-default btn-cons btn-rounded m-t-10">
+                  Cancel
+                </button>
+                <button class="btn btn-complete btn-cons btn-rounded m-t-10">
+                  Save
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
 
 <!--Page specific script-->

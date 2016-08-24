@@ -1,7 +1,21 @@
 .centralize {
   position: relative;
-  top: 60%;
-  transform: translateY(50%); }
+  top: 50%;
+  transform: translateY(30%); }
+
+.padding-body {
+  padding-top: 10px; }
+
+.padding-accordion-group {
+  padding-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px; }
+
+.panel-title-custom {
+  width: 100%; }
+
+.panel-heading-a {
+  width: 90%; }
 
 .accordion-item-title {
   font-family: 'Montserrat';
@@ -19,36 +33,45 @@
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease; }
 
-.padding-body {
-  padding-top: 10px; }
-
-.padding-accordion-group {
-  padding-top: 20px;
-  margin-left: 10px;
-  margin-right: 10px; }
-
-.panel-title-custom {
-  width: 100%; }
-
-.panel-heading-a {
-  width: 90%; }
-
 .accordion-item {
   border: 1px solid rgba(230, 230, 230, 0.7);
   padding-left: 5px;
   min-height: 48px;
   width: 100%;
-  padding-top: 5px; }
+  padding-top: 5px;
+  background: #eeeeee; }
+
+.accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
+  background: #c7c7c7; }
+
+.add-row {
+  background: transparent; }
+
+.add-row:hover, .add-row:active {
+  background: transparent; }
 
 .item-content {
   padding-left: 0px; }
 
 .btn-accordion {
   outline: none;
-  border: 0px; }
+  border: 0px;
+  background: transparent; }
 
 .btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
   border: 0px;
-  background: none; }
+  background: none;
+  background: transparent; }
+
+.icon-light-grey {
+  color: #b3b3b3; }
+
+.header .search-link .custom-search {
+  border: 0;
+  width: 200px;
+  font-size: 16px; }
+
+.form-group-default .textarea-custom {
+  height: 100px; }
 
 /*# sourceMappingURL=pikto_okr.css.map */

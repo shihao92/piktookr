@@ -1,3 +1,9 @@
+<% @user = User.find(current_user.id) %>
+<% @current_date = Time.now.strftime("%Y-%m-%d") %>
+<% @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") %>
+<% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
+<% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,7 +11,6 @@
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application' %>
-    <script src="https://www.promisejs.org/polyfills/promise-done-7.0.4.min.js"></script>
   </head>
   <body class="fixed-header">
     <nav class="page-sidebar" data-pages="sidebar">
@@ -45,11 +50,19 @@
       <div class="sidebar-menu">
         <ul class="menu-items">
           <li class="m-t-30 ">
+            <!-- Date : 23rd August 2016 -->
+            <!-- User favourite module proposed here -->
+            <!-- Current Progress: On the way to estimate time for implementations -->          
+            <!-- JS here to generate the user name and shortform -->
             <a href="/" class="detailed">
-              <span class="title">Dashboard</span>
-              <span class="details">12 New Updates</span>
+              <span class="title" id="user-name"><%= @user.name %></span>
+              <span class="details" id="user-position">
+                Pikto Academy Web <br/>Developer
+              </span>
             </a>
-            <span class="bg-success icon-thumbnail"><i class="pg-home"></i></span>
+            <span class="icon-thumbnail">
+              <span id="username-shortform">SH</span>
+            </span>
           </li>
         </ul>
         <div class="clearfix"></div>
@@ -95,7 +108,10 @@
             <div class="brand inline">
               <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
             </div>
-            <a href="#" class="search-link" data-toggle="search"><i class="pg-search"></i>Type anywhere to <span class="bold">search</span></a> 
+            <span class="search-link">
+              <label for="search-input"><i class="pg-search"></i></label>
+              <input id="search-input" type="text" class="custom-search" placeholder="Type to search"/>
+            </span> 
           </div>
         </div>
         <div class="pull-right">
@@ -111,7 +127,6 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <% @user = User.find(current_user.id) %>
               <span class="semi-bold"><%= @user.name %></span> 
             </div>
             <div class="dropdown pull-right">
@@ -155,7 +170,8 @@
             <!-- START day notification for timeframe -->
             <div class="no-margin hidden-sm hidden-xs b-grey b-l b-r p-l-20 p-r-20">
               <div class="text-center">
-                <span class="bold">14</span> <span class="text-master">days left</span>
+                <span class="bold"><%= @remaining_quarter_days.to_i %></span> 
+                <span class="text-master">days left</span>
               </div>
             </div>
             <!-- END NOTIFICATIONS LIST -->
@@ -164,13 +180,12 @@
         <div class="pull-right">
           <div class="visible-lg visible-md m-t-15 p-r-20">
             <!-- START calendar for timeframe selection -->
-            <% @current_date = Time.now.strftime("%Y-%m-%d") %>
-            <% @timeframe_logs = TimeframeLog.all %>
-            <% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="fa fa-fw fa-calendar fa-lg"></span>
-                <span class="text-master"><%= @current_timeframe_log[0].quarter %></span>
+                <span class="text-master">
+                  <%= @current_timeframe_log[0].quarter %>
+                </span>
                 <span class="caret"></span> 
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
@@ -222,7 +237,9 @@
           <a href="#quickview-alerts" data-toggle="tab">Alerts</a>
         </li>
       </ul>
-      <a class="btn-link quickview-toggle" data-toggle-element="#quickview" data-toggle="quickview"><i class="pg-close"></i></a>
+      <a class="btn-link quickview-toggle" data-toggle-element="#quickview" data-toggle="quickview">
+        <i class="pg-close"></i>
+      </a>
       <!-- Tab panes -->
       <div class="tab-content">
         <!-- BEGIN Alerts !-->
@@ -242,45 +259,43 @@
               <!-- BEGIN Alert List !-->
               <div data-init-list-view="ioslist" class="list-view boreded no-top-border">
                 <h2 class="list-view-fake-header">
-                  Sever Status
+                  Server Status
                 </h2>
                 <!-- BEGIN List Group !-->
                 <div class="scroll-wrapper list-view-wrapper" style="position: absolute;">
                   <div class="list-view-wrapper scroll-content" data-ios="false" style="height: 100px; margin-bottom: 0px; margin-right: 0px; max-height: none;">
                     <div class="list-view-group-container">
-                    <!-- BEGIN List Group Header!-->
-                    <div class="list-view-group-header text-uppercase">
-                      Calendar
-                    </div>
-                    <!-- END List Group Header!-->
-                    <ul>
-                      <!-- BEGIN List Group Item!-->
-                      <li class="alert-list">
-                        defdef
+                      <!-- BEGIN List Group Header!-->
+                      <div class="list-view-group-header text-uppercase">
+                        Calendar
+                      </div>
+                      <!-- END List Group Header!-->
+                      <ul>
                         <!-- BEGIN List Group Item!-->
-                      </li>
-                      <!-- END List Group Item!-->
-                      <!-- BEGIN List Group Item!-->
-                      <li class="alert-list">
-                        abcabc
-                      </li>
-                      <!-- END List Group Item!-->
-                    </ul>
+                        <li class="alert-list">
+                          defdef
+                          <!-- BEGIN List Group Item!-->
+                        </li>
+                        <!-- END List Group Item!-->
+                        <!-- BEGIN List Group Item!-->
+                        <li class="alert-list">
+                          abcabc
+                        </li>
+                        <!-- END List Group Item!-->
+                      </ul>
+                    </div>
+                  </div>
+                <!-- END Alert List !-->
                 </div>
+              <!-- EEND Alerts View !-->
               </div>
-              <!-- END Alert List !-->
             </div>
-            <!-- EEND Alerts View !-->
+          <!-- END Alerts !-->
           </div>
         </div>
-        <!-- END Alerts !-->
       </div>
     </div>
 
-    <div class="overlay hide">
-
-    </div>
-    
     <script src="/dist/shared-webpack.js"></script>
     <!--script src="/dist/role-webpack.js"></script-->
 

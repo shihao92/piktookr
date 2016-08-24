@@ -15,6 +15,9 @@
  *= require css/jquery.scrollbar
  *= require css/select2
  *= require css/switchery.min
+ *= require css/ion-slider/ion.rangeSlider
+ *= require css/ion-slider/ion.rangeSlider.skinFlat
+ *= require css/pages/jquery.nouislider
  *= require css/pages/pages-icons
  *= require css/pages/pages
  *= require css/circle
