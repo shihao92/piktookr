@@ -278,14 +278,15 @@
 <div class="overlay hide" data-pages="search" id="contribution_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="#" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/" class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
     </div>
-    <div class="container-fluid">
-      <div class="col-lg-3 col-md-3 col-sm-3">
-      </div>
-      <div class="col-lg-6 col-md-6 col-sm-6">
+    <div class="centralize">
+      <div class="container-fluid">
+        <div class="col-lg-3 col-md-3 col-sm-3">
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
         <div class="row">
           <h5 class="m-b-5">
             <span class="semi-bold result-name">
@@ -305,34 +306,36 @@
         <div class="row">
           <form role="form">
             <div class="row">           
-              <div class="form-group form-group-default">
-                <label>WHAT DID YOU CONTRIBUTE TO THIS OKR?</label>
-                <textarea class="form-control textarea-custom" required></textarea>
-              </div>
+                <div class="form-group form-group-default">
+                  <label>WHAT DID YOU CONTRIBUTE TO THIS OKR?</label>
+                  <textarea class="form-control textarea-custom" required></textarea>
+                </div>
             </div>
             <div class="row">
-              <div class="pull-left">
-                <div class="checkbox checkbox-success">
-                  <input type="checkbox" id="checkbox_kr_done" value="complete_kr"/>
-                  <label for="checkbox_kr_done">Mark KR as completed</label>
+                <div class="pull-left">
+                  <div class="checkbox checkbox-success">
+                    <input type="checkbox" id="checkbox_kr_done" value="complete_kr"/>
+                    <label for="checkbox_kr_done">Mark KR as completed</label>
+                  </div>
                 </div>
-              </div>
-              <div class="pull-right">
-                <button class="btn btn-default btn-cons btn-rounded m-t-10">
-                  Cancel
-                </button>
-                <button class="btn btn-complete btn-cons btn-rounded m-t-10">
-                  Save
-                </button>
-              </div>
+                <div class="pull-right">
+                  <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
+                    Cancel
+                  </a>
+                  <button class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
+                    Save
+                  </button>
+                </div>
             </div>
           </form>
         </div>
-      </div>
-      <div class="col-lg-3 col-md-3 col-sm-3">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-3">
+        </div>
       </div>
     </div>
   </div>
 </div>
 
 <!--Page specific script-->
+<script src="/dist/personal_okr-webpack.js"></script>

@@ -4,6 +4,7 @@ module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
       shared: 'controller/shared.js',
+      personal_okr: 'controller/personal_okr.js',
       role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',
       personal_objective: 'controller/objective_key_result/personal_objective'
