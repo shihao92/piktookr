@@ -9,8 +9,8 @@
   <head>
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application' %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
   </head>
   <body class="fixed-header">
     <nav class="page-sidebar" data-pages="sidebar">
@@ -57,11 +57,18 @@
             <a href="/" class="detailed">
               <span class="title" id="user-name"><%= @user.name %></span>
               <span class="details" id="user-position">
-                Pikto Academy Web <br/>Developer
-              </span>
+                <%= @user.position %>
+              </span> 
             </a>
             <span class="icon-thumbnail">
-              <span id="username-shortform">SH</span>
+              <span id="username-shortform">
+                <% @user_shortform = @user.name.scan(/[A-Z]/) %>
+                <% @user_short_str = "" %>
+                <% @user_shortform.each do |item| %>
+                  <% @user_short_str = @user_short_str + item %>
+                <% end %>
+                <%= @user_short_str %>
+              </span>
             </span>
           </li>
         </ul>
@@ -206,8 +213,7 @@
       <!-- START PAGE CONTENT WRAPPER -->
       <div class="page-content-wrapper ">
         <!-- START PAGE CONTENT -->
-        <div class="content ">
-          <script src="/dist/shared-webpack.js"></script>
+        <div class="content ">         
           <%= yield %>
         </div>
         <!-- END PAGE CONTENT -->
@@ -297,8 +303,8 @@
       </div>
     </div>
 
-    <!--script src="/dist/role-webpack.js"></script-->
-
+    <script src="/dist/vendor-webpack.js"></script>
+    <script src="/dist/personal_okr-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

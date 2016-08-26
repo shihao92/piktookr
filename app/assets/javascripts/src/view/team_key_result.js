@@ -1,7 +1,7 @@
 // Date : 2 Aug 2016
 // This JS file controls the pages for team key result. 
 
-define(['jquery'], function () {
+define(function () {
 
     function populateTeamObjectives(team_objectives)
     {

@@ -1,7 +1,7 @@
 // Date : 26 July 2016
 // This JS file that acts as controller for the role module. 
 
-require(['jquery','model/role','view/header','view/dashboard'], 
+require(['model/role','view/header','view/dashboard'], 
 function(jqueryParam,roleParam,headerParam,dashboardParam){
     
     //Set the utility dropdown visible

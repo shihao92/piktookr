@@ -1,7 +1,7 @@
 // Date : 3 Aug 2016
 // This JS file controls the personal objective of all the pages. 
 
-require(['jquery','model/role','model/team_objective_key_result','view/header','view/personal_objective'],
+require(['model/role','model/team_objective_key_result','view/header','view/personal_objective'],
 function(jqueryParam,roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
 
     $(document).ready(function(){

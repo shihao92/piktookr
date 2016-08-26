@@ -9,6 +9,7 @@ class PersonalObjectivesController < ApplicationController
   # GET /personal_objectives.json
   def index
     @personal_objectives = PersonalObjective.all
+    @js_controller = 'personal_okr'
   end
 
   # GET /personal_objectives/1

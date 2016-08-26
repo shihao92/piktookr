@@ -1,14 +1,15 @@
 // Date : 25 August 2016
 // JS File cater for slider control only.
 
-define(['jquery'], function(){
+define(['plugins/jquery-nouislider/jquery.nouislider.min','plugins/jquery-nouislider/jquery.liblink'],
+function(){
 
-    function contributionSliderControl()
+    function contributionSliderControl(current_progress)
     {
         // Contribution Popup Related Controls
         $(document).ready(function() {
-        $("#slider-tooltips").noUiSlider({
-                 start: 40,
+            $("#slider-tooltips").noUiSlider({
+                 start: current_progress,
                  direction: 'ltr',
                  behaviour: "drag",
                  connect: "lower",
@@ -18,13 +19,13 @@ define(['jquery'], function(){
                  },
                  pips: {
 	             	mode: 'values',
-	             	values: [20, 80],
+	             	values: [0, 100],
 	             	density: 4
 	             }
              })
              .on('change', function ( handle, value ) {
-                if ( value < 40 ) {
-                	$("#slider-tooltips").val(40);
+                if ( value < current_progress ) {
+                	$("#slider-tooltips").val(current_progress);
                 }
               });
             $("#slider-tooltips").Link('lower').to('-inline-<div class="tooltip fade top in" style="top: -33px;left: -14px;opacity: 0.7;"></div>', function(value) {
@@ -36,7 +37,6 @@ define(['jquery'], function(){
                     '</div>'
                 );
             });
-            // $( "#slider-tooltips" ).noUiSlider.on('options', true /* Allow destruction + rebuilding */ );
         });
     }
 

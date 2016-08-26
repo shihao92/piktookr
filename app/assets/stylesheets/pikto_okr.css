@@ -17,6 +17,9 @@
 .panel-heading-a {
   width: 90%; }
 
+.user-menu {
+  word-wrap: break-word; }
+
 .accordion-item-title {
   font-family: 'Montserrat';
   display: inline-block;

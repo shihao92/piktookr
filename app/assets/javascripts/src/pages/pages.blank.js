@@ -492,7 +492,7 @@
     // QUICKVIEW DATA API
     //===================
 
-    $(window).on('load', function() {
+    $(document).ready( function() {
 
         $('[data-pages="quickview"]').each(function() {
             var $quickview = $(this)

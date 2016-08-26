@@ -6,8 +6,11 @@
     "email": "shihao@piktochart.com"
   },
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "bower-requirejs": "^1.2.0",
-    "jquery": "^3.1.0"
+    "jquery": "^3.1.0",
+    "promise": "^7.1.1",
+    "webpack": "^1.13.2"
   },
   "devDependencies": {
     "babel-core": "^6.11.4",

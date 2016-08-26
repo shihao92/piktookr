@@ -8,6 +8,26 @@
 <!-- Personal OKR module declarations -->
 <% @personal_objective = PersonalObjective.where(user_id: current_user.id) %>
 
+<!-- Calculation of the overall progress -->
+<% @completed_objective = 0 %>
+<% if(@personal_objective.count != 0) %>
+  <% @progress_portion = 100 / @personal_objective.count %>
+  <% @total_progress = 0 %>
+  <% @temp_date = [] %>
+  <% @personal_objective.each do |item| %>
+    <% @temp_progress = (item.progress/100) * @progress_portion %>
+    <% @total_progress = @total_progress + @temp_progress %>
+    <% # To check whether there is any completed objective %>  
+    <% if(item.progress == 100.00) %>
+      <% @completed_objective = @completed_objective + 1 %>
+    <% end %>
+    <% # To check which is the latest updated date %>
+    <% @temp_date << item.updated_at %>
+  <% end %>
+  <% @date_max = @temp_date.max %>
+  <% @date_difference = (Time.now - @date_max) / 86400 %>
+<% end %>
+
 <!-- START JUMBOTRON -->
 <div class="jumbotron" data-pages="parallax">
   <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
@@ -79,9 +99,11 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p50">
+        <div class="c100 p<%= @completed_objective %>">
           <span>
-            <span id="completed_objective_portion">8/16</span> <br/>
+            <span id="completed_objective_portion">
+              <%= @completed_objective %>/<%= @personal_objective.count %>
+            </span> <br/>
             <p>objectives</p>
           </span>
           <div class="slice">
@@ -91,9 +113,11 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p100">
+        <div class="c100 p<%= @total_progress.to_i %>">
           <span>
-            <span id="overall_okr_progress">100%</span> <br/>
+            <span id="overall_okr_progress">
+              <%= @total_progress.to_i %>%
+            </span> <br/>
             <p>overall progress</p>
           </span>
           <div class="slice">
@@ -103,9 +127,15 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p80">
+        <div class="c100 p<%= @date_difference.to_i %>">
           <span>
-            <span id="last_updated">14</span>  
+            <span id="last_updated">
+              <% if(@personal_objective.count == 0) %>
+              <%= '-' %>
+              <% else %>
+                <%= @date_difference.to_i %>
+              <% end %>
+            </span>  
             <p>days ago</p> 
           </span>
           <div class="slice">
@@ -181,34 +211,32 @@
               <% if(item.progress == 100.00) %>
               <%    @personal_key_result_completed = @personal_key_result_completed + 1 %>
               <% end %>
-              <div class="row accordion-item">
+              <div id="personal_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">
-                  <div class="row">
+                  <div class="row checkbox">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
-                        <div class="checkbox checkbox-primary">
+                        <div class="checkbox-primary">
                           <input type="checkbox" value="<%= item.id %>" id="personal_kr_<%= item.id %>"/>
                           <label for="personal_kr_<%= item.id %>"><%= item.key_result %></label>
                         </div> 
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="text-center centralize">
+                      <div class="text-center">
                         <span class="bold">21%</span>
                       </div>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
-                      <div class="text-center centralize">
+                      <div class="text-center">
                         <span class="bold">5</span>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
-                      <div class="centralize">
-                        <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center small") %>
-                        <div class="progress">
-                          <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
-                        </div>
-                      </div>
+                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
+                      <div class="progress">
+                        <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                      </div>    
                     </div>
                   </div>
                 </div>
@@ -217,15 +245,15 @@
            	        <button class="btn btn-accordion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            	          <i class="pg-menu"></i>
            	        </button>
-                    <div class="dropdown-menu">
+                    <ul class="dropdown-menu">
                       <li>
                         <!-- JS : Contribution page -->
-                        <a href="#" data-toggle="search">
+                        <a href="/" data-toggle="search" id="keyresultprogress_<%= item.id %>">
                           <i class="fa fa-fw fa-plus"></i> 
                            Progress update
                         </a>
                       </li>
-                    </div>
+                    </ul>
                     <!-- <a href="#" class="search-link" data-toggle="contribution"> -->
            	      </div>
                 </div>
@@ -237,7 +265,6 @@
               <div class="panel-heading" role="tab">
               </div>
             </div>
-
           </div>
         </div>
         <div class="panel-footer">
@@ -291,7 +318,7 @@
           <h5 class="m-b-5">
             <span class="semi-bold result-name">
             	Confirm progress update for: <br/>
-              <span class="bold">xxxxxx</span>
+              <span class="bold" id="personal_key_result">xxxxxx</span>
             </span>
           </h5>
         </div>
@@ -337,5 +364,3 @@
   </div>
 </div>
 
-<!--Page specific script-->
-<script src="/dist/personal_okr-webpack.js"></script>

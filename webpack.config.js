@@ -1,9 +1,10 @@
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      shared: 'controller/shared.js',
+      vendor: ['jquery','plugins/bootstrapv3/js/bootstrap'],
       personal_okr: 'controller/personal_okr.js',
       role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',
@@ -15,6 +16,9 @@ module.exports = {
       filename: '[name]-webpack.js',
     },
     resolve: {
+      alias: {
+        'jquery': 'plugins/jquery/jquery-1.11.1.min'
+      },
       root: [
         // register root here
         path.resolve('./app/assets/javascripts/src'),
@@ -38,4 +42,11 @@ module.exports = {
       ],
     },
     devtool: 'eval',
+    plugins: [
+      new webpack.ProvidePlugin({
+        $: "jquery",
+        jQuery: "jquery",
+        "window.jQuery": "jquery"
+      })
+    ]
   };
