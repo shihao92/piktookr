@@ -58,7 +58,7 @@ Rails.application.routes.draw do
   get 'app/dashboard'
   
   # Route for the default page
-  root 'personal_objectives#index'
+  root 'app#dashboard_v2'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

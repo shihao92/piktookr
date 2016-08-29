@@ -1,3 +1,4 @@
+<div class="container">
 <%= form_for @personal_key_result do |f| %>
   <% if @personal_key_result.errors.any? %>
     <div id="error_explanation">
@@ -20,7 +21,7 @@
   <% obj_array = PersonalObjective.where(user_id: current_user.id).map { |obj| [obj.objective, obj.id] }%>
   <div class="form-group">
     <%= f.label :personal_objective_alignment %><br />
-    <%= select("personal_objective", "obj_id", obj_array, {}, {class: 'form-control'}) %>
+    <%= f.select(:personal_objective_id, obj_array, {}, {class: 'form-control'}) %>
   </div>        
 
   <div class="form-group">
@@ -29,8 +30,16 @@
   </div>
 
   <div class="form-group">
+    <%= f.fields_for :contributions do |c_form| %>
+      <%= c_form.label :contribution_comment %><br />
+      <%= c_form.text_field :contribution_comment, autofocus: true, class: "form-control" %>
+    <% end %>
+  </div>
+  
+  <div class="form-group">
     <div class="text-right">
       <%= f.submit "Submit", class: "btn btn-primary"%>
     </div>
   </div>
 <% end %>
+</div>

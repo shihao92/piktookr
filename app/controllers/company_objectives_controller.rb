@@ -58,6 +58,7 @@ class CompanyObjectivesController < ApplicationController
   # DELETE /company_objectives/1
   # DELETE /company_objectives/1.json
   def destroy
+    binding.pry
     @company_objective.destroy
     respond_to do |format|
       format.html { redirect_to company_objectives_url, notice: 'Company objective was successfully destroyed.' }

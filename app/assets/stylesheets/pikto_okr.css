@@ -36,6 +36,9 @@
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease; }
 
+.form-custom-accordion {
+  border: 1px solid rgba(230, 230, 230, 0.7); }
+
 .accordion-item {
   border: 1px solid rgba(230, 230, 230, 0.7);
   padding-left: 5px;
