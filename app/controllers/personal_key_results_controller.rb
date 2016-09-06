@@ -26,10 +26,12 @@ class PersonalKeyResultsController < ApplicationController
   # GET /personal_key_results/new
   def new
     @personal_key_result = PersonalKeyResult.new
+    @contribution = @personal_key_result.contributions.build
   end
 
   # GET /personal_key_results/1/edit
   def edit
+    @contribution = @personal_key_result.contributions.build
   end
 
   # POST /personal_key_results
@@ -57,17 +59,17 @@ class PersonalKeyResultsController < ApplicationController
     respond_to do |format|
       # Everytime when progress is being updated, update the team OKR progress and company OKR progress
       # Perform this after justification
+      
       if @personal_key_result.update(personal_key_result_params)
-
+        #Contribution.new(@personal_key_result[:contribution][:contribution_comment])
         # Activate the cascade OKR update functions
-        update_okr_modules(@personal_key_result.personal_objective_id,@personal_key_result.id,@personal_key_result.progress)
+        update_okr_modules(@personal_key_result.personal_objective_id, @personal_key_result.id, @personal_key_result.progress)
 
         format.html { redirect_to @personal_key_result, notice: 'Personal key result was successfully updated.' }
         format.json { render :show, status: :ok, location: @personal_key_result }
       else
         format.html { render :edit }
         format.json { render json: @personal_key_result.errors, status: :unprocessable_entity }
-
       end
     end
   end
@@ -96,7 +98,7 @@ class PersonalKeyResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def personal_key_result_params
-      params.require(:personal_key_result).permit(:key_result,:progress,:personal_objective_id)
+      params.require(:personal_key_result).permit(:key_result, :progress, :personal_objective_id, contributions_attributes:[:id,:contribution_comment])
     end
 
     # Cascade functions in updating the OKR from personal to company

@@ -4,6 +4,8 @@
 <% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
 <% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
 
+<% @server_url = "http://localhost:3000" %>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -17,28 +19,28 @@
       <div class="sidebar-overlay-slide from-top" id="appMenu">
         <div class="row">
           <div class="col-xs-6 no-padding">
-            <a href="#" class="p-l-40"><img src="assets/img/demo/social_app.svg" alt="socail">
+            <a href="#" class="p-l-40"><img src="<%= @server_url %>/assets/img/demo/social_app.svg" alt="socail">
             </a>
           </div>
           <div class="col-xs-6 no-padding">
-            <a href="#" class="p-l-10"><img src="assets/img/demo/email_app.svg" alt="socail">
+            <a href="#" class="p-l-10"><img src="<%= @server_url %>/assets/img/demo/email_app.svg" alt="socail">
             </a>
           </div>
         </div>
         <div class="row">
           <div class="col-xs-6 m-t-20 no-padding">
-            <a href="#" class="p-l-40"><img src="assets/img/demo/calendar_app.svg" alt="socail">
+            <a href="#" class="p-l-40"><img src="<%= @server_url %>/assets/img/demo/calendar_app.svg" alt="socail">
             </a>
           </div>
           <div class="col-xs-6 m-t-20 no-padding">
-            <a href="#" class="p-l-10"><img src="assets/img/demo/add_more.svg" alt="socail">
+            <a href="#" class="p-l-10"><img src="<%= @server_url %>/assets/img/demo/add_more.svg" alt="socail">
             </a>
           </div>
         </div>
       </div>
 
       <div class="sidebar-header">
-        <img src="assets/img/logo_white.png" alt="logo" class="brand" data-src="assets/img/logo_white.png" data-src-retina="assets/img/logo_white_2x.png" width="78" height="22">
+        <img src="<%= @server_url %>/assets/img/logo_white.png" alt="logo" class="brand" data-src="<%= @server_url %>/assets/img/logo_white.png" data-src-retina="assets/img/logo_white_2x.png" width="78" height="22">
         <div class="sidebar-header-controls">
           <button type="button" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" data-pages-toggle="#appMenu"><i class="fa fa-angle-down fs-16"></i>
           </button>
@@ -94,7 +96,7 @@
           <div class="pull-center hidden-md hidden-lg">
             <div class="header-inner">
               <div class="brand inline">
-                <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+                <img src="<%= @server_url %>/assets/img/logo.png" alt="logo" data-src="<%= @server_url %>/assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
               </div>
             </div>
           </div>
@@ -102,7 +104,7 @@
           <div class="pull-right full-height visible-sm visible-xs">
             <!-- START ACTION BAR -->
             <div class="header-inner">
-              <a href="#" class="btn-link visible-sm-inline-block visible-xs-inline-block" data-toggle="#quickview" data-toggle-element="#quickview">
+              <a href="/" class="btn-link visible-sm-inline-block visible-xs-inline-block" data-toggle="#quickview" data-toggle-element="#quickview">
                 <span class="fa fa-fw fa-bell-o fa-lg menu-hambuger-plus"></span>
               </a>
             </div>
@@ -113,7 +115,7 @@
         <div class="pull-left sm-table hidden-xs hidden-sm">
           <div class="header-inner">
             <div class="brand inline">
-              <img src="assets/img/logo.png" alt="logo" data-src="assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+              <img src="<%= @server_url %>/assets/img/logo.png" alt="logo" data-src="<%= @server_url %>/assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
             </div>
             <span class="search-link">
               <label for="search-input"><i class="pg-search"></i></label>
@@ -125,7 +127,7 @@
           <div class="header-inner">
             <!-- START NOTIFICATION LIST -->
             <!-- Notification is in the right hand side bar -->
-            <a href="#" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
+            <a href="/" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
             </a>
             <!-- END NOTIFICATIONS LIST -->
           </div>
@@ -144,19 +146,19 @@
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
                 <li>
-                  <a href="#">
+                  <a href="/">
                     <i class="fa fa-user"></i> 
                     Profile
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="/">
                     <i class="pg-settings"></i> 
                     Setting
                   </a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="/">
                     <i class="pg-outdent"></i> 
                     Feedback
                   </a>
@@ -305,6 +307,7 @@
 
     <script src="/dist/vendor-webpack.js"></script>
     <script src="/dist/personal_okr-webpack.js"></script>
+    <script src="/dist/personal_objective-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

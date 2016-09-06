@@ -1,3 +1,4 @@
+<div class="container">
 <p id="notice"><%= notice %></p>
 
 <h1>Personal Key Results</h1>
@@ -20,7 +21,9 @@
         <td><%= personal_key_result.personal_objective.objective%></td>
         <td><%= link_to 'Show', personal_key_result %></td>
         <td><%= link_to 'Edit', edit_personal_key_result_path(personal_key_result) %></td>
-        <td><%= link_to 'Destroy', personal_key_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= button_to 'Destroy', personal_key_result, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -29,3 +32,4 @@
 <br>
 
 <%= link_to 'New Personal Key Result', new_personal_key_result_path %>
+</div>

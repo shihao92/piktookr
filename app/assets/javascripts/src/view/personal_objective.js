@@ -54,20 +54,16 @@ define(function(){
 
     function teamSelectionOnChange()
     {
-        $('#team_team_id').change(function(){
-            let teamSelection = document.getElementById('team_team_id');
-            let teamId = teamSelection.options[teamSelection.selectedIndex].value;
-            teamObjectiveSelections(teamId);
-        });
+        let teamSelection = document.getElementById('team_team_id');
+        let teamId = teamSelection.options[teamSelection.selectedIndex].value;
+        return teamId;
     }
 
     function teamObjectiveSelectionOnChange()
     {
-        $('#team_objective_id').change(function(){
-            let teamObjectiveSelection = document.getElementById('team_objective_id');
-            let teamObjectiveId = teamObjectiveSelection.options[teamObjectiveSelection.selectedIndex].value;
-            teamKeyResultSelections(teamObjectiveId);
-        });
+        let teamObjectiveSelection = document.getElementById('team_objective_id');
+        let teamObjectiveId = teamObjectiveSelection.options[teamObjectiveSelection.selectedIndex].value;
+        return teamObjectiveId;
     }
 
     return {

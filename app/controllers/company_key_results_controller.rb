@@ -55,7 +55,7 @@ class CompanyKeyResultsController < ApplicationController
   # DELETE /company_key_results/1
   # DELETE /company_key_results/1.json
   def destroy
-    @company_key_result.destroy
+    @company_key_result.destroy(param[:id])
     delete_company_key_result(@company_key_result.company_objective_id)
     respond_to do |format|
       format.html { redirect_to company_key_results_url, notice: 'Company key result was successfully destroyed.' }

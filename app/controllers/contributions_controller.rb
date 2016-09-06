@@ -24,7 +24,7 @@ class ContributionsController < ApplicationController
   # POST /contributions
   # POST /contributions.json
   def create
-    @contribution = Contribution.new(contribution_params)
+    @contribution = Contribution.new(contribution_params.merge(personal_key_result_id: params[:personal_key_result][:kr_id]))
 
     respond_to do |format|
       if @contribution.save
@@ -69,6 +69,6 @@ class ContributionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def contribution_params
-      params.require(:contribution).permit(:contribution_comment,:personal_key_result_id)
+      params.require(:contribution).permit(:contribution_comment,:personal_key_result_id,:progress_increment)
     end
 end

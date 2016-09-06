@@ -2,13 +2,17 @@
 // This JS file controls the personal objective of all the pages. 
 
 require(['model/role','model/team_objective_key_result','view/header','view/personal_objective'],
-function(jqueryParam,roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
+function(roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
 
     $(document).ready(function(){
 
-        personalObjectiveViewParam.teamSelectionOnChange();
+        $('#team_team_id').change(function(){
+            teamObjectiveSelections(personalObjectiveViewParam.teamSelectionOnChange());
+        });
 
-        personalObjectiveViewParam.teamObjectiveSelectionOnChange();
+        $('#team_objective_id').change(function(){
+            teamKeyResultSelections(personalObjectiveViewParam.teamObjectiveSelectionOnChange());
+        });
 
         function teamObjectiveSelections(team_id)
         {
@@ -34,6 +38,7 @@ function(jqueryParam,roleParam,teamOKRModelParam,headerParam,personalObjectiveVi
                 personalObjectiveViewParam.populateTeamKeyResults(teamKeyResults);
             });
         }
+
     });
    
 });

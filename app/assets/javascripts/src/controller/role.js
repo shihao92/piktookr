@@ -2,7 +2,7 @@
 // This JS file that acts as controller for the role module. 
 
 require(['model/role','view/header','view/dashboard'], 
-function(jqueryParam,roleParam,headerParam,dashboardParam){
+function(roleParam,headerParam,dashboardParam){
     
     //Set the utility dropdown visible
     //headerParam.utilityVisibility();
