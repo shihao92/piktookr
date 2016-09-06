@@ -1,9 +1,13 @@
 # Date : 5 August 2016
-# Completed module : Create, Read and Update feature for OKR Module
-# To be completed module : Delete OKR
+# Completed module : Create, Read, Update and Delete feature for OKR Module
+# Date : 1 September 2016
+# Completed module : Log feature for OKR Module
 
 class PersonalKeyResultsController < ApplicationController
   before_action :set_personal_key_result, only: [:show, :edit, :update, :destroy]
+
+  # Declarations for public variable
+  @@progress_before_update = 0.00;
 
   # GET /personal_key_results
   # GET /personal_key_results.json
@@ -27,20 +31,25 @@ class PersonalKeyResultsController < ApplicationController
   def new
     @personal_key_result = PersonalKeyResult.new
     @contribution = @personal_key_result.contributions.build
+    @log_personal_key_result = @personal_key_result.contributions.build
   end
 
   # GET /personal_key_results/1/edit
   def edit
     @contribution = @personal_key_result.contributions.build
+    @@progress_before_update = @personal_key_result.progress
   end
 
   # POST /personal_key_results
   # POST /personal_key_results.json
   def create
-    @personal_key_result = PersonalKeyResult.new(personal_key_result_params.merge(progress: 0.0, personal_objective_id: params[:personal_objective][:obj_id]))
+    @personal_objective = PersonalObjective.where(id: personal_key_result_params[:personal_objective_id])
+    @log_content = 'Created <span class="bold">' + params[:personal_key_result][:key_result] + '</span> and aligned with <span class="bold">' + @personal_objective[0].objective + '</span>'
+    @personal_key_result = PersonalKeyResult.new(personal_key_result_params.merge(progress: 0.0, personal_objective_id: personal_key_result_params[:personal_objective_id]))
     respond_to do |format|
-      if @personal_key_result.save
-
+      if @personal_key_result.save  
+        @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@personal_key_result.id, user_id: current_user.id)     
+        @log_personal_key_result.save
         # Activate the cascade OKR update functions
         update_okr_modules(@personal_key_result.personal_objective_id,@personal_key_result.id,@personal_key_result.progress)
 
@@ -58,12 +67,11 @@ class PersonalKeyResultsController < ApplicationController
   def update
     respond_to do |format|
       # Everytime when progress is being updated, update the team OKR progress and company OKR progress
-      # Perform this after justification
-      
       if @personal_key_result.update(personal_key_result_params)
-        #Contribution.new(@personal_key_result[:contribution][:contribution_comment])
         # Activate the cascade OKR update functions
         update_okr_modules(@personal_key_result.personal_objective_id, @personal_key_result.id, @personal_key_result.progress)
+
+        generate_log_when_update(@personal_key_result.progress, @@progress_before_update, @personal_key_result.id, @personal_key_result.personal_objective_id)
 
         format.html { redirect_to @personal_key_result, notice: 'Personal key result was successfully updated.' }
         format.json { render :show, status: :ok, location: @personal_key_result }
@@ -77,18 +85,54 @@ class PersonalKeyResultsController < ApplicationController
   # DELETE /personal_key_results/1
   # DELETE /personal_key_results/1.json
   def destroy
-    # Set the progress back to 0 first then only destroy
-    # Activate the cascade OKR update functions
-    # update_okr_modules(@personal_key_result.personal_objective_id,@personal_key_result.id,0.00)
+    @log_content = 'Deleted <span><del>' + @personal_key_result.key_result + '</del></span>'
+    LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_key_result.personal_objective_id, user_id: current_user.id)
+    LogPersonalKeyResult.where(personal_key_result_id: @personal_key_result.id).destroy_all()
+    Contribution.where(personal_key_result_id: @personal_key_result.id).destroy_all()
     @personal_key_result.destroy
-    update_personal_objective_progress_delete_func(@personal_key_result.personal_objective_id)
+    # Activate the cascade OKR update functions
+    delete_personal_key_result(@personal_key_result.personal_objective_id)
     respond_to do |format|
-      format.html { redirect_to personal_key_results_url, notice: 'Personal key result was successfully destroyed.' }
+      format.html { redirect_to '/', notice: 'Personal key result was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
-  
+  def create_new_key_result
+    @key_result = params["key_result"]
+    @personal_objective_id = params["personal_objective_id"]
+
+    @personal_objective = PersonalObjective.where(id: @personal_objective_id)
+    @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @personal_objective[0].objective + '</span>'
+    @temp = PersonalKeyResult.create!(progress: 0.0, key_result: @key_result , personal_objective_id: @personal_objective_id)
+    
+    @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@temp.id, user_id: current_user.id)     
+    @log_personal_key_result.save
+
+    # Activate the cascade OKR update functions
+    update_okr_modules(@personal_objective_id, @temp.id, @temp.progress)
+  end
+
+  def update_progress_key_result
+    # Temporarily implementations with GET method
+    @key_result_id = params["id"]
+    @progress = params["progress"]
+    @progress_decimal = BigDecimal.new(@progress)
+    @initial_progress = params["initial"]
+    @initial_progress_decimal = BigDecimal.new(@initial_progress)
+    @contribution = params["contribution"]
+
+    @personal_key_result = PersonalKeyResult.where(id: @key_result_id)
+
+    puts @personal_key_result[0].personal_objective_id
+    # Update functions for the personal key result
+    PersonalKeyResult.where(id: @key_result_id).update_all(progress: @progress)
+    # Save into contribution module
+    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id)
+    # Activate the cascade OKR update functions
+    update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @progress)
+    generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -98,7 +142,7 @@ class PersonalKeyResultsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def personal_key_result_params
-      params.require(:personal_key_result).permit(:key_result, :progress, :personal_objective_id, contributions_attributes:[:id,:contribution_comment])
+      params.require(:personal_key_result).permit(:key_result, :progress, :personal_objective_id, contributions_attributes:[:id,:contribution_comment], log_personal_key_results_attributes:[:log_content,:personal_key_result_id])
     end
 
     # Cascade functions in updating the OKR from personal to company
@@ -175,6 +219,46 @@ class PersonalKeyResultsController < ApplicationController
       @company_objective_progress = update_company_objective_progress(@company_objective_id,@company_key_result_id)
       # Update the progress of the company objective
       CompanyObjective.where(id: @company_objective_id).update_all(progress: @company_objective_progress)
+
+    end
+
+    def generate_log_when_update(personal_kr_progress, initial_progress, personal_kr_id, personal_objective_id)
+
+      # Contribution towards the personal key result (Log)
+      @personal_key_result = PersonalKeyResult.where(id: personal_kr_id)
+      @progress_difference =  personal_kr_progress - initial_progress
+      @log_content = 'Contributed <span class="bold">+' + @progress_difference.to_s + '%</span>'
+      @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id: personal_kr_id, user_id: current_user.id)     
+      @log_personal_key_result.save
+      # Contribution towards the personal objective (Log)
+      @personal_objectives = PersonalKeyResult.where(personal_objective_id: personal_objective_id)
+      @personal_objective_progress_portion = @progress_difference / @personal_objectives.count
+      @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @personal_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
+      LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: personal_objective_id, user_id: current_user.id)
+      # Generate log for team key result
+      @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: personal_objective_id)
+      @team_key_results = OkrTeamPersonal.where(team_key_result_id: @okr_team_personal[0].team_key_result_id)
+      @team_kr_progress_portion = @personal_objective_progress_portion / @team_key_results.count
+      @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @team_kr_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
+      LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @okr_team_personal[0].team_key_result_id, user_id: current_user.id)
+      # Generate log for team objective
+      @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id)
+      @team_objectives = TeamKeyResult.where(team_objective_id: @team_key_result[0].team_objective_id)
+      @team_objective_progress_portion = @team_kr_progress_portion / @team_objectives.count
+      @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @team_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
+      LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_key_result[0].team_objective_id, user_id: current_user.id)
+      # Generate log for company key result
+      @okr_company_team = OkrCompanyTeam.where(team_objective_id: @team_key_result[0].team_objective_id)
+      @company_key_results = OkrCompanyTeam.where(company_key_result_id: @okr_company_team[0].company_key_result_id)
+      @company_kr_progress_portion = @team_objective_progress_portion / @company_key_results.count
+      @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @company_kr_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
+      LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @okr_company_team[0].company_key_result_id, user_id: current_user.id)
+      # Generate log for company objective
+      @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id)
+      @company_objectives = CompanyKeyResult.where(company_objective_id: @company_key_result[0].company_objective_id)
+      @company_objective_progress_portion = @company_kr_progress_portion / @company_objectives.count
+      @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @company_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
+      LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_key_result[0].company_objective_id, user_id: current_user.id)
 
     end
 

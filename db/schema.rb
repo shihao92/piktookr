@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160824021950) do
+ActiveRecord::Schema.define(version: 20160830021913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,66 @@ ActiveRecord::Schema.define(version: 20160824021950) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
     t.index ["personal_key_result_id"], name: "index_contributions_on_personal_key_result_id", using: :btree
+  end
+
+  create_table "log_company_key_results", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "company_key_result_id"
+    t.integer  "user_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["company_key_result_id"], name: "index_log_company_key_results_on_company_key_result_id", using: :btree
+    t.index ["user_id"], name: "index_log_company_key_results_on_user_id", using: :btree
+  end
+
+  create_table "log_company_objectives", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "company_objective_id"
+    t.integer  "user_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.index ["company_objective_id"], name: "index_log_company_objectives_on_company_objective_id", using: :btree
+    t.index ["user_id"], name: "index_log_company_objectives_on_user_id", using: :btree
+  end
+
+  create_table "log_personal_key_results", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "personal_key_result_id"
+    t.integer  "user_id"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.index ["personal_key_result_id"], name: "index_log_personal_key_results_on_personal_key_result_id", using: :btree
+    t.index ["user_id"], name: "index_log_personal_key_results_on_user_id", using: :btree
+  end
+
+  create_table "log_personal_objectives", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "personal_objective_id"
+    t.integer  "user_id"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.index ["personal_objective_id"], name: "index_log_personal_objectives_on_personal_objective_id", using: :btree
+    t.index ["user_id"], name: "index_log_personal_objectives_on_user_id", using: :btree
+  end
+
+  create_table "log_team_key_results", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "team_key_result_id"
+    t.integer  "user_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.index ["team_key_result_id"], name: "index_log_team_key_results_on_team_key_result_id", using: :btree
+    t.index ["user_id"], name: "index_log_team_key_results_on_user_id", using: :btree
+  end
+
+  create_table "log_team_objectives", force: :cascade do |t|
+    t.string   "log_content"
+    t.integer  "team_objective_id"
+    t.integer  "user_id"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["team_objective_id"], name: "index_log_team_objectives_on_team_objective_id", using: :btree
+    t.index ["user_id"], name: "index_log_team_objectives_on_user_id", using: :btree
   end
 
   create_table "okr_company_teams", force: :cascade do |t|
@@ -93,6 +153,7 @@ ActiveRecord::Schema.define(version: 20160824021950) do
     t.integer  "personal_objective_id"
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
+    t.boolean  "is_completed"
     t.index ["personal_objective_id"], name: "index_personal_key_results_on_personal_objective_id", using: :btree
   end
 
@@ -180,6 +241,18 @@ ActiveRecord::Schema.define(version: 20160824021950) do
   add_foreign_key "company_key_results", "company_objectives"
   add_foreign_key "company_objectives", "timeframe_logs"
   add_foreign_key "contributions", "personal_key_results"
+  add_foreign_key "log_company_key_results", "company_key_results"
+  add_foreign_key "log_company_key_results", "users"
+  add_foreign_key "log_company_objectives", "company_objectives"
+  add_foreign_key "log_company_objectives", "users"
+  add_foreign_key "log_personal_key_results", "personal_key_results"
+  add_foreign_key "log_personal_key_results", "users"
+  add_foreign_key "log_personal_objectives", "personal_objectives"
+  add_foreign_key "log_personal_objectives", "users"
+  add_foreign_key "log_team_key_results", "team_key_results"
+  add_foreign_key "log_team_key_results", "users"
+  add_foreign_key "log_team_objectives", "team_objectives"
+  add_foreign_key "log_team_objectives", "users"
   add_foreign_key "okr_company_teams", "company_key_results"
   add_foreign_key "okr_company_teams", "team_objectives"
   add_foreign_key "okr_team_personals", "personal_objectives"

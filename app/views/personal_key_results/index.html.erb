@@ -31,5 +31,22 @@
 
 <br>
 
+<table>
+  <thead>
+    <tr>
+      <th>Log for Personal Key Result</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @logs = LogPersonalKeyResult.all %>
+    <% @logs.each do |item| %>
+      <tr>
+        <td><%= raw(item.log_content) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <%= link_to 'New Personal Key Result', new_personal_key_result_path %>
 </div>

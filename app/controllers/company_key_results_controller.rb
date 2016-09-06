@@ -26,15 +26,16 @@ class CompanyKeyResultsController < ApplicationController
   def create
     @company_key_result = CompanyKeyResult.new(company_key_result_params.merge(progress: 0.0,company_objective_id: params[:company_objective][:company_objective_id]))
 
-    respond_to do |format|
-      if @company_key_result.save
-        update_okr_modules(@company_key_result.company_objective_id,@company_key_result.id)
-        format.html { redirect_to @company_key_result, notice: 'Company key result was successfully created.' }
-        format.json { render :show, status: :created, location: @company_key_result }
-      else
-        format.html { render :new }
-        format.json { render json: @company_key_result.errors, status: :unprocessable_entity }
-      end
+    if @company_key_result.save
+      update_okr_modules(@company_key_result.company_objective_id,@company_key_result.id)
+      @company_objective = CompanyObjective.where(id: @company_key_result.company_objective_id)
+      @log_content = 'Created <span class="bold">' + @company_key_result.key_result + '</span> and aligned with <span class="bold">' + @company_objective[0].objective + '</span>'
+      LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @company_key_result.id, user_id: current_user.id)
+      flash.notice = 'Company key result was successfully created.'
+      redirect_to @company_key_result
+    else
+      flash.notice = 'Company key result was not able to be created.'
+      redirect_to @company_key_result
     end
   end
 
@@ -43,6 +44,7 @@ class CompanyKeyResultsController < ApplicationController
   def update
     respond_to do |format|
       if @company_key_result.update(company_key_result_params)
+        
         format.html { redirect_to @company_key_result, notice: 'Company key result was successfully updated.' }
         format.json { render :show, status: :ok, location: @company_key_result }
       else
@@ -55,11 +57,17 @@ class CompanyKeyResultsController < ApplicationController
   # DELETE /company_key_results/1
   # DELETE /company_key_results/1.json
   def destroy
-    @company_key_result.destroy(param[:id])
-    delete_company_key_result(@company_key_result.company_objective_id)
-    respond_to do |format|
-      format.html { redirect_to company_key_results_url, notice: 'Company key result was successfully destroyed.' }
-      format.json { head :no_content }
+    # Temporarily implementation - Delete log team key result whenever user want to delete the team key result
+    @log_content = 'Deleted <span><del>' + @company_key_result.key_result + '</del></span>'
+    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_key_result.company_objective_id, user_id: current_user.id)
+    LogCompanyKeyResult.where(company_key_result_id: @company_key_result.id).destroy_all()
+    if @company_key_result.destroy
+      delete_company_key_result(@company_key_result.company_objective_id)
+      flash.alert = 'Company key result was successfully destroyed.'
+      redirect_to company_key_results_url
+    else
+      flash.alert = 'Not able to be deleted because there are other team key result aligned to it.'
+      redirect_to company_key_results_url
     end
   end
 

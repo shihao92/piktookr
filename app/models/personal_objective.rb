@@ -6,4 +6,6 @@ class PersonalObjective < ApplicationRecord
 
     has_many           :personal_key_results
 
+    has_many           :log_personal_objectives
+
 end

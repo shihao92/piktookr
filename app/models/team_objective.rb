@@ -6,4 +6,7 @@ class TeamObjective < ApplicationRecord
     has_many           :team_key_results
     belongs_to         :timeframe_log
 
+
+    has_many           :log_team_objectives
+
 end

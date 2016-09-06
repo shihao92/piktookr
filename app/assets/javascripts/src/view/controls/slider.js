@@ -24,8 +24,23 @@ function(){
 	             }
              })
              .on('change', function ( handle, value ) {
-                if ( value < current_progress ) {
+                if ( value < current_progress ) 
+                {
                 	$("#slider-tooltips").val(current_progress);
+                }
+                else
+                {
+                    // Enable the save button after the contribution is being filled in
+                    if($('#contribution_textarea').val() != "")
+                    {
+                        $('#btn_update_progress').prop( "disabled", false );
+                    }
+                    else
+                    {
+                        $('#contribution_textarea').change(function(){
+                            $('#btn_update_progress').prop( "disabled", false );
+                        });
+                    }
                 }
               });
             $("#slider-tooltips").Link('lower').to('-inline-<div class="tooltip fade top in" style="top: -33px;left: -14px;opacity: 0.7;"></div>', function(value) {
@@ -38,6 +53,11 @@ function(){
                 );
             });
         });
+    }
+
+    function accordionSliderControl(id,progress)
+    {
+        
     }
 
     return {

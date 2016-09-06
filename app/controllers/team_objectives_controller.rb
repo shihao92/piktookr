@@ -30,6 +30,11 @@ class TeamObjectivesController < ApplicationController
       if @team_objective.save
         OkrCompanyTeam.create!(team_objective_id: @team_objective.id,company_key_result_id: params[:company_key_result][:kr_id])
         update_okr_modules(@team_objective.id,@team_objective.progress)
+
+        @company_key_result = CompanyKeyResult.where(id: params[:company_key_result][:kr_id])
+        @log_content = 'Created <span class="bold">' + @team_objective.objective + '</span> and aligned with <span class="bold">' + @company_key_result[0].key_result + '</span>'
+        LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_objective.id, user_id: current_user.id)
+
         format.html { redirect_to @team_objective, notice: 'Team objective was successfully created.' }
         format.json { render :show, status: :created, location: @team_objective }
       else
@@ -60,6 +65,10 @@ class TeamObjectivesController < ApplicationController
     @okr_company_team = OkrCompanyTeam.where(team_objective_id: team_objective.id)
     @company_key_result_id = @okr_company_team[0].company_key_result_id
     OkrCompanyTeam.where(team_objective_id: @team_objective.id).destroy_all
+
+    # Temporarily implementation - Delete log team objective whenever user want to delete the team objective
+    LogTeamObjective.where(team_objective_id: @team_objective.id).destroy_all
+    
     @team_objective.destroy
     respond_to do |format|
       format.html { redirect_to team_objectives_url, notice: 'Team objective was successfully destroyed.' }

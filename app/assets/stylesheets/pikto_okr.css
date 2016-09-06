@@ -1,6 +1,6 @@
 .centralize {
   position: relative;
-  top: 50%;
+  top: 20%;
   transform: translateY(30%); }
 
 .padding-body {
@@ -20,6 +20,9 @@
 .user-menu {
   word-wrap: break-word; }
 
+.modal-background {
+  background: #ffffff; }
+
 .accordion-item-title {
   font-family: 'Montserrat';
   display: inline-block;
@@ -36,12 +39,15 @@
   -webkit-transition: opacity 0.3s ease;
   transition: opacity 0.3s ease; }
 
+.details-layout {
+  word-break: keep-all; }
+
 .form-custom-accordion {
   border: 1px solid rgba(230, 230, 230, 0.7); }
 
 .accordion-item {
   border: 1px solid rgba(230, 230, 230, 0.7);
-  padding-left: 5px;
+  padding-left: 0px;
   min-height: 48px;
   width: 100%;
   padding-top: 5px;
@@ -50,10 +56,10 @@
 .accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
   background: #c7c7c7; }
 
-.add-row {
+.add-new-personal-key-result {
   background: transparent; }
 
-.add-row:hover, .add-row:active {
+.add-new-personal-key-result:hover, .add-new-personal-key-result:active {
   background: transparent; }
 
 .item-content {
@@ -79,5 +85,11 @@
 
 .form-group-default .textarea-custom {
   height: 100px; }
+
+.form-new-key-result {
+  border: none; }
+
+.form-new-key-result:focus {
+  background: transparent; }
 
 /*# sourceMappingURL=pikto_okr.css.map */

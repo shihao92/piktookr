@@ -28,6 +28,9 @@ class CompanyObjectivesController < ApplicationController
     @company_objective = CompanyObjective.new(company_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id))
     respond_to do |format|
       if @company_objective.save
+        @log_content = 'Created <span><del>' + @company_objective.objective + '</del></span>' 
+        LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_objective.id, user_id: current_user.id)
+
         format.html { redirect_to @company_objective, notice: 'Company objective was successfully created.' }
         format.json { render :show, status: :created, location: @company_objective }
       else
@@ -35,10 +38,6 @@ class CompanyObjectivesController < ApplicationController
         format.json { render json: @company_objective.errors, status: :unprocessable_entity }
       end
     end
-  end
-
-  def createKeyResult
-
   end
 
   # PATCH/PUT /company_objectives/1
@@ -58,11 +57,24 @@ class CompanyObjectivesController < ApplicationController
   # DELETE /company_objectives/1
   # DELETE /company_objectives/1.json
   def destroy
-    binding.pry
-    @company_objective.destroy
-    respond_to do |format|
-      format.html { redirect_to company_objectives_url, notice: 'Company objective was successfully destroyed.' }
-      format.json { head :no_content }
+    LogCompanyObjective.where(company_objective_id: @company_objective.id).destroy_all()
+    begin
+      if @company_objective.destroy
+        respond_to do |format|
+          format.html { redirect_to company_objectives_url, notice: 'Company objective was successfully destroyed.' }
+          format.json { head :no_content }
+        end
+      else
+        respond_to do |format|
+          format.html { redirect_to company_objectives_url, notice: 'There is other key result aligned with this company objective.' }
+          format.json { head :no_content }
+        end
+      end
+    rescue
+      respond_to do |format|
+        format.html { redirect_to company_objectives_url, notice: 'There is other key result aligned with this company objective.' }
+        format.json { head :no_content }
+      end
     end
   end
 

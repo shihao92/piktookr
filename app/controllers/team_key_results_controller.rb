@@ -29,10 +29,14 @@ class TeamKeyResultsController < ApplicationController
   # POST /team_key_results.json
   def create
     @team_key_result = TeamKeyResult.new(team_key_result_params.merge(progress: 0.0,team_objective_id: params[:team_objective][:id]))
-    
     respond_to do |format|
       if @team_key_result.save
         update_okr_modules(@team_key_result.team_objective_id, @team_key_result.id, 0.00)
+
+        @team_objective = TeamObjective.where(id: @team_key_result.team_objective_id)
+        @log_content = 'Created <span class="bold">' + @team_key_result.key_result + '</span> and aligned with <span class="bold">' + @team_objective[0].objective + '</span>' 
+        LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @team_key_result.id, user_id: current_user.id)
+
         format.html { redirect_to @team_key_result, notice: 'Team key result was successfully created.' }
         format.json { render :show, status: :created, location: @team_key_result }
       else
@@ -60,6 +64,10 @@ class TeamKeyResultsController < ApplicationController
   # DELETE /team_key_results/1
   # DELETE /team_key_results/1.json
   def destroy
+    # Temporarily implementation - Delete log team key result whenever user want to delete the team key result
+    @log_content = 'Deleted <span><del>' + @team_key_result.key_result + '</del></span>'
+    LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_key_result.team_objective_id, user_id: current_user.id)
+    LogTeamKeyResult.where(team_key_result_id: @team_key_result.id).destroy_all()
     @team_key_result.destroy
     delete_team_key_result(@team_key_result.team_objective_id)
     respond_to do |format|

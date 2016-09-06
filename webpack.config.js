@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      vendor: ['jquery','plugins/bootstrapv3/js/bootstrap'],
+      vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap'],
       personal_okr: 'controller/personal_okr.js',
       role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',
@@ -24,6 +24,7 @@ module.exports = {
         path.resolve('./app/assets/javascripts/src'),
         path.resolve('./app/assets/images'),
         path.resolve('./app/assets/stylesheets'),
+        path.resolve('./node_modules'),
         // path.resolve()
       ],
     },

@@ -21,13 +21,30 @@
         <td><%= company_key_result.company_objective.objective %></td>
         <td><%= link_to 'Show', company_key_result %></td>
         <td><%= link_to 'Edit', edit_company_key_result_path(company_key_result) %></td>
-        <td><%= link_to 'Destroy', company_key_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= button_to 'Destroy', company_key_result, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
 <br>
+
+<table>
+  <thead>
+    <tr>
+      <th>Log for Company Key Result</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @logs = LogCompanyKeyResult.all %>
+    <% @logs.each do |item| %>
+      <tr>
+        <td><%= raw(item.log_content) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
 <%= link_to 'New Company Key Result', new_company_key_result_path %>
 </div>

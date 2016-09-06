@@ -34,9 +34,12 @@ class PersonalObjectivesController < ApplicationController
     respond_to do |format|
       if @personal_objective.save
         OkrTeamPersonal.create!(team_key_result_id: params[:team_key_result][:id], personal_objective_id: @personal_objective.id)
+        @team_key_result = TeamKeyResult.where(id: params[:team_key_result][:id])
+        @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
+        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: current_user.id)
         # Right after creation of new personal objective, update OKR progress 
         update_okr_modules(@personal_objective.id,0.00)
-        format.html { redirect_to @personal_objective, notice: 'Personal objective was successfully created.' }
+        format.html { redirect_to '/', notice: 'Personal objective was successfully created.' }
         format.json { render :show, status: :created, location: @personal_objective }
       else
         format.html { render :new }
@@ -67,6 +70,12 @@ class PersonalObjectivesController < ApplicationController
     @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: @personal_objective.id)
     @team_key_result_id = @okr_team_personal[0].team_key_result_id
     OkrTeamPersonal.where(personal_objective_id: @personal_objective.id).destroy_all()
+    LogPersonalObjective.where(personal_objective_id: @personal_objective.id).destroy_all()
+    PersonalKeyResult.where(personal_objective_id: @personal_objective.id).each do |item|
+      LogPersonalKeyResult.where(personal_key_result_id: item.id).destroy_all()
+    end
+    PersonalKeyResult.where(personal_objective_id: @personal_objective.id).destroy_all()
+    
     @personal_objective.destroy
     delete_personal_objective(@team_key_result_id)
     respond_to do |format|

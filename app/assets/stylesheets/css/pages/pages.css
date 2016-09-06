@@ -442,6 +442,7 @@ body.rtl [class*="col-"] {
 }
 .page-sidebar .sidebar-menu .menu-items > li > a.detailed > .title {
   line-height: 28px;
+  width: 100%;
 }
 .page-sidebar .sidebar-menu .menu-items > li > a.detailed > .details {
   line-height: 16px;

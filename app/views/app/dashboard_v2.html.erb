@@ -133,7 +133,12 @@
               <% if(@personal_objective.count == 0) %>
               <%= '-' %>
               <% else %>
-                <%= @date_difference.to_i %>
+                <% if @date_difference < 1 %>
+                  <% @date_difference = "< 1" %>
+                  <%= @date_difference %>
+                <% else %>
+                  <%= @date_difference.to_i %>
+                <% end %>                 
               <% end %>
             </span>  
             <p>days ago</p> 
@@ -148,59 +153,90 @@
   </div>
 
   <!-- Accordion involved all the OKR progresses -->
-  <div class="row padding-accordion-group">
+  <div class="padding-accordion-group">
     <% @personal_objective.each_with_index do |item,index| %>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab">
-          <h4 class="panel-title panel-title-custom">
-            <div class="row">
-              <div class="col-lg-11 col-md-11 col-sm-11">
+          <div class="row">
+            <div class="col-lg-11 col-md-11 col-sm-11">
+              <h4 class="panel-title panel-title-custom">
                 <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= index %>" aria-expanded="false" aria-controls="personal_obj_<%= index %>">
-                  <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-6">
-                      <% @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: item.id) %>
-                      <% @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id) %>
-                      <div>
-                        <%= content_tag(:p, @team_key_result[0].key_result, class: "small" ) %>
-                        <%= content_tag(:span, item.objective, class: "bold" ) %>
-                      </div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6">
+                    <% @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: item.id) %>
+                    <% @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id) %>
+                    <div>
+                      <%= content_tag(:p, @team_key_result[0].key_result, class: "small details-layout" ) %>
+                      <%= content_tag(:p, item.objective, class: "bold details-layout" ) %>
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1">
+                    <div class="text-center">
+                      <p class="small">Contribution</p>
                       <div class="text-center">
-                        <p class="small">Contribution</p>
-                        <div class="text-center">
-                          <span class="bold">21%</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2">
-                      <div class="text-center">
-                        <p class="small">Days left</p>
-                        <div class="text-center">
-                          <span class="bold">55</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3" style="padding-left:0px;">
-                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
-                      <br />
-                      <div class="progress">
-                        <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                        <span class="bold">21%</span>
                       </div>
                     </div>
                   </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="text-center">
+                      <p class="small">Days left</p>
+                      <div class="text-center">
+                        <span class="bold">55</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3" style="padding-left:0px;">
+                    <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
+                    <br />
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                    </div>
+                  </div>
+                </div>
                 </a>
-              </div>
-              <div class="col-lg-1 col-md-1 col-sm-1">
-                <div class="pull-right">
-           	      <button class="btn btn-accordion">
-           	        <i class="pg-menu"></i>
-           	      </button>
-                  
-           	    </div>
+              </h4>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1">
+              <div class="dropdown pull-right">
+                <button class="btn btn-accordion" data-toggle="dropdown" type="button">
+                  <i class="pg-menu"></i>   
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                      <i class="fa fa-fw fa-trash-o"></i> 
+                      <span> Delete</span>
+                    </a>
+                  </li>
+                </ul>
               </div>
             </div>
-          </h4>
+          </div>
+        </div>
+        <!-- Confirmation Modal before personal objective deletion -->
+        <div id="confirmation_obj_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
+          <div class="modal-dialog">                   
+            <!-- Modal content-->
+            <div style="background:#ffffff;">
+              <div class="modal-header clearfix text-left">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Warning</h4>
+              </div>
+              <hr/>
+              <div class="modal-body">
+                <div class="form-group">
+                  <p>Are you sure? </p>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
+                  Delete
+                </a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>                
+          </div>
         </div>
         <div id="personal_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="personal_obj_<%= index %> ">
           <div class="panel-body no-padding">
@@ -219,7 +255,9 @@
                       <div class="accordion-item-title">
                         <div class="checkbox-primary">
                           <input type="checkbox" value="<%= item.id %>" id="personal_kr_<%= item.id %>"/>
-                          <label style="display: inline-block;overflow-wrap: break-word;word-wrap: break-word;word-break: normal;line-break: strict;" for="personal_kr_<%= item.id %>"><%= item.key_result %></label>
+                          <label for="personal_kr_<%= item.id %>">
+                            <p class="details-layout"><%= item.key_result %></p>
+                          </label>
                         </div> 
                       </div>
                     </div>
@@ -248,10 +286,24 @@
            	        </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <!-- JS : Contribution page -->
-                        <a href="/" data-toggle="search" id="keyresultprogress_<%= item.id %>">
-                          <i class="fa fa-fw fa-plus"></i> 
-                           Progress update
+                        <!-- JS : Link to Contribution page -->
+                        <% if(item.progress == 100.00) %>
+                          <a href="/" data-toggle="modal" data-target="#notification_modal" id="keyresultprogress_<%= item.id %>">
+                            <i class="fa fa-fw fa-plus"></i> 
+                             Progress update
+                          </a>
+                        <% else %>
+                          <a href="/" data-toggle="search" id="keyresultprogress_<%= item.id %>">
+                            <i class="fa fa-fw fa-plus"></i> 
+                             Progress update
+                          </a>
+                        <% end %>
+                      </li>
+                      <li>
+                        <!-- JS : Deletion of key result -->
+                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
+                          <i class="fa fa-fw fa-trash-o"></i> 
+                           Delete
                         </a>
                       </li>
                     </ul>
@@ -259,22 +311,45 @@
            	      </div>
                 </div>
               </div>
+              <!-- Confirmation modal for personal key result deletion -->
+              <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
+                <div class="modal-dialog">
+                
+                  <!-- Modal content-->
+                  <div class="modal-background">
+                    <div class="modal-header clearfix text-left">
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <h4 class="modal-title">Warning</h4>
+                    </div>
+                    <hr/>
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <p id="prompt_message">Are you sure?</p>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_key_results/<%= item.id %>">
+                        Delete
+                      </a>
+                      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                
+                </div>
+              </div>
             <% end %>
 
             <!-- New row for the add in of new key results over here -->
-            <div class="row accordion-item add-row">
-              <div class="panel-heading" role="tab">
-                <h4 class="panel-title">
-                    <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="">
-                        Add new key result
-                    </a>
-                </h4>
-              </div>
-              <div class="panel-collapse collapse" role="tabpanel">
-                <div class="panel-body no-padding form-custom-accordion">
-                    
+            <div class="row accordion-item add-new-personal-key-result">
+              <% @personal_key_result = PersonalKeyResult.new %>
+              <%= form_for @personal_key_result do |f| %>
+                <div id="new_key_result" name="new_key_result_objective_<%= item.id %>">
+                  <div id="form_authenticity_token" style="display: none;">
+                    <%= form_authenticity_token %>
+                  </div>
+                  <input id="new_key_result_objective_<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new key result"/>         
                 </div>
-              </div>
+              <% end %>
             </div>
           </div>
         </div>
@@ -300,16 +375,17 @@
 
     <div class="panel panel-default">
       <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#new_personal_objective" aria-expanded="false" aria-controls="new_personal_objective">
+        <h4 class="panel-title panel-title-custom">
+            <a data-toggle="collapse" data-parent="#accordion" href="#new_personal_objective" aria-expanded="false" aria-controls="new_personal_objective">
+                <i class="fa fa-fw fa-plus fa-lg"></i> 
                 Add new objective
             </a>
         </h4>
       </div>
       <div id="new_personal_objective" class="panel-collapse collapse" role="tabpanel">
-        <div class="panel-body no-padding form-custom-accordion">
+        <div class="panel-body form-custom-accordion">
             <% @personal_objective = PersonalObjective.new %>
-            <div class="container form-group" style="padding-top:10px;">
+            <div style="padding-top:10px;">
               <%= form_for @personal_objective do |f| %>
                 <% if @personal_objective.errors.any? %>
                   <div id="error_explanation">
@@ -365,7 +441,7 @@
       </div>
     </div>
 
-    <div class="panel panel-default">
+    <!--<div class="panel panel-default">
       <div class="panel-heading" role="tab">
         <h4 class="panel-title">
             <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#new_personal_key_result" aria-expanded="false" aria-controls="new_personal_key_result">
@@ -395,10 +471,10 @@
                 <div class="form-group">
                   <%= f.label :key_result %><br />
                   <%= f.text_field :key_result, autofocus: true, class: "form-control" %>
-                </div>        
+                </div>-->       
 
                 <!--Load related personal objective-->
-                <% obj_array = PersonalObjective.where(user_id: current_user.id).map { |obj| [obj.objective, obj.id] }%>
+                <!--<% obj_array = PersonalObjective.where(user_id: current_user.id).map { |obj| [obj.objective, obj.id] }%>
                 <div class="form-group">
                   <%= f.label :personal_objective_alignment %><br />
                   <%= select("personal_objective", "object_id", obj_array, {}, {class: 'form-control'}) %>
@@ -419,7 +495,7 @@
             </div>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->
@@ -448,6 +524,10 @@
             </span>
           </h5>
         </div>
+        <div id="key_result_id" style="display:none;">
+        </div>
+        <div id="popup_initial_progress" style="display:none;">
+        </div>
         <div class="row">
           <div class="no-padding m-t-50">
             <div class="bg-master" id="slider-tooltips">
@@ -457,30 +537,28 @@
         <br/>
         <br/>
         <div class="row">
-          <form role="form">
-            <div class="row">           
-                <div class="form-group form-group-default">
-                  <label>WHAT DID YOU CONTRIBUTE TO THIS OKR?</label>
-                  <textarea class="form-control textarea-custom" required></textarea>
+          <div class="row">           
+              <div class="form-group form-group-default">
+                <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
+                <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
+              </div>
+          </div>
+          <div class="row">
+              <div class="pull-left">
+                <div class="checkbox checkbox-success">
+                  <input type="checkbox" id="checkbox_kr_done" value="complete_kr"/>
+                  <label for="checkbox_kr_done">Mark KR as completed</label>
                 </div>
-            </div>
-            <div class="row">
-                <div class="pull-left">
-                  <div class="checkbox checkbox-success">
-                    <input type="checkbox" id="checkbox_kr_done" value="complete_kr"/>
-                    <label for="checkbox_kr_done">Mark KR as completed</label>
-                  </div>
-                </div>
-                <div class="pull-right">
-                  <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
-                    Cancel
-                  </a>
-                  <button class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
-                    Save
-                  </button>
-                </div>
-            </div>
-          </form>
+              </div>
+              <div class="pull-right">
+                <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
+                  Cancel
+                </a>
+                <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
+                  Save
+                </button>
+              </div>
+          </div>
         </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3">
@@ -489,4 +567,29 @@
     </div>
   </div>
 </div>
+
+<!-- Modal for notification -->
+<div id="notification_modal" class="modal fade stick-up" role="dialog">
+  <div class="modal-dialog">
+  
+    <!-- Modal content-->
+    <div class="modal-background">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Notifications</h4>
+      </div>
+      <hr/>
+      <div class="modal-body">
+        <div class="form-group">
+          <p id="notification_message">This key result is completed!</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  
+  </div>
+</div>
+
 

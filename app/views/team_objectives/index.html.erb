@@ -33,5 +33,22 @@
 
 <br>
 
+<table>
+  <thead>
+    <tr>
+      <th>Log for Team Objective</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @logs = LogTeamObjective.all %>
+    <% @logs.each do |item| %>
+      <tr>
+        <td><%= raw(item.log_content) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
 <%= link_to 'New Team Objective', new_team_objective_path %>
 </div>

@@ -13,7 +13,7 @@ $icon-light-grey : #b3b3b3;
 // ---------------------
 .centralize {
     position: relative;
-    top: 50%;
+    top: 20%;
     transform: translateY(30%);
 }
 .padding-body {
@@ -32,6 +32,9 @@ $icon-light-grey : #b3b3b3;
 }
 .user-menu {
     word-wrap: break-word;
+}
+.modal-background {
+    background: #ffffff;
 }
 
 // ---------------------
@@ -53,6 +56,10 @@ $icon-light-grey : #b3b3b3;
     -webkit-transition: opacity 0.3s ease;
     transition: opacity 0.3s ease;
 }
+// Font layout
+.details-layout{
+    word-break: keep-all;
+}
 
 // ---------------------
 //     Form Controls
@@ -67,7 +74,7 @@ $icon-light-grey : #b3b3b3;
 // Accordion
 .accordion-item {
     border: 1px solid rgba(230, 230, 230, 0.7);
-    padding-left: 5px;
+    padding-left: 0px;
     min-height: 48px; 
     width: 100%;
     padding-top: 5px;
@@ -76,10 +83,10 @@ $icon-light-grey : #b3b3b3;
 .accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
     background: $dark-grey;
 }
-.add-row {
+.add-new-personal-key-result {
     background: transparent;
 }
-.add-row:hover, .add-row:active {
+.add-new-personal-key-result:hover, .add-new-personal-key-result:active {
     background: transparent;
 }
 .item-content {
@@ -108,4 +115,10 @@ $icon-light-grey : #b3b3b3;
 }
 .form-group-default .textarea-custom {
     height: 100px;
+}
+.form-new-key-result {
+    border: none;
+}
+.form-new-key-result:focus {
+    background: transparent;
 }

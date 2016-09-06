@@ -1,4 +1,6 @@
 <% @user = User.find(current_user.id) %>
+<% #User listing module %>
+<% @users = User.all %>
 <% @current_date = Time.now.strftime("%Y-%m-%d") %>
 <% @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") %>
 <% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
@@ -11,7 +13,8 @@
   <head>
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <script src="/dist/vendor-webpack.js"></script>
+    <%= stylesheet_link_tag    'application', media: 'all' %>  
     <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
   </head>
   <body class="fixed-header">
@@ -51,16 +54,43 @@
 
       <div class="sidebar-menu">
         <ul class="menu-items">
+          <% @users.each do |item| %>
+            <% if (item.id != current_user.id) %>
+              <li class="m-t-30 ">
+                <!-- Date : 23rd August 2016 -->
+                <!-- User favourite module proposed here -->
+                <!-- Current Progress: User Listing Module -->          
+                <!-- JS here to generate the user name and shortform -->
+                <a href="/" class="detailed">
+                  <span class="title" id="user-name">
+                    <%= item.name %>
+                  </span>
+                  <p class="details details-layout" id="user-position">
+                    <%= item.position %>
+                  </p> 
+                </a>
+                <span class="icon-thumbnail">
+                  <span id="username-shortform">
+                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @user_short_str = "" %>
+                    <% @user_shortform.each do |item| %>
+                      <% @user_short_str = @user_short_str + item %>
+                    <% end %>
+                    <%= @user_short_str %>
+                  </span>
+                </span>
+              </li>
+            <% end %>
+          <% end %>
           <li class="m-t-30 ">
-            <!-- Date : 23rd August 2016 -->
-            <!-- User favourite module proposed here -->
-            <!-- Current Progress: On the way to estimate time for implementations -->          
-            <!-- JS here to generate the user name and shortform -->
+            <hr/>
             <a href="/" class="detailed">
-              <span class="title" id="user-name"><%= @user.name %></span>
-              <span class="details" id="user-position">
+              <span class="title" id="user-name">
+                <%= @user.name %>
+              </span>
+              <p class="details details-layout" id="user-position">
                 <%= @user.position %>
-              </span> 
+              </p> 
             </a>
             <span class="icon-thumbnail">
               <span id="username-shortform">
@@ -305,7 +335,8 @@
       </div>
     </div>
 
-    <script src="/dist/vendor-webpack.js"></script>
+
+    
     <script src="/dist/personal_okr-webpack.js"></script>
     <script src="/dist/personal_objective-webpack.js"></script>
   </body>

@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # -----------
   # Role module
   # -----------
-  # URL to check for role based on input ID
+  # Route to check for role based on input ID
   get 'app/check_role' 
   
   # ---------------
@@ -39,7 +39,7 @@ Rails.application.routes.draw do
   # ---------------
   resources :team_objectives
   resources :team_key_results
-  # URL to use selected team ID to populate the team objectives combo box
+  # Route to use selected team ID to populate the team objectives combo box
   get 'team_key_results/get_team_objective/:id' => 'team_key_results#get_team_objective'
 
   # -------------------
@@ -47,14 +47,18 @@ Rails.application.routes.draw do
   # -------------------
   resources :personal_objectives
   resources :personal_key_results
-  
+  # Route to create new key result
+  post 'personal_key_results/create_new_key_result' => 'personal_key_results#create_new_key_result'
+  # Route to update the progress of key result
+  post 'personal_key_results/update_progress_key_result' => 'personal_key_results#update_progress_key_result'
+
   # Personal contributions upon update the key results progress
   resources :contributions
 
-  # URL to use selected team ID to populate the team key results combo box
+  # Route to use selected team ID to populate the team key results combo box
   get 'personal_objectives/get_team_key_results/:id' => 'personal_objectives#get_team_key_results' 
 
-  # Routes for application view pages
+  # Route for application view pages
   get 'app/dashboard'
   
   # Route for the default page

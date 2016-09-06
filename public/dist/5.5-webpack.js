@@ -14,10 +14,10 @@ webpackJsonp([5],{
 
 /***/ },
 
-/***/ 12:
+/***/ 13:
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("var __WEBPACK_AMD_DEFINE_RESULT__;// Date : 28 July 2016\n// This JS file controls the content of dashboard page. \n\n!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {\n\n    // Control the admin related content visibility\n    function adminControl() {\n        document.getElementById('admin_register').style.display = \"block\";\n    }\n\n    //Control the team lead related content visibility\n    function teamLeadControl() {\n        document.getElementById('team_lead_functions').style.display = \"block\";\n    }\n\n    return {\n        adminControl: adminControl,\n        teamLeadControl: teamLeadControl\n    };\n}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));\n\n/*****************\n ** WEBPACK FOOTER\n ** /Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/view/dashboard.js\n ** module id = 12\n ** module chunks = 5\n **/\n//# sourceURL=webpack:////Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/view/dashboard.js?");
+	eval("var __WEBPACK_AMD_DEFINE_RESULT__;// Date : 28 July 2016\n// This JS file controls the content of dashboard page. \n\n!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {\n\n    // Control the admin related content visibility\n    function adminControl() {\n        document.getElementById('admin_register').style.display = \"block\";\n    }\n\n    //Control the team lead related content visibility\n    function teamLeadControl() {\n        document.getElementById('team_lead_functions').style.display = \"block\";\n    }\n\n    return {\n        adminControl: adminControl,\n        teamLeadControl: teamLeadControl\n    };\n}.call(exports, __webpack_require__, exports, module), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));\n\n/*****************\n ** WEBPACK FOOTER\n ** /Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/view/dashboard.js\n ** module id = 13\n ** module chunks = 5\n **/\n//# sourceURL=webpack:////Users/piktochart/Desktop/PiktoChart_Works/project/PiktoOKR/app/assets/javascripts/src/view/dashboard.js?");
 
 /***/ }
 

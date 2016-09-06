@@ -30,7 +30,7 @@
           <% obj_array = PersonalObjective.where(user_id: current_user.id).map { |obj| [obj.objective, obj.id] }%>
           <div class="form-group">
             <%= f.label :personal_objective_alignment %><br />
-            <%= select("personal_objective", "obj_id", obj_array, {}, {class: 'form-control'}) %>
+            <%= f.select(:personal_objective_id, obj_array, {}, {class: 'form-control'}) %>
           </div>        
 
           <div class="form-group">
