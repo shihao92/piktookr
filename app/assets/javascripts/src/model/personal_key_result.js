@@ -43,9 +43,29 @@ define (function () {
         });
     }
 
+    function updatePersonalKeyResultStatus(key_result_id, is_completed)
+    {
+        return new Promise((resolve, reject) => {
+            const xhttp = new XMLHttpRequest();
+            // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
+            xhttp.onload = function() {
+              if (xhttp.readyState == 4 && xhttp.status == 200) {
+                resolve(xhttp.responseText);
+              }
+            };
+            xhttp.open(
+                "GET", 
+                serverURL + "/personal_key_results/update_key_result_status/" + key_result_id + "&" + is_completed, 
+                true
+            );
+            xhttp.send();
+        });
+    }
+
     return {
         newPersonalKeyResult: newPersonalKeyResult,
-        updatePersonalKeyResultProgress: updatePersonalKeyResultProgress
+        updatePersonalKeyResultProgress: updatePersonalKeyResultProgress,
+        updatePersonalKeyResultStatus: updatePersonalKeyResultStatus
     }
 
 })

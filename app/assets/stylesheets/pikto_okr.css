@@ -23,6 +23,12 @@
 .modal-background {
   background: #ffffff; }
 
+.okr-details-header-info {
+  margin-right: 40px; }
+  .okr-details-header-info .label-font {
+    font-size: 16px;
+    margin-left: 10px; }
+
 .accordion-item-title {
   font-family: 'Montserrat';
   display: inline-block;
@@ -91,5 +97,30 @@
 
 .form-new-key-result:focus {
   background: transparent; }
+
+.just-padding {
+  padding: 15px; }
+
+.list-group.list-group-root {
+  padding: 0;
+  overflow: hidden;
+  background: none; }
+
+.list-group.list-group-root .list-group {
+  margin-bottom: 0; }
+
+.list-group.list-group-root .list-group-item {
+  border-radius: 0;
+  border-width: 1px 0 0 0;
+  background: none; }
+
+.list-group.list-group-root > .list-group-item:first-child {
+  border-top-width: 0; }
+
+.list-group.list-group-root > .list-group > .list-group-item {
+  padding-left: 0px; }
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+  padding-left: 45px; }
 
 /*# sourceMappingURL=pikto_okr.css.map */

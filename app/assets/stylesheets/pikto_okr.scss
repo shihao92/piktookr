@@ -36,6 +36,13 @@ $icon-light-grey : #b3b3b3;
 .modal-background {
     background: #ffffff;
 }
+.okr-details-header-info {
+    margin-right: 40px;
+    .label-font {
+        font-size: 16px;
+        margin-left: 10px;
+    }
+}
 
 // ---------------------
 //         Font
@@ -121,4 +128,39 @@ $icon-light-grey : #b3b3b3;
 }
 .form-new-key-result:focus {
     background: transparent;
+}
+
+// -----------------------
+//       List Group 
+// -----------------------
+.just-padding {
+  padding: 15px;
+}
+
+.list-group.list-group-root {
+  padding: 0;
+  overflow: hidden;
+  background: none;
+}
+
+.list-group.list-group-root .list-group {
+  margin-bottom: 0;
+}
+
+.list-group.list-group-root .list-group-item {
+  border-radius: 0;
+  border-width: 1px 0 0 0;
+  background: none;
+}
+
+.list-group.list-group-root > .list-group-item:first-child {
+  border-top-width: 0;
+}
+
+.list-group.list-group-root > .list-group > .list-group-item {
+  padding-left: 0px;
+}
+
+.list-group.list-group-root > .list-group > .list-group > .list-group-item {
+  padding-left: 45px;
 }

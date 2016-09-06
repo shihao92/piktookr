@@ -1,10 +1,18 @@
 // Date : 25 August 2016
 // This JS file that controls personal okr page only.
 
-require(['pages/pages.blank','model/personal_key_result','view/controls/popup','view/controls/slider'],
-function(blankParam,personalKeyResultModelParam,popupParam,sliderParam){
+require(['pages/pages.blank', 'model/personal_key_result', 'view/controls/modal', 'view/controls/popup', 'view/controls/slider', 'view/controls/spin-progress'],
+function(blankParam, personalKeyResultModelParam, modalParam, popupParam, sliderParam, spinProgressParam){
+
+    // Show the progress ring when start to load things
+    spinProgressParam.defineSpin();
+    $('#progress_ring_modal').modal({backdrop: 'static', keyboard: false})
+    $('#progress_ring_modal').modal('show');
 
     $(document).ready(function(){
+
+        // Hide the progress ring after everything been loaded
+        $('#progress_ring_modal').modal('hide');
 
         // Contribution popup for update progress
         popupParam.loadPopup();        
@@ -43,17 +51,11 @@ function(blankParam,personalKeyResultModelParam,popupParam,sliderParam){
                     temp_personal_key_result, id_substring
                 ); 
 
-                sessionStorage.reloadAfterPageLoad = true;
-                location.reload();                   
+                $('#notification_message').text("Your personal key result is created successfully!");
+                $('#notification_modal').modal('show');
             }
             else{
                 //do nothing
-            }
-        });
-        $( function () {
-            if ( sessionStorage.reloadAfterPageLoad ) {
-                alert( "Personal Key Result created!" );
-                sessionStorage.reloadAfterPageLoad = false;
             }
         });
 
@@ -69,14 +71,38 @@ function(blankParam,personalKeyResultModelParam,popupParam,sliderParam){
                 key_result_id, progress, initial_progress, contribution
             );
 
-            // $('#notification_message').text("Your personal key result is updated successfully!");
-            // $('#notification_modal').modal('show'); 
-
-            alert("Your personal key result is updated successfully!");
-
-            location.reload();         
+            $('#notification_message').text("Your personal key result is updated successfully!");
+            $('#notification_modal').modal('show'); 
+        
         });
 
+        let checkbox_tick_amount = $('input[type=checkbox]:checked').length;
+        $('input[type=checkbox]').click(function() {
+            // 1 - checked 
+            // 0 - not check
+            let checked_value = $('input[type=checkbox]:checked').length;
+            let key_result_id = $(this).attr('id');
+            let underscore_index = key_result_id.indexOf('_');
+            key_result_id = key_result_id.substring(underscore_index + 1, key_result_id.length);
+            if(checked_value < checkbox_tick_amount)
+            {
+                personalKeyResultModelParam.updatePersonalKeyResultStatus(key_result_id, false);
+                $('#notification_message').text("Your personal key result is marked as incomplete!");
+            }
+            else
+            {
+                personalKeyResultModelParam.updatePersonalKeyResultStatus(key_result_id, true);
+                $('#notification_message').text("Your personal key result is marked as completed!");
+            }
+
+            $('#notification_modal').modal('show'); 
+
+        });
+
+        $('#notification_dismiss_btn').click(function() {
+            location.reload();
+        });
+        
     });
         
 }); 

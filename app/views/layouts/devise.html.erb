@@ -4,14 +4,14 @@
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'devise', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application' %>
+    
     <script src="https://www.promisejs.org/polyfills/promise-done-7.0.4.min.js"></script>
   </head>
   <body class="fixed-header">
  
     <%= yield %>
-    
-    <script src="/dist/shared-webpack.js"></script>
+
+    <script src="/dist/vendor-webpack.js"></script>
     
   </body>
 </html>

@@ -1,33 +1,3 @@
-<!-- Ruby declarations here -->
-<% @user = User.find(current_user.id) %>
-
-<!-- Role module declarations -->
-<% @okr_user_role = OkrUserRole.where(user_id: current_user.id) %>
-<% @role = OkrRole.where(id: @okr_user_role[0].okr_role_id) %>
-
-<!-- Personal OKR module declarations -->
-<% @personal_objective = PersonalObjective.where(user_id: current_user.id) %>
-
-<!-- Calculation of the overall progress -->
-<% @completed_objective = 0 %>
-<% if(@personal_objective.count != 0) %>
-  <% @progress_portion = 100 / @personal_objective.count %>
-  <% @total_progress = 0 %>
-  <% @temp_date = [] %>
-  <% @personal_objective.each do |item| %>
-    <% @temp_progress = (item.progress/100) * @progress_portion %>
-    <% @total_progress = @total_progress + @temp_progress %>
-    <% # To check whether there is any completed objective %>  
-    <% if(item.progress == 100.00) %>
-      <% @completed_objective = @completed_objective + 1 %>
-    <% end %>
-    <% # To check which is the latest updated date %>
-    <% @temp_date << item.updated_at %>
-  <% end %>
-  <% @date_max = @temp_date.max %>
-  <% @date_difference = (Time.now - @date_max) / 86400 %>
-<% end %>
-
 <!-- START JUMBOTRON -->
 <div class="jumbotron" data-pages="parallax">
   <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
@@ -99,7 +69,12 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p<%= @completed_objective %>">
+        <% if(@personal_objective.count != 0) %>
+        <% @percentage_completed_objective = (@completed_objective.to_f / @personal_objective.count.to_f) * 100 %>
+        <% else %>
+        <% @percentage_completed_objective = 0 %>
+        <% end %>
+        <div class="c100 p<%= @percentage_completed_objective.to_i %>">
           <span>
             <span id="completed_objective_portion">
               <%= @completed_objective %>/<%= @personal_objective.count %>
@@ -171,18 +146,18 @@
                     </div>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="text-center">
+                    <!--<div class="text-center">
                       <p class="small">Contribution</p>
                       <div class="text-center">
                         <span class="bold">21%</span>
                       </div>
-                    </div>
+                    </div>-->
                   </div>
                   <div class="col-lg-2 col-md-2 col-sm-2">
                     <div class="text-center">
                       <p class="small">Days left</p>
                       <div class="text-center">
-                        <span class="bold">55</span>
+                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
                       </div>
                     </div>
                   </div>
@@ -203,6 +178,13 @@
                   <i class="pg-menu"></i>   
                 </button>
                 <ul class="dropdown-menu">
+                  <li>
+                    <!--View detailed of the personal key result-->
+                    <a href="/personal_objectives/details/<%= item.id %>">
+                      <i class="pg-search"></i> 
+                      <span> Go to details</span>
+                    </a>
+                  </li>
                   <li>
                     <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
                       <i class="fa fa-fw fa-trash-o"></i> 
@@ -254,21 +236,28 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
                         <div class="checkbox-primary">
-                          <input type="checkbox" value="<%= item.id %>" id="personal_kr_<%= item.id %>"/>
-                          <label for="personal_kr_<%= item.id %>">
+                          <% if(item.is_completed == true) %>
+                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" checked/>
+                          <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout"><%= item.key_result %></p>
                           </label>
+                          <% else %>
+                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>"/>
+                          <label for="personalkrcompleted_<%= item.id %>">
+                            <p class="details-layout"><%= item.key_result %></p>
+                          </label>
+                          <% end %>
                         </div> 
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="text-center">
+                      <!--<div class="text-center">
                         <span class="bold">21%</span>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
                       <div class="text-center">
-                        <span class="bold">5</span>
+                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
@@ -286,23 +275,30 @@
            	        </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <!-- JS : Link to Contribution page -->
-                        <% if(item.progress == 100.00) %>
+                        <!-- Link to Contribution page -->
+                        <% if(item.progress == 100.00 || item.is_completed == true) %>
                           <a href="/" data-toggle="modal" data-target="#notification_modal" id="keyresultprogress_<%= item.id %>">
-                            <i class="fa fa-fw fa-plus"></i> 
+                            <i class="pg-plus"></i> 
                              Progress update
                           </a>
                         <% else %>
                           <a href="/" data-toggle="search" id="keyresultprogress_<%= item.id %>">
-                            <i class="fa fa-fw fa-plus"></i> 
+                            <i class="pg-plus"></i> 
                              Progress update
                           </a>
                         <% end %>
                       </li>
                       <li>
-                        <!-- JS : Deletion of key result -->
+                        <!--View detailed of the personal key result-->
+                        <a href="/personal_key_results/details/<%= item.id %>">
+                          <i class="pg-search"></i> 
+                           Go to details
+                        </a>
+                      </li>
+                      <li>
+                        <!-- Deletion of key result -->
                         <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
-                          <i class="fa fa-fw fa-trash-o"></i> 
+                          <i class="pg-trash_line"></i> 
                            Delete
                         </a>
                       </li>
@@ -376,7 +372,7 @@
     <div class="panel panel-default">
       <div class="panel-heading" role="tab">
         <h4 class="panel-title panel-title-custom">
-            <a data-toggle="collapse" data-parent="#accordion" href="#new_personal_objective" aria-expanded="false" aria-controls="new_personal_objective">
+            <a id="new_personal_objective_dropdown" data-toggle="collapse" data-parent="#accordion" href="#new_personal_objective" aria-expanded="false" aria-controls="new_personal_objective">
                 <i class="fa fa-fw fa-plus fa-lg"></i> 
                 Add new objective
             </a>
@@ -392,7 +388,6 @@
                     <h2>
                       <%= pluralize(@personal_objective.errors.count, "error") %> prohibited this personal_objective from being saved:
                     </h2>      
-
                     <ul>
                       <% @personal_objective.errors.full_messages.each do |message| %>
                         <li><%= message %></li>
@@ -441,61 +436,6 @@
       </div>
     </div>
 
-    <!--<div class="panel panel-default">
-      <div class="panel-heading" role="tab">
-        <h4 class="panel-title">
-            <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#new_personal_key_result" aria-expanded="false" aria-controls="new_personal_key_result">
-                Add new key result
-            </a>
-        </h4>
-      </div>
-      <div id="new_personal_key_result" class="panel-collapse collapse" role="tabpanel">
-        <div class="panel-body no-padding form-custom-accordion">
-            <% @personal_key_result = PersonalKeyResult.new %>
-            <div class="container form-group" style="padding-top:10px;">
-              <%= form_for @personal_key_result do |f| %>
-                <% if @personal_key_result.errors.any? %>
-                  <div id="error_explanation">
-                    <h2>
-                      <%= pluralize(@personal_key_result.errors.count, "error") %> prohibited this personal_key_result from being saved:
-                    </h2>      
-
-                    <ul>
-                      <% @personal_key_result.errors.full_messages.each do |message| %>
-                        <li><%= message %></li>
-                      <% end %>
-                    </ul>
-                  </div>
-                <% end %>     
-
-                <div class="form-group">
-                  <%= f.label :key_result %><br />
-                  <%= f.text_field :key_result, autofocus: true, class: "form-control" %>
-                </div>-->       
-
-                <!--Load related personal objective-->
-                <!--<% obj_array = PersonalObjective.where(user_id: current_user.id).map { |obj| [obj.objective, obj.id] }%>
-                <div class="form-group">
-                  <%= f.label :personal_objective_alignment %><br />
-                  <%= select("personal_objective", "object_id", obj_array, {}, {class: 'form-control'}) %>
-                </div>        
-
-                <div class="form-group">
-                  <%= f.label :progress %><br />
-                  <%= f.text_field :progress, autofocus: true, class: "form-control" %>
-                </div>
-
-                <div class="form-group">
-                  <div class="text-right">
-                    <%= f.submit "Submit", class: "btn btn-primary"%>
-                  </div>
-                </div>
-
-              <% end %>
-            </div>
-        </div>
-      </div>
-    </div>-->
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->
@@ -585,11 +525,13 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button id="notification_dismiss_btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
       </div>
     </div>
   
   </div>
 </div>
+
+
 
 

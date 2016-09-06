@@ -6,8 +6,15 @@ function(roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
 
     $(document).ready(function(){
 
+        // Dropdown function for create new personal objective
+        $('#new_personal_objective_dropdown').click(function() {
+            teamObjectiveSelections(personalObjectiveViewParam.teamSelectionOnChange());
+        });
+
         $('#team_team_id').change(function(){
             teamObjectiveSelections(personalObjectiveViewParam.teamSelectionOnChange());
+            $('#team_key_result_id').html();
+            $('.commit').prop('disabled', true);
         });
 
         $('#team_objective_id').change(function(){
@@ -23,7 +30,6 @@ function(roleParam,teamOKRModelParam,headerParam,personalObjectiveViewParam){
                 teamObjectives = JSON.parse(response);
                 // use the team objective to find all related team key results for the team consists of the user
                 personalObjectiveViewParam.populateTeamObjectives(teamObjectives);
-
             });
         }
 

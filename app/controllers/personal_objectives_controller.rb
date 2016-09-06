@@ -35,7 +35,9 @@ class PersonalObjectivesController < ApplicationController
       if @personal_objective.save
         OkrTeamPersonal.create!(team_key_result_id: params[:team_key_result][:id], personal_objective_id: @personal_objective.id)
         @team_key_result = TeamKeyResult.where(id: params[:team_key_result][:id])
+
         @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
+
         LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: current_user.id)
         # Right after creation of new personal objective, update OKR progress 
         update_okr_modules(@personal_objective.id,0.00)
@@ -70,6 +72,7 @@ class PersonalObjectivesController < ApplicationController
     @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: @personal_objective.id)
     @team_key_result_id = @okr_team_personal[0].team_key_result_id
     OkrTeamPersonal.where(personal_objective_id: @personal_objective.id).destroy_all()
+
     LogPersonalObjective.where(personal_objective_id: @personal_objective.id).destroy_all()
     PersonalKeyResult.where(personal_objective_id: @personal_objective.id).each do |item|
       LogPersonalKeyResult.where(personal_key_result_id: item.id).destroy_all()
@@ -88,6 +91,27 @@ class PersonalObjectivesController < ApplicationController
     @team_objective_id = params[:id]
     @team_key_results = TeamKeyResult.where(team_objective_id: @team_objective_id)
     render json: @team_key_results, status: :ok
+  end
+
+  def details
+    @objective_id = params[:id]
+
+    @personal_objective = PersonalObjective.where(id: @objective_id)
+    @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: @objective_id)
+    @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id)
+    @personal_key_results = PersonalKeyResult.where(personal_objective_id: @objective_id)
+
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date
+
+    @user_info = User.where(id: @personal_objective[0].user_id)
+    @timeframe_log = TimeframeLog.where(id: @personal_objective[0].timeframe_log_id)
+
+    @log = LogPersonalObjective.where(personal_objective_id: @objective_id).order(id: :DESC)
+
+    render "app/personal_objective_details" 
   end
 
   private

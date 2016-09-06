@@ -9909,8 +9909,8 @@ Main components
     margin-bottom: 3em;
   }
   .timeline-container:not(.left) .timeline::before {
-    left: 50%;
-    margin-left: -2px;
+    left: 0%;
+    margin-left: 20px;
   }
 }
 .timeline-block {
@@ -9985,8 +9985,8 @@ Main components
 }
 @media only screen and (min-width: 1170px) {
   .timeline-container:not(.left) .timeline .timeline-point {
-    left: 50%;
-    margin-left: -21px;
+    left: 0%;
+    margin-left: 0px;
     /* Force Hardware Acceleration in WebKit */
     -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;

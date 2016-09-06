@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   post 'personal_key_results/create_new_key_result' => 'personal_key_results#create_new_key_result'
   # Route to update the progress of key result
   post 'personal_key_results/update_progress_key_result' => 'personal_key_results#update_progress_key_result'
+  # Route to update the status of the key result
+  get 'personal_key_results/update_key_result_status/:id&:completed' => 'personal_key_results#update_key_result_status' 
 
   # Personal contributions upon update the key results progress
   resources :contributions
@@ -58,11 +60,18 @@ Rails.application.routes.draw do
   # Route to use selected team ID to populate the team key results combo box
   get 'personal_objectives/get_team_key_results/:id' => 'personal_objectives#get_team_key_results' 
 
+  # Route for the personal objective details page
+  get 'personal_objectives/details/:id' => 'personal_objectives#details'
+  # Route for the personal key result details page
+  get 'personal_key_results/details/:id' => 'personal_key_results#details'
+
   # Route for application view pages
+  # Prototype 1
   get 'app/dashboard'
-  
+  # Prototype 2
+  get 'app/dashboard_v2' => 'app#dashboard_v2'
   # Route for the default page
-  root 'app#dashboard_v2'
+  root 'app#dashboard_v2' 
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

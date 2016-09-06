@@ -17,5 +17,39 @@ class AppController < ApplicationController
       @role = OkrRole.find_by id:(@role_id.okr_role_id)
       render json: @role, status: :ok
     end
+    
+    def dashboard_v2
+      @user = User.find(current_user.id)
+      
+      @okr_user_role = OkrUserRole.where(user_id: current_user.id)
+      @role = OkrRole.where(id: @okr_user_role[0].okr_role_id) 
+      
+      @personal_objective = PersonalObjective.where(user_id: current_user.id) 
+      
+      @completed_objective = 0 
+      if(@personal_objective.count != 0) 
+        @progress_portion = 100 / @personal_objective.count 
+        @total_progress = 0 
+        @temp_date = [] 
+        @personal_objective.each do |item| 
+          @temp_progress = (item.progress/100) * @progress_portion 
+          @total_progress = @total_progress + @temp_progress 
+          # To check whether there is any completed objective  
+          if(item.progress == 100.00) 
+            @completed_objective = @completed_objective + 1 
+          end 
+          # To check which is the latest updated date 
+          @temp_date << item.updated_at 
+        end 
+        @date_max = @temp_date.max 
+        @date_difference = (Time.now - @date_max) / 86400 
+      end 
+      
+      @current_date = Time.now.strftime("%Y-%m-%d") 
+      @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+      @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+      @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date 
 
+      render "app/dashboard_v2"
+    end
 end

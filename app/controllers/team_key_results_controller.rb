@@ -34,7 +34,9 @@ class TeamKeyResultsController < ApplicationController
         update_okr_modules(@team_key_result.team_objective_id, @team_key_result.id, 0.00)
 
         @team_objective = TeamObjective.where(id: @team_key_result.team_objective_id)
+
         @log_content = 'Created <span class="bold">' + @team_key_result.key_result + '</span> and aligned with <span class="bold">' + @team_objective[0].objective + '</span>' 
+
         LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @team_key_result.id, user_id: current_user.id)
 
         format.html { redirect_to @team_key_result, notice: 'Team key result was successfully created.' }
@@ -66,6 +68,7 @@ class TeamKeyResultsController < ApplicationController
   def destroy
     # Temporarily implementation - Delete log team key result whenever user want to delete the team key result
     @log_content = 'Deleted <span><del>' + @team_key_result.key_result + '</del></span>'
+
     LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_key_result.team_objective_id, user_id: current_user.id)
     LogTeamKeyResult.where(team_key_result_id: @team_key_result.id).destroy_all()
     @team_key_result.destroy

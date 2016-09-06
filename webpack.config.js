@@ -4,7 +4,8 @@ const path = require('path');
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap'],
+      vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap.min'],
+      login: 'controller/login.js',
       personal_okr: 'controller/personal_okr.js',
       role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',

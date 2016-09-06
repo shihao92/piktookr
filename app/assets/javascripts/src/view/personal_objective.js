@@ -16,7 +16,6 @@ define(function(){
         }
         else
         {
-            document.getElementsByName('commit')[0].disabled = false;
             document.getElementById('team_objective_id').innerHTML = "";
             for(element in team_objectives)
             {

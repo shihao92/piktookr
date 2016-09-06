@@ -32,7 +32,9 @@ class TeamObjectivesController < ApplicationController
         update_okr_modules(@team_objective.id,@team_objective.progress)
 
         @company_key_result = CompanyKeyResult.where(id: params[:company_key_result][:kr_id])
+
         @log_content = 'Created <span class="bold">' + @team_objective.objective + '</span> and aligned with <span class="bold">' + @company_key_result[0].key_result + '</span>'
+
         LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_objective.id, user_id: current_user.id)
 
         format.html { redirect_to @team_objective, notice: 'Team objective was successfully created.' }

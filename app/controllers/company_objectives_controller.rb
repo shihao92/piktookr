@@ -28,7 +28,9 @@ class CompanyObjectivesController < ApplicationController
     @company_objective = CompanyObjective.new(company_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id))
     respond_to do |format|
       if @company_objective.save
-        @log_content = 'Created <span><del>' + @company_objective.objective + '</del></span>' 
+
+        @log_content = 'Created <span class="bold">' + @company_objective.objective + '</span>' 
+
         LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_objective.id, user_id: current_user.id)
 
         format.html { redirect_to @company_objective, notice: 'Company objective was successfully created.' }

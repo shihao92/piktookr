@@ -13,7 +13,6 @@
   <head>
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
-    <script src="/dist/vendor-webpack.js"></script>
     <%= stylesheet_link_tag    'application', media: 'all' %>  
     <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
   </head>
@@ -335,8 +334,21 @@
       </div>
     </div>
 
+    <!--Modal for the progress ring-->
+    <div id="progress_ring_modal" class="modal fade slide-up" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content-wrapper">
+          <!-- Modal content-->
+          <div class="modal-content" style="border: none;">
+            <div class="text-center">
+              <div id="progress-ring-indeterminate"></div>
+            </div>
+          </div>
+        </div>  
+      </div>
+    </div>
 
-    
+    <script src="/dist/vendor-webpack.js"></script>
     <script src="/dist/personal_okr-webpack.js"></script>
     <script src="/dist/personal_objective-webpack.js"></script>
   </body>

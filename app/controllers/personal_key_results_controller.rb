@@ -44,7 +44,9 @@ class PersonalKeyResultsController < ApplicationController
   # POST /personal_key_results.json
   def create
     @personal_objective = PersonalObjective.where(id: personal_key_result_params[:personal_objective_id])
+
     @log_content = 'Created <span class="bold">' + params[:personal_key_result][:key_result] + '</span> and aligned with <span class="bold">' + @personal_objective[0].objective + '</span>'
+
     @personal_key_result = PersonalKeyResult.new(personal_key_result_params.merge(progress: 0.0, personal_objective_id: personal_key_result_params[:personal_objective_id]))
     respond_to do |format|
       if @personal_key_result.save  
@@ -85,19 +87,23 @@ class PersonalKeyResultsController < ApplicationController
   # DELETE /personal_key_results/1
   # DELETE /personal_key_results/1.json
   def destroy
+
     @log_content = 'Deleted <span><del>' + @personal_key_result.key_result + '</del></span>'
+
     LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_key_result.personal_objective_id, user_id: current_user.id)
     LogPersonalKeyResult.where(personal_key_result_id: @personal_key_result.id).destroy_all()
     Contribution.where(personal_key_result_id: @personal_key_result.id).destroy_all()
     @personal_key_result.destroy
     # Activate the cascade OKR update functions
     delete_personal_key_result(@personal_key_result.personal_objective_id)
+
     respond_to do |format|
       format.html { redirect_to '/', notice: 'Personal key result was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
+  # Customize API for creating and updating the key result
   def create_new_key_result
     @key_result = params["key_result"]
     @personal_objective_id = params["personal_objective_id"]
@@ -114,7 +120,6 @@ class PersonalKeyResultsController < ApplicationController
   end
 
   def update_progress_key_result
-    # Temporarily implementations with GET method
     @key_result_id = params["id"]
     @progress = params["progress"]
     @progress_decimal = BigDecimal.new(@progress)
@@ -127,11 +132,45 @@ class PersonalKeyResultsController < ApplicationController
     puts @personal_key_result[0].personal_objective_id
     # Update functions for the personal key result
     PersonalKeyResult.where(id: @key_result_id).update_all(progress: @progress)
-    # Save into contribution module
-    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id)
     # Activate the cascade OKR update functions
     update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @progress)
-    generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
+    @log_personal_key_result_id = generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
+    # Save into contribution module
+    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id, log_personal_key_results_id: @log_personal_key_result_id) 
+  end
+
+  def update_key_result_status
+    @key_result_id = params[:id]
+    @is_completed = params[:completed]
+    PersonalKeyResult.where(id: @key_result_id).update_all(is_completed: @is_completed)
+    @personal_key_result = PersonalKeyResult.where(id: @key_result_id)
+    update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @personal_key_result[0].progress)
+    if(@is_completed == "true")
+      @log_content = "Marked this key result as completed"
+      @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)     
+      @log_personal_key_result.save
+    else
+      LogPersonalKeyResult.where(log_content: "Marked this key result as completed", personal_key_result_id: @key_result_id).destroy_all()
+    end
+  end
+
+  def details
+    @key_result_id = params[:id]
+
+    @personal_key_result = PersonalKeyResult.where(id: @key_result_id)
+    @personal_objective = PersonalObjective.where(id: @personal_key_result[0].personal_objective_id)
+    
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date 
+
+    @user_info = User.where(id: @personal_objective[0].user_id)
+    @timeframe_log = TimeframeLog.where(id: @personal_objective[0].timeframe_log_id)
+
+    @log = LogPersonalKeyResult.where(personal_key_result_id: @key_result_id).order(id: :DESC)
+
+    render "app/personal_key_result_details"
   end
 
   private
@@ -226,33 +265,39 @@ class PersonalKeyResultsController < ApplicationController
 
       # Contribution towards the personal key result (Log)
       @personal_key_result = PersonalKeyResult.where(id: personal_kr_id)
+
       @progress_difference =  personal_kr_progress - initial_progress
       @log_content = 'Contributed <span class="bold">+' + @progress_difference.to_s + '%</span>'
       @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id: personal_kr_id, user_id: current_user.id)     
       @log_personal_key_result.save
+
       # Contribution towards the personal objective (Log)
       @personal_objectives = PersonalKeyResult.where(personal_objective_id: personal_objective_id)
       @personal_objective_progress_portion = @progress_difference / @personal_objectives.count
       @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @personal_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
       LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: personal_objective_id, user_id: current_user.id)
+      
       # Generate log for team key result
       @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: personal_objective_id)
       @team_key_results = OkrTeamPersonal.where(team_key_result_id: @okr_team_personal[0].team_key_result_id)
       @team_kr_progress_portion = @personal_objective_progress_portion / @team_key_results.count
       @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @team_kr_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
       LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @okr_team_personal[0].team_key_result_id, user_id: current_user.id)
+      
       # Generate log for team objective
       @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id)
       @team_objectives = TeamKeyResult.where(team_objective_id: @team_key_result[0].team_objective_id)
       @team_objective_progress_portion = @team_kr_progress_portion / @team_objectives.count
       @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @team_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
       LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_key_result[0].team_objective_id, user_id: current_user.id)
+      
       # Generate log for company key result
       @okr_company_team = OkrCompanyTeam.where(team_objective_id: @team_key_result[0].team_objective_id)
       @company_key_results = OkrCompanyTeam.where(company_key_result_id: @okr_company_team[0].company_key_result_id)
       @company_kr_progress_portion = @team_objective_progress_portion / @company_key_results.count
       @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @company_kr_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
       LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @okr_company_team[0].company_key_result_id, user_id: current_user.id)
+      
       # Generate log for company objective
       @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id)
       @company_objectives = CompanyKeyResult.where(company_objective_id: @company_key_result[0].company_objective_id)
@@ -260,6 +305,7 @@ class PersonalKeyResultsController < ApplicationController
       @log_content = 'Contributed <span class="bold">+' + ('%.02f' % @company_objective_progress_portion).to_s + '%</span> via <p class="bold">' + @personal_key_result[0].key_result + '</p>'
       LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_key_result[0].company_objective_id, user_id: current_user.id)
 
+      return @log_personal_key_result.id
     end
 
     # --------------------------------------------------------
@@ -271,22 +317,41 @@ class PersonalKeyResultsController < ApplicationController
       
       # 1st calculate how many key results are tied to the linked objective
       @personal_key_result_amt = PersonalKeyResult.where(personal_objective_id: personal_objective_id).count
+      puts @personal_key_result_amt
+      if(@personal_key_result_amt == 0)
+        @personal_objective_progress = 0.0
+      else
+        # Check how many is completed key result
+        @temp_personal_key_result_amt = @personal_key_result_amt
+        @completed_key_result_amt = PersonalKeyResult.where(personal_objective_id: personal_objective_id, is_completed: true).count
+        @personal_key_result_amt = @personal_key_result_amt - @completed_key_result_amt
+  
+        # Divide personal objective progress with the key result amount
+        @total_progress = 100.00
+        @personal_objective_progress = 0.00
+        @personal_objective_progress_portion = @total_progress / @personal_key_result_amt
 
-      # Divide personal objective progress with the key result amount
-      @total_progress = 100.00
-      @personal_objective_progress = 0.00
-      @personal_objective_progress_portion = @total_progress / @personal_key_result_amt
+        @true_count = 0;
 
-      # Check and obtain the other related key result progress and objective portion progress
-      PersonalKeyResult.where(personal_objective_id: personal_objective_id).each do |kr|
-        if(kr.id == personal_key_result_id)
-          # Obtain the progress for objective after total with other related key result progress
-          @personal_objective_progress_diff = (personal_key_result_progress / @total_progress) * @personal_objective_progress_portion;
-          # End product of the progress for the objective
-          @personal_objective_progress = @personal_objective_progress_diff + @personal_objective_progress
-        else
-          @other_key_result_overall_progress = (kr.progress / 100.00) * @personal_objective_progress_portion
-          @personal_objective_progress = @other_key_result_overall_progress + @personal_objective_progress
+        # Check and obtain the other related key result progress and objective portion progress
+        PersonalKeyResult.where(personal_objective_id: personal_objective_id).each do |kr|
+          if(kr.is_completed != true)
+            if(kr.id == personal_key_result_id)
+              # Obtain the progress for objective after total with other related key result progress
+              @personal_objective_progress_diff = (personal_key_result_progress / @total_progress) * @personal_objective_progress_portion;
+              # End product of the progress for the objective
+              @personal_objective_progress = @personal_objective_progress_diff + @personal_objective_progress
+            else
+              @other_key_result_overall_progress = (kr.progress / 100.00) * @personal_objective_progress_portion
+              @personal_objective_progress = @other_key_result_overall_progress + @personal_objective_progress
+            end
+          end
+        end
+
+        if(@completed_key_result_amt > 0)
+          if(@completed_key_result_amt == @temp_personal_key_result_amt)
+            @personal_objective_progress = 100.00
+          end
         end
       end 
 
