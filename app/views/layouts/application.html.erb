@@ -168,6 +168,53 @@
               <% end %>
             <% end %>
           <% end %>
+          <!--Section to link to own personal OKR-->
+          <li>
+            <hr/>
+            <a href="/" class="detailed">
+              <span class="title" id="user-name">
+                <%= @user.name %>
+              </span>
+              <p class="details details-layout" id="user-position">
+                <%= @user.position %>
+              </p> 
+            </a>
+            <span class="icon-thumbnail">
+              <span id="username-shortform">
+                <% @user_shortform = @user.name.scan(/[A-Z]/) %>
+                <% @user_short_str = "" %>
+                <% @user_shortform.each do |item| %>
+                  <% @user_short_str = @user_short_str + item %>
+                <% end %>
+                <%= @user_short_str %>
+              </span>
+            </span>
+          </li>
+          <!--Section to link to own team(s)-->
+          <% @okr_user_teams = OkrUserTeam.where(user_id: current_user.id) %>
+          <% @okr_user_teams.each do |item| %>
+          <% @okr_team = OkrTeam.where(id: item.okr_team_id) %>
+          <li>
+            <a href="/team_objectives/team_dashboard/<%= item.okr_team_id %>" class="detailed">
+              <span class="title" id="team-name">
+                <%= @okr_team[0].name %>
+              </span> 
+              <p class="details details-layout" id="team-position">
+                Piktochart Team
+              </p> 
+            </a>
+            <span class="icon-thumbnail">
+              <span id="username-shortform">
+                <% @team_shortform = @okr_team[0].name.scan(/[A-Z]/) %>
+                <% @team_short_str = "" %>
+                <% @team_shortform.each do |item| %>
+                  <% @team_short_str = @team_short_str + item %>
+                <% end %>
+                <%= @team_short_str %>
+              </span>
+            </span>
+          </li>
+          <% end %>
         </ul>
         <div class="clearfix"></div>
       </div>

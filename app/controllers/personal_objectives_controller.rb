@@ -100,14 +100,12 @@ class PersonalObjectivesController < ApplicationController
     @personal_objective = PersonalObjective.create!(
       personal_objective_params.merge(objective: @objective, progress: 0.0, timeframe_log_id: @current_timeframe_log_id[0].id, user_id: @user_id))
     
-    if @personal_objective.save
-      OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
-      @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
-      @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
-      LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
-      # Right after creation of new personal objective, update OKR progress 
-      update_okr_modules(@personal_objective.id, 0.00)
-    end
+    OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
+    @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
+    @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
+    LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
+    # Right after creation of new personal objective, update OKR progress 
+    update_okr_modules(@personal_objective.id, 0.00)
   end
 
   def details
