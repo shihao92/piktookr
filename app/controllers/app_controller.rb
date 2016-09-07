@@ -34,6 +34,26 @@ class AppController < ApplicationController
 
       @temp_team_objective.each_with_index do |item,index|
         @count = 0
+          while(@count < item.count)
+            @team_key_results = TeamKeyResult.where(team_objective_id: item[@count][1]).all.map{|kr| [kr.key_result, kr.id]}
+            @team_key_results.each do |element|
+              @temp_team_key_result.push(element)
+            end
+            @count = @count + 1
+          end      
+      end
+
+      # @team_key_results = TeamKeyResult.where(team_objective_id: @team_objectives)
+      
+      @temp_team_objective = []
+      @temp_team_key_result = []
+      @team_ids.each do |item|
+        @team_objectives = TeamObjective.where(okr_team_id: item.okr_team_id).all.map{|obj| [obj.objective, obj.id] }
+        @temp_team_objective.push(@team_objectives)
+      end
+
+      @temp_team_objective.each_with_index do |item,index|
+        @count = 0
         while(@count < item.count)
           @team_key_results = TeamKeyResult.where(team_objective_id: item[@count][1]).all.map{|kr| [kr.key_result, kr.id]}
           @team_key_results.each do |element|
