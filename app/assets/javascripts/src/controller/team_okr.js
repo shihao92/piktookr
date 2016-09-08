@@ -54,7 +54,6 @@ modalParam, popupParam, select2Param) {
             $('#notification_message').text("Your personal objective is created successfully!");
             $('#notification_modal').modal('show');
         });
-
     })
 
 })
