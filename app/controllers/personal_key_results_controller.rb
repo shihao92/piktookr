@@ -136,7 +136,7 @@ class PersonalKeyResultsController < ApplicationController
     update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @progress)
     @log_personal_key_result_id = generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
     # Save into contribution module
-    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id, log_personal_key_results_id: @log_personal_key_result_id) 
+    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id, log_personal_key_result_id: @log_personal_key_result_id) 
   end
 
   def update_key_result_status

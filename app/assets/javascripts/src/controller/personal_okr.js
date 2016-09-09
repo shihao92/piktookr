@@ -1,8 +1,12 @@
 // Date : 25 August 2016
 // This JS file that controls personal okr page only.
 
-require(['pages/pages.blank', 'model/personal_key_result', 'view/controls/modal', 'view/controls/popup', 'view/controls/slider', 'view/controls/spin-progress'],
-function(blankParam, personalKeyResultModelParam, modalParam, popupParam, sliderParam, spinProgressParam){
+require(['pages/pages.blank', 
+'model/personal_key_result', 'model/personal_objective', 
+'view/controls/modal', 'view/controls/popup', 'view/controls/slider', 'view/controls/spin-progress', 'view/controls/select2.min'],
+function(blankParam, 
+personalKeyResultModelParam, personalObjectiveModelParam, 
+modalParam, popupParam, sliderParam, spinProgressParam, select2Param) {
 
     // Show the progress ring when start to load things
     spinProgressParam.defineSpin();
@@ -37,10 +41,32 @@ function(blankParam, personalKeyResultModelParam, modalParam, popupParam, slider
             $('#key_result_id').text(temp_id);
         });
 
+        //Personal Objective - Create new
+        $('#add-new-personal-objective')
+        .on('focusout', function(){
+            if($(this).find('#new_personal_objective').val() != '') {
+                $('#new_objective_popup').attr('class','overlay');
+                $('#personal_objective_textarea').text($(this).find('#new_personal_objective').val());
+                $('#team_key_result_selection').select2();
+            }
+        });
+        $('#team_key_result_selection').on('change', function() {
+            if($('#personal_objective_textarea').val() != "") {
+                $('#btn_new_personal_objective').prop( "disabled", false );
+            }
+        });
+        $('#btn_new_personal_objective').click(function() {
+            let personal_objective = $('#personal_objective_textarea').val();
+            let team_key_result_id = $('#team_key_result_selection').val();
+            personalObjectiveModelParam.newPersonalObjective(personal_objective, team_key_result_id);
+            $('#notification_message').text("Your personal objective is created successfully!");
+            $('#notification_modal').modal('show');
+        });
+
         // Key result - Create new  
         $(".add-new-personal-key-result")
         .on('focusout', '#new_key_result', function() {
-            if($(this).find('.form-new-key-result').val() != ''){
+            if($(this).find('.form-new-key-result').val() != '') {
                 // Find out the personal objective id
                 let current_focus_id = $(this).find('.form-new-key-result').attr('id');
                 let id_index = current_focus_id.indexOf('objective_');

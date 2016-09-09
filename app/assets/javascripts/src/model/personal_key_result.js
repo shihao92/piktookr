@@ -1,10 +1,7 @@
 // Date : 2 August 2016
-// This JS file that communicates with database for team OKR module. 
+// This JS file that communicates with database for personal_key_results module. 
 
-// Declarations here
-const serverURL = "http://localhost:3000"; 
-
-define (function () {
+define (['model/server_url'], function (urlParam) {
 
     function newPersonalKeyResult(key_result, personal_objective_id)
     {
@@ -12,7 +9,7 @@ define (function () {
             const xhttp = new XMLHttpRequest();
             xhttp.open(
                 "POST", 
-                serverURL + "/personal_key_results/create_new_key_result", 
+                urlParam.server_url() + "/personal_key_results/create_new_key_result", 
                 true
             );
             xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -30,7 +27,7 @@ define (function () {
             // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
             xhttp.open(
                 "POST", 
-                serverURL + "/personal_key_results/update_progress_key_result", 
+                urlParam.server_url() + "/personal_key_results/update_progress_key_result", 
                 true
             );
             xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -55,7 +52,7 @@ define (function () {
             };
             xhttp.open(
                 "GET", 
-                serverURL + "/personal_key_results/update_key_result_status/" + key_result_id + "&" + is_completed, 
+                urlParam.server_url() + "/personal_key_results/update_key_result_status/" + key_result_id + "&" + is_completed, 
                 true
             );
             xhttp.send();

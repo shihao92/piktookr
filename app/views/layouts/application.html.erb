@@ -6,6 +6,8 @@
 <% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
 <% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
 
+
+
 <% @server_url = "http://localhost:3000" %>
 
 <!DOCTYPE html>
@@ -14,6 +16,7 @@
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
     <%= stylesheet_link_tag    'application', media: 'all' %>  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
   </head>
   <body class="fixed-header">
@@ -53,36 +56,47 @@
 
       <div class="sidebar-menu">
         <ul class="menu-items">
-          <% @users.each do |item| %>
-            <% if (item.id != current_user.id) %>
-              <li class="m-t-30 ">
-                <!-- Date : 23rd August 2016 -->
-                <!-- User favourite module proposed here -->
-                <!-- Current Progress: User Listing Module -->          
-                <!-- JS here to generate the user name and shortform -->
-                <a href="/" class="detailed">
-                  <span class="title" id="user-name">
-                    <%= item.name %>
-                  </span>
-                  <p class="details details-layout" id="user-position">
-                    <%= item.position %>
-                  </p> 
-                </a>
-                <span class="icon-thumbnail">
-                  <span id="username-shortform">
-                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
-                    <% @user_short_str = "" %>
-                    <% @user_shortform.each do |item| %>
-                      <% @user_short_str = @user_short_str + item %>
-                    <% end %>
-                    <%= @user_short_str %>
-                  </span>
-                </span>
-              </li>
-            <% end %>
+          <!-- Section to link to company -->
+          <li class="m-t-30">
+            <a href="/" class="detailed">
+              <span class="title">
+                Piktochart
+              </span> 
+              <p class="details details-layout">
+                Company
+              </p> 
+            </a>
+            <span class="icon-thumbnail" style="background:transparent;">
+              <img src="<%= @server_url %>/Piktochart-icon.png"></img>
+            </span>
+          </li>
+          <!--Section to link to own team(s)-->
+          <% @okr_user_teams = OkrUserTeam.where(user_id: current_user.id) %>
+          <% @okr_user_teams.each do |item| %>
+          <% @okr_team = OkrTeam.where(id: item.okr_team_id) %>
+          <li>
+            <a href="/team_objectives/team_dashboard/<%= item.okr_team_id %>" class="detailed">
+              <span class="title" id="team-name">
+                <%= @okr_team[0].name %>
+              </span> 
+              <p class="details details-layout" id="team-position">
+                Piktochart Team
+              </p> 
+            </a>
+            <span class="icon-thumbnail">
+              <span id="username-shortform">
+                <% @team_shortform = @okr_team[0].name.scan(/[A-Z]/) %>
+                <% @team_short_str = "" %>
+                <% @team_shortform.each do |item| %>
+                  <% @team_short_str = @team_short_str + item %>
+                <% end %>
+                <%= @team_short_str %>
+              </span>
+            </span>
+          </li>
           <% end %>
-          <li class="m-t-30 ">
-            <hr/>
+          <!--Section to link to own personal OKR-->
+          <li>
             <a href="/" class="detailed">
               <span class="title" id="user-name">
                 <%= @user.name %>
@@ -102,6 +116,58 @@
               </span>
             </span>
           </li>
+          <hr />
+          <% @users.each_with_index do |item,index| %>
+            <% if (item.id != current_user.id) %>
+              <% if (index == 0) %>
+              <li>
+                <a href="/personal_objectives/view_others_personal_okr/<%= item.id %>" class="detailed">
+                  <span class="title" id="user-name">
+                    <%= item.name %>
+                  </span>
+                  <p class="details details-layout" id="user-position">
+                    <%= item.position %>
+                  </p> 
+                </a>
+                <span class="icon-thumbnail">
+                  <span id="username-shortform">
+                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @user_short_str = "" %>
+                    <% @user_shortform.each do |item| %>
+                      <% @user_short_str = @user_short_str + item %>
+                    <% end %>
+                    <%= @user_short_str %>
+                  </span>
+                </span>
+              </li>
+              <% else %>
+              <li>
+                <!-- Date : 23rd August 2016 -->
+                <!-- User favourite module proposed here -->
+                <!-- Current Progress: User Listing Module -->          
+                <!-- JS here to generate the user name and shortform -->
+                <a href="/personal_objectives/view_others_personal_okr/<%= item.id %>" class="detailed">
+                  <span class="title" id="user-name">
+                    <%= item.name %>
+                  </span>
+                  <p class="details details-layout" id="user-position">
+                    <%= item.position %>
+                  </p> 
+                </a>
+                <span class="icon-thumbnail">
+                  <span id="username-shortform">
+                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @user_short_str = "" %>
+                    <% @user_shortform.each do |item| %>
+                      <% @user_short_str = @user_short_str + item %>
+                    <% end %>
+                    <%= @user_short_str %>
+                  </span>
+                </span>
+              </li>
+              <% end %>
+            <% end %>
+          <% end %>
         </ul>
         <div class="clearfix"></div>
       </div>
@@ -334,6 +400,30 @@
       </div>
     </div>
 
+    <!-- Modal for notification -->
+    <div id="notification_modal" class="modal fade stick-up" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-background">
+          <div class="modal-header clearfix text-left">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Notifications</h4>
+          </div>
+          <hr/>
+          <div class="modal-body">
+            <div class="form-group">
+              <p id="notification_message">This key result is completed!</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button id="notification_dismiss_btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      
+      </div>
+    </div>
+
     <!--Modal for the progress ring-->
     <div id="progress_ring_modal" class="modal fade slide-up" role="dialog">
       <div class="modal-dialog">
@@ -348,8 +438,9 @@
       </div>
     </div>
 
-    <script src="/dist/vendor-webpack.js"></script>
+    <script src="/dist/vendor-webpack.js"></script>   
     <script src="/dist/personal_okr-webpack.js"></script>
+    <script src="/dist/team_okr-webpack.js"></script>
     <script src="/dist/personal_objective-webpack.js"></script>
   </body>
 </html>

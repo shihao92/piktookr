@@ -144,6 +144,34 @@
         })
     }
 
+    /** @function initSelect2Plugin
+    * @description Initialize select2 dropdown
+    * @requires select2.js
+    */
+    Pages.prototype.initSelect2Plugin = function() {
+        $.fn.select2 && $('[data-init-plugin="select2"]').each(function() {
+            $(this).select2({
+                minimumResultsForSearch: ($(this).attr('data-disable-search') == 'true' ? -1 : 1)
+            }).on('select2-opening', function() {
+                $.fn.scrollbar && $('.select2-results').scrollbar({
+                    ignoreMobile: false
+                })
+            });
+        });
+    }
+
+    /** @function initSelectFxPlugin
+    * @description Initialize iOS like List view plugin
+    * @example <caption>select[data-init-plugin="cs-select"]</caption>
+    */
+    Pages.prototype.initSelectFxPlugin = function() {
+        window.SelectFx && $('select[data-init-plugin="cs-select"]').each(function() {
+            var el = $(this).get(0);
+            $(el).wrap('<div class="cs-wrapper"></div>');
+            new SelectFx(el);
+        });
+    }
+
     /** @function init
     * @description Inintialize all core components.
     */
@@ -679,10 +707,10 @@
         $target.data('pg.search').toggleOverlay('show');
     })
 
-
 })(window.jQuery);
 (function($) {
     'use strict';
     // Initialize layouts and plugins
     (typeof angular === 'undefined') && $.Pages.init();
 })(window.jQuery);
+

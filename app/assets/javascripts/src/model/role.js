@@ -1,10 +1,7 @@
 // Date : 26 July 2016
 // This JS file that communicates with database for role module. 
 
-// Declarations here
-const serverURL = "http://localhost:3000";
-
-define (function () {
+define (['model/server_url'], function (urlParam) {
 
     // Get role after user login 
     function getRolePromise()
@@ -16,7 +13,7 @@ define (function () {
                 resolve(xhttp.responseText);
               }
             };
-            xhttp.open("GET", serverURL + "/app/check_role", true);
+            xhttp.open("GET", urlParam.server_url() + "/app/check_role", true);
             xhttp.send();
         });
     }

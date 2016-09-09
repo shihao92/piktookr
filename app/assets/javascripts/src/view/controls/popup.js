@@ -6,7 +6,16 @@ define(function(){
     // JQuery for the use of the pop up
     function loadPopup()
     {
+        // Initialization of new overlay
         $('[data-pages="search"]').search({
+            // Bind elements that are included inside search overlay
+            searchField: '#overlay-search',
+            closeButton: '.overlay-close',
+            suggestions: '#overlay-suggestions',
+            brand: '.brand'
+        });
+
+        $('#new_objective_popup').search({
             // Bind elements that are included inside search overlay
             searchField: '#overlay-search',
             closeButton: '.overlay-close',

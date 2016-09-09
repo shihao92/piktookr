@@ -42,6 +42,17 @@ Rails.application.routes.draw do
   # Route to use selected team ID to populate the team objectives combo box
   get 'team_key_results/get_team_objective/:id' => 'team_key_results#get_team_objective'
 
+  # Route to the team dashboard
+  get 'team_objectives/team_dashboard/:team_id' => 'team_objectives#team_dashboard'
+  # Route to the team objective details
+  get 'team_objectives/details/:id&:team_id' => 'team_objectives#details'
+  # Route to create team objective
+  post 'team_objectives/create_new_objective' => 'team_objectives#create_new_objective'
+  # Route to the team key result detail page
+  get 'team_key_results/details/:id&:team_id' => 'team_key_results#details'
+  # Route to create new team key result
+  post 'team_key_results/create_new_key_result' => 'team_key_results#create_new_key_result'
+
   # -------------------
   # Personal OKR Module
   # -------------------
@@ -64,7 +75,11 @@ Rails.application.routes.draw do
   get 'personal_objectives/details/:id' => 'personal_objectives#details'
   # Route for the personal key result details page
   get 'personal_key_results/details/:id' => 'personal_key_results#details'
-
+  # Route to view other person personal OKR
+  get 'personal_objectives/view_others_personal_okr/:user_id' => 'personal_objectives#view_others_personal_okr'
+  # Route to create new personal objective
+  post 'personal_objectives/create_new_objective' => 'personal_objectives#create_new_objective'
+  
   # Route for application view pages
   # Prototype 1
   get 'app/dashboard'

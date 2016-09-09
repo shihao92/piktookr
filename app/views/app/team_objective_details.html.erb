@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/" class="active">MY PERSONAL OKRs</a>
+          <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="active"><%= @okr_team.name %> TEAM OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -21,7 +21,7 @@
   <div class="row">
     <div class="col-lg-8 col-md-8 col-sm-8">
       <h3 class="semi-bold">
-        <%= @personal_key_result[0].key_result %>
+        <%= @team_objective[0].objective %>
       </h3>
       <br/>
       <span class="okr-details-header-info">
@@ -52,9 +52,9 @@
             <div class="fill"></div>
           </div>
         </div>
-        <div class="c100 p<%= @personal_key_result[0].progress.to_i %>">
+        <div class="c100 p<%= @team_objective[0].progress.to_i %>">
           <span>
-            <span id="okr_aligned_percentage"><%= @personal_key_result[0].progress.to_i %>%</span> <br/>
+            <span id="okr_aligned_percentage"><%= @team_objective[0].progress.to_i %>%</span> <br/>
             <p>progress</p>
           </span>
           <div class="slice">
@@ -78,8 +78,6 @@
                 <i class="pg-lock"></i>
                 <% elsif item.log_content.include? "Contributed" %>
                 <i class="pg-arrow_up"></i>
-                <% elsif item.log_content.include? "Marked" %>
-                <i class="pg-save"></i>
                 <% end %>
               </div>
               <div class="timeline-content">
@@ -98,20 +96,9 @@
                       <span class="small"><%= @day_difference.to_i %> day ago</span>
                       <% end %>
                     <% end %>
-                    <% if item.log_content.include? "Contributed" %>
-                      <span class="pull-right"><%= raw(item.log_content) %></span>
-                    <% end %>
                   </div>
-                  <div class="card-description">
-                    <% if item.log_content.include? "Contributed" %>
-                    <!--Note : Approach - Should include the contribution id as foreign key in the log personal key results -->
-                    <% @contribution = Contribution.where(log_personal_key_result_id: item.id) %>
-                    <% if(@contribution != []) %>
-                    <p><%= @contribution[0].contribution_comment %></p>
-                    <% end %>
-                    <% else %>
-                    <p><%= raw(item.log_content) %></p>
-                    <% end %>
+                  <div class="card-description"> 
+                    <p><%= raw(item.log_content) %></p>             
                   </div>
                 </div>
               </div>
@@ -125,12 +112,20 @@
       <div class="list-group list-group-root">
         <ul class="list-group">
           <li class="list-group-item">
-            <i class="pg-map"></i>
-            <%= @personal_objective[0].objective %>
+            <i class="pg-arrow_right"></i>
+            <%= @company_key_result[0].key_result %>
             <ul class="list-group">
               <li class="list-group-item">
-                <i class="pg-arrow_right"></i>
-                <%= @personal_key_result[0].key_result %>
+                <i class="pg-map"></i>
+                <%= @team_objective[0].objective %>
+                <ul class="list-group">
+                  <% @team_key_results.each do |item| %>
+                    <li class="list-group-item">
+                      <i class="pg-arrow_right"></i>
+                      <%= item.key_result %>
+                    </li>
+                  <% end %>
+                </ul>
               </li>
             </ul>
           </li>

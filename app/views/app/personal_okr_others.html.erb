@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/" class="active">MY PERSONAL OKRs</a>
+          <a href="/personal_objectives/view_others_personal_okr/<%= @user.id %>" class="active"><%= @user.name %> PERSONAL OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -20,7 +20,7 @@
 <div class="container-fluid container-fixed-lg">
 
   <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold">My personal OKRs</h5>
+  <h5 class="semi-bold"><%= @user.name %> personal OKRs</h5>
 
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
@@ -129,6 +129,19 @@
 
   <!-- Accordion involved all the OKR progresses -->
   <div class="padding-accordion-group">
+    <% if @personal_objective.count == 0 %>
+      <div class="panel panel-default">
+        <div class="panel-heading" role="tab">
+          <div class="row">
+            <h4 class="panel-title panel-title-custom">
+              <p class="bold details-layout no-objective-presence">
+                No Personal Objective is created by <%= @user.name %>
+              </p>
+            </h4>
+          </div>
+        </div>
+      </div>
+    <% end %>
     <% @personal_objective.each_with_index do |item,index| %>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab">
@@ -185,39 +198,9 @@
                       <span> Go to details</span>
                     </a>
                   </li>
-                  <li>
-                    <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
-                      <i class="fa fa-fw fa-trash-o"></i> 
-                      <span> Delete</span>
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
-          </div>
-        </div>
-        <!-- Confirmation Modal before personal objective deletion -->
-        <div id="confirmation_obj_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
-          <div class="modal-dialog">                   
-            <!-- Modal content-->
-            <div style="background:#ffffff;">
-              <div class="modal-header clearfix text-left">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Warning</h4>
-              </div>
-              <hr/>
-              <div class="modal-body">
-                <div class="form-group">
-                  <p>Are you sure? </p>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
-                  Delete
-                </a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-              </div>
-            </div>                
           </div>
         </div>
         <div id="personal_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="personal_obj_<%= index %> ">
@@ -237,12 +220,12 @@
                       <div class="accordion-item-title">
                         <div class="checkbox-primary">
                           <% if(item.is_completed == true) %>
-                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" checked/>
+                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" disabled=true checked/>
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout"><%= item.key_result %></p>
                           </label>
                           <% else %>
-                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>"/>
+                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" disabled=true />
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout"><%= item.key_result %></p>
                           </label>
@@ -275,72 +258,18 @@
            	        </button>
                     <ul class="dropdown-menu">
                       <li>
-                        <!-- Link to Contribution page -->
-                        <% if(item.progress == 100.00 || item.is_completed == true) %>
-                          <a href="/" data-toggle="modal" data-target="#notification_modal" id="keyresultprogress_<%= item.id %>">
-                            <i class="pg-plus"></i> 
-                             Progress update
-                          </a>
-                        <% else %>
-                          <a href="/" data-toggle="search" data-target="#contribution_popup" id="keyresultprogress_<%= item.id %>">
-                            <i class="pg-plus"></i> 
-                             Progress update
-                          </a>
-                        <% end %>
-                      </li>
-                      <li>
                         <!--View detailed of the personal key result-->
                         <a href="/personal_key_results/details/<%= item.id %>">
                           <i class="pg-search"></i> 
                            Go to details
                         </a>
                       </li>
-                      <li>
-                        <!-- Deletion of key result -->
-                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
-                          <i class="pg-trash_line"></i> 
-                           Delete
-                        </a>
-                      </li>
                     </ul>
-                    <!-- <a href="#" class="search-link" data-toggle="contribution"> -->
            	      </div>
-                </div>
-              </div>
-              <!-- Confirmation modal for personal key result deletion -->
-              <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
-                <div class="modal-dialog">
-                
-                  <!-- Modal content-->
-                  <div class="modal-background">
-                    <div class="modal-header clearfix text-left">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Warning</h4>
-                    </div>
-                    <hr/>
-                    <div class="modal-body">
-                      <div class="form-group">
-                        <p id="prompt_message">Are you sure?</p>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_key_results/<%= item.id %>">
-                        Delete
-                      </a>
-                      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                
                 </div>
               </div>
             <% end %>
 
-            <!-- New row for the add in of new key results over here -->
-            <div class="row accordion-item add-new-personal-key-result">
-              <div id="new_key_result" name="new_key_result_objective_<%= item.id %>">
-                <input id="new_key_result_objective_<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new key result"/>         
-              </div>
-            </div>
           </div>
         </div>
         <div class="panel-footer">
@@ -363,139 +292,12 @@
       </div>
     <% end %>
 
-    <div class="panel panel-default">
-      <div class="panel-heading" role="tab">
-        <h4 class="panel-title panel-title-custom">
-            <div id="add-new-personal-objective">
-              <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-            </div>
-        </h4>
-      </div>
-    </div>
-
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->
 
 </div>
 <!-- END CONTAINER FLUID -->
-
-<!-- Popup for the contribution module -->
-<div class="overlay hide" data-pages="search" id="contribution_popup">
-  <div class="overlay-content has-results m-t-20">
-    <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
-        <i class="pg-close"></i>
-      </a>
-    </div>
-    <div class="centralize">
-      <div class="container-fluid">
-        <div class="col-lg-3 col-md-3 col-sm-3">
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
-        <div class="row">
-          <h5 class="m-b-5">
-            <span class="semi-bold result-name">
-            	Confirm progress update for: <br/>
-              <span class="bold" id="personal_key_result">xxxxxx</span>
-            </span>
-          </h5>
-        </div>
-        <div id="key_result_id" style="display:none;">
-        </div>
-        <div id="popup_initial_progress" style="display:none;">
-        </div>
-        <div class="row">
-          <div class="no-padding m-t-50">
-            <div class="bg-master" id="slider-tooltips">
-            </div>
-          </div>
-        </div>
-        <br/>
-        <br/>
-        <div class="row">
-          <div class="row">           
-              <div class="form-group form-group-default">
-                <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
-                <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
-              </div>
-          </div>
-          <div class="row">
-            <div class="pull-right">
-              <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
-                Cancel
-              </a>
-              <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Popup for the new objective -->
-<div class="overlay hide" id="new_objective_popup">
-  <div class="overlay-content has-results m-t-20">
-    <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
-        <i class="pg-close"></i>
-      </a>
-    </div>
-    <div class="centralize">
-      <div class="container-fluid">
-        <div class="col-lg-3 col-md-3 col-sm-3">
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
-          <div class="row">
-            <h5 class="m-b-5">
-              <span class="semi-bold result-name">
-              	New Personal Objective
-              </span>
-            </h5>
-            <hr />
-            <br />
-          </div>      
-          <div class="row">
-            <form role="form">
-              <div class="form-group">
-                <label>Select the alignment Team Key Result</label>
-                <!--Load all the key result of the particular team-->
-                <select id="team_key_result_selection" class="full-width" data-init-plugin="select2">
-                  <% @temp_team_key_result.each_with_index do |item,index| %>
-                    <option value="<%= item[1] %>"><%= item[0] %></option>
-                  <% end %>                             
-                </select>
-              </div>
-            </form>
-            <br />
-            <div class="form-group form-group-default">
-              <label>OBJECTIVE TITLE</label>
-              <textarea id="personal_objective_textarea" class="form-control textarea-custom" required></textarea>
-            </div>
-          </div>
-          <div class="row">
-            <div class="pull-right">
-              <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
-                Cancel
-              </a>
-              <button id="btn_new_personal_objective" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
-                Save
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-3 col-sm-3">
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 

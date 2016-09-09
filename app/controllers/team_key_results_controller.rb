@@ -66,6 +66,9 @@ class TeamKeyResultsController < ApplicationController
   # DELETE /team_key_results/1
   # DELETE /team_key_results/1.json
   def destroy
+    # Find which team the team key result belongs to
+    @team_objective = TeamObjective.where(id: @team_key_result.team_objective_id)
+    
     # Temporarily implementation - Delete log team key result whenever user want to delete the team key result
     @log_content = 'Deleted <span><del>' + @team_key_result.key_result + '</del></span>'
 
@@ -74,16 +77,54 @@ class TeamKeyResultsController < ApplicationController
     @team_key_result.destroy
     delete_team_key_result(@team_key_result.team_objective_id)
     respond_to do |format|
-      format.html { redirect_to team_key_results_url, notice: 'Team key result was successfully destroyed.' }
+      format.html { redirect_to '/team_objectives/team_dashboard/' + @team_objective[0].okr_team_id.to_s, notice: 'Team key result was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
+  # Required in OLD Prototype only
   # At team key result, obtain the team id and populate team objectives in the dropdown
   def get_team_objective
     @okr_team_id = params[:id]
     @team_objectives = TeamObjective.where(okr_team_id:@okr_team_id) 
     render json: @team_objectives, status: :ok
+  end
+
+  def details
+    @key_result_id = params[:id]
+    @team_id = params[:team_id]
+
+    @okr_team = OkrTeam.where(id: @team_id)
+    @team_key_result = TeamKeyResult.where(id: @key_result_id)
+    @team_objective = TeamObjective.where(id: @team_key_result[0].team_objective_id)
+    @user_info = User.where(id: @team_key_result[0].user_id)
+
+    @log = LogTeamKeyResult.where(team_key_result_id: @key_result_id).order(id: :DESC)
+
+    @temp_personal_objective = []
+    @okr_team_personals = OkrTeamPersonal.where(team_key_result_id: @key_result_id)
+    @okr_team_personals.each do |item|
+      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).all.map{|obj| [obj.objective]}
+      @temp_personal_objective.push(@personal_objective)
+    end
+
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
+
+    render 'app/team_key_result_details'
+  end
+
+  def create_new_key_result
+    @key_result = params['key_result']
+    @team_objective_id = params['team_objective_id']
+
+    @team_objective = TeamObjective.find(@team_objective_id)
+    @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @team_objective.objective + '</span>'
+    @temp = TeamKeyResult.create!(progress: 0.0, key_result: @key_result , team_objective_id: @team_objective_id, user_id: current_user.id)
+    LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @temp.id, user_id: current_user.id)
+    update_okr_modules(@team_objective_id, @temp.id, 0.00)
   end
 
   private

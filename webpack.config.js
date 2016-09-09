@@ -7,6 +7,7 @@ module.exports = {
       vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap.min'],
       login: 'controller/login.js',
       personal_okr: 'controller/personal_okr.js',
+      team_okr: 'controller/team_okr.js',
       role: 'controller/role.js',
       team_key_result: 'controller/objective_key_result/team_key_result',
       personal_objective: 'controller/objective_key_result/personal_objective'

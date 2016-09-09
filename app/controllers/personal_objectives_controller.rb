@@ -1,7 +1,3 @@
-# Date : 5 August 2016
-# Completed module : Create, Read and Update feature for OKR Module
-# To be completed module : Delete OKR
-
 class PersonalObjectivesController < ApplicationController
   before_action :set_personal_objective, only: [:show, :edit, :update, :destroy]
 
@@ -82,7 +78,7 @@ class PersonalObjectivesController < ApplicationController
     @personal_objective.destroy
     delete_personal_objective(@team_key_result_id)
     respond_to do |format|
-      format.html { redirect_to personal_objectives_url, notice: 'Personal objective was successfully destroyed.' }
+      format.html { redirect_to '/', notice: 'Personal objective was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -91,6 +87,27 @@ class PersonalObjectivesController < ApplicationController
     @team_objective_id = params[:id]
     @team_key_results = TeamKeyResult.where(team_objective_id: @team_objective_id)
     render json: @team_key_results, status: :ok
+  end
+
+  def create_new_objective
+    @objective = params["objective"]
+    @team_key_result_id = params["team_key_result_id"]
+    
+    @progress = 0.0
+    @user_id = current_user.id
+    @current_timeframe_log_id = current_timeframe_log_id
+
+    @personal_objective = PersonalObjective.create!(
+      personal_objective_params.merge(objective: @objective, progress: 0.0, timeframe_log_id: @current_timeframe_log_id[0].id, user_id: @user_id))
+    
+    if @personal_objective.save
+      OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
+      @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
+      @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
+      LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
+      # Right after creation of new personal objective, update OKR progress 
+      update_okr_modules(@personal_objective.id, 0.00)
+    end
   end
 
   def details
@@ -112,6 +129,43 @@ class PersonalObjectivesController < ApplicationController
     @log = LogPersonalObjective.where(personal_objective_id: @objective_id).order(id: :DESC)
 
     render "app/personal_objective_details" 
+  end
+
+  def view_others_personal_okr
+    @user_id = params[:user_id]
+
+    @user = User.find(@user_id)
+      
+    @okr_user_role = OkrUserRole.where(user_id: @user_id)
+    @role = OkrRole.where(id: @okr_user_role[0].okr_role_id) 
+    
+    @personal_objective = PersonalObjective.where(user_id: @user_id) 
+    
+    @completed_objective = 0 
+    if(@personal_objective.count != 0) 
+      @progress_portion = 100 / @personal_objective.count 
+      @total_progress = 0 
+      @temp_date = [] 
+      @personal_objective.each do |item| 
+        @temp_progress = (item.progress/100) * @progress_portion 
+        @total_progress = @total_progress + @temp_progress 
+        # To check whether there is any completed objective  
+        if(item.progress == 100.00) 
+          @completed_objective = @completed_objective + 1 
+        end 
+        # To check which is the latest updated date 
+        @temp_date << item.updated_at 
+      end 
+      @date_max = @temp_date.max 
+      @date_difference = (Time.now - @date_max) / 86400 
+    end 
+    
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date 
+
+    render 'app/personal_okr_others'
   end
 
   private

@@ -21,9 +21,9 @@ ActiveRecord::Schema.define(version: 20160906013049) do
     t.integer  "company_objective_id"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
-    t.integer  "users_id"
+    t.integer  "user_id"
     t.index ["company_objective_id"], name: "index_company_key_results_on_company_objective_id", using: :btree
-    t.index ["users_id"], name: "index_company_key_results_on_users_id", using: :btree
+    t.index ["user_id"], name: "index_company_key_results_on_user_id", using: :btree
   end
 
   create_table "company_objectives", force: :cascade do |t|
@@ -32,18 +32,18 @@ ActiveRecord::Schema.define(version: 20160906013049) do
     t.integer  "timeframe_log_id"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.integer  "users_id"
+    t.integer  "user_id"
     t.index ["timeframe_log_id"], name: "index_company_objectives_on_timeframe_log_id", using: :btree
-    t.index ["users_id"], name: "index_company_objectives_on_users_id", using: :btree
+    t.index ["user_id"], name: "index_company_objectives_on_user_id", using: :btree
   end
 
   create_table "contributions", force: :cascade do |t|
     t.string   "contribution_comment"
     t.integer  "personal_key_result_id"
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.integer  "log_personal_key_results_id"
-    t.index ["log_personal_key_results_id"], name: "index_contributions_on_log_personal_key_results_id", using: :btree
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.integer  "log_personal_key_result_id"
+    t.index ["log_personal_key_result_id"], name: "index_contributions_on_log_personal_key_result_id", using: :btree
     t.index ["personal_key_result_id"], name: "index_contributions_on_personal_key_result_id", using: :btree
   end
 
@@ -180,9 +180,9 @@ ActiveRecord::Schema.define(version: 20160906013049) do
     t.integer  "team_objective_id"
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
-    t.integer  "users_id"
+    t.integer  "user_id"
     t.index ["team_objective_id"], name: "index_team_key_results_on_team_objective_id", using: :btree
-    t.index ["users_id"], name: "index_team_key_results_on_users_id", using: :btree
+    t.index ["user_id"], name: "index_team_key_results_on_user_id", using: :btree
   end
 
   create_table "team_objectives", force: :cascade do |t|
@@ -192,10 +192,10 @@ ActiveRecord::Schema.define(version: 20160906013049) do
     t.integer  "okr_team_id"
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
-    t.integer  "users_id"
+    t.integer  "user_id"
     t.index ["okr_team_id"], name: "index_team_objectives_on_okr_team_id", using: :btree
     t.index ["timeframe_log_id"], name: "index_team_objectives_on_timeframe_log_id", using: :btree
-    t.index ["users_id"], name: "index_team_objectives_on_users_id", using: :btree
+    t.index ["user_id"], name: "index_team_objectives_on_user_id", using: :btree
   end
 
   create_table "teams", force: :cascade do |t|
@@ -249,10 +249,10 @@ ActiveRecord::Schema.define(version: 20160906013049) do
   end
 
   add_foreign_key "company_key_results", "company_objectives"
-  add_foreign_key "company_key_results", "users", column: "users_id"
+  add_foreign_key "company_key_results", "users"
   add_foreign_key "company_objectives", "timeframe_logs"
-  add_foreign_key "company_objectives", "users", column: "users_id"
-  add_foreign_key "contributions", "log_personal_key_results", column: "log_personal_key_results_id"
+  add_foreign_key "company_objectives", "users"
+  add_foreign_key "contributions", "log_personal_key_results"
   add_foreign_key "contributions", "personal_key_results"
   add_foreign_key "log_company_key_results", "company_key_results"
   add_foreign_key "log_company_key_results", "users"
@@ -278,10 +278,10 @@ ActiveRecord::Schema.define(version: 20160906013049) do
   add_foreign_key "personal_objectives", "timeframe_logs"
   add_foreign_key "personal_objectives", "users"
   add_foreign_key "team_key_results", "team_objectives"
-  add_foreign_key "team_key_results", "users", column: "users_id"
+  add_foreign_key "team_key_results", "users"
   add_foreign_key "team_objectives", "okr_teams"
   add_foreign_key "team_objectives", "timeframe_logs"
-  add_foreign_key "team_objectives", "users", column: "users_id"
+  add_foreign_key "team_objectives", "users"
   add_foreign_key "timeframe_logs", "timeframes"
   add_foreign_key "users", "teams", column: "teams_id"
 end

@@ -80,6 +80,8 @@
                 <i class="pg-arrow_up"></i>
                 <% elsif item.log_content.include? "Marked" %>
                 <i class="pg-save"></i>
+                <% elsif item.log_content.include? "Deleted" %>
+                <i class="pg-trash_line"></i>
                 <% end %>
               </div>
               <div class="timeline-content">

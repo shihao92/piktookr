@@ -1,10 +1,7 @@
 // Date : 2 August 2016
 // This JS file that communicates with database for team OKR module. 
 
-// Declarations here
-const serverURL = "http://localhost:3000";
-
-define (function () {
+define (['model/server_url'], function (urlParam) {
 
     // Get team objectives for the use of team key results alignment
     function getTeamObjectivesPromise(okr_team_id)
@@ -16,7 +13,7 @@ define (function () {
                 resolve(xhttp.responseText);
               }
             };
-            xhttp.open("GET", serverURL + "/team_key_results/get_team_objective/" + okr_team_id, true);
+            xhttp.open("GET", urlParam.server_url() + "/team_key_results/get_team_objective/" + okr_team_id, true);
             xhttp.send();
         });
     }
@@ -30,7 +27,7 @@ define (function () {
                 resolve(xhttp.responseText);
               }
             };
-            xhttp.open("GET", serverURL + "/personal_objectives/get_team_key_results/" + team_objective_id, true);
+            xhttp.open("GET", urlParam.server_url() + "/personal_objectives/get_team_key_results/" + team_objective_id, true);
             xhttp.send();
         });
     }

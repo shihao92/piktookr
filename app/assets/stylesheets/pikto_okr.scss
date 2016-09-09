@@ -96,8 +96,17 @@ $icon-light-grey : #b3b3b3;
 .add-new-personal-key-result:hover, .add-new-personal-key-result:active {
     background: transparent;
 }
+.add-new-team-key-result {
+    background: transparent;
+}
+.add-new-team-key-result:hover, .add-new-team-key-result:active {
+    background: transparent;
+}
 .item-content {
     padding-left: 0px;
+}
+.no-objective-presence {
+    margin-left: 20px;
 }
 // Button
 .btn-accordion {
