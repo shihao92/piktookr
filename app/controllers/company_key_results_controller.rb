@@ -98,6 +98,22 @@ class CompanyKeyResultsController < ApplicationController
     render 'app/company_key_result_details'
   end
 
+  def create_new_key_result
+    @key_result = params['key_result']
+    @company_objective_id = params['company_objective_id']
+
+    @company_objective = CompanyObjective.find(@company_objective_id)
+    @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @company_objective.objective + '</span>'
+    @new_company_key_result = CompanyKeyResult.create!(
+      key_result: @key_result,
+      progress: 0.0,
+      company_objective_id: @company_objective_id,
+      user_id: current_user.id
+    )
+    LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @new_company_key_result.id, user_id: current_user.id)
+    update_okr_modules(@company_objective_id, @new_company_key_result.id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company_key_result
