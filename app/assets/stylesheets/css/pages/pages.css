@@ -359,7 +359,7 @@ body.rtl [class*="col-"] {
   margin: 0;
   padding: 0;
   position: relative;
-  overflow: auto;
+  /*overflow: hidden;*/
   -webkit-overflow-scrolling: touch;
   height: calc(100% - 10px);
   width: 100%;

@@ -264,6 +264,8 @@
            
              var menuOpenCSS = (this.css3d == true ? 'translate3d(' + _sideBarWidthCondensed + 'px, 0,0)' : 'translate(' + _sideBarWidthCondensed + 'px, 0)');
 
+             $('.sidebar-menu').attr('style', 'overflow-y: scroll;');
+
              if ($.Pages.isVisibleSm() || $.Pages.isVisibleXs()) {
                  return false
              }
@@ -289,6 +291,8 @@
          function sidebarMouseLeave(e) {
             var menuClosedCSS = (_this.css3d == true ? 'translate3d(0, 0,0)' : 'translate(0, 0)');
 
+            $('.sidebar-menu').attr('style', 'overflow-y: hidden;');
+
              if ($.Pages.isVisibleSm() || $.Pages.isVisibleXs()) {
                  return false
              }
@@ -304,7 +308,6 @@
              if ($('.sidebar-overlay-slide').hasClass('show')) {
                  $('.sidebar-overlay-slide').removeClass('show')
                  $("[data-pages-toggle']").removeClass('active')
-
              }
 
              if (_this.cssAnimation) {
