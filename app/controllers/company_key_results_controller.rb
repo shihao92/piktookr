@@ -68,10 +68,10 @@ class CompanyKeyResultsController < ApplicationController
     if @company_key_result.destroy
       delete_company_key_result(@company_key_result.company_objective_id)
       flash.alert = 'Company key result was successfully destroyed.'
-      redirect_to company_key_results_url
+      redirect_to '/company_objectives/company_dashboard'
     else
       flash.alert = 'Not able to be deleted because there are other team key result aligned to it.'
-      redirect_to company_key_results_url
+      redirect_to '/company_objectives/company_dashboard'
     end
   end
 
@@ -110,7 +110,11 @@ class CompanyKeyResultsController < ApplicationController
       company_objective_id: @company_objective_id,
       user_id: current_user.id
     )
-    LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @new_company_key_result.id, user_id: current_user.id)
+    LogCompanyKeyResult.create!(
+      log_content: @log_content, 
+      company_key_result_id: @new_company_key_result.id, 
+      user_id: current_user.id
+    )
     update_okr_modules(@company_objective_id, @new_company_key_result.id)
   end
 

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   # Company OKR Module
   # ------------------
   # resources :company_objectives
+  delete 'company_objectives/:id' => 'company_objectives#destroy'
   resources :company_key_results
 
   # Route to the company dashboard
@@ -40,6 +41,11 @@ Rails.application.routes.draw do
   get 'company_objectives/details/:id' => 'company_objectives#details'
   # Route to the company key result details
   get 'company_key_results/details/:id' => 'company_key_results#details'
+  
+  # Route to create company objective
+  post 'company_objectives/create_new_objective' => 'company_objectives#create_new_objective'
+  # Route to create company key result
+  post 'company_key_results/create_new_key_result' => 'company_key_results#create_new_key_result'
   
   # ---------------
   # Team OKR Module

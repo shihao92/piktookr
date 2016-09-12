@@ -64,18 +64,18 @@ class CompanyObjectivesController < ApplicationController
     begin
       if @company_objective.destroy
         respond_to do |format|
-          format.html { redirect_to company_objectives_url, notice: 'Company objective was successfully destroyed.' }
+          format.html { redirect_to '/company_objectives/company_dashboard', notice: 'Company objective was successfully destroyed.' }
           format.json { head :no_content }
         end
       else
         respond_to do |format|
-          format.html { redirect_to company_objectives_url, notice: 'There is other key result aligned with this company objective.' }
+          format.html { redirect_to '/company_objectives/company_dashboard', notice: 'There is other key result aligned with this company objective.' }
           format.json { head :no_content }
         end
       end
     rescue
       respond_to do |format|
-        format.html { redirect_to company_objectives_url, notice: 'There is other key result aligned with this company objective.' }
+        format.html { redirect_to '/company_objectives/company_dashboard', notice: 'There is other key result aligned with this company objective.' }
         format.json { head :no_content }
       end
     end
@@ -125,6 +125,19 @@ class CompanyObjectivesController < ApplicationController
     @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
 
     render 'app/company_objective_details'
+  end
+
+  def create_new_objective
+    @objective = params['objective']
+    @log = current_timeframe_log_id;
+    @new_company_objective = CompanyObjective.create!(
+      objective: @objective,
+      progress: 0.0,
+      timeframe_log_id: @log[0].id,
+      user_id: current_user.id
+    )
+    @log_content = 'Created <span class="bold">' + @objective + '</span>' 
+    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @new_company_objective.id, user_id: current_user.id)
   end
 
   private
