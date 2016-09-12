@@ -1,6 +1,7 @@
 class CompanyObjectivesController < ApplicationController
   before_action :set_company_objective, only: [:show, :edit, :update, :destroy]
-
+  skip_before_action :set_company_objective, only: [:company_dashboard]
+  
   # GET /company_objectives
   # GET /company_objectives.json
   def index
@@ -78,6 +79,52 @@ class CompanyObjectivesController < ApplicationController
         format.json { head :no_content }
       end
     end
+  end
+
+  def company_dashboard
+    @company_objectives = CompanyObjective.all
+    @completed_objectives = 0
+    @temp_progress_buffer = 0.00
+    @total_progress = 0
+
+    if(@company_objectives.count != 0) 
+      @temp_date = []
+      @company_objectives.each do |item|
+        if(item.progress == 100.00)
+          @completed_objectives = @completed_objectives + 1
+        end
+        @temp_progress_buffer = item.progress + @temp_progress_buffer
+        # To check which is the latest updated date 
+        @temp_date << item.updated_at
+        @date_max = @temp_date.max 
+        @date_difference = (Time.now - @date_max) / 86400 
+      end
+      @percentage_completed_objective = (@completed_objectives.to_f / @company_objectives.count.to_f) * 100
+      @total_progress = @temp_progress_buffer / @company_objectives.count
+      # Timeframe module
+      @current_date = Time.now.strftime("%Y-%m-%d") 
+      @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+      @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+      @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date
+    end
+
+    render 'app/company_dashboard'
+  end
+
+  def details
+    @objective_id = params[:id]
+    @company_objective = CompanyObjective.find(@objective_id)
+    @company_key_results = CompanyKeyResult.where(company_objective_id: @objective_id)
+    @user_info = User.where(id: @company_objective.user_id)
+
+    @log = LogCompanyObjective.where(company_objective_id: @objective_id).order(id: :DESC)
+
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
+
+    render 'app/company_objective_details'
   end
 
   private

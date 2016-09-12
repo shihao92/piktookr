@@ -6,8 +6,6 @@
 <% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
 <% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
 
-
-
 <% @server_url = "http://localhost:3000" %>
 
 <!DOCTYPE html>
@@ -58,7 +56,7 @@
         <ul class="menu-items">
           <!-- Section to link to company -->
           <li class="m-t-30">
-            <a href="/" class="detailed">
+            <a href="/company_objectives/company_dashboard" class="detailed">
               <span class="title">
                 Piktochart
               </span> 

@@ -31,8 +31,15 @@ Rails.application.routes.draw do
   # ------------------
   # Company OKR Module
   # ------------------
-  resources :company_objectives
+  # resources :company_objectives
   resources :company_key_results
+
+  # Route to the company dashboard
+  get 'company_objectives/company_dashboard' => 'company_objectives#company_dashboard'
+  # Route to company objective details
+  get 'company_objectives/details/:id' => 'company_objectives#details'
+  # Route to the company key result details
+  get 'company_key_results/details/:id' => 'company_key_results#details'
   
   # ---------------
   # Team OKR Module

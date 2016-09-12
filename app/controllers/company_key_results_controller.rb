@@ -75,6 +75,29 @@ class CompanyKeyResultsController < ApplicationController
     end
   end
 
+  def details
+    @key_result_id = params[:id]
+    @company_key_result = CompanyKeyResult.find(@key_result_id)
+    @company_objective = CompanyObjective.find(@company_key_result.company_objective_id)
+    @user_info = User.where(id: @company_key_result.user_id)
+
+    @log = LogCompanyKeyResult.where(company_key_result_id: @key_result_id).order(id: :DESC)
+
+    @temp_team_objective = []
+    @okr_company_teams = OkrCompanyTeam.where(company_key_result_id: @key_result_id)
+    @okr_company_teams.each do |item|
+      @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.objective]}
+      @temp_team_objective.push(@team_objective)
+    end
+    
+    @current_date = Time.now.strftime("%Y-%m-%d") 
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
+    @timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
+    @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
+
+    render 'app/company_key_result_details'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company_key_result
