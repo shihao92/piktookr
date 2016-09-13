@@ -1180,7 +1180,7 @@ body.rtl [class*="col-"] {
 }
 .overlay > div {
   width: 100%;
-  height: 260px;
+  height: 100%;
   display: block;
   overflow: hidden;
 }

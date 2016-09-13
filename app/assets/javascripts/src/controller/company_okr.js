@@ -1,10 +1,10 @@
 // Date : 12 September 2016
 // This JS file that controls company okr page only.
 
-require(['pages/pages.blank',
+require([
 'model/company_key_result', 'model/company_objective',
 'view/controls/modal', 'view/controls/popup', 'view/controls/select2.min'], 
-function(blankParam,
+function(
 companyKeyResultModelParam, companyObjectiveModelParam,
 modalParam, popupParam, select2Param) {
 

@@ -1,10 +1,10 @@
 // Date : 8 September 2016
 // This JS file that controls team okr page only.
 
-require(['pages/pages.blank',
+require([
 'model/team_key_result','model/team_objective',
 'view/controls/modal', 'view/controls/popup', 'view/controls/select2.min'], 
-function(blankParam,
+function(
 teamKeyResultModelParam, teamObjectiveModelParam,
 modalParam, popupParam, select2Param) {
 
@@ -145,7 +145,7 @@ modalParam, popupParam, select2Param) {
                 location.reload();
             }
         },'.add-new-team-key-result');
-        
+
     })
 
 })
