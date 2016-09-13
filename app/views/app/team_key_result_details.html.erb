@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/" class="active"><%= @okr_team[0].name %> TEAM OKRs</a>
+          <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="active"><%= @okr_team[0].name %> TEAM OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -78,6 +78,8 @@
                 <i class="pg-lock"></i>
                 <% elsif item.log_content.include? "Contributed" %>
                 <i class="pg-arrow_up"></i>
+                <% elsif item.log_content.include? "Renamed" %>
+                <i class="pg-settings"></i>
                 <% end %>
               </div>
               <div class="timeline-content">

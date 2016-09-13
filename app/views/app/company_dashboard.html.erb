@@ -133,7 +133,20 @@
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6">
                     <p class="small details-layout"></p>
-                    <%= content_tag(:p, item.objective, class: "bold details-layout" ) %>
+                    <div id="company_objective_<%= item.id %>">
+                      <p class="bold details-layout">
+                        <%= item.objective %>
+                      </p>
+                    </div>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1">
+                    <div class="pull-left">
+                      <% if(item.progress != 100.00) %>
+                      <button class="btn btn-accordion edit_company_objective" name="companyobj_<%= item.id %>">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                      <% end %>
+                    </div>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <!--<div class="text-center">
@@ -143,7 +156,7 @@
                       </div>
                     </div>-->
                   </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2">
+                  <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="text-center">
                       <p class="small">Days left</p>
                       <div class="text-center">
@@ -220,14 +233,23 @@
               <% if(item.progress == 100.00) %>
               <%    @company_key_result_completed = @company_key_result_completed + 1 %>
               <% end %>
-              <div id="team_key_result_<%= item.id %>" class="row accordion-item">
+              <div id="company_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">
                   <div class="row checkbox">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
-                        <div class="checkbox-primary">
+                        <div id="company_kr_<%= item.id %>" class="checkbox-primary">
                             <p class="details-layout"><%= item.key_result %></p>
                         </div> 
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                      <div class="pull-left">
+                        <% if(item.progress != 100.00) %>
+                        <button class="btn btn-accordion edit_company_key_result" name="companykr_<%= item.id %>">
+                          <i class="fa fa-pencil"></i>
+                        </button>
+                        <% end %>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
@@ -235,7 +257,7 @@
                         <span class="bold">21%</span>
                       </div>-->
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="text-center">
                         <span class="bold"><%= @remaining_quarter_days.to_i %></span>
                       </div>

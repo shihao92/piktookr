@@ -140,6 +140,16 @@ class CompanyObjectivesController < ApplicationController
     LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @new_company_objective.id, user_id: current_user.id)
   end
 
+  def edit_objective
+    @objective_id = params['id']
+    @edited_objective = params['edited_objective']
+    @original_objective = params['original_objective']
+
+    CompanyObjective.where(id: @objective_id).update_all(objective: @edited_objective)
+    @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
+    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @objective_id, user_id: current_user.id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company_objective

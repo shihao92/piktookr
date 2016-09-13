@@ -171,6 +171,16 @@ class TeamObjectivesController < ApplicationController
     LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_objective.id, user_id: current_user.id)     
   end
 
+  def edit_objective
+    @objective_id = params['id']
+    @edited_objective = params['edited_objective']
+    @original_objective = params['original_objective']
+
+    TeamObjective.where(id: @objective_id).update_all(objective: @edited_objective)
+    @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
+    LogTeamObjective.create!(log_content: @log_content, team_objective_id: @objective_id, user_id: current_user.id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team_objective

@@ -118,6 +118,16 @@ class CompanyKeyResultsController < ApplicationController
     update_okr_modules(@company_objective_id, @new_company_key_result.id)
   end
 
+  def edit_key_result
+    @key_result_id = params['id']
+    @edited_key_result = params['edited_key_result']
+    @original_key_result = params['original_key_result']
+
+    CompanyKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+    LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @key_result_id, user_id: current_user.id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_company_key_result

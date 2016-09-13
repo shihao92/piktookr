@@ -21,8 +21,28 @@ define (['model/server_url'], function (urlParam) {
         });
     }
 
+    function editTeamObjective(objective_id, edited_objective, original_objective)
+    {
+        return new Promise((resolve, reject) => {
+            const xhttp = new XMLHttpRequest();
+            // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
+            xhttp.open(
+                "POST", 
+                urlParam.server_url() + "/team_objectives/edit_objective", 
+                true
+            );
+            xhttp.setRequestHeader('Content-Type', 'application/json');
+            xhttp.send(JSON.stringify({
+                'id'                       : objective_id,
+                'edited_objective'         : edited_objective,
+                'original_objective'       : original_objective
+            }));           
+        });
+    } 
+
     return {
-        newTeamObjective
+        newTeamObjective,
+        editTeamObjective
     }
 
 })

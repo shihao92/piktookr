@@ -113,7 +113,7 @@ modalParam, popupParam, sliderParam, spinProgressParam, select2Param) {
             focusout: function(){
                 location.reload();
             }
-        },'.form-control');
+        },'.add-new-personal-key-result');
 
         // Key result - Create new  
         $(".add-new-personal-key-result")
@@ -144,7 +144,6 @@ modalParam, popupParam, sliderParam, spinProgressParam, select2Param) {
                 location.reload();
             }
         }, '#new_key_result');
-
         // Key result - Update progress
         $('#btn_update_progress').click(function() {
             let progress = $('#slider-tooltips').val();
@@ -201,22 +200,27 @@ modalParam, popupParam, sliderParam, spinProgressParam, select2Param) {
             $('.edit_personal_key_result').attr('style', 'visibility: hidden;');
         });
         $('.checkbox-primary')
-        .on('keypress', '.form-control', function(e) {
-            let key = e.which;
-            if(key == 13){
-                let updated_key_result = $(this).val();
-                let original_key_result = temp_original_key_result;
-                let editing_key_result_id = temp_editing_key_result_id;
-                if(updated_key_result != original_key_result){
-                    personalKeyResultModelParam.editPersonalKeyResult(editing_key_result_id, updated_key_result, original_key_result);
-                    $('#notification_message').text("Your personal key result is updated successfully!");
-                    $('#notification_modal').modal('show');
+        .on({
+            keypress: function(e) {
+                let key = e.which;
+                if(key == 13){
+                    let updated_key_result = $(this).val();
+                    let original_key_result = temp_original_key_result;
+                    let editing_key_result_id = temp_editing_key_result_id;
+                    if(updated_key_result != original_key_result && updated_key_result != ''){
+                        personalKeyResultModelParam.editPersonalKeyResult(editing_key_result_id, updated_key_result, original_key_result);
+                        $('#notification_message').text("Your personal key result is updated successfully!");
+                        $('#notification_modal').modal('show');
+                    }
+                    else{
+                        location.reload();
+                    }
                 }
-                else{
-                    location.reload();
-                }
+            },
+            focusout: function() {
+                location.reload();
             }
-        });
+        },'.add-new-personal-key-result');
 
         $('#notification_dismiss_btn').click(function() {
             location.reload();

@@ -36,6 +36,8 @@ gem 'devise'
 gem "paperclip", "~> 5.0.0"
 # Gem for requirejs
 gem 'requirejs-rails'
+# Gem for the Google Authentication Plugin
+gem 'omniauth-google-oauth2', "~> 0.2.1"
 
 # gem for testing
 gem 'rspec-rails'

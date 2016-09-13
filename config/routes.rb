@@ -44,9 +44,13 @@ Rails.application.routes.draw do
   
   # Route to create company objective
   post 'company_objectives/create_new_objective' => 'company_objectives#create_new_objective'
+  # Route to edit company objective
+  post 'company_objectives/edit_objective' => 'company_objectives#edit_objective'
   # Route to create company key result
   post 'company_key_results/create_new_key_result' => 'company_key_results#create_new_key_result'
-  
+  # Route to edit company key result
+  post 'company_key_results/edit_key_result' => 'company_key_results#edit_key_result'
+
   # ---------------
   # Team OKR Module
   # ---------------
@@ -61,10 +65,14 @@ Rails.application.routes.draw do
   get 'team_objectives/details/:id&:team_id' => 'team_objectives#details'
   # Route to create team objective
   post 'team_objectives/create_new_objective' => 'team_objectives#create_new_objective'
+  # Route to edit the team objective
+  post 'team_objectives/edit_objective' => 'team_objectives#edit_objective'
   # Route to the team key result detail page
   get 'team_key_results/details/:id&:team_id' => 'team_key_results#details'
   # Route to create new team key result
   post 'team_key_results/create_new_key_result' => 'team_key_results#create_new_key_result'
+  # Route to edit the team key result
+  post 'team_key_results/edit_key_result' => 'team_key_results#edit_key_result'
 
   # -------------------
   # Personal OKR Module

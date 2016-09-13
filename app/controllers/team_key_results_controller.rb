@@ -127,6 +127,16 @@ class TeamKeyResultsController < ApplicationController
     update_okr_modules(@team_objective_id, @temp.id, 0.00)
   end
 
+  def edit_key_result
+    @key_result_id = params['id']
+    @edited_key_result = params['edited_key_result']
+    @original_key_result = params['original_key_result']
+
+    TeamKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+    LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @key_result_id, user_id: current_user.id)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team_key_result
