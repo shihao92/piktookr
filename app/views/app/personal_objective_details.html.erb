@@ -82,6 +82,8 @@
                 <i class="pg-save"></i>
                 <% elsif item.log_content.include? "Deleted" %>
                 <i class="pg-trash_line"></i>
+                <% elsif item.log_content.include? "Renamed" %>
+                <i class="pg-settings"></i>
                 <% end %>
               </div>
               <div class="timeline-content">

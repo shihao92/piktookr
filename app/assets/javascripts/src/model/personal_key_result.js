@@ -59,10 +59,30 @@ define (['model/server_url'], function (urlParam) {
         });
     }
 
+    function editPersonalKeyResult(key_result_id, edited_key_result, original_key_result)
+    {
+        return new Promise((resolve, reject) => {
+            const xhttp = new XMLHttpRequest();
+            // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
+            xhttp.open(
+                "POST", 
+                urlParam.server_url() + "/personal_key_results/edit_key_result", 
+                true
+            );
+            xhttp.setRequestHeader('Content-Type', 'application/json');
+            xhttp.send(JSON.stringify({
+                'id'                        : key_result_id,
+                'edited_key_result'         : edited_key_result,
+                'original_key_result'       : original_key_result
+            }));           
+        });
+    }
+
     return {
         newPersonalKeyResult: newPersonalKeyResult,
         updatePersonalKeyResultProgress: updatePersonalKeyResultProgress,
-        updatePersonalKeyResultStatus: updatePersonalKeyResultStatus
+        updatePersonalKeyResultStatus: updatePersonalKeyResultStatus,
+        editPersonalKeyResult: editPersonalKeyResult
     }
 
 })

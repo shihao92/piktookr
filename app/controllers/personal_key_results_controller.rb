@@ -154,6 +154,16 @@ class PersonalKeyResultsController < ApplicationController
     end
   end
 
+  def edit_key_result
+    @key_result_id = params['id']
+    @edited_key_result = params['edited_key_result']
+    @original_key_result = params['original_key_result']
+
+    PersonalKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+    LogPersonalKeyResult.create!(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)
+  end
+
   def details
     @key_result_id = params[:id]
 

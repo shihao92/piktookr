@@ -77,6 +77,8 @@ Rails.application.routes.draw do
   post 'personal_key_results/update_progress_key_result' => 'personal_key_results#update_progress_key_result'
   # Route to update the status of the key result
   get 'personal_key_results/update_key_result_status/:id&:completed' => 'personal_key_results#update_key_result_status' 
+  # Route to edit and save the personal key result
+  post 'personal_key_results/edit_key_result' => 'personal_key_results#edit_key_result'
 
   # Personal contributions upon update the key results progress
   resources :contributions
@@ -92,6 +94,8 @@ Rails.application.routes.draw do
   get 'personal_objectives/view_others_personal_okr/:user_id' => 'personal_objectives#view_others_personal_okr'
   # Route to create new personal objective
   post 'personal_objectives/create_new_objective' => 'personal_objectives#create_new_objective'
+  # Route to edit the personal objective
+  post 'personal_objectives/edit_objective' => 'personal_objectives#edit_objective'
   
   # Route for application view pages
   # Prototype 1

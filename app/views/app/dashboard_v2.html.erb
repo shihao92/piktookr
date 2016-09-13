@@ -140,10 +140,17 @@
                   <div class="col-lg-6 col-md-6 col-sm-6">
                     <% @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: item.id) %>
                     <% @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id) %>
-                    <div>
-                      <%= content_tag(:p, @team_key_result[0].key_result, class: "small details-layout" ) %>
-                      <%= content_tag(:p, item.objective, class: "bold details-layout" ) %>
+                    <%= content_tag(:p, @team_key_result[0].key_result, class: "small details-layout" ) %>
+                    <div id="personal_objective_<%= item.id %>">
+                    <p class="bold details-layout">
+                      <%= item.objective %>
+                    </p>  
                     </div>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1">
+                    <button class="btn btn-accordion edit_personal_objective" name="personalobj_<%= item.id %>">
+                      <i class="fa fa-pencil"></i>
+                    </button>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <!--<div class="text-center">
@@ -153,7 +160,7 @@
                       </div>
                     </div>-->
                   </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2">
+                  <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="text-center">
                       <p class="small">Days left</p>
                       <div class="text-center">
@@ -235,19 +242,30 @@
                   <div class="row checkbox">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
-                        <div class="checkbox-primary">
+                        <div class="checkbox-primary" id="personal_kr_<%= item.id %>">
                           <% if(item.is_completed == true) %>
                           <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" checked/>
                           <label for="personalkrcompleted_<%= item.id %>">
-                            <p class="details-layout"><%= item.key_result %></p>
+                            <p class="details-layout"><%= raw(item.key_result) %></p>
                           </label>
                           <% else %>
                           <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>"/>
                           <label for="personalkrcompleted_<%= item.id %>">
-                            <p class="details-layout"><%= item.key_result %></p>
+                            <p class="details-layout">
+                              <%= raw(item.key_result) %>
+                            </p>
                           </label>
                           <% end %>
                         </div> 
+                      </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-1">
+                      <div class="pull-left">
+                        <% if(item.is_completed != true || item.progress != 100.00) %>
+                        <button class="btn btn-accordion edit_personal_key_result" name="personalkr_<%= item.id %>">
+                          <i class="fa fa-pencil"></i>
+                        </button>
+                        <% end %>
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
@@ -255,7 +273,7 @@
                         <span class="bold">21%</span>
                       </div>-->
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="text-center">
                         <span class="bold"><%= @remaining_quarter_days.to_i %></span>
                       </div>
@@ -366,9 +384,9 @@
     <div class="panel panel-default">
       <div class="panel-heading" role="tab">
         <h4 class="panel-title panel-title-custom">
-            <div id="add-new-personal-objective">
-              <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-            </div>
+          <div id="add-new-personal-objective">
+            <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+          </div>
         </h4>
       </div>
     </div>
@@ -380,7 +398,7 @@
 </div>
 <!-- END CONTAINER FLUID -->
 
-<!-- Popup for the contribution module -->
+<!-- Overlay for the contribution module -->
 <div class="overlay hide" data-pages="search" id="contribution_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
@@ -439,7 +457,7 @@
   </div>
 </div>
 
-<!-- Popup for the new objective -->
+<!-- Overlay for the new objective -->
 <div class="overlay hide" id="new_objective_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
@@ -496,6 +514,9 @@
     </div>
   </div>
 </div>
+
+
+
 
 
 

@@ -43,7 +43,8 @@
   -webkit-text-stroke: 0px;
   filter: alpha(opacity=40);
   -webkit-transition: opacity 0.3s ease;
-  transition: opacity 0.3s ease; }
+  transition: opacity 0.3s ease;
+  width: 100%; }
 
 .details-layout {
   word-break: keep-all; }
@@ -108,7 +109,8 @@
   height: 100px; }
 
 .form-new-key-result {
-  border: none; }
+  border: none;
+  width: 100%; }
 
 .form-new-key-result:focus {
   background: transparent; }
