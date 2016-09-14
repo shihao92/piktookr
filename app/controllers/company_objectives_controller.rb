@@ -130,24 +130,41 @@ class CompanyObjectivesController < ApplicationController
   def create_new_objective
     @objective = params['objective']
     @log = current_timeframe_log_id;
-    @new_company_objective = CompanyObjective.create!(
+    @new_company_objective = CompanyObjective.new(
       objective: @objective,
       progress: 0.0,
       timeframe_log_id: @log[0].id,
       user_id: current_user.id
     )
-    @log_content = 'Created <span class="bold">' + @objective + '</span>' 
-    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @new_company_objective.id, user_id: current_user.id)
+    respond_to do |format|
+      if @new_company_objective.save
+        @log_content = 'Created <span class="bold">' + @objective + '</span>' 
+        LogCompanyObjective.create!(
+          log_content: @log_content, 
+          company_objective_id: @new_company_objective.id, 
+          user_id: current_user.id
+        )
+        format.json { render json: 'Company Objective is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create company objective!', status: :unprocessable_entity }
+      end
+    end
   end
 
   def edit_objective
     @objective_id = params['id']
     @edited_objective = params['edited_objective']
     @original_objective = params['original_objective']
-
-    CompanyObjective.where(id: @objective_id).update_all(objective: @edited_objective)
-    @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
-    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @objective_id, user_id: current_user.id)
+    
+    respond_to do |format|
+      if CompanyObjective.where(id: @objective_id).update_all(objective: @edited_objective)  
+        @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
+        LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @objective_id, user_id: current_user.id)
+        format.json { render json: 'Company Objective is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update company objective!', status: :unprocessable_entity }
+      end
+    end
   end
 
   private

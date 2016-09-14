@@ -122,9 +122,21 @@ class TeamKeyResultsController < ApplicationController
 
     @team_objective = TeamObjective.find(@team_objective_id)
     @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @team_objective.objective + '</span>'
-    @temp = TeamKeyResult.create!(progress: 0.0, key_result: @key_result , team_objective_id: @team_objective_id, user_id: current_user.id)
-    LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @temp.id, user_id: current_user.id)
-    update_okr_modules(@team_objective_id, @temp.id, 0.00)
+    @new_team_key_result = TeamKeyResult.new(
+      progress: 0.0, 
+      key_result: @key_result , 
+      team_objective_id: @team_objective_id, 
+      user_id: current_user.id
+    )
+    respond_to do |format|
+      if @new_team_key_result.save
+        LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @new_team_key_result.id, user_id: current_user.id)
+        update_okr_modules(@team_objective_id, @new_team_key_result.id, 0.00)
+        format.json { render json: 'Team Key Result is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create team key result!', status: :unprocessable_entity }
+      end
+    end
   end
 
   def edit_key_result
@@ -132,9 +144,15 @@ class TeamKeyResultsController < ApplicationController
     @edited_key_result = params['edited_key_result']
     @original_key_result = params['original_key_result']
 
-    TeamKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
-    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
-    LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @key_result_id, user_id: current_user.id)
+    respond_to do |format|
+      if TeamKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+        @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+        LogTeamKeyResult.create!(log_content: @log_content, team_key_result_id: @key_result_id, user_id: current_user.id)
+        format.json { render json: 'Team Key Result is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update team key result!', status: :unprocessable_entity }
+      end
+    end
   end
 
   private

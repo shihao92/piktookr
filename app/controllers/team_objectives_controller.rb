@@ -155,7 +155,7 @@ class TeamObjectivesController < ApplicationController
     @team_id = params["team_id"]
 
     @log = current_timeframe_log_id;
-    @team_objective = TeamObjective.create!(
+    @new_team_objective = TeamObjective.new(
       team_objective_params.merge(
         objective: @objective,
         progress: 0.0, 
@@ -164,11 +164,18 @@ class TeamObjectivesController < ApplicationController
         user_id: current_user.id
       )
     )
-    OkrCompanyTeam.create!(team_objective_id: @team_objective.id,company_key_result_id: @company_key_result_id)
-    update_okr_modules(@team_objective.id,@team_objective.progress)
-    @company_key_result = CompanyKeyResult.where(id: @company_key_result_id)
-    @log_content = 'Created <span class="bold">' + @team_objective.objective + '</span> and aligned with <span class="bold">' + @company_key_result[0].key_result + '</span>'
-    LogTeamObjective.create!(log_content: @log_content, team_objective_id: @team_objective.id, user_id: current_user.id)     
+    respond_to do |format|
+      if @new_team_objective.save
+        OkrCompanyTeam.create!(team_objective_id: @new_team_objective.id,company_key_result_id: @company_key_result_id)
+        update_okr_modules(@new_team_objective.id,@new_team_objective.progress)
+        @company_key_result = CompanyKeyResult.where(id: @company_key_result_id)
+        @log_content = 'Created <span class="bold">' + @new_team_objective.objective + '</span> and aligned with <span class="bold">' + @company_key_result[0].key_result + '</span>'
+        LogTeamObjective.create!(log_content: @log_content, team_objective_id: @new_team_objective.id, user_id: current_user.id)
+        format.json { render json: 'Team Objective is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create team objective!', status: :unprocessable_entity }
+      end
+    end     
   end
 
   def edit_objective
@@ -176,9 +183,15 @@ class TeamObjectivesController < ApplicationController
     @edited_objective = params['edited_objective']
     @original_objective = params['original_objective']
 
-    TeamObjective.where(id: @objective_id).update_all(objective: @edited_objective)
-    @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
-    LogTeamObjective.create!(log_content: @log_content, team_objective_id: @objective_id, user_id: current_user.id)
+    respond_to do |format|
+      if TeamObjective.where(id: @objective_id).update_all(objective: @edited_objective)
+        @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
+        LogTeamObjective.create!(log_content: @log_content, team_objective_id: @objective_id, user_id: current_user.id)
+        format.json { render json: 'Team Objective is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update team objective!', status: :unprocessable_entity }
+      end
+    end
   end
 
   private

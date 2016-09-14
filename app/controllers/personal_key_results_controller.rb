@@ -87,7 +87,6 @@ class PersonalKeyResultsController < ApplicationController
   # DELETE /personal_key_results/1
   # DELETE /personal_key_results/1.json
   def destroy
-
     @log_content = 'Deleted <span><del>' + @personal_key_result.key_result + '</del></span>'
 
     LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_key_result.personal_objective_id, user_id: current_user.id)
@@ -110,13 +109,21 @@ class PersonalKeyResultsController < ApplicationController
 
     @personal_objective = PersonalObjective.where(id: @personal_objective_id)
     @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @personal_objective[0].objective + '</span>'
-    @temp = PersonalKeyResult.create!(progress: 0.0, key_result: @key_result , personal_objective_id: @personal_objective_id)
-    
-    @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@temp.id, user_id: current_user.id)     
-    @log_personal_key_result.save
+    @new_personal_key_result = PersonalKeyResult.new(
+      progress: 0.0, key_result: @key_result , personal_objective_id: @personal_objective_id
+    )
 
-    # Activate the cascade OKR update functions
-    update_okr_modules(@personal_objective_id, @temp.id, @temp.progress)
+    respond_to do |format|
+      if @new_personal_key_result.save
+        @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@new_personal_key_result.id, user_id: current_user.id)     
+        @log_personal_key_result.save
+        # Activate the cascade OKR update functions
+        update_okr_modules(@personal_objective_id, @new_personal_key_result.id, @new_personal_key_result.progress)
+        format.json { render json: 'Personal Key Result is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create personal key result!', status: :unprocessable_entity }
+      end
+    end
   end
 
   def update_progress_key_result
@@ -126,31 +133,39 @@ class PersonalKeyResultsController < ApplicationController
     @initial_progress = params["initial"]
     @initial_progress_decimal = BigDecimal.new(@initial_progress)
     @contribution = params["contribution"]
-
-    @personal_key_result = PersonalKeyResult.where(id: @key_result_id)
-
-    puts @personal_key_result[0].personal_objective_id
-    # Update functions for the personal key result
-    PersonalKeyResult.where(id: @key_result_id).update_all(progress: @progress)
-    # Activate the cascade OKR update functions
-    update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @progress)
-    @log_personal_key_result_id = generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
-    # Save into contribution module
-    Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id, log_personal_key_result_id: @log_personal_key_result_id) 
+    @personal_key_result = PersonalKeyResult.where(id: @key_result_id) 
+    respond_to do |format|
+      if PersonalKeyResult.where(id: @key_result_id).update_all(progress: @progress)
+        # Activate the cascade OKR update functions
+        update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @progress)
+        @log_personal_key_result_id = generate_log_when_update(@progress_decimal, @initial_progress_decimal, @key_result_id, @personal_key_result[0].personal_objective_id)
+        # Save into contribution module
+        Contribution.create!(contribution_comment: @contribution, personal_key_result_id: @key_result_id, log_personal_key_result_id: @log_personal_key_result_id)
+        format.json { render json: 'Progress of the key result is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update progress!', status: :unprocessable_entity }
+      end
+    end
   end
 
   def update_key_result_status
     @key_result_id = params[:id]
-    @is_completed = params[:completed]
-    PersonalKeyResult.where(id: @key_result_id).update_all(is_completed: @is_completed)
+    @is_completed = params[:completed]  
     @personal_key_result = PersonalKeyResult.where(id: @key_result_id)
-    update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @personal_key_result[0].progress)
-    if(@is_completed == "true")
-      @log_content = "Marked this key result as completed"
-      @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)     
-      @log_personal_key_result.save
-    else
-      LogPersonalKeyResult.where(log_content: "Marked this key result as completed", personal_key_result_id: @key_result_id).destroy_all()
+    respond_to do |format|
+      if PersonalKeyResult.where(id: @key_result_id).update_all(is_completed: @is_completed)
+        update_okr_modules(@personal_key_result[0].personal_objective_id, @key_result_id, @personal_key_result[0].progress)
+        if(@is_completed == "true")
+          @log_content = "Marked this key result as completed"
+          @log_personal_key_result = LogPersonalKeyResult.new(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)     
+          @log_personal_key_result.save
+        else
+          LogPersonalKeyResult.where(log_content: "Marked this key result as completed", personal_key_result_id: @key_result_id).destroy_all()
+        end
+        format.json { render json: 'Status of the key result is updated successfully!', status: :ok }        
+      else
+        format.json { render json: 'Fail to update status!', status: :unprocessable_entity }
+      end
     end
   end
 
@@ -158,10 +173,15 @@ class PersonalKeyResultsController < ApplicationController
     @key_result_id = params['id']
     @edited_key_result = params['edited_key_result']
     @original_key_result = params['original_key_result']
-
-    PersonalKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
-    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
-    LogPersonalKeyResult.create!(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)
+    respond_to do |format|
+      if PersonalKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+        @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+        LogPersonalKeyResult.create!(log_content: @log_content, personal_key_result_id:@key_result_id, user_id: current_user.id)
+        format.json { render json: 'Key result is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update key result!', status: :unprocessable_entity }
+      end
+    end
   end
 
   def details

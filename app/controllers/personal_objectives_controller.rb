@@ -97,15 +97,22 @@ class PersonalObjectivesController < ApplicationController
     @user_id = current_user.id
     @current_timeframe_log_id = current_timeframe_log_id
 
-    @personal_objective = PersonalObjective.create!(
+    @personal_objective = PersonalObjective.new(
       personal_objective_params.merge(objective: @objective, progress: 0.0, timeframe_log_id: @current_timeframe_log_id[0].id, user_id: @user_id))
     
-    OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
-    @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
-    @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
-    LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
-    # Right after creation of new personal objective, update OKR progress 
-    update_okr_modules(@personal_objective.id, 0.00)
+    respond_to do |format|
+      if @personal_objective.save
+        OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
+        @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
+        @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
+        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
+        # Right after creation of new personal objective, update OKR progress 
+        update_okr_modules(@personal_objective.id, 0.00)
+        format.json { render json: 'Personal Objective is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Failed to create personal objective!', status: :ok }
+      end
+    end
   end
 
   def details
@@ -170,10 +177,15 @@ class PersonalObjectivesController < ApplicationController
     @objective_id = params['id']
     @edited_objective = params['edited_objective']
     @original_objective = params['original_objective']
-
-    PersonalObjective.where(id: @objective_id).update_all(objective: @edited_objective)
-    @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
-    LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @objective_id, user_id: current_user.id)
+    respond_to do |format|
+      if PersonalObjective.where(id: @objective_id).update_all(objective: @edited_objective)
+        @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
+        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @objective_id, user_id: current_user.id)
+        format.json { render json: 'Personal Objective is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Failed to update personal objective!', status: :ok }
+      end
+    end       
   end
 
   private

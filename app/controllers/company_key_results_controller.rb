@@ -104,18 +104,25 @@ class CompanyKeyResultsController < ApplicationController
 
     @company_objective = CompanyObjective.find(@company_objective_id)
     @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @company_objective.objective + '</span>'
-    @new_company_key_result = CompanyKeyResult.create!(
+    @new_company_key_result = CompanyKeyResult.new(
       key_result: @key_result,
       progress: 0.0,
       company_objective_id: @company_objective_id,
       user_id: current_user.id
     )
-    LogCompanyKeyResult.create!(
-      log_content: @log_content, 
-      company_key_result_id: @new_company_key_result.id, 
-      user_id: current_user.id
-    )
-    update_okr_modules(@company_objective_id, @new_company_key_result.id)
+    respond_to do |format|
+      if @new_company_key_result.save
+        LogCompanyKeyResult.create!(
+          log_content: @log_content, 
+          company_key_result_id: @new_company_key_result.id, 
+          user_id: current_user.id
+        )
+        update_okr_modules(@company_objective_id, @new_company_key_result.id)
+        format.json { render json: 'Company Key Result is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create company key result!', status: :unprocessable_entity }
+      end
+    end    
   end
 
   def edit_key_result
@@ -123,9 +130,15 @@ class CompanyKeyResultsController < ApplicationController
     @edited_key_result = params['edited_key_result']
     @original_key_result = params['original_key_result']
 
-    CompanyKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
-    @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
-    LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @key_result_id, user_id: current_user.id)
+    respond_to do |format|
+      if CompanyKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
+        @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
+        LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @key_result_id, user_id: current_user.id)  
+        format.json { render json: 'Company Key Result is updated successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to update company key result!', status: :unprocessable_entity }
+      end
+    end
   end
 
   private
