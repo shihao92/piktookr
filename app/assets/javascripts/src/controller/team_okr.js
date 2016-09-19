@@ -174,6 +174,11 @@ modalParam, popupParam, select2Param) {
           }
         },'.add-new-team-key-result');
 
+        // Setting for the team
+        $('#team_setting').click(function() {
+          $('#user_invitation_selection').select2();
+          $('#teammate_list').attr('class','overlay');
+        });
     })
 
 })

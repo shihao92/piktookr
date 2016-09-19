@@ -32,7 +32,7 @@ modalParam, popupParam, select2Param) {
                       $('#notification_message').text(value);
                       $('#notification_modal').modal('show');
                   }, function(reason) {
-                      $('#notification_message').text(value);
+                      $('#notification_message').text(reason);
                       $('#notification_modal').modal('show');
                   });
                 }

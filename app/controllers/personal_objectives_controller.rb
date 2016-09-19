@@ -25,23 +25,14 @@ class PersonalObjectivesController < ApplicationController
   # POST /personal_objectives
   # POST /personal_objectives.json
   def create
-    @log = current_timeframe_log_id;
-    @personal_objective = PersonalObjective.new(personal_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id, user_id: current_user.id))
+    objective = params[:objective]
+    team_key_result_id = params[:team_key_result_id]
+    status = PersonalObjective.new_personal_objective(objective, team_key_result_id, current_user.id)
     respond_to do |format|
-      if @personal_objective.save
-        OkrTeamPersonal.create!(team_key_result_id: params[:team_key_result][:id], personal_objective_id: @personal_objective.id)
-        @team_key_result = TeamKeyResult.where(id: params[:team_key_result][:id])
-
-        @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
-
-        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: current_user.id)
-        # Right after creation of new personal objective, update OKR progress 
-        update_okr_modules(@personal_objective.id,0.00)
-        format.html { redirect_to '/', notice: 'Personal objective was successfully created.' }
-        format.json { render :show, status: :created, location: @personal_objective }
+      if status == 200
+        format.json { render json: 'Personal Objective is created successfully!', status: :ok }
       else
-        format.html { render :new }
-        format.json { render json: @personal_objective.errors, status: :unprocessable_entity }
+        format.json { render json: 'Failed to create personal objective!', status: :ok }
       end
     end
   end
@@ -52,7 +43,7 @@ class PersonalObjectivesController < ApplicationController
     respond_to do |format|
       if @personal_objective.update(personal_objective_params)
         # Right after update progress of personal objective, update OKR progress 
-        update_okr_modules(@personal_objective.id,@personal_objective.progress)
+        # update_okr_modules(@personal_objective.id,@personal_objective.progress)
         format.html { redirect_to @personal_objective, notice: 'Personal objective was successfully updated.' }
         format.json { render :show, status: :ok, location: @personal_objective }
       else
@@ -65,122 +56,75 @@ class PersonalObjectivesController < ApplicationController
   # DELETE /personal_objectives/1
   # DELETE /personal_objectives/1.json
   def destroy
-    @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: @personal_objective.id)
-    @team_key_result_id = @okr_team_personal[0].team_key_result_id
-    OkrTeamPersonal.where(personal_objective_id: @personal_objective.id).destroy_all()
-
-    LogPersonalObjective.where(personal_objective_id: @personal_objective.id).destroy_all()
-    PersonalKeyResult.where(personal_objective_id: @personal_objective.id).each do |item|
-      LogPersonalKeyResult.where(personal_key_result_id: item.id).destroy_all()
-    end
-    PersonalKeyResult.where(personal_objective_id: @personal_objective.id).destroy_all()
-    
-    @personal_objective.destroy
-    delete_personal_objective(@team_key_result_id)
+    status = PersonalObjective.delete_personal_objective(@personal_objective)
     respond_to do |format|
-      format.html { redirect_to '/', notice: 'Personal objective was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
-
-  def get_team_key_results
-    @team_objective_id = params[:id]
-    @team_key_results = TeamKeyResult.where(team_objective_id: @team_objective_id)
-    render json: @team_key_results, status: :ok
-  end
-
-  def create_new_objective
-    @objective = params["objective"]
-    @team_key_result_id = params["team_key_result_id"]
-    
-    @progress = 0.0
-    @user_id = current_user.id
-    @current_timeframe_log_id = current_timeframe_log_id
-
-    @personal_objective = PersonalObjective.new(
-      personal_objective_params.merge(objective: @objective, progress: 0.0, timeframe_log_id: @current_timeframe_log_id[0].id, user_id: @user_id))
-    
-    respond_to do |format|
-      if @personal_objective.save
-        OkrTeamPersonal.create!(team_key_result_id: @team_key_result_id, personal_objective_id: @personal_objective.id)
-        @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
-        @log_content = 'Created <span class="bold">' + @personal_objective.objective + '</span> and aligned with <span class="bold">' + @team_key_result[0].key_result + '</span>'
-        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @personal_objective.id, user_id: @user_id)
-        # Right after creation of new personal objective, update OKR progress 
-        update_okr_modules(@personal_objective.id, 0.00)
-        format.json { render json: 'Personal Objective is created successfully!', status: :ok }
+      if status == 200
+        format.html { redirect_to '/', notice: 'Personal objective was successfully destroyed.' }
+        format.json { head :no_content }
       else
-        format.json { render json: 'Failed to create personal objective!', status: :ok }
+        format.html { redirect_to '/', notice: 'Failed to destroy personal objective.' }
+        format.json { head :no_content }
       end
     end
   end
 
   def details
-    @objective_id = params[:id]
+    objective_id = params[:id]
 
-    @personal_objective = PersonalObjective.where(id: @objective_id)
-    @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: @objective_id)
-    @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id)
-    @personal_key_results = PersonalKeyResult.where(personal_objective_id: @objective_id)
+    @personal_objective = PersonalObjective.find(objective_id)
+    okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
+    @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
+    @personal_key_results = PersonalKeyResult.where(personal_objective_id: objective_id)
+ 
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
 
-    @current_date = Time.now.strftime("%Y-%m-%d") 
-    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
-    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
-    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date
+    @user_info = User.find(@personal_objective.user_id)
+    @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
 
-    @user_info = User.where(id: @personal_objective[0].user_id)
-    @timeframe_log = TimeframeLog.where(id: @personal_objective[0].timeframe_log_id)
-
-    @log = LogPersonalObjective.where(personal_objective_id: @objective_id).order(id: :DESC)
+    @log = LogPersonalObjective.where(personal_objective_id: objective_id).order(id: :DESC)
 
     render "app/personal_objective_details" 
   end
 
   def view_others_personal_okr
-    @user_id = params[:user_id]
+    user_id = params[:user_id]
+    @user = User.find(user_id)     
+    okr_user_role = OkrUserRole.find_by(user_id: user_id)
+    @role = OkrRole.find(okr_user_role.okr_role_id)    
+    @personal_objective = PersonalObjective.where(user_id: user_id) 
+    @completed_objective = 0   
 
-    @user = User.find(@user_id)
-      
-    @okr_user_role = OkrUserRole.where(user_id: @user_id)
-    @role = OkrRole.where(id: @okr_user_role[0].okr_role_id) 
-    
-    @personal_objective = PersonalObjective.where(user_id: @user_id) 
-    
-    @completed_objective = 0 
-    if(@personal_objective.count != 0) 
-      @progress_portion = 100 / @personal_objective.count 
-      @total_progress = 0 
-      @temp_date = [] 
+    if(@personal_objective.count != 0)  
+      temp_date = [] 
+      @total_progress = 0
       @personal_objective.each do |item| 
-        @temp_progress = (item.progress/100) * @progress_portion 
-        @total_progress = @total_progress + @temp_progress 
+        @total_progress = @total_progress + item.progress 
         # To check whether there is any completed objective  
         if(item.progress == 100.00) 
           @completed_objective = @completed_objective + 1 
         end 
         # To check which is the latest updated date 
-        @temp_date << item.updated_at 
+        temp_date << item.updated_at 
       end 
-      @date_max = @temp_date.max 
-      @date_difference = (Time.now - @date_max) / 86400 
+      @total_progress = @total_progress / @personal_objective.count
+      date_max = temp_date.max 
+      @date_difference = (Time.now - date_max) / 86400 
     end 
     
-    @current_date = Time.now.strftime("%Y-%m-%d") 
-    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
-    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
-    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date 
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/personal_okr_others'
   end
 
   def edit_objective
-    @objective_id = params['id']
-    @edited_objective = params['edited_objective']
-    @original_objective = params['original_objective']
+    objective_id = params[:id]
+    edited_objective = params[:edited_objective]
+    original_objective = params[:original_objective]
+
+    status = PersonalObjective.rename_personal_objective(original_objective, edited_objective, objective_id, current_user.id)
+
     respond_to do |format|
-      if PersonalObjective.where(id: @objective_id).update_all(objective: @edited_objective)
-        @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
-        LogPersonalObjective.create!(log_content: @log_content, personal_objective_id: @objective_id, user_id: current_user.id)
+      if status == 200
         format.json { render json: 'Personal Objective is updated successfully!', status: :ok }
       else
         format.json { render json: 'Failed to update personal objective!', status: :ok }
@@ -197,207 +141,6 @@ class PersonalObjectivesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def personal_objective_params
       params.require(:personal_objective).permit(:objective,:progress,:timeframe_log_id,:user_id);
-    end
-
-    # Obtain the current timeframe log id based on the current date
-    def current_timeframe_log_id
-      @current_date = DateTime.now.to_date.strftime("%Y-%m-%d");
-      @log = TimeframeLog.where("(start_date, end_date) OVERLAPS ('" + @current_date + "'::DATE, '" + @current_date + "'::DATE)");
-      return @log;
-    end
-
-    def update_okr_modules(personal_objective_id,personal_objective_progress)
-      # Search for the related team key result id
-      @okr_team_personals = OkrTeamPersonal.where(personal_objective_id: personal_objective_id)
-      @team_key_result_id = @okr_team_personals[0].team_key_result_id
-      @team_key_result_progress = update_team_key_result_progress(@team_key_result_id,personal_objective_id,personal_objective_progress)
-      # Update the progress of the team key results
-      TeamKeyResult.where(id: @team_key_result_id).update_all(progress: @team_key_result_progress)
-
-      # Search for the related team objective id
-      @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
-      @team_objective_id = @team_key_result[0].team_objective_id
-      @team_objective_progress = update_team_objective_progress(@team_objective_id, @team_key_result_id)
-      # Update the progress of the team objectives
-      TeamObjective.where(id: @team_objective_id).update_all(progress: @team_objective_progress)
-
-      # Search for the related company key result id
-      @okr_company_team = OkrCompanyTeam.where(team_objective_id: @team_objective_id)
-      @company_key_result_id = @okr_company_team[0].company_key_result_id
-      @company_key_result_progress = update_company_key_result_progress(@company_key_result_id,@team_objective_id)
-      # Update the progress of the company key results
-      CompanyKeyResult.where(id: @company_key_result_id).update_all(progress: @company_key_result_progress)
-
-      # Search for the related company objective id
-      @company_key_result = CompanyKeyResult.where(id: @company_key_result_id)
-      @company_objective_id = @company_key_result[0].company_objective_id
-      @company_objective_progress = update_company_objective_progress(@company_objective_id,@company_key_result_id)
-      # Update the progress of the company objective
-      CompanyObjective.where(id: @company_objective_id).update_all(progress: @company_objective_progress)
-    end
-
-    def delete_personal_objective(team_key_result_id)
-
-      @team_key_result_progress = update_team_key_result_progress_delete_func(team_key_result_id)
-      # Update the progress of the team key results
-      TeamKeyResult.where(id: @team_key_result_id).update_all(progress: @team_key_result_progress)
-
-      # Search for the related team objective id
-      @team_key_result = TeamKeyResult.where(id: @team_key_result_id)
-      @team_objective_id = @team_key_result[0].team_objective_id
-      @team_objective_progress = update_team_objective_progress(@team_objective_id, @team_key_result_id)
-      # Update the progress of the team objectives
-      TeamObjective.where(id: @team_objective_id).update_all(progress: @team_objective_progress)
-
-      # Search for the related company key result id
-      @okr_company_team = OkrCompanyTeam.where(team_objective_id: @team_objective_id)
-      @company_key_result_id = @okr_company_team[0].company_key_result_id
-      @company_key_result_progress = update_company_key_result_progress(@company_key_result_id,@team_objective_id)
-      # Update the progress of the company key results
-      CompanyKeyResult.where(id: @company_key_result_id).update_all(progress: @company_key_result_progress)
-
-      # Search for the related company objective id
-      @company_key_result = CompanyKeyResult.where(id: @company_key_result_id)
-      @company_objective_id = @company_key_result[0].company_objective_id
-      @company_objective_progress = update_company_objective_progress(@company_objective_id,@company_key_result_id)
-      # Update the progress of the company objective
-      CompanyObjective.where(id: @company_objective_id).update_all(progress: @company_objective_progress)
-
-    end
-
-    # --------------------------------------------------------
-    # Core Algorithm for Personal OKR Calculations and Updates
-    # --------------------------------------------------------
-    # Perform action whenever the progress is being updated or created or deleted
-    # 2nd Layer: Update the progress for the team key results
-    def update_team_key_result_progress(team_key_result_id,personal_objective_id,personal_objective_progress)
-
-      # 1st calculate how many personal objectives are tied to the linked team key results
-      @personal_objective_amt = OkrTeamPersonal.where(team_key_result_id: team_key_result_id).count
-
-      # Divide team key result progress with the personal objective amount
-      @total_progress = 100.00
-      @team_key_result_progress = 0.00
-      @team_key_result_progress_portion = @total_progress / @personal_objective_amt
-
-      # Check and obtain the other related personal objective progress and team key result portion progress
-      OkrTeamPersonal.where(team_key_result_id: team_key_result_id).each do |entry|
-
-        if(personal_objective_id == entry.personal_objective_id)
-          @selected_personal_objective_progress = personal_objective_progress
-          @personal_objective_progress_portion = (@selected_personal_objective_progress / @total_progress) * @team_key_result_progress_portion
-          @team_key_result_progress = @personal_objective_progress_portion + @team_key_result_progress
-        else
-          @selected_personal_objective = PersonalObjective.where(id: entry.personal_objective_id)
-          @selected_personal_objective_progress = @selected_personal_objective[0].progress
-          @personal_objective_progress_portion = (@selected_personal_objective_progress / @total_progress) * @team_key_result_progress_portion
-          @team_key_result_progress = @personal_objective_progress_portion + @team_key_result_progress
-        end
-
-      end 
-
-      return @team_key_result_progress
-
-    end
-
-    def update_team_key_result_progress_delete_func(team_key_result_id)
-
-      # 1st calculate how many personal objectives are tied to the linked team key results
-      @personal_objective_amt = OkrTeamPersonal.where(team_key_result_id: team_key_result_id).count
-
-      # Divide team key result progress with the personal objective amount
-      @total_progress = 100.00
-      @team_key_result_progress = 0.00
-      @team_key_result_progress_portion = @total_progress / @personal_objective_amt
-
-      # Check and obtain the other related personal objective progress and team key result portion progress
-      OkrTeamPersonal.where(team_key_result_id: team_key_result_id).each do |entry|
-
-          @selected_personal_objective = PersonalObjective.where(id: entry.personal_objective_id)
-          @selected_personal_objective_progress = @selected_personal_objective[0].progress
-          @personal_objective_progress_portion = (@selected_personal_objective_progress / @total_progress) * @team_key_result_progress_portion
-          @team_key_result_progress = @personal_objective_progress_portion + @team_key_result_progress
-
-      end 
-
-      return @team_key_result_progress
-
-    end
-
-    # 3rd Layer: Update the progress for the team objectives
-    def update_team_objective_progress(team_objective_id, team_key_result_id)
-
-      # 1st calculate how many team key results are tied to the linked team objective
-      @team_key_result_amt = TeamKeyResult.where(team_objective_id: team_objective_id).count
-
-      # Divide team objective progress with the related key result amount
-      @total_progress = 100.00
-      @team_objective_progress = 0.00
-      @team_objective_progress_portion = @total_progress / @team_key_result_amt
-      @temp_objective_progress = 0.00;
-
-      # Check other related team key result progress and obtain the team objective portion progress
-      TeamKeyResult.where(team_objective_id: team_objective_id).each do |entry|
-
-        @selected_team_key_result_progress = entry.progress
-        @temp_objective_progress = (@selected_team_key_result_progress / @total_progress) * @team_objective_progress_portion
-        @team_objective_progress = @temp_objective_progress + @team_objective_progress
-
-      end 
-
-      return @team_objective_progress
-
-    end
-
-    # 4th Layer: Update the progress for company key results
-    def update_company_key_result_progress(company_key_result_id, team_objective_id)
-
-      # 1st calculate how many team objectives are linked to the company key results
-      @company_key_result_amt = OkrCompanyTeam.where(company_key_result_id: company_key_result_id).count
-
-      # Divide company key result progress with the related team objective amount 
-      @total_progress = 100.00
-      @company_key_result_progress = 0.00
-      @company_key_result_progress_portion = @total_progress / @company_key_result_amt
-      @temp_company_key_result_progress = 0.00
-
-      # Check other related team objective progress and obtain the company key result portion progress
-      OkrCompanyTeam.where(company_key_result_id: company_key_result_id).each do |entry|
-
-        @selected_team_objective = TeamObjective.where(id: entry.team_objective_id)
-        @selected_team_objective_progress = @selected_team_objective[0].progress
-        @temp_company_key_result_progress = (@selected_team_objective_progress / @total_progress) * @company_key_result_progress_portion
-        @company_key_result_progress = @temp_company_key_result_progress + @company_key_result_progress
-
-      end
-
-      return @company_key_result_progress
-
-    end
-
-    # 5th Layer: Update the progress for the company objective
-    def update_company_objective_progress(company_objective_id, company_key_result_id)
-
-      # 1st calculate how many company key results are linked to the company objective
-      @company_key_result_amt = CompanyKeyResult.where(company_objective_id: company_objective_id).count
-
-      # Divide company objective progress with the related company key result amount
-      @total_progress = 100.00
-      @company_objective_progress = 0.00
-      @company_objective_progress_portion = @total_progress / @company_key_result_amt
-      @temp_company_objective_progress = 0.00
-
-      # Check other related company key result progress and obtain the company objective portion progress
-      CompanyKeyResult.where(company_objective_id: company_objective_id).each do |entry|
-
-        @selected_company_key_result_progress = entry.progress
-        @temp_company_objective_progress = (@selected_company_key_result_progress / @total_progress) * @company_objective_progress_portion
-        @company_objective_progress = @temp_company_objective_progress + @company_objective_progress
-
-      end
-
-      return @company_objective_progress
-
     end
 
 end

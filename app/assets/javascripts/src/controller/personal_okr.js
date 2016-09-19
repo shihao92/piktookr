@@ -163,7 +163,7 @@ modalParam, popupParam, sliderParam, spinProgressParam, select2Param) {
           let initial_progress = $('#popup_initial_progress').text();
           let key_result_id = $('#key_result_id').text();
           let contribution = $('#contribution_textarea').val();
-          
+
           // AJAX call to update the personal key result progress
           let update_kr_progress_promise = new personalKeyResultModelParam.updatePersonalKeyResultProgress(
               key_result_id, progress, initial_progress, contribution

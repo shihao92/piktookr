@@ -24,20 +24,17 @@ class CompanyKeyResultsController < ApplicationController
   # POST /company_key_results
   # POST /company_key_results.json
   def create
-    @company_key_result = CompanyKeyResult.new(company_key_result_params.merge(progress: 0.0,company_objective_id: params[:company_objective][:company_objective_id]))
+    key_result = params[:key_result]
+    company_objective_id = params[:company_objective_id]
 
-    if @company_key_result.save
-      update_okr_modules(@company_key_result.company_objective_id,@company_key_result.id)
-      @company_objective = CompanyObjective.where(id: @company_key_result.company_objective_id)
-
-      @log_content = 'Created <span class="bold">' + @company_key_result.key_result + '</span> and aligned with <span class="bold">' + @company_objective[0].objective + '</span>'
-
-      LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @company_key_result.id, user_id: current_user.id)
-      flash.notice = 'Company key result was successfully created.'
-      redirect_to @company_key_result
-    else
-      flash.notice = 'Company key result was not able to be created.'
-      redirect_to @company_key_result
+    status = CompanyKeyResult.new_company_key_result(key_result, company_objective_id, current_user.id)
+    
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Company Key Result is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Fail to create company key result!', status: :unprocessable_entity }
+      end
     end
   end
 
@@ -58,15 +55,9 @@ class CompanyKeyResultsController < ApplicationController
 
   # DELETE /company_key_results/1
   # DELETE /company_key_results/1.json
-  def destroy
-    # Temporarily implementation - Delete log team key result whenever user want to delete the team key result
-
-    @log_content = 'Deleted <span><del>' + @company_key_result.key_result + '</del></span>'
-
-    LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_key_result.company_objective_id, user_id: current_user.id)
-    LogCompanyKeyResult.where(company_key_result_id: @company_key_result.id).destroy_all()
-    if @company_key_result.destroy
-      delete_company_key_result(@company_key_result.company_objective_id)
+  def destroy    
+    status = CompanyKeyResult.delete_company_key_result(@company_key_result)
+    if status == 200
       flash.alert = 'Company key result was successfully destroyed.'
       redirect_to '/company_objectives/company_dashboard'
     else
@@ -98,42 +89,15 @@ class CompanyKeyResultsController < ApplicationController
     render 'app/company_key_result_details'
   end
 
-  def create_new_key_result
-    @key_result = params['key_result']
-    @company_objective_id = params['company_objective_id']
-
-    @company_objective = CompanyObjective.find(@company_objective_id)
-    @log_content = 'Created <span class="bold">' + @key_result + '</span> and aligned with <span class="bold">' + @company_objective.objective + '</span>'
-    @new_company_key_result = CompanyKeyResult.new(
-      key_result: @key_result,
-      progress: 0.0,
-      company_objective_id: @company_objective_id,
-      user_id: current_user.id
-    )
-    respond_to do |format|
-      if @new_company_key_result.save
-        LogCompanyKeyResult.create!(
-          log_content: @log_content, 
-          company_key_result_id: @new_company_key_result.id, 
-          user_id: current_user.id
-        )
-        update_okr_modules(@company_objective_id, @new_company_key_result.id)
-        format.json { render json: 'Company Key Result is created successfully!', status: :ok }
-      else
-        format.json { render json: 'Fail to create company key result!', status: :unprocessable_entity }
-      end
-    end    
-  end
-
   def edit_key_result
-    @key_result_id = params['id']
-    @edited_key_result = params['edited_key_result']
-    @original_key_result = params['original_key_result']
+    key_result_id = params[:id]
+    edited_key_result = params[:edited_key_result]
+    original_key_result = params[:original_key_result]
+
+    status = CompanyKeyResult.rename_company_key_result(original_key_result, edited_key_result, key_result_id, current_user.id)
 
     respond_to do |format|
-      if CompanyKeyResult.where(id: @key_result_id).update_all(key_result: @edited_key_result)
-        @log_content = 'Renamed <del>' + @original_key_result + '</del> to <span class="bold">' + @edited_key_result + '</span>'
-        LogCompanyKeyResult.create!(log_content: @log_content, company_key_result_id: @key_result_id, user_id: current_user.id)  
+      if status == 200
         format.json { render json: 'Company Key Result is updated successfully!', status: :ok }
       else
         format.json { render json: 'Fail to update company key result!', status: :unprocessable_entity }
@@ -152,71 +116,4 @@ class CompanyKeyResultsController < ApplicationController
       params.require(:company_key_result).permit(:key_result,:progress,:company_objective_id)
     end
 
-    def update_okr_modules(company_objective_id,company_key_result_id)
-
-      @company_objective_progress = update_company_objective_progress(company_objective_id, company_key_result_id)
-      CompanyObjective.where(id: company_objective_id).update_all(progress: @company_objective_progress)
-
-    end
-
-    def delete_company_key_result(company_objective_id)
-
-      @company_objective_progress = update_company_objective_progress_delete_func(company_objective_id)
-      CompanyObjective.where(id: company_objective_id).update_all(progress: @company_objective_progress)
-
-    end
-
-    # --------------------------------------------------------
-    # Core Algorithm for Team OKR Calculations and Updates
-    # --------------------------------------------------------
-    # Perform action whenever the progress is being updated or created or deleted
-
-    # 5th Layer: Update the progress for the company objective
-    def update_company_objective_progress(company_objective_id, company_key_result_id)
-
-      # 1st calculate how many company key results are linked to the company objective
-      @company_key_result_amt = CompanyKeyResult.where(company_objective_id: company_objective_id).count
-
-      # Divide company objective progress with the related company key result amount
-      @total_progress = 100.00
-      @company_objective_progress = 0.00
-      @company_objective_progress_portion = @total_progress / @company_key_result_amt
-      @temp_company_objective_progress = 0.00
-
-      # Check other related company key result progress and obtain the company objective portion progress
-      CompanyKeyResult.where(company_objective_id: company_objective_id).each do |entry|
-
-        @selected_company_key_result_progress = entry.progress
-        @temp_company_objective_progress = (@selected_company_key_result_progress / @total_progress) * @company_objective_progress_portion
-        @company_objective_progress = @temp_company_objective_progress + @company_objective_progress
-
-      end
-
-      return @company_objective_progress
-
-    end
-
-    def update_company_objective_progress_delete_func(company_objective_id)
-
-      # 1st calculate how many company key results are linked to the company objective
-      @company_key_result_amt = CompanyKeyResult.where(company_objective_id: company_objective_id).count
-
-      # Divide company objective progress with the related company key result amount
-      @total_progress = 100.00
-      @company_objective_progress = 0.00
-      @company_objective_progress_portion = @total_progress / @company_key_result_amt
-      @temp_company_objective_progress = 0.00
-
-      # Check other related company key result progress and obtain the company objective portion progress
-      CompanyKeyResult.where(company_objective_id: company_objective_id).each do |entry|
-
-        @selected_company_key_result_progress = entry.progress
-        @temp_company_objective_progress = (@selected_company_key_result_progress / @total_progress) * @company_objective_progress_portion
-        @company_objective_progress = @temp_company_objective_progress + @company_objective_progress
-
-      end
-
-      return @company_objective_progress
-
-    end
 end

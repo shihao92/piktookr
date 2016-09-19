@@ -25,20 +25,13 @@ class CompanyObjectivesController < ApplicationController
   # POST /company_objectives
   # POST /company_objectives.json
   def create
-    @log = current_timeframe_log_id;
-    @company_objective = CompanyObjective.new(company_objective_params.merge(progress: 0.0,timeframe_log_id: @log[0].id))
+    objective = params[:objective]
+    status = CompanyObjective.new_company_objective(objective, current_user.id)
     respond_to do |format|
-      if @company_objective.save
-
-        @log_content = 'Created <span class="bold">' + @company_objective.objective + '</span>' 
-
-        LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @company_objective.id, user_id: current_user.id)
-
-        format.html { redirect_to @company_objective, notice: 'Company objective was successfully created.' }
-        format.json { render :show, status: :created, location: @company_objective }
+      if status == 200     
+        format.json { render json: 'Company Objective is created successfully!', status: :ok }
       else
-        format.html { render :new }
-        format.json { render json: @company_objective.errors, status: :unprocessable_entity }
+        format.json { render json: 'Fail to create company objective!', status: :unprocessable_entity }
       end
     end
   end
@@ -60,9 +53,9 @@ class CompanyObjectivesController < ApplicationController
   # DELETE /company_objectives/1
   # DELETE /company_objectives/1.json
   def destroy
-    LogCompanyObjective.where(company_objective_id: @company_objective.id).destroy_all()
+    status = CompanyObjective.delete_company_objective(@company_objective)
     begin
-      if @company_objective.destroy
+      if status == 200
         respond_to do |format|
           format.html { redirect_to '/company_objectives/company_dashboard', notice: 'Company objective was successfully destroyed.' }
           format.json { head :no_content }
@@ -127,39 +120,15 @@ class CompanyObjectivesController < ApplicationController
     render 'app/company_objective_details'
   end
 
-  def create_new_objective
-    @objective = params['objective']
-    @log = current_timeframe_log_id;
-    @new_company_objective = CompanyObjective.new(
-      objective: @objective,
-      progress: 0.0,
-      timeframe_log_id: @log[0].id,
-      user_id: current_user.id
-    )
-    respond_to do |format|
-      if @new_company_objective.save
-        @log_content = 'Created <span class="bold">' + @objective + '</span>' 
-        LogCompanyObjective.create!(
-          log_content: @log_content, 
-          company_objective_id: @new_company_objective.id, 
-          user_id: current_user.id
-        )
-        format.json { render json: 'Company Objective is created successfully!', status: :ok }
-      else
-        format.json { render json: 'Fail to create company objective!', status: :unprocessable_entity }
-      end
-    end
-  end
-
   def edit_objective
-    @objective_id = params['id']
-    @edited_objective = params['edited_objective']
-    @original_objective = params['original_objective']
+    objective_id = params['id']
+    edited_objective = params['edited_objective']
+    original_objective = params['original_objective']
     
+    status = rename_company_objective(original_objective, edited_objective, objective_id, current_user.id)
+
     respond_to do |format|
-      if CompanyObjective.where(id: @objective_id).update_all(objective: @edited_objective)  
-        @log_content = 'Renamed <del>' + @original_objective + '</del> to <span class="bold">' + @edited_objective + '</span>'
-        LogCompanyObjective.create!(log_content: @log_content, company_objective_id: @objective_id, user_id: current_user.id)
+      if status == 200  
         format.json { render json: 'Company Objective is updated successfully!', status: :ok }
       else
         format.json { render json: 'Fail to update company objective!', status: :unprocessable_entity }
@@ -176,12 +145,5 @@ class CompanyObjectivesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_objective_params
       params.require(:company_objective).permit(:objective, :progress, :timeframe_log_id);
-    end
-
-    # Obtain the current timeframe log id based on the current date
-    def current_timeframe_log_id
-      @current_date = DateTime.now.to_date.strftime("%Y-%m-%d");
-      @log = TimeframeLog.where("(start_date, end_date) OVERLAPS ('" + @current_date + "'::DATE, '" + @current_date + "'::DATE)");
-      return @log;
     end
 end

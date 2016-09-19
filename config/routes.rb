@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   # Company OKR Module
   # ------------------
   # resources :company_objectives
+  post 'company_objectives' => 'company_objectives#create'
   delete 'company_objectives/:id' => 'company_objectives#destroy'
   resources :company_key_results
 
@@ -46,8 +47,6 @@ Rails.application.routes.draw do
   post 'company_objectives/create_new_objective' => 'company_objectives#create_new_objective'
   # Route to edit company objective
   post 'company_objectives/edit_objective' => 'company_objectives#edit_objective'
-  # Route to create company key result
-  post 'company_key_results/create_new_key_result' => 'company_key_results#create_new_key_result'
   # Route to edit company key result
   post 'company_key_results/edit_key_result' => 'company_key_results#edit_key_result'
 
@@ -56,21 +55,14 @@ Rails.application.routes.draw do
   # ---------------
   resources :team_objectives
   resources :team_key_results
-  # Route to use selected team ID to populate the team objectives combo box
-  get 'team_key_results/get_team_objective/:id' => 'team_key_results#get_team_objective'
-
   # Route to the team dashboard
   get 'team_objectives/team_dashboard/:team_id' => 'team_objectives#team_dashboard'
   # Route to the team objective details
-  get 'team_objectives/details/:id&:team_id' => 'team_objectives#details'
-  # Route to create team objective
-  post 'team_objectives/create_new_objective' => 'team_objectives#create_new_objective'
+  get 'team/:team_id/team_objectives/details/:id' => 'team_objectives#details'
   # Route to edit the team objective
   post 'team_objectives/edit_objective' => 'team_objectives#edit_objective'
   # Route to the team key result detail page
-  get 'team_key_results/details/:id&:team_id' => 'team_key_results#details'
-  # Route to create new team key result
-  post 'team_key_results/create_new_key_result' => 'team_key_results#create_new_key_result'
+  get 'team/:team_id/team_key_results/details/:id' => 'team_key_results#details'
   # Route to edit the team key result
   post 'team_key_results/edit_key_result' => 'team_key_results#edit_key_result'
 
@@ -79,12 +71,10 @@ Rails.application.routes.draw do
   # -------------------
   resources :personal_objectives
   resources :personal_key_results
-  # Route to create new key result
-  post 'personal_key_results/create_new_key_result' => 'personal_key_results#create_new_key_result'
   # Route to update the progress of key result
   post 'personal_key_results/update_progress_key_result' => 'personal_key_results#update_progress_key_result'
   # Route to update the status of the key result
-  get 'personal_key_results/update_key_result_status/:id&:completed' => 'personal_key_results#update_key_result_status' 
+  get 'personal_key_results/:id/update_key_result_status/:completed' => 'personal_key_results#update_key_result_status' 
   # Route to edit and save the personal key result
   post 'personal_key_results/edit_key_result' => 'personal_key_results#edit_key_result'
 
@@ -100,8 +90,6 @@ Rails.application.routes.draw do
   get 'personal_key_results/details/:id' => 'personal_key_results#details'
   # Route to view other person personal OKR
   get 'personal_objectives/view_others_personal_okr/:user_id' => 'personal_objectives#view_others_personal_okr'
-  # Route to create new personal objective
-  post 'personal_objectives/create_new_objective' => 'personal_objectives#create_new_objective'
   # Route to edit the personal objective
   post 'personal_objectives/edit_objective' => 'personal_objectives#edit_objective'
   

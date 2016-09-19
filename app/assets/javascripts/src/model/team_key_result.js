@@ -8,19 +8,22 @@ define (['model/server_url'], function (urlParam) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-          if(this.readyState == 4 && this.status == 200) {
-              resolve(this.responseText);
+          if(this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
           }
         };
         xhttp.open(
           "POST", 
-          urlParam.server_url() + "/team_key_results/create_new_key_result", 
+          urlParam.server_url() + "/team_key_results", 
           true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          'key_result'                : key_result,
-          'team_objective_id'         : objective_id
+          key_result                : key_result,
+          team_objective_id         : objective_id
         }));
       });
     }
@@ -30,8 +33,11 @@ define (['model/server_url'], function (urlParam) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();  
         xhttp.onreadystatechange = function() {
-          if(this.readyState == 4 && this.status == 200) {
-              resolve(this.responseText);
+          if(this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -42,16 +48,16 @@ define (['model/server_url'], function (urlParam) {
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          'id'                        : key_result_id,
-          'edited_key_result'         : edited_key_result,
-          'original_key_result'       : original_key_result
+          id                        : key_result_id,
+          edited_key_result         : edited_key_result,
+          original_key_result       : original_key_result
         }));
       });
     }
 
     return {
-        newTeamKeyResult,
-        editTeamKeyResult
+      newTeamKeyResult,
+      editTeamKeyResult
     }
 
 })

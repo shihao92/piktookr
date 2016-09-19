@@ -6,19 +6,22 @@ define(['model/server_url'], function(urlParam) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-          if(this.readyState == 4 && this.status == 200) {
+          if(this.readyState === 4 && this.status === 200) {
             resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
           }
         };
         xhttp.open(
           "POST", 
-          urlParam.server_url() + "/personal_objectives/create_new_objective", 
+          urlParam.server_url() + "/personal_objectives", 
           true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          "objective"                 : objective,
-          "team_key_result_id"        : parseInt(team_key_result_id)
+          objective                 : objective,
+          team_key_result_id        : parseInt(team_key_result_id)
         }));
       });
     }
@@ -28,8 +31,11 @@ define(['model/server_url'], function(urlParam) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-          if(this.readyState == 4 && this.status == 200) {
+          if(this.readyState === 4 && this.status === 200) {
             resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -40,16 +46,16 @@ define(['model/server_url'], function(urlParam) {
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          'id'                       : objective_id,
-          'edited_objective'         : edited_objective,
-          'original_objective'       : original_objective
+          id                       : objective_id,
+          edited_objective         : edited_objective,
+          original_objective       : original_objective
         }));           
       });
     } 
 
     return {
-        newPersonalObjective,
-        editPersonalObjective
+      newPersonalObjective,
+      editPersonalObjective
     }
 
 })

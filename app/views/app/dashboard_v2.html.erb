@@ -35,7 +35,7 @@
         <div class="row">
           <div class="form-group">
             <label>ROLE</label>
-            <%= content_tag(:div, content_tag(:p, @role[0].name, class: "bold" )) %>
+            <%= content_tag(:div, content_tag(:p, @role.name, class: "bold" )) %>
           </div>
         </div>
         <div class="row">
@@ -70,11 +70,11 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <% if(@personal_objective.count != 0) %>
-        <% @percentage_completed_objective = (@completed_objective.to_f / @personal_objective.count.to_f) * 100 %>
+        <% percentage_completed_objective = (@completed_objective.to_f / @personal_objective.count.to_f) * 100 %>
         <% else %>
-        <% @percentage_completed_objective = 0 %>
+        <% percentage_completed_objective = 0 %>
         <% end %>
-        <div class="c100 p<%= @percentage_completed_objective.to_i %>">
+        <div class="c100 p<%= percentage_completed_objective.to_i %>">
           <span>
             <span id="completed_objective_portion">
               <%= @completed_objective %>/<%= @personal_objective.count %>
@@ -129,22 +129,22 @@
 
   <!-- Accordion involved all the OKR progresses -->
   <div class="padding-accordion-group">
-    <% @personal_objective.each_with_index do |item,index| %>
+    <% @personal_objective.each do |item| %>
       <div class="panel panel-default">
         <div class="panel-heading" role="tab">
           <div class="row">
             <div class="col-lg-11 col-md-11 col-sm-11">
               <h4 class="panel-title panel-title-custom">
-                <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= index %>" aria-expanded="false" aria-controls="personal_obj_<%= index %>">
+                <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= item.id %>" aria-expanded="false" aria-controls="personal_obj_<%= item.id %>">
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6">
-                    <% @okr_team_personal = OkrTeamPersonal.where(personal_objective_id: item.id) %>
-                    <% @team_key_result = TeamKeyResult.where(id: @okr_team_personal[0].team_key_result_id) %>
-                    <%= content_tag(:p, @team_key_result[0].key_result, class: "small details-layout" ) %>
+                    <% @okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: item.id) %>
+                    <% @team_key_result = TeamKeyResult.find_by(id: @okr_team_personal.team_key_result_id) %>
+                    <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
                     <div id="personal_objective_<%= item.id %>">
-                    <p class="bold details-layout">
-                      <%= item.objective %>
-                    </p>  
+                      <p class="bold details-layout">
+                        <%= item.objective %>
+                      </p>  
                     </div>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
@@ -227,15 +227,15 @@
             </div>                
           </div>
         </div>
-        <div id="personal_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="personal_obj_<%= index %> ">
+        <div id="personal_obj_<%= item.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="personal_obj_<%= item.id %> ">
           <div class="panel-body no-padding">
             <!-- Find out the key result linked to the objective -->
-            <% @personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id) %>
-            <% @personal_key_result_count = @personal_key_result.count %>
-            <% @personal_key_result_completed = 0 %>
-            <% @personal_key_result.each_with_index do |item,index| %>
-              <% if(item.progress == 100.00) %>
-              <%    @personal_key_result_completed = @personal_key_result_completed + 1 %>
+            <% personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id) %>
+            <% personal_key_result_count = personal_key_result.count %>
+            <% personal_key_result_completed = 0 %>
+            <% personal_key_result.each_with_index do |item,index| %>
+              <% if(item.progress == 100.00 || item.is_completed == true) %>
+              <%    personal_key_result_completed = personal_key_result_completed + 1 %>
               <% end %>
               <div id="personal_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">
@@ -364,7 +364,7 @@
         <div class="panel-footer">
           <div class="row">
             <div class="col-md-4 col-sm-4 bold small">
-              <%= @personal_key_result_count %> Key Results
+              <%= personal_key_result_count %> Key Results
             </div>
             <div class="col-md-4 col-sm-4">
               <div class="text-center">
@@ -373,7 +373,7 @@
             </div>
             <div class="col-md-4 col-sm-4">
               <div class="pull-right bold small">
-                <%= @personal_key_result_completed %> Completed
+                <%= personal_key_result_completed %> Completed
               </div>
             </div>
           </div>
@@ -484,8 +484,8 @@
               <div class="form-group">
                 <label>Select the alignment Team Key Result</label>
                 <!--Load all the key result of the particular team-->
-                <select id="team_key_result_selection" class="full-width" data-init-plugin="select2">
-                  <% @temp_team_key_result.each_with_index do |item,index| %>
+                <select id="team_key_result_selection" class="full-width">
+                  <% @temp_team_key_result.each do |item| %>
                     <option value="<%= item[1] %>"><%= item[0] %></option>
                   <% end %>                             
                 </select>

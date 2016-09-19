@@ -21,19 +21,19 @@
   <div class="row">
     <div class="col-lg-8 col-md-8 col-sm-8">
       <h3 class="semi-bold">
-        <%= @personal_key_result[0].key_result %>
+        <%= @personal_key_result.key_result %>
       </h3>
       <br/>
       <span class="okr-details-header-info">
         <i class="glyphicon glyphicon-user fa-lg"></i>
         <span class="label-font">
-          <%= @user_info[0].name %>
+          <%= @user_info.name %>
         </span>
       </span>
       <span class="okr-details-header-info">
         <i class="glyphicon glyphicon-calendar fa-lg"></i>
         <span class="label-font">
-          <%= @timeframe_log[0].quarter %>
+          <%= @timeframe_log.quarter %>
         </span>
       </span>
       <br />
@@ -52,9 +52,9 @@
             <div class="fill"></div>
           </div>
         </div>
-        <div class="c100 p<%= @personal_key_result[0].progress.to_i %>">
+        <div class="c100 p<%= @personal_key_result.progress.to_i %>">
           <span>
-            <span id="okr_aligned_percentage"><%= @personal_key_result[0].progress.to_i %>%</span> <br/>
+            <span id="okr_aligned_percentage"><%= @personal_key_result.progress.to_i %>%</span> <br/>
             <p>progress</p>
           </span>
           <div class="slice">
@@ -87,17 +87,17 @@
               <div class="timeline-content">
                 <div class="card share full-width">
                   <div class="card-header clearfix">
-                    <% @time_difference = Time.now - item.created_at %>
-                    <% if @time_difference < 86400 %>
-                      <h5><%= @user_info[0].name %></h5>
+                    <% time_difference = Time.now - item.created_at %>
+                    <% if time_difference < 86400 %>
+                      <h5><%= @user_info.name %></h5>
                       <span class="small">Less than 1 day ago</span>
                     <% else %>
-                    <% @day_difference = @time_difference / 86400 %>
-                      <h5><%= @user_info[0].name %></h5>
-                      <% if(@day_difference.to_i > 1) %>
-                      <span class="small"><%= @day_difference.to_i %> days ago</span>
+                    <% day_difference = time_difference / 86400 %>
+                      <h5><%= @user_info.name %></h5>
+                      <% if(day_difference.to_i > 1) %>
+                      <span class="small"><%= day_difference.to_i %> days ago</span>
                       <% else %>
-                      <span class="small"><%= @day_difference.to_i %> day ago</span>
+                      <span class="small"><%= day_difference.to_i %> day ago</span>
                       <% end %>
                     <% end %>
                     <% if item.log_content.include? "Contributed" %>
@@ -107,9 +107,9 @@
                   <div class="card-description">
                     <% if item.log_content.include? "Contributed" %>
                     <!--Note : Approach - Should include the contribution id as foreign key in the log personal key results -->
-                    <% @contribution = Contribution.where(log_personal_key_result_id: item.id) %>
-                    <% if(@contribution != []) %>
-                    <p><%= @contribution[0].contribution_comment %></p>
+                    <% contribution = Contribution.find_by(log_personal_key_result_id: item.id) %>
+                    <% if(contribution != nil) %>
+                    <p><%= contribution.contribution_comment %></p>
                     <% end %>
                     <% else %>
                     <p><%= raw(item.log_content) %></p>
@@ -128,11 +128,11 @@
         <ul class="list-group">
           <li class="list-group-item">
             <i class="pg-map"></i>
-            <%= @personal_objective[0].objective %>
+            <%= @personal_objective.objective %>
             <ul class="list-group">
               <li class="list-group-item">
                 <i class="pg-arrow_right"></i>
-                <%= @personal_key_result[0].key_result %>
+                <%= @personal_key_result.key_result %>
               </li>
             </ul>
           </li>

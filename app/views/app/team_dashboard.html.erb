@@ -30,7 +30,16 @@
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7" >
         <div class="row">
-          <%= content_tag(:div, content_tag(:h5, @okr_team.name, class: "bold")) %>
+          <h5 class="bold">
+            <span>
+              <%= @okr_team.name %>
+            </span>
+            <span class="p-l-10">
+              <button id="team_setting" data-id="<%= @team_id %>" class="btn btn-default no-padding">
+                <i class="fa fa-fw fa-gears fa-lg"></i>
+              </button>
+            </span>
+          </h5>
         </div>
         <div class="row">
           <div class="form-group">
@@ -199,7 +208,7 @@
                 <ul class="dropdown-menu">
                   <li>
                     <!--View detailed of the personal key result-->
-                    <a href="/team_objectives/details/<%= item.id %>&<%= @team_id %>">
+                    <a href="/team/<%= @team_id %>/team_objectives/details/<%= item.id %>">
                       <i class="pg-search"></i> 
                       <span> Go to details</span>
                     </a>
@@ -294,7 +303,7 @@
                     <ul class="dropdown-menu">
                       <li>
                         <!--View detailed of the personal key result-->
-                        <a href="/team_key_results/details/<%= item.id %>&<%= @team_id %>">
+                        <a href="/team/<%= @team_id %>/team_key_results/details/<%= item.id %>">
                           <i class="pg-search"></i> 
                            Go to details
                         </a>
@@ -434,6 +443,94 @@
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3">
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Popup for the new teammate invitation-->
+<div class="overlay hide" id="teammate_list">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 centralize">
+        <div class="row">
+          <h5 class="m-b-5">
+            <span class="bold result-name">
+              <%= @okr_team.name %> team 
+            </span>
+          </h5>
+          <hr />
+        </div>
+        <div class="row">
+          <div class="panel panel-transparent">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-tabs-linetriangle" data-init-reponsive-tabs="dropdownfx">
+              <li class="active">
+                <a data-toggle="tab" href="#team_details">
+                  <span>Team Details</span>
+                </a>
+              </li>
+              <li>
+                <a data-toggle="tab" href="#team_members">
+                  <span>Team Members (<%= @team_users.count %>)</span>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="team_details">
+                <div class="col-lg-5 col-md-5 col-sm-5">
+                  <h1 class="text-center centralize">
+                    <%= @team_short_str %>
+                  </h1>
+                </div>
+                <div class="col-lg-7 col-md-7 col-sm-7">
+                  <div class="form-group form-group-default">
+                    <label>TEAM NAME</label>
+                    <input id="team_name_input" class="form-control" value="<%= @okr_team.name %> team" disabled="true"/>
+                  </div>
+                  <div class="form-group form-group-default">
+                    <label>TL / PM / PO</label>
+                    <input id="team_lead_input" class="form-control" value="<%= @team_lead %>" disabled="true"/>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="team_members">
+                <% @team_users.each_with_index do |item, index| %>
+                  <% @team_user = User.find(item.id) %> 
+                  <div class="row checkbox">
+                    <div class="col-lg-10 col-md-10 col-sm-10 checkbox-primary">
+                      <span class="thumbnail-wrapper d32 circular inline">
+                        <%= image_tag @team_user.avatar.url %>
+                        <%= @team_user.name %>
+                      </span>
+                      <span class="bold m-l-20">
+                      <%= @team_user.name %>
+                      </span>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-2">
+                      <div class="pull-right">
+                        <button data-id="<%= item.id %>" id="btn_remove_team_user" class="btn btn-accordion no-padding">
+                          <i class="pg-close"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </div>  
+                  <hr/>       
+                <% end %>
+                <select id="user_invitation_selection" class="full-width">
+                  
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
       </div>
     </div>
   </div>
