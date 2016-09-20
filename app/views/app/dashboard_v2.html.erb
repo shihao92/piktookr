@@ -139,7 +139,7 @@
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6">
                     <% @okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: item.id) %>
-                    <% @team_key_result = TeamKeyResult.find_by(id: @okr_team_personal.team_key_result_id) %>
+                    <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
                     <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
                     <div id="personal_objective_<%= item.id %>">
                       <p class="bold details-layout">
@@ -148,7 +148,7 @@
                     </div>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
-                    <button class="btn btn-accordion edit_personal_objective" name="personalobj_<%= item.id %>">
+                    <button class="btn btn-accordion edit_personal_objective" data-id="<%= item.id %>" name="personalobj_<%= item.id %>">
                       <i class="fa fa-pencil"></i>
                     </button>
                   </div>
@@ -262,7 +262,7 @@
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="pull-left">
                         <% if(item.is_completed != true || item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_personal_key_result" name="personalkr_<%= item.id %>">
+                        <button class="btn btn-accordion edit_personal_key_result" name="personalkr_<%= item.id %>"  data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
                         <% end %>
@@ -356,7 +356,7 @@
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-personal-key-result">
               <div id="new_key_result" name="new_key_result_objective_<%= item.id %>">
-                <input id="new_key_result_objective_<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new key result"/>         
+                <input id="new_key_result" data-id="<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new key result"/>         
               </div>
             </div>
           </div>

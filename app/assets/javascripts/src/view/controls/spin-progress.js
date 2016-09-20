@@ -1,4 +1,4 @@
-define(['view/controls/spin'], function(spinParam){
+define(['view/library/spin'], function(spinParam){
     function defineSpin()
     {
         let opts = {

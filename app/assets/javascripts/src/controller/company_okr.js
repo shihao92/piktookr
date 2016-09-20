@@ -3,10 +3,10 @@
 
 require([
 'model/company_key_result', 'model/company_objective',
-'view/controls/modal', 'view/controls/popup', 'view/controls/select2.min'], 
+'view/controls/overlay', 'view/library/select2.min'], 
 function(
 companyKeyResultModelParam, companyObjectiveModelParam,
-modalParam, popupParam, select2Param) {
+overlayParam, select2Param) {
 
     $(document).ready(function() {
         
