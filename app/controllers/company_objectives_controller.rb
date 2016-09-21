@@ -121,11 +121,11 @@ class CompanyObjectivesController < ApplicationController
   end
 
   def edit_objective
-    objective_id = params['id']
-    edited_objective = params['edited_objective']
-    original_objective = params['original_objective']
+    objective_id = params[:id]
+    edited_objective = params[:edited_objective]
+    original_objective = params[:original_objective]
     
-    status = rename_company_objective(original_objective, edited_objective, objective_id, current_user.id)
+    status = CompanyObjective.rename_company_objective(original_objective, edited_objective, objective_id, current_user.id)
 
     respond_to do |format|
       if status == 200  

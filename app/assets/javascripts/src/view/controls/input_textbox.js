@@ -4,20 +4,10 @@
 define(['view/controls/overlay'],
 function(overlayParam){
 
-  function addNewPersonalObjective(){
+  function addNewPersonalObjective(resolve){
     $('#add-new-personal-objective')
     .on({
-      keypress: function(event){
-        let key = event.which;
-        if($('#new_personal_objective').val() !== '') {
-          if(key == 13){
-            let temp_personal_objective = "";
-            temp_personal_objective = $('#new_personal_objective').val();
-            overlayParam.loadNewPersonalObjectiveOverlayContent();
-            $('#personal_objective_textarea').text(temp_personal_objective);
-          }
-        }       
-      }
+      keypress: resolve
     });
   }
 
@@ -32,7 +22,7 @@ function(overlayParam){
   }
 
   function addNewPersonalKeyResult(resolve){
-    $('#new_key_result')
+    $('input[name=new_key_result]')
     .on({
       focusout: function(){
         location.reload();
@@ -66,13 +56,134 @@ function(overlayParam){
     .find('.form-new-key-result').val(original_key_result);
   }
 
+  function createInputTextboxForEditTeamObjective(objective_id, original_objective){
+    $('#team_objective_' + objective_id)
+    .empty()
+    .html('<input type="text" class="form-control form-new-key-result add-new-team-key-result" data-id="' + objective_id + '"/>')
+    .find('.form-new-key-result')
+    .val(original_objective);
+  }
+
+  function createInputTextboxForEditTeamKeyResult(key_result_id, original_key_result){
+    $('#team_kr_' + key_result_id)
+    .empty()
+    .html('<input type="text" class="form-control form-new-key-result add-new-team-key-result" data-id="' + key_result_id + '"/>')
+    .find('.form-new-key-result')
+    .val(original_key_result);
+  }
+
+  function createInputTextboxForEditCompanyKeyResult(key_result_id, original_key_result){
+    $('#company_kr_' + key_result_id)
+    .empty()
+    .html('<input name="edit_company_key_result" type="text" class="form-control form-new-key-result add-new-company-key-result" data-id="' + key_result_id + '"/>')
+    .find('.form-new-key-result')
+    .val(original_key_result);
+  }
+
+  function createInputTextboxForEditCompanyObjective(objective_id, original_objective){
+    $('#company_objective_' + objective_id)
+    .empty()
+    .html('<input name="edit_company_objective" type="text" class="form-control form-new-key-result add-new-company-key-result" data-id="' + objective_id + '"/>')
+    .find('.form-new-key-result')
+    .val(original_objective);
+  }
+
+  function addNewTeamObjective(resolveFocusOut, resolveKeypress){
+    $('#add-new-team-objective')
+    .on({
+      focusout: resolveFocusOut,
+      keypress: resolveKeypress
+    });
+  }
+
+  function addNewTeamKeyResult(resolve){
+    $('input[name=new_team_key_result]')
+    .on({
+      keypress: resolve,
+      focusout: function(){
+        location.reload();
+      }
+    });
+  }
+
+  function editTeamObjective(resolve){
+    $('.panel-heading-a')
+    .on({
+      keypress: resolve,
+      focusout: function() {
+        location.reload();
+      }
+    },'.add-new-team-key-result');
+  }
+
+  function editTeamKeyResult(resolve){
+    $('.accordion-item')
+    .on({
+      keypress: resolve,
+      focusout: function() {
+        location.reload();
+      }
+    },'.add-new-team-key-result');
+  }
+
+  function addNewCompanyKeyResult(resolve){
+    $("input[name=new_company_key_result]")
+    .on({
+        focusout: function() {
+            location.reload();
+        },
+        keypress: resolve
+    });
+  }
+
+  function editCompanyKeyResult(resolve){
+    $(".checkbox-primary")
+    .on({
+        focusout: function() {
+            location.reload();
+        },
+        keypress: resolve
+    });
+  }
+
+  function addNewCompanyObjective(resolveFocusOut, resolveKeypress){
+    $("#add-new-company-objective")
+    .on({
+        focusout: resolveFocusOut,
+        keypress: resolveKeypress
+    });
+  }
+
+  function editCompanyObjective(resolve){
+    $('.panel-heading-a')
+    .on({
+      keypress: resolve,
+      focusout: function() {
+          location.reload();
+      }
+    }, "input[name=edit_company_objective]");
+  }
+
+
   return{
+    addNewCompanyObjective,
+    editCompanyObjective,
+    addNewCompanyKeyResult,
+    editCompanyKeyResult,
+    addNewTeamObjective,
+    editTeamObjective,
+    addNewTeamKeyResult,
+    editTeamKeyResult,
     addNewPersonalObjective,
     editPersonalObjective,
     addNewPersonalKeyResult,
     editPersonalKeyResult,
     createInputTextboxForEditPersonalObjective,
-    createInputTextboxForEditPersonalKeyResult
+    createInputTextboxForEditPersonalKeyResult,
+    createInputTextboxForEditTeamObjective,
+    createInputTextboxForEditTeamKeyResult,
+    createInputTextboxForEditCompanyKeyResult,
+    createInputTextboxForEditCompanyObjective
   }
 
 })

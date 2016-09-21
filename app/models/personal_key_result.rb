@@ -1,6 +1,6 @@
 class PersonalKeyResult < ApplicationRecord
 
-    belongs_to      :personal_objective
+    belongs_to      :personal_objective, touch: true
     has_many        :contributions
     accepts_nested_attributes_for :contributions
 

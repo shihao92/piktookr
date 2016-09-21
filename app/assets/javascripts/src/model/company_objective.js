@@ -45,9 +45,9 @@ define(['model/server_url'], function(urlParam) {
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          'id'                       : objective_id,
-          'edited_objective'         : edited_objective,
-          'original_objective'       : original_objective
+          id                       : objective_id,
+          edited_objective         : edited_objective,
+          original_objective       : original_objective
         }));           
       });
     } 

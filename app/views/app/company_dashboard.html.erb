@@ -142,7 +142,7 @@
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="pull-left">
                       <% if(item.progress != 100.00) %>
-                      <button class="btn btn-accordion edit_company_objective" name="companyobj_<%= item.id %>">
+                      <button class="btn btn-accordion edit_company_objective" data-id="<%= item.id %>">
                         <i class="fa fa-pencil"></i>
                       </button>
                       <% end %>
@@ -239,14 +239,14 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
                         <div id="company_kr_<%= item.id %>" class="checkbox-primary">
-                            <p class="details-layout"><%= item.key_result %></p>
+                          <p class="details-layout"><%= item.key_result %></p>
                         </div> 
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="pull-left">
                         <% if(item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_company_key_result" name="companykr_<%= item.id %>">
+                        <button class="btn btn-accordion edit_company_key_result" data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
                         <% end %>
@@ -323,9 +323,7 @@
             <% end %>
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-company-key-result">
-              <div id="new_key_result" name="new_key_result_objective_<%= item.id %>">
-                <input id="new_key_result_objective_<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new company key result"/>         
-              </div>
+              <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>             
             </div>
           </div>
         </div>

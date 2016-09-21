@@ -13,31 +13,34 @@ function(overlay, personalObjectiveModel){
     }
   }
 
+  function toggleDisabledSaveNewTeamObjectiveButton(input){
+    switch(input){
+      case 0: $('#btn_new_team_objective').prop( "disabled", false );
+              break;
+      case 1: $('#btn_new_team_objective').prop( "disabled", true );
+              break;
+    }
+  }
+
+  function toggleButtonDisability(btn_info, input){
+    switch(input){
+      case 0: $(btn_info).prop( "disabled", false );
+              break;
+      case 1: $(btn_info).prop( "disabled", true );
+              break;
+    }
+  }
+
   // --------------------
   // Button Click Section
   // --------------------
-  function newPersonalObjectiveButtonClick(resolve){ 
-    $('#btn_new_personal_objective').click(resolve);
+
+  function resolveButtonClick(btn_info, resolve){
+    $(btn_info).click(resolve);
   }
 
-  function editPersonalObjectiveButtonClick(resolve){ 
-    $('.edit_personal_objective').click(resolve); 
-  }
-
-  function updatePersonalKeyResultProgressClick(resolve){
-    $('#btn_update_progress').click(resolve);
-  }
-
-  function editPersonalKeyResultButtonClick(resolve){
-    $('.edit_personal_key_result').click(resolve);
-  }
-
-  function hideEditPersonalObjectiveButton(){
-    $('.edit_personal_objective').attr('style', 'visibility: hidden;');
-  }
-
-  function hideEditPersonalKeyResultButton(){
-    $('.edit_personal_key_result').attr('style', 'visibility: hidden;');
+  function hideButton(btn_info){
+    $(btn_info).attr('style', 'visibility: hidden;');
   }
 
   function notificationDismissClick(){
@@ -47,13 +50,11 @@ function(overlay, personalObjectiveModel){
   }
 
   return{
+    toggleButtonDisability,
     toggleDisabledSaveNewPersonalObjectiveButton,
-    newPersonalObjectiveButtonClick,
-    editPersonalObjectiveButtonClick,
-    updatePersonalKeyResultProgressClick,
-    editPersonalKeyResultButtonClick,
-    hideEditPersonalObjectiveButton,
-    hideEditPersonalKeyResultButton,
+    toggleDisabledSaveNewTeamObjectiveButton,
+    resolveButtonClick,
+    hideButton,
     notificationDismissClick
   }
 

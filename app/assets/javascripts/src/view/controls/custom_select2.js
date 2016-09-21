@@ -13,8 +13,17 @@ function(select2LibraryParam, btnParam){
     }); 
   }
 
+  function companyKeyResultSelectionChanged(){
+    $('#company_key_result_selection').on('change', function() {
+      if($('#team_objective_textarea').val() != "") {
+        btnParam.toggleDisabledSaveNewTeamObjectiveButton(0);
+      }
+    });
+  }
+
   return{
-    teamKeyResultSelectionChanged
+    teamKeyResultSelectionChanged,
+    companyKeyResultSelectionChanged
   }
 
 })

@@ -10,6 +10,12 @@ personalKeyResultModel, personalObjectiveModel,
 customModal, overlay, slider, customSelect2, 
 btnControl, textboxInput, checkboxControl) {
 
+    const button_new_personal_objective = '#btn_new_personal_objective';
+    const button_edit_personal_objective = '.edit_personal_objective';
+    const button_update_progress_key_result = '#btn_update_progress';
+    const button_edit_personal_key_result = '.edit_personal_key_result';
+    const textbox_new_personal_key_result = '.form-new-key-result';
+
     let original_personal_objective = "";
     let checkbox_tick_amount = 0;
     let original_personal_key_result = "";
@@ -17,6 +23,18 @@ btnControl, textboxInput, checkboxControl) {
     // ------------------
     // Personal Objective
     // ------------------
+
+    function displayCreatePersonalObjectiveOverlay(event){
+      let key = event.which;
+      if($('#new_personal_objective').val() !== '') {
+        if(key == 13){
+          let temp_personal_objective = "";
+          temp_personal_objective = $('#new_personal_objective').val();
+          overlay.loadNewPersonalObjectiveOverlayContent();
+          $('#personal_objective_textarea').text(temp_personal_objective);
+        }
+      }   
+    }
 
     function createNewPersonalObjective(){
       let personal_objective = $('#personal_objective_textarea').val();
@@ -34,7 +52,7 @@ btnControl, textboxInput, checkboxControl) {
       objective = objective.trim();
 
       original_objective = objective;
-      btnControl.hideEditPersonalObjectiveButton();
+      btnControl.hideButton(button_edit_personal_objective);
 
       textboxInput.createInputTextboxForEditPersonalObjective(current_editing_objective_id, original_objective);
 
@@ -65,15 +83,17 @@ btnControl, textboxInput, checkboxControl) {
 
     function createNewPersonalKeyResult(event){
       let key = event.which;
-      if(key == 13){
-        // Find out the personal objective id
-        let current_focus_objective_id = $(event.target).attr('data-id');
-        let temp_personal_key_result = $(event.target).val();  
-        if(temp_personal_key_result !== ''){
-          let create_personal_kr_promise = new personalKeyResultModel.newPersonalKeyResult(
-            temp_personal_key_result, current_focus_objective_id
-          );   
-          create_personal_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      if($(event.target).val() !== ''){
+        if(key == 13){
+          // Find out the personal objective id
+          let current_focus_objective_id = $(event.target).attr('data-id');
+          let temp_personal_key_result = $(event.target).val();  
+          if(temp_personal_key_result !== ''){
+            let create_personal_kr_promise = new personalKeyResultModel.newPersonalKeyResult(
+              temp_personal_key_result, current_focus_objective_id
+            );   
+            create_personal_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          }
         }
       }
     }
@@ -118,7 +138,7 @@ btnControl, textboxInput, checkboxControl) {
       textboxInput.createInputTextboxForEditPersonalKeyResult(key_result_id, key_result);
 
       original_personal_key_result = key_result;
-      btnControl.hideEditPersonalKeyResultButton();
+      btnControl.hideButton(button_edit_personal_key_result);
     }
 
     function editedPersonalKeyResult(event){
@@ -148,26 +168,26 @@ btnControl, textboxInput, checkboxControl) {
         overlay.clickProgressUpdateOverlay();
 
         //Personal Objective - Create new
-        textboxInput.addNewPersonalObjective();
+        textboxInput.addNewPersonalObjective(displayCreatePersonalObjectiveOverlay);
         customSelect2.teamKeyResultSelectionChanged();  
-        btnControl.newPersonalObjectiveButtonClick(createNewPersonalObjective);   
-              
+        btnControl.resolveButtonClick(button_new_personal_objective, createNewPersonalObjective);   
+       
         // Personal Objective - Edit     
-        btnControl.editPersonalObjectiveButtonClick(editPersonalObjective);
+        btnControl.resolveButtonClick(button_edit_personal_objective, editPersonalObjective);
         textboxInput.editPersonalObjective(editedPersonalObjective);
 
         // Key result - Create new  
         textboxInput.addNewPersonalKeyResult(createNewPersonalKeyResult);     
         
         // Key result - Update progress
-        btnControl.updatePersonalKeyResultProgressClick(updateProgressPersonalKeyResult);
+        btnControl.resolveButtonClick(button_update_progress_key_result, updateProgressPersonalKeyResult);
 
         // Key result - Checked completed key result
         checkbox_tick_amount = $('input[type=checkbox]:checked').length;
         checkboxControl.checkUncheckPersonalKeyResult(checkedUncheckedPersonalKeyResult);
         
         // Key Result - Edit 
-        btnControl.editPersonalKeyResultButtonClick(editPersonalKeyResult);
+        btnControl.resolveButtonClick(button_edit_personal_key_result, editPersonalKeyResult);
         textboxInput.editPersonalKeyResult(editedPersonalKeyResult);
 
         btnControl.notificationDismissClick();

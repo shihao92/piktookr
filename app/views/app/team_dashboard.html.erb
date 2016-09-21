@@ -167,7 +167,7 @@
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="pull-left">
                       <% if(item.progress != 100.00) %>
-                      <button class="btn btn-accordion edit_team_objective" name="teamobj_<%= item.id %>">
+                      <button class="btn btn-accordion edit_team_objective" data-id="<%= item.id %>">
                         <i class="fa fa-pencil"></i>
                       </button>
                       <% end %>
@@ -258,20 +258,20 @@
               <% if(item.progress == 100.00) %>
               <%    @team_key_result_completed = @team_key_result_completed + 1 %>
               <% end %>
-              <div class="row accordion-item">
+              <div class="row accordion-item" id="team_kr_<%= item.id %>">
                 <div class="col-lg-11 col-md-11 col-sm-11">
                   <div class="row checkbox">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
-                        <div id="team_kr_<%= item.id %>" class="checkbox-primary">
-                            <p class="details-layout"><%= item.key_result %></p>
+                        <div class="checkbox-primary">
+                          <p class="details-layout"><%= item.key_result %></p>
                         </div> 
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="pull-left">
                         <% if(item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_team_key_result" name="teamkr_<%= item.id %>">
+                        <button class="btn btn-accordion edit_team_key_result" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
                         <% end %>
@@ -348,9 +348,7 @@
             <% end %>
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-team-key-result">
-              <div id="new_key_result" name="new_key_result_objective_<%= item.id %>">
-                <input id="new_key_result_objective_<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new team key result"/>         
-              </div>
+              <input name="new_team_key_result" data-id="<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new team key result"/>
             </div>
           </div>
         </div>
@@ -435,7 +433,7 @@
               <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="btn btn-default btn-cons btn-rounded m-t-10">
                 Cancel
               </a>
-              <button id="btn_new_team_objective" name="<%= @team_id %>" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
+              <button id="btn_new_team_objective" data-id="<%= @team_id %>" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
                 Save
               </button>
             </div>
