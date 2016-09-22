@@ -1,10 +1,24 @@
 class CompanyObjective < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to      :timeframe_log
     belongs_to      :user
     has_many        :company_key_results
     
     has_many        :log_company_objectives
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :objective, presence: true, length: { minimum: 2 }, uniqueness: true
+    validates   :progress, presence: true, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+    validates   :timeframe_log_id, presence: true
+    validates   :user_id, presence: true
+
 
     def self.new_company_objective(objective, user_id)
       status = 0

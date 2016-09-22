@@ -1,5 +1,9 @@
 class CompanyKeyResult < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to   :company_objective
     belongs_to   :user
 
@@ -7,6 +11,16 @@ class CompanyKeyResult < ApplicationRecord
     has_many     :team_objectives, :through => :okr_company_teams
 
     has_many     :log_company_key_results
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :key_result, presence: true, length: { minimum: 2 }, uniqueness: true
+    validates   :progress, presence: true, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+    validates   :company_objective_id, presence: true
+    validates   :user_id, presence: true
+
 
     def self.new_company_key_result(key_result, company_objective_id, user_id)
       status = 0

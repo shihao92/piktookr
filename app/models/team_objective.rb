@@ -1,5 +1,9 @@
 class TeamObjective < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     has_many           :okr_company_teams
     has_many           :company_key_results, :through => :okr_company_teams
     belongs_to         :okr_team
@@ -8,8 +12,17 @@ class TeamObjective < ApplicationRecord
     belongs_to         :timeframe_log
     belongs_to         :user
 
-
     has_many           :log_team_objectives
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :objective, presence: true, length: { minimum: 5 }
+    validates   :progress, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+    validates   :timeframe_log_id, presence: true, :numericality => { only_integer: true }
+    validates   :okr_team_id, presence: true, :numericality => { only_integer: true }
+
 
     def self.new_team_objective(objective, company_key_result_id, user_id, team_id)
       status = 0

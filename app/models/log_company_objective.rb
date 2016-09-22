@@ -1,7 +1,20 @@
 class LogCompanyObjective < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to      :company_objective
     belongs_to      :user
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :log_content, presence: true
+    validates   :company_objective_id, presence: true, :numericality => { only_integer: true }
+    validates   :user_id, presence: true, :numericality => { only_integer: true }
+
 
     def self.log_new_company_objective(objective, objective_id, user_id)
       log_content = 'Created <span class="bold">' + objective + '</span>' 

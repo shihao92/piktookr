@@ -1,4 +1,15 @@
 class OkrRole < ActiveRecord::Base
-    #self.table_name = "okr_roles"
+
+    # ---------
+    # Relations
+    # ---------
+
     has_and_belongs_to_many :users
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :name, presence: true, length: { minimum: 2 }
+
 end

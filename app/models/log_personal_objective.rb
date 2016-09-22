@@ -1,7 +1,20 @@
 class LogPersonalObjective < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to      :personal_objective
     belongs_to      :user
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :log_content, presence: true
+    validates   :personal_objective_id, presence: true, :numericality => { only_integer: true }
+    validates   :user_id, presence: true, :numericality => { only_integer: true }
+
 
     def self.log_new_personal_objective(objective, objective_id, team_key_result, user_id)
       log_content = 'Created <span class="bold">' + objective + '</span> and aligned with <span class="bold">' + team_key_result + '</span>'

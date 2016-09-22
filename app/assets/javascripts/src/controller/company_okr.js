@@ -24,9 +24,9 @@ textboxControl, btnControl, customSelect2) {
     // -----------------
 
     function focusOutCreateNewCompanyObjective(event){
-      if($(event.target).find('#new_company_objective').val() != '') {
+      if($('#new_company_objective').val() != '') {
         $('#new_objective_popup').attr('class','overlay');
-        $('#company_objective_textarea').text($(event.target).find('#new_company_objective').val());
+        $('#company_objective_textarea').text($('#new_company_objective').val());
         btnControl.toggleButtonDisability(button_create_company_objective, 0)
       } 
     }
@@ -34,9 +34,9 @@ textboxControl, btnControl, customSelect2) {
     function enterCreateNewCompanyObjective(event){
       let key = event.which;
       if(key == 13){
-        if($(event.target).find('#new_company_objective').val() != '') {
+        if($('#new_company_objective').val() != '') {
           $('#new_objective_popup').attr('class','overlay');
-          $('#company_objective_textarea').text($(event.target).find('#new_company_objective').val());
+          $('#company_objective_textarea').text($('#new_company_objective').val());
           btnControl.toggleButtonDisability(button_create_company_objective, 0)
         }
       }  
@@ -44,7 +44,7 @@ textboxControl, btnControl, customSelect2) {
 
     function createNewCompanyObjective(event){
       let company_objective = $('#company_objective_textarea').val();
-      let create_company_objective_promise = new companyObjectiveModelParam.newCompanyObjective(company_objective);
+      let create_company_objective_promise = new companyObjectiveModel.newCompanyObjective(company_objective);
       create_company_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
     }
 

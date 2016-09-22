@@ -79,7 +79,7 @@ class TeamKeyResultsController < ApplicationController
     @key_result_id = params[:id]
     @team_id = params[:team_id]
 
-    @okr_team = OkrTeam.where(id: @team_id)
+    @okr_team = OkrTeam.find(@team_id)
     @team_key_result = TeamKeyResult.find(@key_result_id)
     @team_objective = TeamObjective.find(@team_key_result.team_objective_id)
     @user_info = User.find(@team_key_result.user_id)

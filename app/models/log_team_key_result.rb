@@ -1,7 +1,20 @@
 class LogTeamKeyResult < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to      :team_key_result
     belongs_to      :user
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :log_content, presence: true
+    validates   :team_key_result_id, presence: true, :numericality => { only_integer: true }
+    validates   :user_id, presence: true, :numericality => { only_integer: true }
+
 
     def self.log_new_team_key_result(key_result_id, team_objective, user_id)
       team_key_result = TeamKeyResult.find(key_result_id)

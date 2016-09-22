@@ -97,7 +97,7 @@
           <li>
             <a href="/" class="detailed">
               <span class="title" id="user-name">
-                <%= @user.name %>
+                <%= @user.last_name %>
               </span>
               <p class="details details-layout" id="user-position">
                 <%= @user.position %>
@@ -105,7 +105,7 @@
             </a>
             <span class="icon-thumbnail">
               <span id="username-shortform">
-                <% @user_shortform = @user.name.scan(/[A-Z]/) %>
+                <% @user_shortform = @user.last_name.scan(/[A-Z]/) %>
                 <% @user_short_str = "" %>
                 <% @user_shortform.each do |item| %>
                   <% @user_short_str = @user_short_str + item %>
@@ -121,7 +121,7 @@
               <li>
                 <a href="/personal_objectives/view_others_personal_okr/<%= item.id %>" class="detailed">
                   <span class="title" id="user-name">
-                    <%= item.name %>
+                    <%= item.last_name %>
                   </span>
                   <p class="details details-layout" id="user-position">
                     <%= item.position %>
@@ -129,7 +129,7 @@
                 </a>
                 <span class="icon-thumbnail">
                   <span id="username-shortform">
-                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @user_shortform = item.last_name.scan(/[A-Z]/) %>
                     <% @user_short_str = "" %>
                     <% @user_shortform.each do |item| %>
                       <% @user_short_str = @user_short_str + item %>
@@ -142,7 +142,7 @@
               <li>
                 <a href="/personal_objectives/view_others_personal_okr/<%= item.id %>" class="detailed">
                   <span class="title" id="user-name">
-                    <%= item.name %>
+                    <%= item.last_name %>
                   </span>
                   <p class="details details-layout" id="user-position">
                     <%= item.position %>
@@ -150,7 +150,7 @@
                 </a>
                 <span class="icon-thumbnail">
                   <span id="username-shortform">
-                    <% @user_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @user_shortform = item.last_name.scan(/[A-Z]/) %>
                     <% @user_short_str = "" %>
                     <% @user_shortform.each do |item| %>
                       <% @user_short_str = @user_short_str + item %>
@@ -225,7 +225,7 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <span class="semi-bold"><%= @user.name %></span> 
+              <span class="semi-bold"><%= @user.last_name %></span> 
             </div>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

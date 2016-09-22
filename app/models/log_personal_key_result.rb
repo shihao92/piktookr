@@ -1,7 +1,20 @@
 class LogPersonalKeyResult < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     belongs_to      :personal_key_result
     belongs_to      :user
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :log_content, presence: true
+    validates   :personal_key_result_id, presence: true, :numericality => { only_integer: true }
+    validates   :user_id, presence: true, :numericality => { only_integer: true }
+
 
     def self.log_new_personal_key_result(key_result_id, objective, user_id)
       personal_key_result = PersonalKeyResult.find(key_result_id)

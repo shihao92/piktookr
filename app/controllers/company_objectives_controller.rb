@@ -108,7 +108,7 @@ class CompanyObjectivesController < ApplicationController
     @objective_id = params[:id]
     @company_objective = CompanyObjective.find(@objective_id)
     @company_key_results = CompanyKeyResult.where(company_objective_id: @objective_id)
-    @user_info = User.where(id: @company_objective.user_id)
+    @user_info = User.find(@company_objective.user_id)
 
     @log = LogCompanyObjective.where(company_objective_id: @objective_id).order(id: :DESC)
 

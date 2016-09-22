@@ -21,9 +21,9 @@ textboxControl, btnControl, customSelect2) {
     // --------------
 
     function focusOutCreateNewTeamObjective(event){
-      if($(event.target).find('#new_team_objective').val() != '') {
+      if($('#new_team_objective').val() != '') {
         $('#new_objective_popup').attr('class','overlay');
-        $('#team_objective_textarea').text($(event.target).find('#new_team_objective').val());
+        $('#team_objective_textarea').text($('#new_team_objective').val());
         $('#company_key_result_selection').select2();
       }
     }
@@ -31,9 +31,9 @@ textboxControl, btnControl, customSelect2) {
     function enterCreateNewTeamObjective(event){
       let key = event.which;
       if(key == 13){
-        if($(event.target).find('#new_team_objective').val() != '') {
+        if($('#new_team_objective').val() != '') {
           $('#new_objective_popup').attr('class','overlay');
-          $('#team_objective_textarea').text($(event.target).find('#new_team_objective').val());
+          $('#team_objective_textarea').text($('#new_team_objective').val());
           $('#company_key_result_selection').select2();
         }
       }

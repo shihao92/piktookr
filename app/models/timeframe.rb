@@ -1,6 +1,19 @@
 class Timeframe < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     has_many :timeframe_logs
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates   :year, presence:  true, :numericality => { only_integer: true }
+    validates   :timeframe_type, presence: true, length: { minimum: 2 }
+
+
 
     def self.calculate_remaining_days_current_quarter
       current_date = Time.now.strftime("%Y-%m-%d") 

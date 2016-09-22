@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/personal_objectives/view_others_personal_okr/<%= @user.id %>" class="active"><%= @user.name %> PERSONAL OKRs</a>
+          <a href="/personal_objectives/view_others_personal_okr/<%= @user.id %>" class="active"><%= @user.last_name %> PERSONAL OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -20,7 +20,7 @@
 <div class="container-fluid container-fixed-lg">
 
   <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold"><%= @user.name %> personal OKRs</h5>
+  <h5 class="semi-bold"><%= @user.last_name %> personal OKRs</h5>
 
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
@@ -30,7 +30,7 @@
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
         <div class="row">
-          <%= content_tag(:div, content_tag(:h5, @user.name, class: "bold")) %>
+          <%= content_tag(:div, content_tag(:h5, @user.last_name, class: "bold")) %>
         </div>
         <div class="row">
           <div class="form-group">
@@ -135,7 +135,7 @@
           <div class="row">
             <h4 class="panel-title panel-title-custom">
               <p class="bold details-layout no-objective-presence">
-                No Personal Objective is created by <%= @user.name %>
+                No Personal Objective is created by <%= @user.last_name %>
               </p>
             </h4>
           </div>

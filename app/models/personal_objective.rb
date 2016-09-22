@@ -1,5 +1,9 @@
 class PersonalObjective < ApplicationRecord
 
+    # ---------
+    # Relations
+    # ---------
+
     has_many           :okr_team_personals
     has_many           :team_key_results, :through => :okr_team_personals
     belongs_to         :timeframe_log
@@ -8,6 +12,16 @@ class PersonalObjective < ApplicationRecord
     has_many           :personal_key_results
 
     has_many           :log_personal_objectives
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates :objective, presence: true, length: { minimum: 5 }
+    validates :progress, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
+    validates :timeframe_log_id, presence: true, :numericality => { only_integer: true }
+    validates :user_id, presence: true
+
 
     def self.new_personal_objective(objective, team_key_result_id, user_id)
       status = 0

@@ -70,7 +70,7 @@ class CompanyKeyResultsController < ApplicationController
     @key_result_id = params[:id]
     @company_key_result = CompanyKeyResult.find(@key_result_id)
     @company_objective = CompanyObjective.find(@company_key_result.company_objective_id)
-    @user_info = User.where(id: @company_key_result.user_id)
+    @user_info = User.find(@company_key_result.user_id)
 
     @log = LogCompanyKeyResult.where(company_key_result_id: @key_result_id).order(id: :DESC)
 

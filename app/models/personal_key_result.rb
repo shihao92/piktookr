@@ -1,11 +1,25 @@
 class PersonalKeyResult < ApplicationRecord
 
-    belongs_to      :personal_objective, touch: true
+    # ---------
+    # Relations
+    # ---------
+
+    belongs_to      :personal_objective
     has_many        :contributions
     accepts_nested_attributes_for :contributions
 
     has_many        :log_personal_key_results
     accepts_nested_attributes_for :log_personal_key_results
+
+    # -----------
+    # Validations
+    # -----------
+
+    validates :key_result, presence: true
+    validates :personal_objective_id, presence: true
+    validates :progress, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}, on: :update
+    validates :is_completed, inclusion: { in: [ true, false ] }
+
 
     def self.new_personal_key_result(key_result, objective_id, user_id)
       status = 0
@@ -13,13 +27,14 @@ class PersonalKeyResult < ApplicationRecord
       @new_personal_key_result = PersonalKeyResult.new(
         progress: 0.0, 
         key_result: key_result, 
-        personal_objective_id: objective_id
+        personal_objective_id: objective_id,
+        is_completed: false
       )
       if @new_personal_key_result.save
         LogPersonalKeyResult.log_new_personal_key_result(@new_personal_key_result.id, personal_objective.objective, user_id)    
         cascade_personal_objective("", objective_id, 0)
         status = 200
-      else
+      else 
         status = 0
       end
 
