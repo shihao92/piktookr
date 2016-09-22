@@ -39,6 +39,7 @@ btnControl, textboxInput, checkboxControl) {
     function createNewPersonalObjective(){
       let personal_objective = $('#personal_objective_textarea').val();
       let team_key_result_id = $('#team_key_result_selection').val();
+      team_key_result_id = parseInt(team_key_result_id);
       let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
       create_personal_objective.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
     }
@@ -87,6 +88,7 @@ btnControl, textboxInput, checkboxControl) {
         if(key == 13){
           // Find out the personal objective id
           let current_focus_objective_id = $(event.target).attr('data-id');
+          current_focus_objective_id = parseInt(current_focus_objective_id);
           let temp_personal_key_result = $(event.target).val();  
           if(temp_personal_key_result !== ''){
             let create_personal_kr_promise = new personalKeyResultModel.newPersonalKeyResult(

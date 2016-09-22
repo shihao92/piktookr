@@ -9,7 +9,7 @@ define(['model/server_url'], function(urlParam) {
           if(this.readyState === 4 && this.status === 200) {
             resolve(this.responseText);
           }
-          else if(this.readyState === 0 && this.status !== 200){
+          else if(this.readyState === 4 && this.status !== 200){
             reject("Error!");
           }
         };
@@ -34,7 +34,7 @@ define(['model/server_url'], function(urlParam) {
           if(this.readyState === 4 && this.status === 200) {
             resolve(this.responseText);
           }
-          else if(this.readyState === 0 && this.status !== 200){
+          else if(this.readyState === 4 && this.status !== 200){
             reject("Error!");
           }
         };
