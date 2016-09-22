@@ -118,10 +118,7 @@ class TeamObjectivesController < ApplicationController
     # Create new team objective section
     @company_key_results = CompanyKeyResult.all   
 
-    @current_date = Time.now.strftime("%Y-%m-%d") 
-    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
-    @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
-    @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/team_dashboard'
   end
@@ -140,9 +137,8 @@ class TeamObjectivesController < ApplicationController
     @user_info = User.find(@team_objective.user_id)
 
     @current_date = Time.now.strftime("%Y-%m-%d") 
-    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
-    @timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
-    @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
+    @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id) 
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/team_objective_details'
   end

@@ -38,6 +38,8 @@ gem "paperclip", "~> 5.0.0"
 gem 'requirejs-rails'
 # Gem for the Google Authentication Plugin
 gem 'omniauth-google-oauth2', "~> 0.2.1"
+# Gem for validate date and time
+gem 'validates_timeliness', '~> 4.0'
 
 # gem for testing
 gem 'rspec-rails'

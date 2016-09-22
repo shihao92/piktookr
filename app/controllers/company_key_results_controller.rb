@@ -81,10 +81,8 @@ class CompanyKeyResultsController < ApplicationController
       @temp_team_objective.push(@team_objective)
     end
     
-    @current_date = Time.now.strftime("%Y-%m-%d") 
-    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") 
-    @timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") 
-    @remaining_quarter_days = @timeframe_log[0].end_date - Time.now.to_date
+    @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
 
     render 'app/company_key_result_details'
   end
