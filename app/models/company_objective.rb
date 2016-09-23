@@ -38,14 +38,14 @@ class CompanyObjective < ApplicationRecord
     end
 
     def self.update_progress_objective(personal_key_result, objective_id, progress, user_id)
-      if CompanyObjective.where(id: objective_id).update_all(progress: progress)
-        if user_id != 0
-          # Log generated for company objective update
-          LogCompanyObjective.log_update_progress_objective(
-              personal_key_result, progress, objective_id, user_id
-          )          
-        end
-      end
+      CompanyObjective.where(id: objective_id).update_all(progress: progress)
+    end
+
+    def self.calculate_and_log_progress_increment(personal_key_result, progress, company_objective_id, user_id)
+      # Find out how many company objective is linked with this company key result
+      company_key_results = CompanyKeyResult.where(company_objective_id: company_objective_id)
+      progress_increment = OkrCalculation.calculate_progress_contribution(progress, company_key_results.count)
+      LogCompanyObjective.log_update_progress_objective(personal_key_result, progress_increment, company_objective_id, user_id)
     end
 
     def self.rename_company_objective(original_objective, edited_objective, objective_id, user_id)
@@ -58,9 +58,10 @@ class CompanyObjective < ApplicationRecord
       return status 
     end
 
-    def self.delete_company_objective(company_objective)
+    def self.delete_company_objective(company_objective_id)
       status = 0
-      LogCompanyObjective.where(company_objective_id: company_objective.id).destroy_all()
+      LogCompanyObjective.where(company_objective_id: company_objective_id).destroy_all()
+      company_objective = CompanyObjective.find(company_objective_id)
       if company_objective.destroy
         status = 200
       end

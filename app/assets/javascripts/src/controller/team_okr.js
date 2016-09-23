@@ -8,6 +8,7 @@ function(teamKeyResultModel, teamObjectiveModel,
 overlay, select2, customModal,
 textboxControl, btnControl, customSelect2) {
 
+    const container_team_dashboard = '#team_page_container';
     const button_create_team_objective = '#btn_new_team_objective';
     const button_edit_team_objective = '.edit_team_objective';
     const button_edit_team_key_result = '.edit_team_key_result';
@@ -42,7 +43,7 @@ textboxControl, btnControl, customSelect2) {
     function createTeamObjective(event){
       let team_objective = $('#team_objective_textarea').val();
       let company_key_result_id = $('#company_key_result_selection').val();
-      let team_id = $(event.target).attr('data-id');
+      let team_id = $(container_team_dashboard).attr('data-id');
       company_key_result_id = parseInt(company_key_result_id);
       team_id = parseInt(team_id);
       let create_objective_promise = new teamObjectiveModel.newTeamObjective(
@@ -67,8 +68,9 @@ textboxControl, btnControl, customSelect2) {
         let original_objective = original_team_objective;
         if(updated_objective !== original_objective){
           let editing_objective_id = $(event.target).attr('data-id');
+          let team_id = $(container_team_dashboard).attr('data-id');
           let edit_objective_promise = new teamObjectiveModel.editTeamObjective(
-            editing_objective_id, updated_objective, original_objective
+            editing_objective_id, updated_objective, original_objective, team_id
           );
           edit_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
         }
@@ -86,10 +88,11 @@ textboxControl, btnControl, customSelect2) {
       let key = event.which;
       if(key == 13){
         if($(event.target).val() !== '') {
-          let current_focus_id = $(event.target).attr('data-id');
+          let team_objective_id = $(event.target).attr('data-id');
           let temp_team_key_result = $(event.target).val();
+          let team_id = $(container_team_dashboard).attr('data-id');
           let create_key_result_promise = new teamKeyResultModel.newTeamKeyResult(
-            temp_team_key_result, current_focus_id
+            temp_team_key_result, team_objective_id, team_id
           ); 
           create_key_result_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
         }
@@ -110,6 +113,7 @@ textboxControl, btnControl, customSelect2) {
       if(key == 13){
         let updated_key_result = $(event.target).val();
         let original_key_result = original_team_key_result;
+        let team_id = $(container_team_dashboard).attr('data-id');
         if(updated_key_result !== original_key_result){
           let editing_key_result_id = event.currentTarget.getAttribute('data-id');
           let edit_key_result_promise = new teamKeyResultModel.editTeamKeyResult(

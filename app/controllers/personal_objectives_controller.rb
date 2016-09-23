@@ -5,7 +5,6 @@ class PersonalObjectivesController < ApplicationController
   # GET /personal_objectives.json
   def index
     @personal_objectives = PersonalObjective.all
-    @js_controller = 'personal_okr'
   end
 
   # GET /personal_objectives/1
@@ -87,7 +86,7 @@ class PersonalObjectivesController < ApplicationController
   end
 
   def view_others_personal_okr
-    user_id = params[:user_id]
+    user_id = params[:id]
     @user = User.find(user_id)     
     okr_user_role = OkrUserRole.find_by(user_id: user_id)
     @role = OkrRole.find(okr_user_role.okr_role_id)    

@@ -17,7 +17,7 @@ class PersonalKeyResult < ApplicationRecord
 
     validates :key_result, presence: true
     validates :personal_objective_id, presence: true
-    validates :progress, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}, on: :update
+    validates :progress, :numericality => {:greater_than_or_equal_to => 0.00, :less_than_or_equal_to => 100.00}, on: :update
     validates :is_completed, inclusion: { in: [ true, false ] }
 
 
@@ -45,31 +45,33 @@ class PersonalKeyResult < ApplicationRecord
       status = 0
       progress_difference = progress - initial_progress
       personal_key_result = PersonalKeyResult.find(key_result_id)
+      personal_objective_id = (personal_key_result.personal_objective_id).to_i
       # If user_id is 0, system is updating the progress of the OKR that had been newly created.
       # Therefore, no log is required to be generated when update progress.
       if user_id != 0
         if PersonalKeyResult.where(id: key_result_id).update_all(progress: progress)   
-          # Log generated for personal key result
-          # No log required if the new key result is being created
-          generated_log_id = LogPersonalKeyResult.log_update_progress_key_result(key_result_id, progress_difference, user_id) 
+          # Log generated for personal key result       
+          generated_personal_key_result_log_id = LogPersonalKeyResult.log_update_progress_key_result(key_result_id, progress_difference, user_id) 
+          increment_okr_progress(personal_key_result.key_result, progress_difference, personal_key_result.personal_objective_id, user_id)
 
           # Save new contribution for this personal key result progress increment
           new_contribution = Contribution.new(
             contribution_comment: contribution, 
             personal_key_result_id: key_result_id, 
-            log_personal_key_result_id: generated_log_id
+            log_personal_key_result_id: generated_personal_key_result_log_id
           )
           if new_contribution.save 
             cascade_personal_objective(
               personal_key_result.key_result, 
-              personal_key_result.personal_objective_id, 
+              personal_objective_id, 
               user_id
-              )
+            )
             status = 200
           end                
         end
       else
         # For updating the progress of other OKR hierarchy when create operation is done
+        # No log required if the new key result is being created
         # Cascade to Personal Objective
         cascade_personal_objective(
           "", 
@@ -80,6 +82,24 @@ class PersonalKeyResult < ApplicationRecord
       end
 
       return status
+    end
+
+    # This route is for logging purpose to allow record of progress increment in all 3 OKR Modules
+    def self.increment_okr_progress(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
+      # Personal Objective progress increment
+      personal_objective_increment = PersonalObjective.calculate_and_log_progress_increment(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
+      # Team Key Result progress increment
+      okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: personal_objective_id)
+      team_key_result_increment = TeamKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_objective_increment, okr_team_personal.team_key_result_id, user_id)
+      # Team Objective progress increment
+      team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
+      team_objective_increment = TeamObjective.calculate_and_log_progress_increment(personal_key_result, team_key_result_increment, team_key_result.team_objective_id, user_id)
+      # Company Key Result progress increment
+      okr_company_team = OkrCompanyTeam.find_by(team_objective_id: team_key_result.team_objective_id)
+      company_key_result_increment = CompanyKeyResult.calculate_and_log_progress_increment(personal_key_result, team_objective_increment, okr_company_team.company_key_result_id, user_id)
+      # Company Objective progress increment
+      company_key_result = CompanyKeyResult.find(okr_company_team.company_key_result_id)
+      CompanyObjective.calculate_and_log_progress_increment(personal_key_result, company_key_result_increment, company_key_result.company_objective_id, user_id)
     end
 
     def self.update_status_personal_key_result(key_result_id, objective_id, completed_flag, user_id)
@@ -136,10 +156,12 @@ class PersonalKeyResult < ApplicationRecord
           item_count = item_count + 1
         end   
       end
-      if item_count == 0
+      # If all the personal key result is being marked as completed
+      if item_count == 0 
+        total_progress = 100.00
         item_count = 1
       end
-      progress_contribution = calculate_progress_contribution(total_progress, item_count)
+      progress_contribution = OkrCalculation.calculate_progress_contribution(total_progress, item_count)
       PersonalObjective.update_progress_objective(
         key_result,
         objective_id, 
@@ -149,12 +171,6 @@ class PersonalKeyResult < ApplicationRecord
       status = 200
 
       return status
-    end
-
-    def self.calculate_progress_contribution(progress, count) 
-      progress_contribution = progress / count
-      progress_contribution = progress_contribution.round(2)
-      return progress_contribution
     end
 
 end

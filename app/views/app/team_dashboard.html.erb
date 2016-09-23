@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="active"><%= @okr_team.name %> TEAM OKRs</a>
+          <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="active"><%= @okr_team.name %> TEAM OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -17,7 +17,7 @@
 </div>
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
-<div class="container-fluid container-fixed-lg">
+<div class="container-fluid container-fixed-lg" id="team_page_container" data-id="<%= @team_id %>">
 
   <!-- BEGIN PlACE PAGE CONTENT HERE -->
   <h5 class="semi-bold"><%= @okr_team.name %> team OKRs</h5>
@@ -35,7 +35,7 @@
               <%= @okr_team.name %>
             </span>
             <span class="p-l-10">
-              <button id="team_setting" data-id="<%= @team_id %>" class="btn btn-default no-padding">
+              <button id="team_setting" class="btn btn-default no-padding">
                 <i class="fa fa-fw fa-gears fa-lg"></i>
               </button>
             </span>
@@ -158,7 +158,7 @@
                     <% @okr_company_team = OkrCompanyTeam.where(team_objective_id: item.id) %>
                     <% @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id) %>
                     <%= content_tag(:p, @company_key_result[0].key_result, class: "small details-layout" ) %>
-                    <div id="team_objective_<%= item.id %>">
+                    <div id="team_objective_<%= item.id %>" data-id="<%= @team_id %>">
                       <p class="bold details-layout">
                         <%= item.objective %>
                       </p>
@@ -208,7 +208,7 @@
                 <ul class="dropdown-menu">
                   <li>
                     <!--View detailed of the personal key result-->
-                    <a href="/team/<%= @team_id %>/team_objectives/details/<%= item.id %>">
+                    <a href="/team/<%= @team_id %>/team_objectives/<%= item.id %>/details">
                       <i class="pg-search"></i> 
                       <span> Go to details</span>
                     </a>
@@ -240,7 +240,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/team_objectives/<%= item.id %>">
+                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/team/<%= @team_id %>/team_objectives/<%= item.id %>">
                   Delete
                 </a>
                 <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -303,7 +303,7 @@
                     <ul class="dropdown-menu">
                       <li>
                         <!--View detailed of the personal key result-->
-                        <a href="/team/<%= @team_id %>/team_key_results/details/<%= item.id %>">
+                        <a href="/team/<%= @team_id %>/team_key_results/<%= item.id %>/details">
                           <i class="pg-search"></i> 
                            Go to details
                         </a>
@@ -319,7 +319,7 @@
            	      </div>
                 </div>
               </div>
-              <!-- Confirmation modal for personal key result deletion -->
+              <!-- Confirmation modal for team key result deletion -->
               <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
                 <div class="modal-dialog">
                 
@@ -336,7 +336,7 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/team_key_results/<%= item.id %>">
+                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/team/<%= @team_id %>/team_key_results/<%= item.id %>">
                         Delete
                       </a>
                       <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
@@ -430,7 +430,7 @@
           </div>
           <div class="row">
             <div class="pull-right">
-              <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="btn btn-default btn-cons btn-rounded m-t-10">
+              <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="btn btn-default btn-cons btn-rounded m-t-10">
                 Cancel
               </a>
               <button id="btn_new_team_objective" data-id="<%= @team_id %>" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
@@ -450,7 +450,7 @@
 <div class="overlay hide" id="teammate_list">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/team_objectives/team_dashboard/<%= @team_id %>" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">

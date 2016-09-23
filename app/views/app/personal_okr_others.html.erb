@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/personal_objectives/view_others_personal_okr/<%= @user.id %>" class="active"><%= @user.last_name %> PERSONAL OKRs</a>
+          <a href="/users/<%= @user.id %>/personal_objectives/view_others_personal_okr" class="active"><%= @user.last_name %> PERSONAL OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -192,8 +192,8 @@
                 </button>
                 <ul class="dropdown-menu">
                   <li>
-                    <!--View detailed of the personal key result-->
-                    <a href="/personal_objectives/details/<%= item.id %>">
+                    <!--View detailed of the personal objective-->
+                    <a href="/personal_objectives/<%= item.id %>/details">
                       <i class="pg-search"></i> 
                       <span> Go to details</span>
                     </a>
@@ -259,7 +259,7 @@
                     <ul class="dropdown-menu">
                       <li>
                         <!--View detailed of the personal key result-->
-                        <a href="/personal_key_results/details/<%= item.id %>">
+                        <a href="/personal_key_results/<%= item.id %>/details">
                           <i class="pg-search"></i> 
                            Go to details
                         </a>

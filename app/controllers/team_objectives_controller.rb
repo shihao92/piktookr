@@ -1,5 +1,5 @@
 class TeamObjectivesController < ApplicationController
-  before_action :set_team_objective, only: [:show, :edit, :update, :destroy]
+  before_action :set_team_objective, only: [:edit, :update, :destroy]
 
   # GET /team_objectives
   # GET /team_objectives.json
@@ -57,14 +57,16 @@ class TeamObjectivesController < ApplicationController
   # DELETE /team_objectives/1
   # DELETE /team_objectives/1.json
   def destroy
-    status = TeamObjective.delete_team_objective(@team_objective)
+    objective_id = params[:id]
+    team_id = params[:okr_team_id]
+    status = TeamObjective.delete_team_objective(objective_id)
     respond_to do |format|
       if status == 200
-        format.html { redirect_to '/team_objectives/team_dashboard/' + @team_objective.okr_team_id.to_s, 
+        format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
                       notice: 'Team objective was successfully destroyed.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to '/team_objectives/team_dashboard/' + @team_objective.okr_team_id.to_s, 
+        format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
                       notice: 'Failed to destroy team objective' }
         format.json { head :no_content }
       end
@@ -72,7 +74,7 @@ class TeamObjectivesController < ApplicationController
   end
 
   def team_dashboard
-    @team_id = params[:team_id]
+    @team_id = params[:okr_team_id]
     
     @okr_team = OkrTeam.find(@team_id)
     team_shortform = @okr_team.name.scan(/[A-Z]/) 
@@ -125,7 +127,7 @@ class TeamObjectivesController < ApplicationController
 
   def details
     @objective_id = params[:id]
-    @team_id = params[:team_id]
+    @team_id = params[:okr_team_id]
     @okr_team = OkrTeam.find(@team_id)
 
     @okr_company_team = OkrCompanyTeam.find_by(team_objective_id: @objective_id)
@@ -162,7 +164,7 @@ class TeamObjectivesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team_objective
-      @team_objective = TeamObjective.find(params[:id])
+      
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

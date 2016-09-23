@@ -60,15 +60,16 @@ class TeamKeyResultsController < ApplicationController
   # DELETE /team_key_results/1
   # DELETE /team_key_results/1.json
   def destroy
+    team_id = params[:okr_team_id]
     team_objective = TeamObjective.find(@team_key_result.team_objective_id)
     status = TeamKeyResult.delete_team_key_result(@team_key_result)
     respond_to do |format|
       if status == 200
-        format.html { redirect_to '/team_objectives/team_dashboard/' + team_objective.okr_team_id.to_s, 
+        format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
                       notice: 'Team key result was successfully destroyed.' }
         format.json { head :no_content }
       else
-        format.html { redirect_to '/team_objectives/team_dashboard/' + team_objective.okr_team_id.to_s, 
+        format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
                       notice: 'Failed to destroy team objective' }
         format.json { head :no_content }
       end
@@ -77,7 +78,7 @@ class TeamKeyResultsController < ApplicationController
 
   def details
     @key_result_id = params[:id]
-    @team_id = params[:team_id]
+    @team_id = params[:okr_team_id]
 
     @okr_team = OkrTeam.find(@team_id)
     @team_key_result = TeamKeyResult.find(@key_result_id)

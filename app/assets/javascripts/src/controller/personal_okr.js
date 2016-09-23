@@ -105,6 +105,7 @@ btnControl, textboxInput, checkboxControl) {
       let initial_progress = $('#popup_initial_progress').text();
       let key_result_id = $('#key_result_id').text();
       let contribution = $('#contribution_textarea').val();
+      key_result_id = parseInt(key_result_id);
 
       // AJAX call to update the personal key result progress
       let update_kr_progress_promise = new personalKeyResultModel.updatePersonalKeyResultProgress(

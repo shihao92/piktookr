@@ -44,13 +44,19 @@ class CompanyKeyResult < ApplicationRecord
       company_key_result = CompanyKeyResult.find(key_result_id)
       if CompanyKeyResult.where(id: key_result_id).update_all(progress: progress)
         if user_id != 0    
-          # Log generated for company key result progress update
-          LogCompanyKeyResult.log_update_progress_key_result(personal_key_result, key_result_id, progress, user_id)
           cascade_company_objective(personal_key_result, company_key_result.company_objective_id, user_id)
         else
           cascade_company_objective("", company_key_result.company_objective_id, user_id)
         end
       end
+    end
+
+    def self.calculate_and_log_progress_increment(personal_key_result, progress, company_key_result_id, user_id)
+      # Find out how many team objective is linked with this company key result
+      okr_company_teams = OkrCompanyTeam.where(company_key_result_id: company_key_result_id)
+      progress_increment = OkrCalculation.calculate_progress_contribution(progress, okr_company_teams.count)
+      log_content = LogCompanyKeyResult.log_update_progress_key_result(personal_key_result, company_key_result_id, progress_increment, user_id)
+      return progress_increment
     end
 
     def self.rename_company_key_result(original_key_result, edited_key_result, key_result_id, user_id)
@@ -87,7 +93,7 @@ class CompanyKeyResult < ApplicationRecord
         company_key_results.each do |item|
           total_progress = total_progress + item.progress
         end
-        progress_contribution = calculate_progress_contribution(total_progress, company_key_results.count)
+        progress_contribution = OkrCalculation.calculate_progress_contribution(total_progress, company_key_results.count)
       end
       CompanyObjective.update_progress_objective(
         personal_key_result,
@@ -95,12 +101,6 @@ class CompanyKeyResult < ApplicationRecord
         progress_contribution, 
         user_id
       )
-    end
-
-    def self.calculate_progress_contribution(progress, count) 
-      progress_contribution = progress / count
-      progress_contribution = progress_contribution.round(2)
-      return progress_contribution
     end
 
 end

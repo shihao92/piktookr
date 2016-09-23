@@ -46,13 +46,19 @@ class TeamKeyResult < ApplicationRecord
       team_key_result = TeamKeyResult.find(key_result_id)
       if TeamKeyResult.where(id: key_result_id).update_all(progress: progress)
         if user_id != 0
-          # Log generated for team key result progress update
-          LogTeamKeyResult.log_update_progress_key_result(personal_key_result, key_result_id, progress, user_id)
           cascade_team_objective(personal_key_result, team_key_result.team_objective_id, user_id)                
         else
           cascade_team_objective("", team_key_result.team_objective_id, user_id) 
         end
       end
+    end
+
+    def self.calculate_and_log_progress_increment(personal_key_result, progress, team_key_result_id, user_id)
+      # Find out how many personal objective is linked with this team key result
+      okr_team_personals = OkrTeamPersonal.where(team_key_result_id: team_key_result_id)
+      progress_increment = OkrCalculation.calculate_progress_contribution(progress, okr_team_personals.count)
+      log_content = LogTeamKeyResult.log_update_progress_key_result(personal_key_result, team_key_result_id, progress_increment, user_id)
+      return progress_increment
     end
 
     def self.rename_team_key_result(original_key_result, edited_key_result, key_result_id, user_id)
@@ -88,7 +94,7 @@ class TeamKeyResult < ApplicationRecord
         team_key_results.each do |item|
           total_progress = total_progress + item.progress
         end
-        progress_contribution = calculate_progress_contribution(total_progress, team_key_results.count)
+        progress_contribution = OkrCalculation.calculate_progress_contribution(total_progress, team_key_results.count)
       end         
       TeamObjective.update_progress_objective(
         personal_key_result,
@@ -96,12 +102,6 @@ class TeamKeyResult < ApplicationRecord
         progress_contribution, 
         user_id
       )
-    end
-
-    def self.calculate_progress_contribution(progress, count) 
-      progress_contribution = progress / count
-      progress_contribution = progress_contribution.round(2)
-      return progress_contribution
     end
 
 end

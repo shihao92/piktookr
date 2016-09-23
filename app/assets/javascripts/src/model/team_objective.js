@@ -17,7 +17,7 @@ define (['model/server_url'], function (urlParam) {
         };
         xhttp.open(
             "POST", 
-            urlParam.server_url() + "/team_objectives", 
+            urlParam.server_url() + "/team/" + team_id + "/team_objectives", 
             true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -29,7 +29,7 @@ define (['model/server_url'], function (urlParam) {
       });
     }
 
-    function editTeamObjective(objective_id, edited_objective, original_objective)
+    function editTeamObjective(objective_id, edited_objective, original_objective, team_id)
     {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
@@ -44,7 +44,7 @@ define (['model/server_url'], function (urlParam) {
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
             "POST", 
-            urlParam.server_url() + "/team_objectives/edit_objective", 
+            urlParam.server_url() + "/team/" + team_id + "/team_objectives/" + objective_id + "/edit_objective", 
             true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');

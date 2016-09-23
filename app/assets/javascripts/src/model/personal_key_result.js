@@ -43,7 +43,7 @@ define (['model/server_url'], function (urlParam) {
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
           "POST", 
-          urlParam.server_url() + "/personal_key_results/update_progress_key_result", 
+          urlParam.server_url() + "/personal_key_results/" + key_result_id + "/update_progress_key_result", 
           true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
@@ -70,11 +70,15 @@ define (['model/server_url'], function (urlParam) {
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
-          "GET", 
-          urlParam.server_url() + "/personal_key_results/" + key_result_id + "/update_key_result_status/" + is_completed, 
+          "POST", 
+          urlParam.server_url() + "/personal_key_results/" + key_result_id + "/update_key_result_status", 
           true
         );
-        xhttp.send();
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify({
+          id           : key_result_id,
+          completed    : is_completed
+        }));
       });
     }
 
@@ -93,7 +97,7 @@ define (['model/server_url'], function (urlParam) {
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
           "POST", 
-          urlParam.server_url() + "/personal_key_results/edit_key_result", 
+          urlParam.server_url() + "/personal_key_results/" + key_result_id + "/edit_key_result", 
           true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');

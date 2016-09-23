@@ -51,15 +51,19 @@ class PersonalObjective < ApplicationRecord
       okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
       if PersonalObjective.where(id: objective_id).update_all(progress: progress)
         if user_id != 0            
-          # Log generated for personal objective update
-          LogPersonalObjective.log_update_progress_objective(
-              personal_key_result, progress, objective_id, user_id
-          )
           cascade_team_key_result(personal_key_result, okr_team_personal.team_key_result_id, user_id)
         else
           cascade_team_key_result("", okr_team_personal.team_key_result_id, user_id)
         end
       end
+    end
+
+    def self.calculate_and_log_progress_increment(personal_key_result, progress, objective_id, user_id)
+      # Find out how many personal key result is linked with this personal objective
+      personal_objectives = PersonalKeyResult.where(personal_objective_id: objective_id)
+      progress_increment = OkrCalculation.calculate_progress_contribution(progress, personal_objectives.count)
+      log_content = LogPersonalObjective.log_update_progress_objective(personal_key_result, progress_increment, objective_id, user_id)
+      return progress_increment
     end
 
     def self.rename_personal_objective(original_objective, edited_objective, objective_id, user_id)
@@ -104,7 +108,7 @@ class PersonalObjective < ApplicationRecord
           personal_objective = PersonalObjective.find(item.personal_objective_id)
           total_progress = total_progress + personal_objective.progress
         end
-        progress_contribution = calculate_progress_contribution(total_progress, personal_objectives.count)
+        progress_contribution = OkrCalculation.calculate_progress_contribution(total_progress, personal_objectives.count)
       end
       TeamKeyResult.update_progress_key_result(
         personal_key_result, 
@@ -112,12 +116,6 @@ class PersonalObjective < ApplicationRecord
         progress_contribution, 
         user_id
       )
-    end
-
-    def self.calculate_progress_contribution(progress, count) 
-      progress_contribution = progress / count
-      progress_contribution = progress_contribution.round(2)
-      return progress_contribution
     end
 
 end

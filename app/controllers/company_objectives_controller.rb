@@ -1,18 +1,6 @@
 class CompanyObjectivesController < ApplicationController
-  before_action :set_company_objective, only: [:show, :edit, :update, :destroy]
-  skip_before_action :set_company_objective, only: [:company_dashboard]
   
-  # GET /company_objectives
-  # GET /company_objectives.json
-  def index
-    @company_objectives = CompanyObjective.all
-  end
-
-  # GET /company_objectives/1
-  # GET /company_objectives/1.json
-  def show
-  end
-
+  
   # GET /company_objectives/new
   def new
     @company_objective = CompanyObjective.new
@@ -53,7 +41,8 @@ class CompanyObjectivesController < ApplicationController
   # DELETE /company_objectives/1
   # DELETE /company_objectives/1.json
   def destroy
-    status = CompanyObjective.delete_company_objective(@company_objective)
+    company_objective_id = params[:id]
+    status = CompanyObjective.delete_company_objective(company_objective_id)
     begin
       if status == 200
         respond_to do |format|
@@ -132,10 +121,6 @@ class CompanyObjectivesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_company_objective
-      @company_objective = CompanyObjective.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def company_objective_params
