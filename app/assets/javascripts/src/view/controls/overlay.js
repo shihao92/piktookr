@@ -84,6 +84,14 @@ function(intConverter, sliderParam, select2LibraryParam){
     function displayUserCreationSuccessfulOverlay(){
       $('#overlay_user_created_notification').attr('class','overlay');
     }
+
+    function displayUserDeletionConfirmationOverlay(){
+      $('#overlay_user_deletion').attr('class', 'overlay');
+    }
+
+    function displayUserEditOverlay(){
+      $('#overlay_user_edit').attr('class', 'overlay');
+    }
     
     return {
         loadOverlay,
@@ -91,7 +99,9 @@ function(intConverter, sliderParam, select2LibraryParam){
         clickProgressUpdateOverlay,
         loadNewPersonalObjectiveOverlayContent,
         loadNewUserOverlayContent,
-        displayUserCreationSuccessfulOverlay
+        displayUserCreationSuccessfulOverlay,
+        displayUserDeletionConfirmationOverlay,
+        displayUserEditOverlay
     }
 
 })

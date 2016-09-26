@@ -2,6 +2,8 @@ class UsersController < ApplicationController
 
   CONST_USER_STATUS = ["ACTIVE", "INACTIVE"]
 
+  @@editing_user_id = 1
+
   # GET /users
   # GET /users.json
   def index
@@ -11,7 +13,8 @@ class UsersController < ApplicationController
     @admins = OkrUserRole.where(okr_role_id: 0)
 
     @user_status_selection = CONST_USER_STATUS
-
+    @current_edit_user = User.find(@@editing_user_id)
+    
     @user = User.new
 
     render 'app/system_users'
@@ -30,6 +33,11 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
+    @@editing_user_id = params[:id]
+
+    respond_to do |format|      
+      format.html { redirect_to '/users/:edit_user=true', notice: 'User was successfully created.' }
+    end 
   end
 
   # POST /users
@@ -64,15 +72,14 @@ class UsersController < ApplicationController
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
+    current_user_id = params[:id]
+    current_edit_user = User.find(current_user_id)
     respond_to do |format|
-      if @user.update(user_params)
-        @user.build_okr_user_role( okr_role_id: params[:role][:role_id] ).save
-        OkrUserTeam.create!( user_id: @user.id, okr_team_id: params[:team][:team_id] )
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
+      if current_edit_user.update(user_params)
+        OkrUserRole.where(user_id: current_user_id).update_all(okr_role_id: params[:role][:role_id])
+        format.html { redirect_to '/users', notice: 'User was successfully updated.' }
       else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { redirect_to '/users' }
       end
     end
   end

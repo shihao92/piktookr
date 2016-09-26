@@ -91,14 +91,14 @@
               <td><%= user.updated_at %></td>
               <td>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_edit_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-pencil"></i> Edit
-                </a>
+                  <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Edit
+                  </a>
                 </span>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_delete_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-trash-o"></i> Delete
-                </a>
+                  <a name="link_delete_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                  </a>
                 </span>
               </td>
             </tr>
@@ -139,7 +139,7 @@
             <tr>
               <td class="v-align-middle">
                 <span class="thumbnail-wrapper d32 circular inline">
-                <%= image_tag user.avatar.url %>
+                  <%= image_tag user.avatar.url %>
                 </span>
               </td>
               <td class="bold"><%= user.first_name %></td>
@@ -151,14 +151,14 @@
               <td><%= user.updated_at %></td>
               <td>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_edit_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-pencil"></i> Edit
-                </a>
+                  <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Edit
+                  </a>
                 </span>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_delete_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-trash-o"></i> Delete
-                </a>
+                  <a name="link_delete_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                  </a>
                 </span>
               </td>
             </tr>
@@ -211,14 +211,14 @@
               <td><%= user.updated_at %></td>
               <td>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_edit_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-pencil"></i> Edit
-                </a>
+                  <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Edit
+                  </a>
                 </span>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_delete_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-trash-o"></i> Delete
-                </a>
+                  <a name="link_delete_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                  </a>
                 </span>
               </td>
             </tr>
@@ -271,14 +271,14 @@
               <td><%= user.updated_at %></td>
               <td>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_edit_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-pencil"></i> Edit
-                </a>
+                  <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Edit
+                  </a>
                 </span>
                 <span class="col-md-6 col-sm-6">
-                <a name="link_delete_user" data-id="<%= user.id %>">
-                  <i class="fa fa-fw fa-trash-o"></i> Delete
-                </a>
+                  <a name="link_delete_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                  </a>
                 </span>
               </td>
             </tr>
@@ -416,6 +416,123 @@
         </div>       
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--User deletion overlay-->
+<div class="overlay hide" id="overlay_user_deletion">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/users" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 centralize">
+        <div class="text-center">
+          <img src="/user_deletion.png" style="height: 256px; width: 156px;"/>
+          <br/>
+          <br/>
+          <h5 class="m-b-5">
+            Are you sure you would like to 
+            <span class="bold result-name">
+            	remove this user?
+            </span>
+          </h5>
+          <br/>
+          <div class="row m-t-10">
+            <span class="thumbnail-wrapper d48 circular inline" style="float:none;">
+              <img id="img_targeted_user" src="/system/users/avatars/000/000/005/original/airbnb.png" />
+            </span>
+            <label class="p-r-10 p-l-20 p-b-10 m-b-20 fs-16 font-heading" style="vertical-align: middle;">
+              <span class="bold">Jen Yen</span> 
+            </label>
+          </div>
+          <br/>
+          <br/>
+          <div class="row">
+            <a href="/users" class="btn btn-default btn-rounded btn-cons">
+              Cancel
+            </a>
+            <button id="btn_confirm_delete_user" class="btn btn-danger btn-rounded btn-cons">
+              Delete
+            </button>
+          </div>
+        </div>       
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--User edit overlay-->
+<div class="overlay hide" id="overlay_user_edit" >
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/users" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+      </div>
+      <div class="col-sm-6 col-md-6 col-lg-6">
+        <%= form_for @current_edit_user do |f| %>
+          <div class="form-group form-group-default required">
+            <%= f.label :email %>
+            <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "example@gmail.com", required: true %>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-6">
+              <div class="form-group form-group-default required">
+                <%= f.label :last_name %>
+                <%= f.text_field :last_name, autofocus: true, class: "form-control", placeholder: "Smith", required: true %>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-6">
+              <div class="form-group form-group-default required">
+                <%= f.label :first_name %>
+                <%= f.text_field :first_name, autofocus: true, class: "form-control", placeholder: "John", required: true %>
+              </div>
+            </div>
+          </div>
+          <div class="form-group form-group-default required">
+            <%= f.label :position %>
+            <%= f.text_field :position, autofocus: true, class: "form-control", placeholder: "UI/UX Designer", required: true %>
+          </div>
+          <div class="row">
+            <div class="form-group form-group-default required">
+              <%= f.label :password %>
+              <% if @minimum_password_length %>
+                <em>(<%= @minimum_password_length %> characters minimum)</em>
+              <% end %>
+              <%= f.password_field :password, autocomplete: "off", class: "form-control", required: true %>
+            </div>
+          </div>
+          <div class="form-group">
+            <%= f.label :status %><br />
+            <%= select("status", "status_const", @user_status_selection, {include_blank: false}, class: "form-control") %>
+          </div>
+          <div class="form-group">
+            <%= f.label :avatar %><br />
+            <%= f.file_field :avatar, class: "form-control" %>
+          </div>
+          <% roles_array = OkrRole.all.map { |role| [role.name, role.id] } %>
+          <div class="form-group">
+            <%= f.label :role %><br />
+            <%= select("role", "role_id", roles_array, {include_blank: false}, class: "form-control") %>
+          </div>
+          <br/>
+          <div class="form-group">
+            <div class="text-right">
+              <a href="/users" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <%= f.submit "Submit", class: "btn btn-complete btn-rounded btn-cons" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
       </div>
     </div>
   </div>
