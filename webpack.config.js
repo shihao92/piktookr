@@ -6,6 +6,7 @@ module.exports = {
     entry: {
       vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap.min'],
       login: 'controller/login.js',
+      user: 'controller/user.js',
       personal_okr: 'controller/personal_okr.js',
       team_okr: 'controller/team_okr.js',
       company_okr: 'controller/company_okr.js',

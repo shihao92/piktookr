@@ -1,10 +1,20 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+
+  CONST_USER_STATUS = ["ACTIVE", "INACTIVE"]
 
   # GET /users
   # GET /users.json
   def index
     @users = User.all
+    @employees = OkrUserRole.where(okr_role_id: 2)
+    @team_leads = OkrUserRole.where(okr_role_id: 1)
+    @admins = OkrUserRole.where(okr_role_id: 0)
+
+    @user_status_selection = CONST_USER_STATUS
+
+    @user = User.new
+
+    render 'app/system_users'
   end
 
   # GET /users/1
@@ -25,16 +35,14 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create_member
-    @user = User.new(user_params)
+    @user = User.new(user_params.merge(status: params[:status][:status_const]))
 
     respond_to do |format|
-      if @user.save
-        @user.build_okr_user_role( okr_role_id: params[:role][:role_id] ).save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
+      if @user.save      
+        OkrUserRole.create!(user_id: @user.id, okr_role_id: params[:role][:role_id])
+        format.html { redirect_to '/users/:user_created=true', notice: 'User was successfully created.' }
       else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
+        format.html { redirect_to '/users/:user_created=false', notice: 'Error!' }
       end
     end
   end
@@ -44,7 +52,6 @@ class UsersController < ApplicationController
   def edit_team
     respond_to do |format|
       if @user.update(user_params)
-        @user.build_okr_user_team( okr_team_id: params[:team][:team_id] ).save
         format.html { redirect_to @user, notice: 'User was successfully added into the team.' }
         format.json { render :show, status: :ok, location: @user }
       else
@@ -73,22 +80,30 @@ class UsersController < ApplicationController
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    @user.okr_user_role.try(:destroy)
-    @user.destroy
+    user_id = params[:id]
+    status = User.remove_user(user_id)
     respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
+      if status == 200
+        format.json { render json: 'User is removed successfully!', status: :ok } 
+      else
+        format.json { render json: 'Fail to remove user!', status: :unprocessable_entity }
+      end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_user
-      @user = User.find(params[:id])
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :last_name, :first_name, :status, :avatar, :position, :team)
+      params.require(:user).permit(
+        :email, 
+        :password,  
+        :last_name, 
+        :first_name, 
+        :status, 
+        :avatar, 
+        :position, 
+        :team
+      )
     end
 end

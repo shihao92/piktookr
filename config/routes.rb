@@ -4,8 +4,9 @@ Rails.application.routes.draw do
   # User login and registration module
   # ----------------------------------
   devise_for :users, :controllers => {:registrations => "registrations"}
-  resources :users, except: :create do
+  resources :users, except: [:create, :show] do
     collection do
+      get ':user_created' => 'users#index' 
       post :create_member
       post :edit_team
     end

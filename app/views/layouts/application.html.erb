@@ -113,7 +113,7 @@
                 <% @user_short_str = "" %>
                 <% counter = 0 %>
                 <% @user_shortform.each do |item| %>
-                  <% if counter < 1 %>
+                  <% if counter < 2 %>
                   <% @user_short_str = @user_short_str + item %>
                   <% counter = counter + 1 %>
                   <% end %>
@@ -150,7 +150,7 @@
               <li>
                 <a href="/users/<%= item.id %>/personal_objectives/view_others_personal_okr" class="detailed">
                   <span class="title" id="user-name">
-                    <%= item.last_name %>
+                    <%= item.last_name %> <%= item.first_name %>
                   </span>
                   <p class="details details-layout" id="user-position">
                     <%= item.position %>
@@ -444,6 +444,7 @@
     <script src="/dist/personal_okr-webpack.js"></script>
     <script src="/dist/team_okr-webpack.js"></script>
     <script src="/dist/company_okr-webpack.js"></script>
+    <script src="/dist/user-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

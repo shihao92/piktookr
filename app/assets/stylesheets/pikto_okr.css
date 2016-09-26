@@ -100,6 +100,10 @@
 .icon-light-grey {
   color: #b3b3b3; }
 
+.icon-large {
+  width: 128px;
+  height: 128px; }
+
 .header .search-link .custom-search {
   border: 0;
   width: 200px;

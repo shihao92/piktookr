@@ -30,7 +30,15 @@ function(intConverter, sliderParam, select2LibraryParam){
             closeButton: '.overlay-close',
             suggestions: '#overlay-suggestions',
             brand: '.brand'
-        });       
+        });  
+
+        $('#create_new_user').search({
+            // Bind elements that are included inside search overlay
+            searchField: '#overlay-search',
+            closeButton: '.overlay-close',
+            suggestions: '#overlay-suggestions',
+            brand: '.brand'
+        });     
     }
 
     function setOverlayKeyResult(key_result,key_result_id)
@@ -66,12 +74,24 @@ function(intConverter, sliderParam, select2LibraryParam){
       $('#new_objective_popup').attr('class','overlay');
       $('#team_key_result_selection').select2();
     }
+
+    function loadNewUserOverlayContent(){
+      $('#overlay_create_new_user').attr('class','overlay');
+      $('#status_status_const').select2();
+      $('#role_role_id').select2();
+    }
+
+    function displayUserCreationSuccessfulOverlay(){
+      $('#overlay_user_created_notification').attr('class','overlay');
+    }
     
     return {
         loadOverlay,
         setOverlayKeyResult,
         clickProgressUpdateOverlay,
-        loadNewPersonalObjectiveOverlayContent
+        loadNewPersonalObjectiveOverlayContent,
+        loadNewUserOverlayContent,
+        displayUserCreationSuccessfulOverlay
     }
 
 })

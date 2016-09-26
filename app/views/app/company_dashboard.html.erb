@@ -30,7 +30,14 @@
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7" >
         <div class="row">
-          <%= content_tag(:div, content_tag(:h5, "Piktochart", class: "bold")) %>
+          <h5 class="bold">
+            <span>Piktochart</span>
+            <span class="p-l-10">
+              <a href="/users" class="btn btn-default no-padding">
+                <i class="fa fa-fw fa-users fa-lg"></i>
+              </a>
+            </span>
+          </h5>
         </div>
         <div class="row">
           <div class="form-group">
@@ -367,7 +374,7 @@
 <div class="overlay hide" id="new_objective_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/company_objectives/company_dashboard" class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
     </div>

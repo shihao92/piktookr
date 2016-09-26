@@ -520,9 +520,16 @@
                   </div>  
                   <hr/>       
                 <% end %>
-                <select id="user_invitation_selection" class="full-width">
-                  
+                <select id="user_invitation_selection" style="width: 100%;">
+                  <% @users_not_in_team.each do |item| %>
+                    <% user_info = User.find(item) %>
+                    <option value="<%= user_info.id %>"><%= user_info.last_name %></option>
+                  <% end %>
                 </select>
+                <hr/>
+                <button id="btn_invite_new_member" class="btn btn-default pull-right">
+                  Invite New Member
+                </button>
               </div>
             </div>
           </div>

@@ -1,5 +1,4 @@
 class TeamObjectivesController < ApplicationController
-  before_action :set_team_objective, only: [:edit, :update, :destroy]
 
   # GET /team_objectives
   # GET /team_objectives.json
@@ -93,9 +92,8 @@ class TeamObjectivesController < ApplicationController
       end
     end 
 
-    # Find out the users list
-    @filtered_user_list = {}
-    @users = User.all
+    # Find out the users list which are not in the team
+    @users_not_in_team = User.return_users_lists_not_in_team(@team_id)    
 
     @team_objective = TeamObjective.where(okr_team_id: @team_id)
     @completed_objective = 0 
@@ -162,10 +160,6 @@ class TeamObjectivesController < ApplicationController
   end 
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_team_objective
-      
-    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def team_objective_params

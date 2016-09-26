@@ -44,9 +44,8 @@ class AppController < ApplicationController
           # To check which is the latest updated date 
           temp_date << item.updated_at 
         end 
-        @total_progress = @total_progress / personal_objective_count
-        date_max = temp_date.max 
-        @date_difference = (Time.now - date_max) / 86400 
+        @total_progress = @total_progress / personal_objective_count 
+        @date_difference = (Time.now - @user.updated_at) / 86400 
       end 
       
       team_ids.each do |item|

@@ -1,6 +1,5 @@
 class CompanyObjectivesController < ApplicationController
   
-  
   # GET /company_objectives/new
   def new
     @company_objective = CompanyObjective.new
