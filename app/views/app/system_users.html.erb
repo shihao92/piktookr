@@ -76,14 +76,14 @@
           </thead>
           <tbody>
             <% @users.each do |user| %>
-            <tr>
+            <tr name="user_listing_<%= user.id %>">
               <td class="v-align-middle">
                 <span class="thumbnail-wrapper d32 circular inline">
                 <%= image_tag user.avatar.url %>
                 </span>
               </td>
-              <td class="bold"><%= user.first_name %></td>
-              <td class="bold">
+              <td name="first_name" class="bold"><%= user.first_name %></td>
+              <td name="last_name" class="bold">
                 <%= user.last_name %>  
               </td>
               <td><%= user.okr_role.try(:name) %></td>
@@ -136,14 +136,14 @@
           <tbody>
             <% @employees.each do |employee| %>
             <% user = User.find(employee.user_id) %>
-            <tr>
+            <tr name="user_listing_<%= user.id %>">
               <td class="v-align-middle">
                 <span class="thumbnail-wrapper d32 circular inline">
                   <%= image_tag user.avatar.url %>
                 </span>
               </td>
-              <td class="bold"><%= user.first_name %></td>
-              <td class="bold">
+              <td name="first_name" class="bold"><%= user.first_name %></td>
+              <td name="last_name" class="bold">
                 <%= user.last_name %>  
               </td>
               <td><%= user.okr_role.try(:name) %></td>
@@ -196,14 +196,14 @@
           <tbody>
             <% @team_leads.each do |team_lead| %>
             <% user = User.find(team_lead.user_id) %>
-            <tr>
+            <tr name="user_listing_<%= user.id %>">
               <td class="v-align-middle">
                 <span class="thumbnail-wrapper d32 circular inline">
                 <%= image_tag user.avatar.url %>
                 </span>
               </td>
-              <td class="bold"><%= user.first_name %></td>
-              <td class="bold">
+              <td name="first_name" class="bold"><%= user.first_name %></td>
+              <td name="last_name" class="bold">
                 <%= user.last_name %>  
               </td>
               <td><%= user.okr_role.try(:name) %></td>
@@ -256,14 +256,14 @@
           <tbody>
             <% @admins.each do |admin| %>
             <% user = User.find(admin.user_id) %>
-            <tr>
+            <tr name="user_listing_<%= user.id %>">
               <td class="v-align-middle">
                 <span class="thumbnail-wrapper d32 circular inline">
                 <%= image_tag user.avatar.url %>
                 </span>
               </td>
-              <td class="bold"><%= user.first_name %></td>
-              <td class="bold">
+              <td name="first_name" class="bold"><%= user.first_name %></td>
+              <td name="last_name" class="bold">
                 <%= user.last_name %>  
               </td>
               <td><%= user.okr_role.try(:name) %></td>
@@ -443,11 +443,11 @@
           </h5>
           <br/>
           <div class="row m-t-10">
-            <span class="thumbnail-wrapper d48 circular inline" style="float:none;">
+            <span id="img_deleting_user" class="thumbnail-wrapper d48 circular inline" style="float:none;">
               <img id="img_targeted_user" src="/system/users/avatars/000/000/005/original/airbnb.png" />
             </span>
             <label class="p-r-10 p-l-20 p-b-10 m-b-20 fs-16 font-heading" style="vertical-align: middle;">
-              <span class="bold">Jen Yen</span> 
+              <span id="name_deleting_user" class="bold">Jen Yen</span> 
             </label>
           </div>
           <br/>
@@ -478,7 +478,13 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
       </div>
       <div class="col-sm-6 col-md-6 col-lg-6">
+        <br/>
         <%= form_for @current_edit_user do |f| %>
+          <div class="text-center">
+            <%= image_tag @current_edit_user.avatar.url %>
+          </div>
+          <br/>
+          <br/>
           <div class="form-group form-group-default required">
             <%= f.label :email %>
             <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "example@gmail.com", required: true %>

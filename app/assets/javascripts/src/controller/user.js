@@ -12,6 +12,8 @@ function(userModel, overlay, btnControl, customModal){
     const overlay_create_new_user = '#overlay_create_new_user';
     const link_delete_user = "a[name=link_delete_user]";
     const link_edit_user = "a[name=link_edit_user]";
+    const html_user_deletion_img = "#img_deleting_user";
+    const name_user_deletion = "#name_deleting_user";
 
     function loadContentNewUserOverlay(event){
       overlay.loadNewUserOverlayContent();
@@ -32,8 +34,15 @@ function(userModel, overlay, btnControl, customModal){
     function deleteUserLinkClick(event){
       let target_user_id = $(event.target).attr('data-id');
       target_user_id = parseInt(target_user_id);
+      let img_url = $(event.target).parents('tr[name=user_listing_' + target_user_id + ']').find('.thumbnail-wrapper').html();
+      let first_name = $(event.target).parents('tr[name=user_listing_' + target_user_id + ']').find('td[name=first_name]').text();
+      let last_name = $(event.target).parents('tr[name=user_listing_' + target_user_id + ']').find('td[name=last_name]').text();
+
       $(button_confirm_delete_user).attr('data-id', target_user_id);
       
+      // Load the content of the overlay
+      $(html_user_deletion_img).html(img_url);
+      $(name_user_deletion).text(first_name + ' ' + last_name);
       overlay.displayUserDeletionConfirmationOverlay();
     }
 
@@ -67,8 +76,7 @@ function(userModel, overlay, btnControl, customModal){
       btnControl.resolveButtonClick(link_delete_user, deleteUserLinkClick);
       btnControl.resolveButtonClick(button_confirm_delete_user, deleteUser);
 
-      checkUserEditStatus();
-      
+      checkUserEditStatus();     
 
     });
 
