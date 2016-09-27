@@ -12,6 +12,8 @@ Rails.application.routes.draw do
     end
 
     member do
+      patch :user_update
+      put   :user_update
       resources :personal_objectives, only: [:view_others_personal_okr] do
         collection do
           # Route to view other person personal OKR
@@ -30,6 +32,14 @@ Rails.application.routes.draw do
   # OKR Team Module
   # ---------------
   resources :okr_teams, path: 'team' do
+
+    collection do
+      post  :remove_user_from_team
+    end
+
+    member do
+      post  :get_team_info   
+    end
 
     # ---------------
     # Team OKR Module

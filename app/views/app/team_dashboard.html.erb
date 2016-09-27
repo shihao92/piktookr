@@ -50,7 +50,7 @@
             <label>TEAM MEMBERS</label>
             <br />
             <% @team_users.each do |item| %>
-            <span class="thumbnail-wrapper d32 circular inline m-t-5">
+            <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5">
               <%= image_tag item.avatar.url %>
             </span>
             <% end %>
@@ -512,7 +512,8 @@
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
                       <div class="pull-right">
-                        <button data-id="<%= item.id %>" id="btn_remove_team_user" class="btn btn-accordion no-padding">
+                        <% okr_user_team = OkrUserTeam.find_by(user_id: item.id, okr_team_id: @team_id) %>
+                        <button data-id="<%= okr_user_team.id %>" name="btn_remove_team_user" class="btn btn-accordion no-padding">
                           <i class="pg-close"></i>
                         </button>
                       </div>
@@ -523,11 +524,13 @@
                 <select id="user_invitation_selection" style="width: 100%;">
                   <% @users_not_in_team.each do |item| %>
                     <% user_info = User.find(item) %>
-                    <option value="<%= user_info.id %>"><%= user_info.last_name %></option>
+                    <option value="<%= user_info.id %>">
+                      <%= user_info.last_name %> <%= user_info.first_name %>
+                    </option>
                   <% end %>
                 </select>
                 <hr/>
-                <button id="btn_invite_new_member" class="btn btn-default pull-right">
+                <button id="btn_invite_new_member" class="btn btn-complete btn-rounded btn-cons pull-right">
                   Invite New Member
                 </button>
               </div>

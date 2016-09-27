@@ -69,17 +69,31 @@ class UsersController < ApplicationController
     end
   end
 
+  # Admin update only
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
     current_user_id = params[:id]
     current_edit_user = User.find(current_user_id)
     respond_to do |format|
-      if current_edit_user.update(user_params)
+      if current_edit_user.update(user_params)      
         OkrUserRole.where(user_id: current_user_id).update_all(okr_role_id: params[:role][:role_id])
         format.html { redirect_to '/users', notice: 'User was successfully updated.' }
       else
         format.html { redirect_to '/users' }
+      end
+    end
+  end
+
+  # User update
+  def user_update
+    current_user_id = params[:id]
+    current_edit_user = User.find(current_user_id)
+    respond_to do |format|
+      if current_edit_user.update(user_params)      
+        format.html { redirect_to '/', notice: 'User was successfully updated.' }
+      else
+        format.html { redirect_to '/' }
       end
     end
   end

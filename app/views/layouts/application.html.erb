@@ -7,6 +7,7 @@
 <% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
 
 <% @server_url = "http://localhost:3000" %>
+<% @session_user = User.find(current_user.id) %>
 
 <!DOCTYPE html>
 <html>
@@ -101,7 +102,7 @@
           <li>
             <a href="/" class="detailed">
               <span class="title" id="user-name">
-                <%= @user.last_name %>
+                <%= @user.last_name + " " + @user.first_name %>
               </span>
               <p class="details details-layout" id="user-position">
                 <%= @user.position %>
@@ -109,7 +110,7 @@
             </a>
             <span class="icon-thumbnail">
               <span id="username-shortform">
-                <% @user_shortform = @user.last_name.scan(/[A-Z]/) %>
+                <% @user_shortform = @user.first_name.scan(/[A-Z]/) %>
                 <% @user_short_str = "" %>
                 <% counter = 0 %>
                 <% @user_shortform.each do |item| %>
@@ -129,7 +130,7 @@
               <li>
                 <a href="/users/<%= item.id %>/personal_objectives/view_others_personal_okr" class="detailed">
                   <span class="title" id="user-name">
-                    <%= item.last_name %>
+                    <%= item.last_name %> <%= item.first_name %>
                   </span>
                   <p class="details details-layout" id="user-position">
                     <%= item.position %>
@@ -137,7 +138,7 @@
                 </a>
                 <span class="icon-thumbnail">
                   <span id="username-shortform">
-                    <% @user_shortform = item.last_name.scan(/[A-Z]/) %>
+                    <% @user_shortform = item.first_name.scan(/[A-Z]/) %>
                     <% @user_short_str = "" %>
                     <% @user_shortform.each do |item| %>
                       <% @user_short_str = @user_short_str + item %>   
@@ -158,7 +159,7 @@
                 </a>
                 <span class="icon-thumbnail">
                   <span id="username-shortform">
-                    <% @user_shortform = item.last_name.scan(/[A-Z]/) %>
+                    <% @user_shortform = item.first_name.scan(/[A-Z]/) %>
                     <% @user_short_str = "" %>
                     <% @user_shortform.each do |item| %>
                       <% @user_short_str = @user_short_str + item %>
@@ -233,7 +234,7 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <span class="semi-bold"><%= @user.last_name %></span> 
+              <span class="semi-bold"><%= @user.last_name + " " + @user.first_name %></span> 
             </div>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -243,7 +244,7 @@
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
                 <li>
-                  <a href="/">
+                  <a id="link_user_profile">
                     <i class="fa fa-user"></i> 
                     Profile
                   </a>
@@ -440,11 +441,142 @@
       </div>
     </div>
 
+    <!--Overlay for the user profile-->
+    <div id="overlay_user_profile" class="overlay hide">
+      <div class="overlay-content has-results m-t-20">
+        <div class="container-fluid">
+          <a href="/" class="close-icon-light overlay-close text-black fs-16">
+            <i class="pg-close"></i>
+          </a>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="row">
+              <h5 class="m-b-5">
+                <span class="bold result-name">
+                	User Profile
+                </span>
+              </h5>
+              <br/>
+            </div>
+            <div class="row">
+              <div class="panel">
+                <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" role="tablist" data-init-reponsive-tabs="collapse">
+                  <li class="active">
+                    <a href="#user_details_tab" data-toggle="tab" role="tab">User Details</a>
+                  </li>
+                  <li>
+                    <a href="#password_settings_tab" data-toggle="tab" role="tab">Password Settings</a>
+                  </li>
+                  <li>
+                    <a href="#okr_teams_tab" data-toggle="tab" role="tab">Teams</a>
+                  </li>
+                </ul>
+                <div class="tab-content">
+                  <div class="tab-pane active" id="user_details_tab">
+                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update" do |f| %>
+                      <div class="text-center">
+                        <%= image_tag @session_user.avatar.url %>
+                      </div>
+                      <br/>
+                      <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                          <div class="form-group form-group-default">
+                            <%= f.label :last_name %>
+                            <%= f.text_field :last_name, autofocus: true, class: "form-control", placeholder: "Smith", required: true %>
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                          <div class="form-group form-group-default">
+                            <%= f.label :first_name %>
+                            <%= f.text_field :first_name, autofocus: true, class: "form-control", placeholder: "John", required: true %>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group form-group-default">
+                        <%= f.label :email %>
+                        <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "example@gmail.com", required: true %>
+                      </div>
+                      <div class="form-group form-group-default required">
+                        <%= f.label :position %>
+                        <%= f.text_field :position, autofocus: true, class: "form-control", placeholder: "UI/UX Designer", required: true %>
+                      </div>
+                      <div class="form-group form-group-default">
+                        <%= f.label :change_avatar %><br />
+                        <%= f.file_field :avatar, class: "form-control" %>
+                      </div>
+                      <hr/>
+                      <div class="pull-right">
+                        <button id="btn_close_user_details_tab" class="btn btn-default btn-rounded btn-cons">Cancel</button>
+                        <%= f.submit "Save", class: "btn btn-complete btn-rounded btn-cons" %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="tab-pane" id="password_settings_tab">
+                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update" do |f| %>
+                      <div class="row">
+                        <div class="col-sm-6 col-md-6">
+                          <div class="form-group form-group-default required">
+                            <%= f.label :password %>
+                            <% if @minimum_password_length == 6 %>
+                              <em>(<%= @minimum_password_length %> characters minimum)</em>
+                            <% end %>
+                            <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                          <div class="form-group form-group-default required">
+                            <%= f.label :password_confirmation %>
+                            <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control" %>
+                          </div>
+                        </div>
+                      </div>
+                      <hr/>
+                      <div class="pull-right">
+                        <button id="btn_close_password_settings_tab" class="btn btn-default btn-rounded btn-cons">Cancel</button>
+                        <%= f.submit "Save", class: "btn btn-complete btn-rounded btn-cons" %>
+                      </div>
+                    <% end %>
+                  </div>
+                  <div class="tab-pane" id="okr_teams_tab">
+                    <% @current_user_teams = OkrUserTeam.where(user_id: current_user.id) %>
+                    <% @current_user_teams.each do |item| %>
+                      <% @team_info = OkrTeam.find(item.okr_team_id) %>
+                      <div class="row checkbox">
+                        <div class="col-lg-10 col-md-10 col-sm-10 checkbox-primary">
+                          <span class="thumbnail-wrapper d32 circular inline">
+                            <%= @team_info.name %>
+                          </span>
+                          <span class="bold m-l-20">
+                            <%= @team_info.name %>
+                          </span>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                          <div class="pull-right">
+                            <button data-id="<%= item.id %>" id="btn_remove_team" class="btn btn-accordion no-padding">
+                              <i class="pg-close"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="/dist/vendor-webpack.js"></script>   
     <script src="/dist/personal_okr-webpack.js"></script>
     <script src="/dist/team_okr-webpack.js"></script>
     <script src="/dist/company_okr-webpack.js"></script>
     <script src="/dist/user-webpack.js"></script>
+    <script src="/dist/team-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

@@ -15,6 +15,16 @@ function(userModel, overlay, btnControl, customModal){
     const html_user_deletion_img = "#img_deleting_user";
     const name_user_deletion = "#name_deleting_user";
 
+    // Controls at Layout Page
+    const link_user_profile = '#link_user_profile';
+
+    // Controls at Team Settings Page
+    const button_remove_team_user = 'button[name=btn_remove_team_user]';
+
+    // -------------------------
+    // User Details and Settings
+    // -------------------------
+
     function loadContentNewUserOverlay(event){
       overlay.loadNewUserOverlayContent();
     }
@@ -65,6 +75,22 @@ function(userModel, overlay, btnControl, customModal){
       }
     }
 
+    function displayUserDetailsOverlay(){
+      overlay.toggleUserDetailsOverlay(1);
+    }
+
+    // --------------------------------------
+    // User Related Team Details and Settings
+    // --------------------------------------
+
+    function removeUserFromTeam(event){
+      let okr_user_team_id = $(event.currentTarget).attr('data-id');
+      okr_user_team_id = parseInt(okr_user_team_id);
+      let remove_user_from_team_promise = new userModel.removeUserFromTeam(okr_user_team_id);
+      remove_user_from_team_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+    }
+
+
     $(document).ready(function(){
       
       // Display create new user overlay
@@ -76,7 +102,13 @@ function(userModel, overlay, btnControl, customModal){
       btnControl.resolveButtonClick(link_delete_user, deleteUserLinkClick);
       btnControl.resolveButtonClick(button_confirm_delete_user, deleteUser);
 
-      checkUserEditStatus();     
+      checkUserEditStatus();   
+
+      // User Profile Section
+      btnControl.resolveButtonClick(link_user_profile, displayUserDetailsOverlay); 
+
+      // User removal from team
+      btnControl.resolveButtonClick(button_remove_team_user, removeUserFromTeam);
 
     });
 

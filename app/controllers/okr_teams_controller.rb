@@ -5,6 +5,8 @@ class OkrTeamsController < ApplicationController
   # GET /okr_teams.json
   def index
     @okr_teams = OkrTeam.all
+
+    render 'app/system_teams'
   end
 
   # GET /okr_teams/1
@@ -25,15 +27,16 @@ class OkrTeamsController < ApplicationController
   # POST /okr_teams
   # POST /okr_teams.json
   def create
-    @okr_team = OkrTeam.new(okr_team_params)
+    team_name = params[:name]
+    description = params[:description]
+
+    @okr_team = OkrTeam.new(name: team_name, description: description)
 
     respond_to do |format|
       if @okr_team.save
-        format.html { redirect_to @okr_team, notice: 'Team was successfully created.' }
-        format.json { render :show, status: :created, location: @okr_team }
+        format.json { render json: 'Team is created successfully!', status: :ok }
       else
-        format.html { render :new }
-        format.json { render json: @okr_team.errors, status: :unprocessable_entity }
+        format.json { render json: 'Error!', status: :unprocessable_entity }
       end
     end
   end
@@ -41,13 +44,15 @@ class OkrTeamsController < ApplicationController
   # PATCH/PUT /okr_teams/1
   # PATCH/PUT /okr_teams/1.json
   def update
+    team_name = params[:name]
+    team_description = params[:description]
+    team_id = params[:id]
+
     respond_to do |format|
-      if @okr_team.update(okr_team_params)
-        format.html { redirect_to @okr_team, notice: 'Okr team was successfully updated.' }
-        format.json { render :show, status: :ok, location: @okr_team }
+      if OkrTeam.where(id: team_id).update_all(name: team_name, description: team_description)
+        format.json { render json: 'Team is updated successfully!', status: :ok }
       else
-        format.html { render :edit }
-        format.json { render json: @okr_team.errors, status: :unprocessable_entity }
+        format.json { render json: 'Error!', status: :unprocessable_entity }
       end
     end
   end
@@ -55,10 +60,39 @@ class OkrTeamsController < ApplicationController
   # DELETE /okr_teams/1
   # DELETE /okr_teams/1.json
   def destroy
-    @okr_team.destroy
+    team_id = params[:id]
+    status = OkrTeam.remove_team_from_system(team_id)
+
     respond_to do |format|
-      format.html { redirect_to okr_teams_url, notice: 'Okr team was successfully destroyed.' }
-      format.json { head :no_content }
+      if status == 200
+        format.json { render json: 'Team is removed successfully from the system!', status: :ok }
+      else
+        format.json { render json: 'Unable to remove team from system!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def remove_user_from_team
+    okr_user_team_id = params[:id]
+    status = OkrUserTeam.remove_user_from_team(okr_user_team_id)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'User is removed from team!', status: :ok }
+      else
+        format.json { render json: 'Unable to remove user from team!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def get_team_info
+    team_id = params[:id]
+    team_info = OkrTeam.find(team_id)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: team_info, status: :ok }
+      else
+        format.json { render json: 'Unable to get team information!', status: :unprocessable_entity }
+      end
     end
   end
 

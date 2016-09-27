@@ -38,7 +38,15 @@ function(intConverter, sliderParam, select2LibraryParam){
             closeButton: '.overlay-close',
             suggestions: '#overlay-suggestions',
             brand: '.brand'
-        });     
+        }); 
+        
+        $('#overlay_user_profile').search({
+            // Bind elements that are included inside search overlay
+            searchField: '#overlay-search',
+            closeButton: '.overlay-close',
+            suggestions: '#overlay-suggestions',
+            brand: '.brand'
+        }); 
     }
 
     function setOverlayKeyResult(key_result,key_result_id)
@@ -92,6 +100,24 @@ function(intConverter, sliderParam, select2LibraryParam){
     function displayUserEditOverlay(){
       $('#overlay_user_edit').attr('class', 'overlay');
     }
+
+    function toggleUserDetailsOverlay(input){
+      switch(input){
+        case 0: $('#overlay_user_profile').attr('class', 'overlay hide');
+                break;
+        case 1: $('#overlay_user_profile').attr('class', 'overlay');
+                break;
+      }
+    }
+
+    function toggleOverlay(control_info, input){
+      switch(input){
+        case 0: $(control_info).attr('class', 'overlay hide');
+                break;
+        case 1: $(control_info).attr('class', 'overlay');
+                break;
+      }
+    }
     
     return {
         loadOverlay,
@@ -101,7 +127,9 @@ function(intConverter, sliderParam, select2LibraryParam){
         loadNewUserOverlayContent,
         displayUserCreationSuccessfulOverlay,
         displayUserDeletionConfirmationOverlay,
-        displayUserEditOverlay
+        displayUserEditOverlay,
+        toggleUserDetailsOverlay,
+        toggleOverlay
     }
 
 })

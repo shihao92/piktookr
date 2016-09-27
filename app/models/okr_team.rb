@@ -19,4 +19,13 @@ class OkrTeam < ApplicationRecord
       return @team_users    
     end
 
+    def self.remove_team_from_system(team_id)
+      status = 0
+      if OkrTeam.find(team_id).destroy
+        status = 200
+      end
+
+      return status
+    end
+
 end

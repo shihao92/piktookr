@@ -1,0 +1,223 @@
+<!-- START JUMBOTRON -->
+<div class="jumbotron" data-pages="parallax">
+  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ul class="breadcrumb">
+        <li>
+          <p>HOME</p>
+        </li>
+        <li>
+          <a href="/team" class="active">SYSTEM TEAMS</a>
+        </li>
+      </ul>
+      <!-- END BREADCRUMB -->
+    </div>
+  </div>
+</div>
+<!-- END JUMBOTRON -->
+<!-- START CONTAINER FLUID -->
+<div class="container-fluid">
+  <div class="col-md-6 col-sm-6">
+    <h5 class="semi-bold">
+      System Teams
+    </h5>
+  </div>
+  <div class="col-md-6 col-sm-6">
+    <button id="btn_create_new_team_overlay" class="btn btn-complete btn-cons btn-rounded btn-lg bold pull-right">
+      Create New
+    </button>
+  </div>
+</div>
+<br/>
+<div class="container-fluid container-fixed-lg">
+  <div class="panel">
+    <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" role="tablist" data-init-reponsive-tabs="collapse">
+      <li class="active">
+        <a href="#all_teams_list_tab" data-toggle="tab" role="tab">All (<%= @okr_teams.count %>)</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="all_teams_list_tab">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width:1%" class="text-center">
+                <i class="fa fa-fw fa-image fa-lg"></i>
+              </th>
+              <th style="width:30%">
+                NAME
+              </th>
+              <th style="width:39%">
+                DESCRIPTION
+              </th>
+              <th style="width:30%">
+                ACTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @okr_teams.each do |team| %>
+            <tr name="team_listing_<%= team.id %>">
+              <td class="v-align-middle">
+                <span class="thumbnail-wrapper d32 circular inline">
+                  
+                </span>
+              </td>
+              <td name="team_name" class="bold">
+                <%= team.name %>  
+              </td>
+              <td name="team_description" class="bold">
+                <%= team.description %>  
+              </td>
+              <td>
+                <span class="col-md-6 col-sm-6">
+                  <a name="link_edit_team" data-id="<%= team.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Edit
+                  </a>
+                </span>
+                <span class="col-md-6 col-sm-6">
+                  <a name="link_delete_team" data-id="<%= team.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                  </a>
+                </span>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END CONTAINER FLUID -->
+
+<!--Create new team overlay-->
+<div class="overlay hide" id="overlay_create_new_team">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+    </div>
+    <div class="container-fluid">
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 centralize">
+        <div class="row">
+          <h5 class="m-b-5">
+            <span class="bold result-name">
+            	Create New Team
+            </span>
+          </h5>
+          <br/>
+        </div>
+        <div class="row">
+          <div class="form-group form-group-default required">
+            <label>Team Name</label>
+            <input id="new_team_name" type="text" placeholder="Unity" class="form-control" required/>
+          </div>
+          <div class="form-group form-group-default required">
+            <label>Team Description</label>
+            <input id="new_team_description" type="text" placeholder="This team is all about top management." class="form-control" required/>
+          </div>
+          <br/>
+          <div class="form-group">
+            <div class="text-right">
+              <a href="/team" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <button id="btn_create_new_team" class="btn btn-complete btn-rounded btn-cons">Submit</button>
+            </div>
+          </div>        
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Team deletion overlay-->
+<div class="overlay hide" id="overlay_team_deletion">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/team" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 centralize">
+        <div class="text-center">
+          <img src="/user_deletion.png" style="height: 256px; width: 156px;"/>
+          <br/>
+          <br/>
+          <h5 class="m-b-5">
+            Are you sure you would like to 
+            <span class="bold result-name">
+            	remove this team?
+            </span>
+          </h5>
+          <br/>
+          <div class="row m-t-10">
+            <label class="p-r-10 p-l-20 p-b-10 m-b-20 fs-16 font-heading" style="vertical-align: middle;">
+              <span id="name_deleting_team" class="bold"></span> 
+            </label>
+          </div>
+          <br/>
+          <br/>
+          <div class="row">
+            <a href="/team" class="btn btn-default btn-rounded btn-cons">
+              Cancel
+            </a>
+            <button id="btn_confirm_delete_team" class="btn btn-danger btn-rounded btn-cons">
+              Delete
+            </button>
+          </div>
+        </div>       
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Team edit overlay-->
+<div class="overlay hide" id="overlay_team_edit">
+  <div class="overlay-content has-results m-t-20">
+    <div class="container-fluid">
+      <a href="/team" class="close-icon-light overlay-close text-black fs-16">
+        <i class="pg-close"></i>
+      </a>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+      <div class="col-lg-6 col-md-6 col-sm-6 centralize">
+        <div class="row">
+          <h5 class="m-b-5">
+            <span class="bold result-name">
+            	Edit Team Information
+            </span>
+          </h5>
+          <br/>
+        </div>
+        <div class="row"> 
+          <div class="form-group form-group-default required">
+            <label>Team Name</label>
+            <input id="edit_team_name" type="text" class="form-control" required/>
+          </div>
+          <div class="form-group form-group-default required">
+            <label>Team Description</label>
+            <input id="edit_team_description" type="text" placeholder="This team is all about top management." class="form-control" required/>
+          </div>
+          <br/>
+          <div class="form-group">
+            <div class="text-right">
+              <a href="/team" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <button id="btn_edit_team" class="btn btn-complete btn-rounded btn-cons">Submit</button>
+            </div>
+          </div>        
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
