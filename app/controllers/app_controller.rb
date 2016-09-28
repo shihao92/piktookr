@@ -23,10 +23,11 @@ class AppController < ApplicationController
       team_ids = OkrUserTeam.where(user_id: current_user.id) 
       temp_team_objective = []
 
+      @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
       @remaining_quarter_days = calculate_remaining_quarter_days
       @user = User.find(current_user.id)
       @role = OkrRole.find(okr_user_role.okr_role_id) 
-      @personal_objective = PersonalObjective.where(user_id: current_user.id)
+      @personal_objective = PersonalObjective.where(user_id: current_user.id, timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
       @completed_objective = 0 
       @total_progress = 0
       @temp_team_key_result = []                  

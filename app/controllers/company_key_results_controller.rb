@@ -81,6 +81,7 @@ class CompanyKeyResultsController < ApplicationController
       @temp_team_objective.push(@team_objective)
     end
     
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
     @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
 

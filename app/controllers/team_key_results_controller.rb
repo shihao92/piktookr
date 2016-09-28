@@ -95,6 +95,7 @@ class TeamKeyResultsController < ApplicationController
       @temp_personal_objective.push(@personal_objective)
     end
 
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/team_key_result_details'

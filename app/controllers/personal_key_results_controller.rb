@@ -148,6 +148,7 @@ class PersonalKeyResultsController < ApplicationController
 
     @user_info = User.find(@personal_objective.user_id)
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     @log = LogPersonalKeyResult.where(personal_key_result_id: @key_result_id).order(id: :DESC)
 

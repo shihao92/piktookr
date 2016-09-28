@@ -79,6 +79,7 @@ class PersonalObjectivesController < ApplicationController
 
     @user_info = User.find(@personal_objective.user_id)
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     @log = LogPersonalObjective.where(personal_objective_id: objective_id).order(id: :DESC)
 
@@ -90,7 +91,8 @@ class PersonalObjectivesController < ApplicationController
     @user = User.find(user_id)     
     okr_user_role = OkrUserRole.find_by(user_id: user_id)
     @role = OkrRole.find(okr_user_role.okr_role_id)    
-    @personal_objective = PersonalObjective.where(user_id: user_id) 
+    current_timeframe_log_id = TimeframeLog.current_timeframe_log_id
+    @personal_objective = PersonalObjective.where(user_id: user_id, timeframe_log_id: @@system_timeframe_log_id) 
     @completed_objective = 0   
 
     if(@personal_objective.count != 0)  
@@ -109,7 +111,8 @@ class PersonalObjectivesController < ApplicationController
       date_max = temp_date.max 
       @date_difference = (Time.now - date_max) / 86400 
     end 
-    
+
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/personal_okr_others'

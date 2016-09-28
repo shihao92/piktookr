@@ -30,7 +30,11 @@ Rails.application.routes.draw do
   # ----------------
   # Timeframe module
   # ----------------
-  resources :timeframes 
+  resources :timeframes do
+    member do
+      get   :set_system_timeframe_log_id
+    end
+  end
   
   # ---------------
   # OKR Team Module

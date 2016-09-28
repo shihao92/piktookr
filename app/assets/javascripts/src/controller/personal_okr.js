@@ -4,11 +4,11 @@
 require(['pages/pages.blank', 
 'model/personal_key_result', 'model/personal_objective', 
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
-'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox'],
+'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh'],
 function(pagesBlank, 
 personalKeyResultModel, personalObjectiveModel, 
 customModal, overlay, slider, customSelect2, 
-btnControl, textboxInput, checkboxControl) {
+btnControl, textboxInput, checkboxControl, refreshPage) {
 
     const button_new_personal_objective = '#btn_new_personal_objective';
     const button_edit_personal_objective = '.edit_personal_objective';
@@ -41,7 +41,12 @@ btnControl, textboxInput, checkboxControl) {
       let team_key_result_id = $('#team_key_result_selection').val();
       team_key_result_id = parseInt(team_key_result_id);
       let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
-      create_personal_objective.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+    }
+
+    function createdPersonalObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function editPersonalObjective(){
@@ -94,7 +99,7 @@ btnControl, textboxInput, checkboxControl) {
             let create_personal_kr_promise = new personalKeyResultModel.newPersonalKeyResult(
               temp_personal_key_result, current_focus_objective_id
             );   
-            create_personal_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+            create_personal_kr_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
           }
         }
       }

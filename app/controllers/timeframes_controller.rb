@@ -63,6 +63,15 @@ class TimeframesController < ApplicationController
     end
   end
 
+  
+  def set_system_timeframe_log_id
+    timeframe_id = params[:id]
+    @@system_timeframe_log_id = timeframe_id
+    respond_to do |format|
+      format.json { render json: "Timeframe Log updated successfully!", status: :ok }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_timeframe

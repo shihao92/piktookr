@@ -320,15 +320,15 @@
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="fa fa-fw fa-calendar fa-lg"></span>
-                <span class="text-master">
-                  <%= @current_timeframe_log[0].quarter %>
+                <span id="" class="text-master">
+                  <%= @selected_timeframe.quarter%>
                 </span>
                 <span class="caret"></span> 
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
                 <% @timeframe_logs.each do |item| %>
                   <li>
-                    <a href="#">
+                    <a name="timeframe_log_selection" data-id="<%= item.id %>">
                       <%= item.quarter %>
                     </a>
                   </li>
@@ -635,6 +635,7 @@
     <script src="/dist/company_okr-webpack.js"></script>
     <script src="/dist/user-webpack.js"></script>
     <script src="/dist/team-webpack.js"></script>
+    <script src="/dist/timeframe-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

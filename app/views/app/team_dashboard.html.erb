@@ -251,7 +251,7 @@
         <div id="team_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="team_obj_<%= index %> ">
           <div class="panel-body no-padding">
             <!-- Find out the key result linked to the objective -->
-            <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id) %>
+            <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
             <% @team_key_result_count = @team_key_result.count %>
             <% @team_key_result_completed = 0 %>
             <% @team_key_result.each_with_index do |item,index| %>

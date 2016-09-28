@@ -95,7 +95,7 @@ class TeamObjectivesController < ApplicationController
     # Find out the users list which are not in the team
     @users_not_in_team = User.return_users_lists_not_in_team(@team_id, current_user.id)    
 
-    @team_objective = TeamObjective.where(okr_team_id: @team_id)
+    @team_objective = TeamObjective.where(okr_team_id: @team_id, timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
     @completed_objective = 0 
     if(@team_objective.count != 0) 
       @progress_portion = 100 / @team_objective.count 
@@ -119,6 +119,7 @@ class TeamObjectivesController < ApplicationController
     @company_key_results = CompanyKeyResult.all   
 
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/team_dashboard'
   end
@@ -139,6 +140,7 @@ class TeamObjectivesController < ApplicationController
     @current_date = Time.now.strftime("%Y-%m-%d") 
     @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id) 
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/team_objective_details'
   end

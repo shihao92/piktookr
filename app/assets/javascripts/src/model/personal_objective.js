@@ -41,7 +41,7 @@ define(['model/server_url'], function(urlParam) {
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
           "POST", 
-          urlParam.server_url() + "/personal_objectives/edit_objective", 
+          urlParam.server_url() + "/personal_objectives/" + objective_id + "/edit_objective", 
           true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');

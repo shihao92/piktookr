@@ -11,7 +11,8 @@ module.exports = {
       personal_okr: 'controller/personal_okr.js',
       team_okr: 'controller/team_okr.js',
       company_okr: 'controller/company_okr.js',
-      role: 'controller/role.js'
+      role: 'controller/role.js',
+      timeframe: 'controller/timeframe.js'
     },
     output: {
       path: __dirname + '/public/dist',

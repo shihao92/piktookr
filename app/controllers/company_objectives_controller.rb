@@ -63,7 +63,7 @@ class CompanyObjectivesController < ApplicationController
   end
 
   def company_dashboard
-    @company_objectives = CompanyObjective.all
+    @company_objectives = CompanyObjective.where(timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
     @completed_objectives = 0
     @temp_progress_buffer = 0.00
     @total_progress = 0
@@ -86,6 +86,8 @@ class CompanyObjectivesController < ApplicationController
       @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
     end
 
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
+
     render 'app/company_dashboard'
   end
 
@@ -99,6 +101,7 @@ class CompanyObjectivesController < ApplicationController
 
     @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
+    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/company_objective_details'
   end

@@ -3,10 +3,10 @@
 
 require(['model/team_key_result','model/team_objective',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
-'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2'], 
+'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(teamKeyResultModel, teamObjectiveModel,
 overlay, select2, customModal,
-textboxControl, btnControl, customSelect2) {
+textboxControl, btnControl, customSelect2, refreshPage) {
 
     const container_team_dashboard = '#team_page_container';
     const button_create_team_objective = '#btn_new_team_objective';
@@ -49,7 +49,12 @@ textboxControl, btnControl, customSelect2) {
       let create_objective_promise = new teamObjectiveModel.newTeamObjective(
           team_objective, company_key_result_id, team_id
       );
-      create_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      create_objective_promise.then(createdTeamObjective, customModal.notificationModalToggle);
+    }
+
+    function createdTeamObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function editTeamObjective(event){
@@ -94,7 +99,7 @@ textboxControl, btnControl, customSelect2) {
           let create_key_result_promise = new teamKeyResultModel.newTeamKeyResult(
             temp_team_key_result, team_objective_id, team_id
           ); 
-          create_key_result_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          create_key_result_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
         }
       }
     }  

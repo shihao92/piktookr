@@ -230,7 +230,7 @@
         <div id="personal_obj_<%= item.id %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="personal_obj_<%= item.id %> ">
           <div class="panel-body no-padding">
             <!-- Find out the key result linked to the objective -->
-            <% personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id) %>
+            <% personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id).order(updated_at: :DESC) %>
             <% personal_key_result_count = personal_key_result.count %>
             <% personal_key_result_completed = 0 %>
             <% personal_key_result.each_with_index do |item,index| %>

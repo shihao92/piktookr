@@ -4,11 +4,11 @@
 require([
 'model/company_key_result', 'model/company_objective',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
-'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2'], 
+'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(
 companyKeyResultModel, companyObjectiveModel,
 overlay, select2, customModal,
-textboxControl, btnControl, customSelect2) {
+textboxControl, btnControl, customSelect2, refreshPage) {
 
     const button_create_company_objective = '#btn_new_company_objective';
     const button_edit_company_objective = '.edit_company_objective';
@@ -45,7 +45,12 @@ textboxControl, btnControl, customSelect2) {
     function createNewCompanyObjective(event){
       let company_objective = $('#company_objective_textarea').val();
       let create_company_objective_promise = new companyObjectiveModel.newCompanyObjective(company_objective);
-      create_company_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      create_company_objective_promise.then(createdCompanyObjective, customModal.notificationModalToggle);
+    }
+
+    function createdCompanyObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function editCompanyObjective(event){
@@ -92,7 +97,7 @@ textboxControl, btnControl, customSelect2) {
           let create_company_kr_promise = new companyKeyResultModel.newCompanyKeyResult(
               company_key_result, current_focus_id
           ); 
-          create_company_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          create_company_kr_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
         }
       }
     }

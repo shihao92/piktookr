@@ -39,6 +39,9 @@
               <a href="/team" class="btn btn-default no-padding" title="System Teams">
                 <i class="fa fa-fw fa-group fa-lg"></i>
               </a>
+              <a class="btn btn-default no-padding" title="OKR System Settings">
+                <i class="fa fa-fw fa-gears fa-lg"></i>
+              </a>
             </span>
           </h5>
         </div>
@@ -236,7 +239,7 @@
         <div id="company_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_obj_<%= index %> ">
           <div class="panel-body no-padding">
             <!-- Find out the key result linked to the objective -->
-            <% @company_key_results = CompanyKeyResult.where(company_objective_id: item.id) %>
+            <% @company_key_results = CompanyKeyResult.where(company_objective_id: item.id).order(updated_at: :DESC) %>
             <% @company_key_results_count = @company_key_results.count %>
             <% @company_key_result_completed = 0 %>
             <% @company_key_results.each_with_index do |item,index| %>
