@@ -96,6 +96,36 @@ class OkrTeamsController < ApplicationController
     end
   end
 
+  def invite_to_team
+    team_id = params[:team_id]
+    sender_id = params[:sender_id]
+    receiver_id = params[:receiver_id]
+
+    status = Notification.generate_notification_team_invitation(sender_id, receiver_id, team_id)
+
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'User is invited into the team!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def accept_team_invitation
+    notification_id = params[:id]
+    respond_to do |format|
+      if OkrUserTeam.where(notification_id: notification_id).update_all(status: "APPROVED")
+        status = Notification.accepted_team_invitation(notification_id)
+        if status == 200
+          format.json { render json: 'You accepted the invitation!', status: :ok }
+        else
+          format.json { render json: 'Error!', status: :unprocessable_entity }
+        end
+      end
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_okr_team

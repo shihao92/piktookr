@@ -88,12 +88,12 @@ class TeamObjectivesController < ApplicationController
     @team_users.each do |item|
       @okr_role = User.where(id: item.id).first.okr_role
       if(@okr_role.name == "Team Lead")
-        @team_lead = item.last_name
+        @team_lead = item.last_name + " " + item.first_name
       end
     end 
 
     # Find out the users list which are not in the team
-    @users_not_in_team = User.return_users_lists_not_in_team(@team_id)    
+    @users_not_in_team = User.return_users_lists_not_in_team(@team_id, current_user.id)    
 
     @team_objective = TeamObjective.where(okr_team_id: @team_id)
     @completed_objective = 0 

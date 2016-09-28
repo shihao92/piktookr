@@ -76,7 +76,11 @@ class UsersController < ApplicationController
     current_user_id = params[:id]
     current_edit_user = User.find(current_user_id)
     respond_to do |format|
-      if current_edit_user.update(user_params)      
+      if User.where(id: current_user_id).update_all(email: user_params["email"], 
+                                                    last_name: user_params["last_name"], 
+                                                    first_name: user_params["first_name"], 
+                                                    status: params[:status][:status_const],
+                                                    position: user_params["position"])      
         OkrUserRole.where(user_id: current_user_id).update_all(okr_role_id: params[:role][:role_id])
         format.html { redirect_to '/users', notice: 'User was successfully updated.' }
       else
@@ -112,6 +116,38 @@ class UsersController < ApplicationController
     end
   end
 
+  # GET /users/:id/notifications_read_status
+  def notifications_read_status
+    user_id = params[:id]
+    status = 0
+    notifications = Notification.where(receiver_id: user_id)
+    notifications.each do |item|
+      if item.read_status == 'PENDING'
+        status = 1
+      end
+    end
+    
+    respond_to do |format|
+      if status == 0 || status == 1
+        format.json { render json: status, status: :ok } 
+      else
+        format.json { render json: 'Fail to get status!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # GET /users/:id/update_notification_read_status/:notification_id
+  def update_notification_read_status
+    notification_id = params[:notification_id]
+    respond_to do |format|
+      if Notification.where(id: notification_id).update_all(read_status: "READ")
+        format.json { render json: 'Read notification!', status: :ok } 
+      else
+        format.json { render json: 'Fail to update notification status!', status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.
@@ -127,4 +163,5 @@ class UsersController < ApplicationController
         :team
       )
     end
+
 end

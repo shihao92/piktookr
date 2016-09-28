@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160927042538) do
+ActiveRecord::Schema.define(version: 20160928053715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,6 +107,18 @@ ActiveRecord::Schema.define(version: 20160927042538) do
     t.index ["user_id"], name: "index_log_team_objectives_on_user_id", using: :btree
   end
 
+  create_table "notifications", force: :cascade do |t|
+    t.string   "notification_message"
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.string   "notification_type"
+    t.string   "read_status"
+    t.index ["receiver_id"], name: "index_notifications_on_receiver_id", using: :btree
+    t.index ["sender_id"], name: "index_notifications_on_sender_id", using: :btree
+  end
+
   create_table "okr_company_teams", force: :cascade do |t|
     t.integer  "company_key_result_id"
     t.integer  "team_objective_id"
@@ -147,9 +159,11 @@ ActiveRecord::Schema.define(version: 20160927042538) do
   create_table "okr_user_teams", force: :cascade do |t|
     t.integer  "user_id"
     t.integer  "okr_team_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.string   "status"
+    t.integer  "notification_id"
+    t.index ["notification_id"], name: "index_okr_user_teams_on_notification_id", using: :btree
     t.index ["okr_team_id"], name: "index_okr_user_teams_on_okr_team_id", using: :btree
     t.index ["user_id"], name: "index_okr_user_teams_on_user_id", using: :btree
   end
@@ -274,6 +288,7 @@ ActiveRecord::Schema.define(version: 20160927042538) do
   add_foreign_key "okr_team_personals", "team_key_results"
   add_foreign_key "okr_user_roles", "okr_roles"
   add_foreign_key "okr_user_roles", "users"
+  add_foreign_key "okr_user_teams", "notifications"
   add_foreign_key "okr_user_teams", "okr_teams"
   add_foreign_key "okr_user_teams", "users"
   add_foreign_key "personal_key_results", "personal_objectives"

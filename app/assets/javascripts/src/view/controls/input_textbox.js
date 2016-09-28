@@ -1,14 +1,23 @@
 // Date: 20 September 2016
 // JS file to control all the inputs in the project.
 
-define(['view/controls/overlay'],
-function(overlayParam){
+define(['view/controls/overlay', 'view/controls/button'],
+function(overlayParam, btnControl){
 
   function addNewPersonalObjective(resolve){
     $('#add-new-personal-objective')
     .on({
       keypress: resolve
     });
+  }
+
+  function checkPersonalObjectiveInput(){
+    $('#personal_objective_textarea')
+    .on({
+      keypress: function(){
+        btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
+      }
+    })
   }
 
   function editPersonalObjective(resolve){
@@ -175,6 +184,7 @@ function(overlayParam){
     addNewTeamKeyResult,
     editTeamKeyResult,
     addNewPersonalObjective,
+    checkPersonalObjectiveInput,
     editPersonalObjective,
     addNewPersonalKeyResult,
     editPersonalKeyResult,

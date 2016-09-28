@@ -98,11 +98,61 @@ define (['model/server_url'], function (urlParam) {
     });
   }
 
+  function inviteToTeamPromise(team_id, sender_id, receiver_id){
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/team/" + team_id + "/invite_to_team", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        team_id             : team_id,
+        sender_id           : sender_id,
+        receiver_id         : receiver_id
+      }));
+    });
+  }
+
+  function acceptIntoTeamPromise(notification_id){
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/team/accept_team_invitation", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        id             : notification_id
+      }));
+    });
+  }
+
   return {
     newTeamPromise,
     deleteTeamPromise,
     getTeamInfoPromise,
-    updateTeamInfoPromise
+    updateTeamInfoPromise,
+    inviteToTeamPromise,
+    acceptIntoTeamPromise
   }
 
 })

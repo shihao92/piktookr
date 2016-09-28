@@ -1,4 +1,3 @@
-<% @user = User.find(current_user.id) %>
 <% #User listing module %>
 <% @users = User.all %>
 <% @current_date = Time.now.strftime("%Y-%m-%d") %>
@@ -8,6 +7,7 @@
 
 <% @server_url = "http://localhost:3000" %>
 <% @session_user = User.find(current_user.id) %>
+<% @user_role = OkrUserRole.find_by(user_id: current_user.id) %>
 
 <!DOCTYPE html>
 <html>
@@ -65,52 +65,85 @@
                 Company
               </p> 
             </a>
-            <span class="icon-thumbnail" style="background:transparent;">
-              <img src="<%= @server_url %>/Piktochart-icon.png"></img>
+            <span class="icon-thumbnail">
+              <img src="<%= @server_url %>/pikto-logo.svg" style="margin-bottom:3px;"></img>
             </span>
           </li>
           <!--Section to link to own team(s)-->
-          <% @okr_user_teams = OkrUserTeam.where(user_id: current_user.id) %>
-          <% @okr_user_teams.each do |item| %>
-          <% @okr_team = OkrTeam.where(id: item.okr_team_id) %>
-          <li>
-            <a href="/team/<%= item.okr_team_id %>/team_objectives/team_dashboard" class="detailed">
-              <span class="title" id="team-name">
-                <%= @okr_team[0].name %>
-              </span> 
-              <p class="details details-layout" id="team-position">
-                Piktochart Team
-              </p> 
-            </a>
-            <span class="icon-thumbnail">
-              <span id="username-shortform">
-                <% @team_shortform = @okr_team[0].name.scan(/[A-Z]/) %>
-                <% @team_short_str = "" %>
-                <% counter = 0 %>
-                <% @team_shortform.each do |item| %>
-                  <% if counter < 2 %>
-                  <% @team_short_str = @team_short_str + item %>
-                  <% counter = counter + 1 %>
+          <!--If its admin user, then will display all team(s)-->
+          <% if @user_role.okr_role_id == 0 %>
+            <% okr_teams = OkrTeam.all %>
+            <% okr_teams.each do |item| %>
+              <li>
+                <a href="/team/<%= item.id %>/team_objectives/team_dashboard" class="detailed">
+                  <span class="title" id="team-name">
+                    <%= item.name %>
+                  </span> 
+                  <p class="details details-layout" id="team-position">
+                    Piktochart Team
+                  </p> 
+                </a>
+                <span class="icon-thumbnail">
+                  <span id="username-shortform">
+                    <% @team_shortform = item.name.scan(/[A-Z]/) %>
+                    <% @team_short_str = "" %>
+                    <% counter = 0 %>
+                    <% @team_shortform.each do |item| %>
+                      <% if counter < 2 %>
+                      <% @team_short_str = @team_short_str + item %>
+                      <% counter = counter + 1 %>
+                      <% end %>
+                    <% end %>
+                    <%= @team_short_str %>
+                  </span>
+                </span>
+              </li>
+            <% end %>
+          <% else %>
+            <% @okr_user_teams = OkrUserTeam.where(user_id: current_user.id) %>
+            <% @okr_user_teams.each do |item| %>
+            <% if item.status == "APPROVED" %>
+            <% @okr_team = OkrTeam.find(item.okr_team_id) %>
+            <li>
+              <a href="/team/<%= item.okr_team_id %>/team_objectives/team_dashboard" class="detailed">
+                <span class="title" id="team-name">
+                  <%= @okr_team.name %>
+                </span> 
+                <p class="details details-layout" id="team-position">
+                  Piktochart Team
+                </p> 
+              </a>
+              <span class="icon-thumbnail">
+                <span id="username-shortform">
+                  <% @team_shortform = @okr_team.name.scan(/[A-Z]/) %>
+                  <% @team_short_str = "" %>
+                  <% counter = 0 %>
+                  <% @team_shortform.each do |item| %>
+                    <% if counter < 2 %>
+                    <% @team_short_str = @team_short_str + item %>
+                    <% counter = counter + 1 %>
+                    <% end %>
                   <% end %>
-                <% end %>
-                <%= @team_short_str %>
+                  <%= @team_short_str %>
+                </span>
               </span>
-            </span>
-          </li>
+            </li>
+            <% end %>
+            <% end %>
           <% end %>
           <!--Section to link to own personal OKR-->
           <li>
             <a href="/" class="detailed">
               <span class="title" id="user-name">
-                <%= @user.last_name + " " + @user.first_name %>
+                <%= @session_user.last_name + " " + @session_user.first_name %>
               </span>
               <p class="details details-layout" id="user-position">
-                <%= @user.position %>
+                <%= @session_user.position %>
               </p> 
             </a>
             <span class="icon-thumbnail">
               <span id="username-shortform">
-                <% @user_shortform = @user.first_name.scan(/[A-Z]/) %>
+                <% @user_shortform = @session_user.first_name.scan(/[A-Z]/) %>
                 <% @user_short_str = "" %>
                 <% counter = 0 %>
                 <% @user_shortform.each do |item| %>
@@ -202,8 +235,9 @@
           <div class="pull-right full-height visible-sm visible-xs">
             <!-- START ACTION BAR -->
             <div class="header-inner">
-              <a href="/" class="btn-link visible-sm-inline-block visible-xs-inline-block" data-toggle="#quickview" data-toggle-element="#quickview">
-                <span class="fa fa-fw fa-bell-o fa-lg menu-hambuger-plus"></span>
+              <a class="btn-link visible-sm-inline-block visible-xs-inline-block" data-toggle="#quickview" data-toggle-element="#quickview">
+                <span class="fa fa-fw fa-bell-o fa-lg menu-hambuger-plus">
+                </span>
               </a>
             </div>
             <!-- END ACTION BAR -->
@@ -225,7 +259,9 @@
           <div class="header-inner">
             <!-- START NOTIFICATION LIST -->
             <!-- Notification is in the right hand side bar -->
-            <a href="/" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
+            <a id="toggle_notifications" data-id="<%= @session_user.id %>" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
+              <span id="bubble_new_notification" class="bubble">
+              </span>
             </a>
             <!-- END NOTIFICATIONS LIST -->
           </div>
@@ -234,12 +270,12 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <span class="semi-bold"><%= @user.last_name + " " + @user.first_name %></span> 
+              <span class="semi-bold"><%= @session_user.last_name + " " + @session_user.first_name %></span> 
             </div>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="thumbnail-wrapper d32 circular inline m-t-5">
-                  <%= image_tag @user.avatar.url %>
+                  <%= image_tag @session_user.avatar.url %>
                 </span>
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
@@ -247,12 +283,6 @@
                   <a id="link_user_profile">
                     <i class="fa fa-user"></i> 
                     Profile
-                  </a>
-                </li>
-                <li>
-                  <a href="/">
-                    <i class="pg-settings"></i> 
-                    Setting
                   </a>
                 </li>
                 <li>
@@ -322,7 +352,7 @@
           <div class="copyright sm-text-center">
             <p class="small no-margin pull-left sm-pull-reset">
               <span class="hint-text">Copyright &copy; 2016 </span>
-              <span class="font-montserrat">PiktoChart Web Academy</span>.
+              <span class="font-montserrat">Piktochart Web Academy</span>.
               <span class="hint-text">All rights reserved. </span>
               <span class="sm-block"><a href="#" class="m-l-10 m-r-10">Terms of use</a> | <a href="#" class="m-l-10">Privacy Policy</a></span>
             </p>
@@ -364,35 +394,39 @@
               </div>
               <!-- END View Header !-->
               <!-- BEGIN Alert List !-->
-              <div data-init-list-view="ioslist" class="list-view boreded no-top-border">
+              <div class="list-view boreded no-top-border">
                 <h2 class="list-view-fake-header">
-                  Server Status
+                  Team Notifications
                 </h2>
-                <!-- BEGIN List Group !-->
                 <div class="scroll-wrapper list-view-wrapper" style="position: absolute;">
-                  <div class="list-view-wrapper scroll-content" data-ios="false" style="height: 100px; margin-bottom: 0px; margin-right: 0px; max-height: none;">
-                    <div class="list-view-group-container">
-                      <!-- BEGIN List Group Header!-->
-                      <div class="list-view-group-header text-uppercase">
-                        Calendar
-                      </div>
-                      <!-- END List Group Header!-->
+                  <div class="list-view-wrapper scroll-content" data-ios="false">
+                    <div class="list-view-group-container">                    
                       <ul>
-                        <!-- BEGIN List Group Item!-->
-                        <li class="alert-list">
-                          defdef
-                          <!-- BEGIN List Group Item!-->
-                        </li>
-                        <!-- END List Group Item!-->
-                        <!-- BEGIN List Group Item!-->
-                        <li class="alert-list">
-                          abcabc
-                        </li>
-                        <!-- END List Group Item!-->
+                        <% team_notifications = Notification.where(receiver_id: current_user.id, notification_type: "TEAM") %>
+                        <% team_notifications.each do |item| %>
+                        <li class="alert-list <%= item.read_status %>" data-id="notification_<%= item.id %>">
+                          <% if item.notification_message.include? "invited you to join" %> 
+                          <a class="p-t-10 p-b-10" data-toggle="modal" data-target="#team_invitation_modal" name="link_pending_team_invitation">
+                          <% else %>
+                          <a class="p-t-10 p-b-10">
+                          <% end %>
+                            <p class="col-xs-height col-middle">
+                              <span class="thumbnail-wrapper d32 circular inline m-t-5">
+                                <% sender_user = User.find(item.sender_id) %>
+                                <%= image_tag sender_user.avatar.url %>
+                              </span>
+                            </p>
+                            <p class="p-l-10 col-xs-height col-middle col-xs-12 fs-12">
+                              <span class="text-master link">
+                                <%= raw(item.notification_message) %>
+                              </span>
+                            </p>
+                          </a>      
+                        </li>  
+                        <% end %>                     
                       </ul>
                     </div>
                   </div>
-                <!-- END Alert List !-->
                 </div>
               <!-- EEND Alerts View !-->
               </div>
@@ -438,6 +472,30 @@
             </div>
           </div>
         </div>  
+      </div>
+    </div>
+
+    <!--Modal for accept team invite-->
+    <div id="team_invitation_modal" class="modal fade slide-up" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content-wrapper">
+          <div class="modal-content">
+            <div class="modal-header clearfix text-left">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Team Invitation</h4>
+            </div>
+            <hr/>
+            <div class="modal-body">
+              <div class="form-group">
+                Do you want to accept the team invitation? 
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button id="notification_dismiss_btn" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button id="btn_accept_team_invite" type="button" class="btn btn-complete">Accept</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

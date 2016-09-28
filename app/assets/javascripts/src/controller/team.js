@@ -6,10 +6,13 @@ require(['model/team',
 function(teamModel,
 overlay, btnControl, customModal){
 
+  const container_team_dashboard = '#team_page_container';
   const button_new_team_overlay = '#btn_create_new_team_overlay';
   const button_create_new_team = '#btn_create_new_team';
   const button_delete_team = '#btn_confirm_delete_team';
   const button_edit_team = '#btn_edit_team';
+  const button_invite_team = '#btn_invite_new_member';
+  const select_user_invite_team = '#user_invitation_selection';
   const overlay_create_new_team = '#overlay_create_new_team';
   const overlay_delete_team = '#overlay_team_deletion';
   const overlay_edit_team = '#overlay_team_edit';
@@ -96,6 +99,14 @@ overlay, btnControl, customModal){
     }
   }
 
+  function sendTeamInvitation(event){
+    let sender_id = $(event.target).attr('data-id');
+    let selected_user_id = $(select_user_invite_team).val();
+    let team_id = $(container_team_dashboard).attr('data-id');
+    let team_invitation_promise = new teamModel.inviteToTeamPromise(team_id, sender_id, selected_user_id);
+    team_invitation_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+  }
+
   $(document).ready(function(){
 
     // Create new team overlay
@@ -109,6 +120,10 @@ overlay, btnControl, customModal){
     // Edit team overlay
     btnControl.resolveButtonClick(link_edit_team, displayEditTeamOverlay);
     btnControl.resolveButtonClick(button_edit_team, saveEditedTeamInfo);
+
+    // Send team invitation
+    btnControl.resolveButtonClick(button_invite_team, sendTeamInvitation);
+
 
   });
 

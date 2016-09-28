@@ -23,6 +23,10 @@ class User < ActiveRecord::Base
   has_many  :log_team_objective
   has_many  :log_company_key_result
   has_many  :log_company_objective
+
+  # Linkage to notification module
+  has_many  :sender_users, class_name: 'Notification', foreign_key: 'sender_id'
+  has_many  :receiver_users, class_name: 'Notification', foreign_key: 'receiver_id'
   
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -43,12 +47,14 @@ class User < ActiveRecord::Base
   validates   :position, presence: true, length: { minimum: 2 }
   
 
-  def self.return_users_lists_not_in_team(team_id) 
+  def self.return_users_lists_not_in_team(team_id, current_user_id) 
     okr_user_teams = OkrUserTeam.where(okr_team_id: team_id)
     users_list = Array.new
     users = User.all
     users.each do |item|
-      users_list << item.id
+      if current_user_id != item.id
+        users_list << item.id
+      end
     end 
     okr_user_teams.each do |user|
       users_list.delete(user.user_id)

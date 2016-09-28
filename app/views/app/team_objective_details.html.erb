@@ -27,7 +27,7 @@
       <span class="okr-details-header-info">
         <i class="glyphicon glyphicon-user fa-lg"></i>
         <span class="label-font">
-          <%= @user_info.last_name %>
+          <%= @user_info.first_name %>
         </span>
       </span>
       <span class="okr-details-header-info">
@@ -73,7 +73,7 @@
         <section class="timeline">
           <% @log.each do |item| %>
             <div class="timeline-block">
-              <div class="timeline-point primary">
+              <div class="timeline-point complete">
                 <% if item.log_content.include? "Created" %>
                 <i class="pg-lock"></i>
                 <% elsif item.log_content.include? "Contributed" %>
@@ -89,11 +89,11 @@
                   <div class="card-header clearfix">
                     <% @time_difference = Time.now - item.created_at %>
                     <% if @time_difference < 86400 %>
-                      <h5><%= @user_info.last_name %></h5>
+                      <h5><%= @user_info.first_name %></h5>
                       <span class="small">Less than 1 day ago</span>
                     <% else %>
                     <% @day_difference = @time_difference / 86400 %>
-                      <h5><%= @user_info.last_name %></h5>
+                      <h5><%= @user_info.first_name %></h5>
                       <% if(@day_difference.to_i > 1) %>
                       <span class="small"><%= @day_difference.to_i %> days ago</span>
                       <% else %>

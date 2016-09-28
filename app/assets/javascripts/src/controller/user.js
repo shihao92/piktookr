@@ -1,9 +1,9 @@
 // Date : 24 September 2016
 // This JS file that controls user creation only.
 
-require(['model/user',
+require(['model/user', 'model/notification', 'model/team',
 'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal'],
-function(userModel, overlay, btnControl, customModal){
+function(userModel, notificationModel, teamModel, overlay, btnControl, customModal){
 
     const document_url = document.URL;
     const button_create_new_user = '#btn_create_new_user_overlay';
@@ -17,9 +17,76 @@ function(userModel, overlay, btnControl, customModal){
 
     // Controls at Layout Page
     const link_user_profile = '#link_user_profile';
+    const link_pending_team_invitation = 'a[name=link_pending_team_invitation]';
+    const toggle_notifications = '#toggle_notifications';
+    const bubble_new_notification = '#bubble_new_notification';
+    const pending_notification = '.PENDING';
+    const modal_team_invitation = '#team_invitation_modal';
+    const button_accept_team_invite = '#btn_accept_team_invite';
 
     // Controls at Team Settings Page
     const button_remove_team_user = 'button[name=btn_remove_team_user]';
+
+
+    // -------------
+    // Notifications
+    // -------------
+
+    function getNotificationsReadStatus(){
+      let current_user_id = $(toggle_notifications).attr('data-id');
+      let notification_status_promise = new notificationModel.checkNotificationsReadStatus(current_user_id);
+      notification_status_promise.then(checkNotificationReadStatus, customModal.notificationModalToggle);
+    }
+
+    function checkNotificationReadStatus(reply){
+      reply = parseInt(reply);
+      if(reply === 0){
+        $(bubble_new_notification).attr('style', 'display:none;');
+      } else if (reply === 1) {
+        $(bubble_new_notification).attr('style', 'display:inherit;');
+      } 
+    }
+
+    function updateNotificationStatus(event){
+      let unread_notification_count = $(pending_notification).length;
+      let user_id = $(event.target).attr('data-id');
+      if(unread_notification_count > 0){
+        let counter = 0;
+        while(counter < unread_notification_count){
+          let notification_id = $(pending_notification).attr('data-id');
+          $('[data-id=' + notification_id + ']').attr('class', 'alert-list READ');
+          let index_underscore = notification_id.indexOf('_');
+          let notification_int = notification_id.substring(index_underscore + 1, notification_id.length);
+          notification_int = parseInt(notification_int);
+          let update_notification_read_promise = new notificationModel.updateNotificationReadStatus(user_id, notification_int);
+          counter = counter + 1;
+        }      
+      }
+    }
+
+    function acceptingTeamInvite(event){
+      let notification_id = $(event.target).parents('.alert-list').attr('data-id');
+      let index_underscore = notification_id.indexOf('_');
+      let notification_int = notification_id.substring(index_underscore + 1, notification_id.length);
+      notification_int = parseInt(notification_int);
+      $(button_accept_team_invite).attr('data-id', notification_int);
+    }
+
+    function acceptTeamInvite(event){
+      let notification_id = $(event.target).attr('data-id');
+      let team_invite_accepted_promise = new teamModel.acceptIntoTeamPromise(notification_id);
+      team_invite_accepted_promise.then(successAcceptionTeamInvitation, failedAcceptionTeamInvitation);
+    }
+
+    function successAcceptionTeamInvitation(message){
+      $(modal_team_invitation).modal('hide');
+      customModal.notificationModalToggle(message);
+    }
+
+    function failedAcceptionTeamInvitation(error){
+      $(modal_team_invitation).modal('hide');
+      customModal.notificationModalToggle(error);
+    }
 
     // -------------------------
     // User Details and Settings
@@ -109,6 +176,17 @@ function(userModel, overlay, btnControl, customModal){
 
       // User removal from team
       btnControl.resolveButtonClick(button_remove_team_user, removeUserFromTeam);
+         
+      // Notifications related Section
+      getNotificationsReadStatus();  
+
+      // Update notification read status
+      btnControl.resolveButtonClick(toggle_notifications, updateNotificationStatus);
+
+      // When user try to accept team invitation
+      btnControl.resolveButtonClick(link_pending_team_invitation, acceptingTeamInvite);
+      // Accept team invite
+      btnControl.resolveButtonClick(button_accept_team_invite, acceptTeamInvite);
 
     });
 

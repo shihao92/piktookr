@@ -20,6 +20,10 @@ Rails.application.routes.draw do
           get   :view_others_personal_okr
         end
       end
+
+      # Notifications section
+      get   :notifications_read_status
+      get   'update_notification_read_status/:notification_id' => 'users#update_notification_read_status'      
     end
   end
 
@@ -35,10 +39,17 @@ Rails.application.routes.draw do
 
     collection do
       post  :remove_user_from_team
+
+      # ------------
+      # Notification
+      # ------------
+    
+      post  :accept_team_invitation
     end
 
     member do
-      post  :get_team_info   
+      post  :get_team_info
+      post  :invite_to_team   
     end
 
     # ---------------

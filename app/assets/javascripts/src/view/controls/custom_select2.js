@@ -2,21 +2,19 @@
 // JS file to customize the control - select2.
 
 define(['view/library/select2.min',
-'view/controls/button'],
-function(select2LibraryParam, btnParam){
+'view/controls/button', 'view/controls/input_textbox'],
+function(select2LibraryParam, btnControl, textboxControl){
 
   function teamKeyResultSelectionChanged(){
     $('#team_key_result_selection').on('change', function() {
-      if($('#personal_objective_textarea').val() != "") {
-        btnParam.toggleDisabledSaveNewPersonalObjectiveButton(0);
-      }
+      textboxControl.checkPersonalObjectiveInput();
     }); 
   }
 
   function companyKeyResultSelectionChanged(){
     $('#company_key_result_selection').on('change', function() {
       if($('#team_objective_textarea').val() != "") {
-        btnParam.toggleDisabledSaveNewTeamObjectiveButton(0);
+        btnControl.toggleDisabledSaveNewTeamObjectiveButton(0);
       }
     });
   }
