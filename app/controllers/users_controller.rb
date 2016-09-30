@@ -21,6 +21,20 @@ class UsersController < ApplicationController
     render 'app/system_users'
   end
 
+  def check_first_time
+    user_id = params[:id]
+    current_user = User.find(user_id)
+    is_first_time = 0
+    respond_to do |format|
+      if current_user.sign_in_count == 1
+        is_first_time = 1
+        format.json { render json: is_first_time, status: :ok }
+      else
+        format.json { render json: is_first_time, status: :ok }
+      end
+    end
+  end
+
   # GET /users/1
   # GET /users/1.json
   def show
@@ -90,6 +104,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def user_update_info
+    current_user_id = params[:id]
+    current_edit_user = User.find(current_user_id)
+    current_edit_user.update(user_params)
+    respond_to do |format|
+      format.html { redirect_to '/', notice: 'User was successfully updated.' }
+    end
+  end
+
   # User update
   def user_update
     current_user_id = params[:id]
@@ -154,10 +177,10 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(
-        :email, 
-        :password,  
+        :email,  
         :last_name, 
         :first_name, 
+        :password,
         :status, 
         :avatar, 
         :position, 

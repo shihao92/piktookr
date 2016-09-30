@@ -2,8 +2,7 @@
 <% @users = User.all %>
 <% @current_date = Time.now.strftime("%Y-%m-%d") %>
 <% @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") %>
-<% @current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + @current_date + "'::DATE,'" + @current_date + "'::DATE)") %>
-<% @remaining_quarter_days = @current_timeframe_log[0].end_date - Time.now.to_date %>
+
 
 <% @server_url = "http://localhost:3000" %>
 <% @session_user = User.find(current_user.id) %>
@@ -307,7 +306,7 @@
             <!-- START day notification for timeframe -->
             <div class="no-margin hidden-sm hidden-xs b-grey b-l b-r p-l-20 p-r-20">
               <div class="text-center">
-                <span class="bold"><%= @remaining_quarter_days.to_i %></span> 
+                <span class="bold"><%= @remaining_quarter_days.to_i %></span>
                 <span class="text-master">days left</span>
               </div>
             </div>
@@ -318,9 +317,9 @@
           <div class="visible-lg visible-md m-t-15 p-r-20">
             <!-- START calendar for timeframe selection -->
             <div class="dropdown pull-right">
-              <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button id="btn_timeframe_dropdown" class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-id="<%= @selected_timeframe.id %>">
                 <span class="fa fa-fw fa-calendar fa-lg"></span>
-                <span id="" class="text-master">
+                <span class="text-master">
                   <%= @selected_timeframe.quarter%>
                 </span>
                 <span class="caret"></span> 
@@ -532,7 +531,7 @@
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="user_details_tab">
-                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update" do |f| %>
+                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update_info" do |f| %>
                       <div class="text-center">
                         <%= image_tag @session_user.avatar.url %>
                       </div>
@@ -563,9 +562,26 @@
                         <%= f.label :change_avatar %><br />
                         <%= f.file_field :avatar, class: "form-control" %>
                       </div>
+                      <div class="row">
+                        <div class="col-sm-6 col-md-6">
+                          <div class="form-group form-group-default required">
+                            <%= f.label :password %>
+                            <% if @minimum_password_length == 6 %>
+                              <em>(<%= @minimum_password_length %> characters minimum)</em>
+                            <% end %>
+                            <%= f.password_field :password, autocomplete: "off", class: "form-control", required: true %>
+                          </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6">
+                          <div class="form-group form-group-default required">
+                            <%= f.label :password_confirmation %>
+                            <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", required: true %>
+                          </div>
+                        </div>
+                      </div>
                       <hr/>
                       <div class="pull-right">
-                        <button id="btn_close_user_details_tab" class="btn btn-default btn-rounded btn-cons">Cancel</button>
+                        <a href="/" id="btn_close_user_details_tab" class="btn btn-default btn-rounded btn-cons">Cancel</a>
                         <%= f.submit "Save", class: "btn btn-complete btn-rounded btn-cons" %>
                       </div>
                     <% end %>
@@ -579,13 +595,13 @@
                             <% if @minimum_password_length == 6 %>
                               <em>(<%= @minimum_password_length %> characters minimum)</em>
                             <% end %>
-                            <%= f.password_field :password, autocomplete: "off", class: "form-control" %>
+                            <%= f.password_field :password, autocomplete: "off", class: "form-control", required: true %>
                           </div>
                         </div>
                         <div class="col-sm-6 col-md-6">
                           <div class="form-group form-group-default required">
                             <%= f.label :password_confirmation %>
-                            <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control" %>
+                            <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", required: true %>
                           </div>
                         </div>
                       </div>
@@ -628,6 +644,7 @@
         </div>
       </div>
     </div>
+    
 
     <script src="/dist/vendor-webpack.js"></script>   
     <script src="/dist/personal_okr-webpack.js"></script>

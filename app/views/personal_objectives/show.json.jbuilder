@@ -1,1 +1,0 @@
-json.partial! "personal_objectives/personal_objective", personal_objective: @personal_objective

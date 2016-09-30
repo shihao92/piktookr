@@ -1,1 +1,0 @@
-json.array! @okr_teams, partial: 'okr_teams/okr_team', as: :okr_team

@@ -1,1 +1,0 @@
-json.array! @personal_objectives, partial: 'personal_objectives/personal_objective', as: :personal_objective

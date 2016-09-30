@@ -24,7 +24,7 @@ class AppController < ApplicationController
       temp_team_objective = []
 
       @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
-      @remaining_quarter_days = calculate_remaining_quarter_days
+      @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
       @user = User.find(current_user.id)
       @role = OkrRole.find(okr_user_role.okr_role_id) 
       @personal_objective = PersonalObjective.where(user_id: current_user.id, timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
@@ -66,14 +66,6 @@ class AppController < ApplicationController
       end
 
       render "app/dashboard_v2"
-    end
-
-    def calculate_remaining_quarter_days
-      current_date = Time.now.strftime("%Y-%m-%d")  
-      current_timeframe_log = TimeframeLog.where("(start_date,end_date) overlaps ('" + current_date + "'::DATE,'" + current_date + "'::DATE)") 
-      remaining_quarter_days = current_timeframe_log[0].end_date - Time.now.to_date
-
-      return remaining_quarter_days
     end
     
 end

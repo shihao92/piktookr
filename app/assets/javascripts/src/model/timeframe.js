@@ -23,8 +23,29 @@ define (['model/server_url'], function (urlParam) {
     });
   }
 
+  function getCurrentQuarterEndDate(){
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "GET", 
+        urlParam.server_url() + "/timeframes/get_current_quarter_end_date", 
+        true
+      );
+      xhttp.send();
+    });
+  }
+
   return {
-    updateSystemTimeframeLogID
+    updateSystemTimeframeLogID,
+    getCurrentQuarterEndDate
   }
 
 })

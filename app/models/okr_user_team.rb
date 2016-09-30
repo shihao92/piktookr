@@ -17,8 +17,9 @@ class OkrUserTeam < ApplicationRecord
 
     def self.remove_user_from_team(okr_user_team_id)
       status = 0
-      puts okr_user_team_id
-      if OkrUserTeam.find(okr_user_team_id).destroy
+      okr_user_team = OkrUserTeam.find(okr_user_team_id)
+      if okr_user_team.destroy
+        Notification.find(okr_user_team.notification_id).destroy
         status = 200
       end
 

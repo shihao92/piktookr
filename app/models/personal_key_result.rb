@@ -173,4 +173,12 @@ class PersonalKeyResult < ApplicationRecord
       return status
     end
 
+    def self.update_due_date(key_result_id, due_date)
+      status = 0
+      if PersonalKeyResult.where(id: key_result_id).update_all(due_date: due_date)
+        status = 200
+      end
+      return status
+    end
+
 end

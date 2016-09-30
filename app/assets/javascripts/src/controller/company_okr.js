@@ -2,19 +2,25 @@
 // This JS file that controls company okr page only.
 
 require([
-'model/company_key_result', 'model/company_objective',
+'model/company_key_result', 'model/company_objective', 'model/timeframe',
+'view/library/bootstrap-datepicker',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
 'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(
-companyKeyResultModel, companyObjectiveModel,
+companyKeyResultModel, companyObjectiveModel, timeframeModel,
+datepicker,
 overlay, select2, customModal,
 textboxControl, btnControl, customSelect2, refreshPage) {
 
     const button_create_company_objective = '#btn_new_company_objective';
     const button_edit_company_objective = '.edit_company_objective';
     const button_edit_company_key_result = '.edit_company_key_result';
+    const button_save_company_kr_due_date = '#btn_save_company_kr_due_date';
     const textbox_new_company_objective = '#add-new-company-objective';
     const textbox_new_company_key_result = '.form-new-key-result';
+    const link_add_due_date_company_kr = '#link_add_due_date_company_kr';
+    const modal_company_kr_due_date = '#company_kr_due_date_modal';
+    const datepicker_company_kr = '#company_kr_datepicker';
 
     let original_company_objective = "";
     let original_company_key_result = "";
@@ -97,9 +103,14 @@ textboxControl, btnControl, customSelect2, refreshPage) {
           let create_company_kr_promise = new companyKeyResultModel.newCompanyKeyResult(
               company_key_result, current_focus_id
           ); 
-          create_company_kr_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
+          create_company_kr_promise.then(createdCompanyKeyResult, customModal.notificationModalToggle);
         }
       }
+    }
+
+    function createdCompanyKeyResult(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function editCompanyKeyResult(event){
@@ -131,6 +142,34 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       }
     }
 
+    function getCurrentQuarterEndDate(){
+      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate();
+      get_current_quarter_end_date.then(initializeDatepicker, customModal.notificationModalToggle);
+    }
+
+    function initializeDatepicker(end_date){
+      let nowDate = new Date();
+      let today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+      $(datepicker_company_kr).datepicker({
+        format: 'yyyy/mm/dd',
+        startDate: today,
+        endDate: end_date
+      });
+      $(modal_company_kr_due_date).modal('show');
+    } 
+
+    function saveCompanyKeyResultDueDate(event){
+      let company_key_result_id = $(event.target).attr('data-id');
+      let selected_due_date = $(modal_company_kr_due_date).find('.form-control').val();
+      $(modal_company_kr_due_date).modal('hide');
+      if(selected_due_date == ''){
+        customModal.notificationModalToggle("Due date cannot be empty!");
+      } else {
+        let update_due_date_promise = new companyKeyResultModel.updateDueDate(company_key_result_id, selected_due_date);
+        update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      }  
+    } 
+
     $(document).ready(function() {
         
         // Key Result - Create new 
@@ -139,6 +178,10 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         // Key Result - Edit
         btnControl.resolveButtonClick(button_edit_company_key_result, editCompanyKeyResult);
         textboxControl.editCompanyKeyResult(editedCompanyKeyResult);
+
+        // Key Result - Update due date
+        btnControl.resolveButtonClick(link_add_due_date_company_kr, getCurrentQuarterEndDate);
+        btnControl.resolveButtonClick(button_save_company_kr_due_date, saveCompanyKeyResultDueDate);
 
         // Company Objective - Create new
         textboxControl.addNewCompanyObjective(focusOutCreateNewCompanyObjective, enterCreateNewCompanyObjective);

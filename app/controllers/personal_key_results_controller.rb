@@ -4,25 +4,7 @@
 # Completed module : Log feature for OKR Module
 
 class PersonalKeyResultsController < ApplicationController
-  before_action :set_personal_key_result, only: [:show, :edit, :update, :destroy]
-
-  # GET /personal_key_results
-  # GET /personal_key_results.json 
-  def index
-
-    # Access to own personal key result only
-    # @personal_objectives = PersonalObjective.all.where(user_id: current_user.id)
-    # @personal_key_results = PersonalKeyResult.all.where(personal_objective_id: @personal_objectives.ids)
-
-    # General access to all the personal key results
-    @personal_key_results = PersonalKeyResult.all
-
-  end
-
-  # GET /personal_key_results/1
-  # GET /personal_key_results/1.json
-  def show
-  end
+  before_action :set_personal_key_result, only: [:edit, :update, :destroy]
 
   # GET /personal_key_results/new
   def new
@@ -134,6 +116,19 @@ class PersonalKeyResultsController < ApplicationController
         format.json { render json: 'Key result is updated successfully!', status: :ok }
       else
         format.json { render json: 'Fail to update key result!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def insert_due_date
+    key_result_id = params[:id]
+    selected_due_date = params[:due_date]
+    status = PersonalKeyResult.update_due_date(key_result_id, selected_due_date)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Due date is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
       end
     end
   end

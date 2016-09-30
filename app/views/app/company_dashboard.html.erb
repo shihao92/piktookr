@@ -39,8 +39,12 @@
               <a href="/team" class="btn btn-default no-padding" title="System Teams">
                 <i class="fa fa-fw fa-group fa-lg"></i>
               </a>
-              <a class="btn btn-default no-padding" title="OKR System Settings">
+              <!--This catered for security and role settings for admin-->
+              <a href="/role" class="btn btn-default no-padding" title="OKR System Settings">
                 <i class="fa fa-fw fa-gears fa-lg"></i>
+              </a>
+              <a class="btn btn-default no-padding" title="Timeframe Settings">
+                <i class="fa fa-fw fa-clock-o fa-lg"></i>
               </a>
             </span>
           </h5>
@@ -120,7 +124,7 @@
       </div>
     </div>
   </div>
-
+  <br/>
   <!-- Accordion involved all the OKR progresses -->
   <div class="padding-accordion-group">
     <% if @company_objectives.count == 0 %>
@@ -244,7 +248,7 @@
             <% @company_key_result_completed = 0 %>
             <% @company_key_results.each_with_index do |item,index| %>
               <% if(item.progress == 100.00) %>
-              <%    @company_key_result_completed = @company_key_result_completed + 1 %>
+              <%   @company_key_result_completed = @company_key_result_completed + 1 %>
               <% end %>
               <div id="company_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">

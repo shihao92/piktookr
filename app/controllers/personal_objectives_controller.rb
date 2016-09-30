@@ -1,16 +1,5 @@
 class PersonalObjectivesController < ApplicationController
-  before_action :set_personal_objective, only: [:show, :edit, :update, :destroy]
-
-  # GET /personal_objectives
-  # GET /personal_objectives.json
-  def index
-    @personal_objectives = PersonalObjective.all
-  end
-
-  # GET /personal_objectives/1
-  # GET /personal_objectives/1.json
-  def show
-  end
+  before_action :set_personal_objective, only: [:edit, :update, :destroy]
 
   # GET /personal_objectives/new
   def new

@@ -109,11 +109,38 @@ define (['model/server_url'], function (urlParam) {
       });
     }
 
+    function updateDueDate(key_result_id, due_date)
+    {
+      return new Promise((resolve, reject) => {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if(this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
+          }
+        };
+        // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
+        xhttp.open(
+          "POST", 
+          urlParam.server_url() + "/personal_key_results/" + key_result_id + "/insert_due_date", 
+          true
+        );
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify({
+          id                        : key_result_id,
+          due_date                  : due_date
+        }));           
+      });
+    }
+
     return {
       newPersonalKeyResult,
       updatePersonalKeyResultProgress,
       updatePersonalKeyResultStatus,
-      editPersonalKeyResult
+      editPersonalKeyResult,
+      updateDueDate
     }
 
 })

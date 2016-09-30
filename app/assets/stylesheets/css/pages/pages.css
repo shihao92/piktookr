@@ -6719,13 +6719,13 @@ https://github.com/eternicode/bootstrap-datepicker
 }
 .datepicker thead tr .next,
 .datepicker thead tr .prev {
-  color: #6d5cae;
+  color: #48b0f7;
   content: '';
   font-size: 0px;
 }
 .datepicker thead tr .next:before,
 .datepicker thead tr .prev:before {
-  color: #6d5cae;
+  color: #48b0f7;
   font-family: 'FontAwesome';
   font-size: 10px;
 }
@@ -6737,7 +6737,7 @@ https://github.com/eternicode/bootstrap-datepicker
 }
 .datepicker thead tr .dow {
   font-family: 'Montserrat';
-  color: #6d5cae;
+  color: #48b0f7;
   text-transform: uppercase;
   font-size: 11px;
 }
@@ -6760,7 +6760,7 @@ https://github.com/eternicode/bootstrap-datepicker
   background: #f0f0f0;
 }
 .datepicker table tr td.active {
-  background-color: #6d5cae !important;
+  background-color: #48b0f7 !important;
 }
 .datepicker table tr td.active,
 .datepicker table tr td.active:hover,
@@ -6785,7 +6785,7 @@ https://github.com/eternicode/bootstrap-datepicker
   line-height: 42px;
 }
 .datepicker table tr td span.active {
-  background-color: #6d5cae !important;
+  background-color: #48b0f7 !important;
 }
 .datepicker table tr td span.active,
 .datepicker table tr td span.active:hover,

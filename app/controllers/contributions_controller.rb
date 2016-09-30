@@ -1,16 +1,5 @@
 class ContributionsController < ApplicationController
-  before_action :set_contribution, only: [:show, :edit, :update, :destroy]
-
-  # GET /contributions
-  # GET /contributions.json
-  def index
-    @contributions = Contribution.all
-  end
-
-  # GET /contributions/1
-  # GET /contributions/1.json
-  def show
-  end
+  before_action :set_contribution, only: [:edit, :update, :destroy]
 
   # GET /contributions/new
   def new

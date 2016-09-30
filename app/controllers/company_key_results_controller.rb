@@ -1,24 +1,8 @@
 class CompanyKeyResultsController < ApplicationController
   before_action :set_company_key_result, only: [:show, :edit, :update, :destroy]
 
-  # GET /company_key_results
-  # GET /company_key_results.json
-  def index
-    @company_key_results = CompanyKeyResult.all
-  end
-
-  # GET /company_key_results/1
-  # GET /company_key_results/1.json
-  def show
-  end
-
-  # GET /company_key_results/new
   def new
     @company_key_result = CompanyKeyResult.new
-  end
-
-  # GET /company_key_results/1/edit
-  def edit
   end
 
   # POST /company_key_results
@@ -100,6 +84,19 @@ class CompanyKeyResultsController < ApplicationController
         format.json { render json: 'Company Key Result is updated successfully!', status: :ok }
       else
         format.json { render json: 'Fail to update company key result!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def insert_due_date
+    key_result_id = params[:id]
+    selected_due_date = params[:due_date]
+    status = CompanyKeyResult.update_due_date(key_result_id, selected_due_date)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Due date is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
       end
     end
   end

@@ -1,0 +1,73 @@
+<!-- START JUMBOTRON -->
+<div class="jumbotron" data-pages="parallax">
+  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ul class="breadcrumb">
+        <li>
+          <p>HOME</p>
+        </li>
+        <li>
+          <a class="active">ROLE SECURITY</a>
+        </li>
+      </ul>
+      <!-- END BREADCRUMB -->
+    </div>
+  </div>
+</div>
+<!-- END JUMBOTRON -->
+<!-- START CONTAINER FLUID -->
+<div class="container-fluid">
+  <h5 class="semi-bold">
+    Security and Role Settings
+  </h5>
+  <hr/>
+  <div class="btn-group" data-toggle="buttons">
+    <% @okr_roles.each_with_index do |item, index| %>
+    <% if index == 0 %>
+      <label class="btn btn-complete active">
+    <% else %>
+      <label class="btn btn-complete">
+    <% end %>
+        <input type="radio" name="options" id="role_<%= item.name %>" />
+        <%= item.name %>
+      </label>
+    <% end %>
+  </div>
+  <br/>
+  <div class="panel">
+    <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" role="tablist" data-init-reponsive-tabs="collapse">
+      <li class="active">
+        <a href="#company_okr_security_tab" data-toggle="tab" role="tab">Company OKR</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="company_okr_security_tab">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width: 50%">Controls</th>
+              <th style="width: 50%">Selections</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="bold">
+                <div class="checkbox">
+                  Create Company OKR
+                </div>
+              </td>
+              <td>
+                <div class="checkbox check-complete">
+                  <input id="sample" type="checkbox" />
+                  <label for="sample"></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END CONTAINER FLUID -->

@@ -36,6 +36,21 @@
           <%= @timeframe_log.quarter %>
         </span>
       </span>
+      <span>
+        <% if @personal_key_result.due_date.to_s == '' %>
+        <a id="link_add_due_date_personal_kr" data-toggle="modal" data-target="personal_kr_due_date_modal">
+          <i class="glyphicon glyphicon-time fa-lg"></i>
+          Add due date
+        </a>
+        <% else %>
+        <a id="link_add_due_date_personal_kr" data-toggle="modal" data-target="personal_kr_due_date_modal">
+          <i class="glyphicon glyphicon-time fa-lg"></i>
+          <span class="label-font">
+            <%= @personal_key_result.due_date.to_s %>
+          </span>
+        </a>
+        <% end %>
+      </span>
       <br />
       <br />
       <hr />
@@ -137,6 +152,35 @@
             </ul>
           </li>
         </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal for due date selection-->
+<div id="personal_kr_due_date_modal" class="modal fade slide-up" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content-wrapper">
+      <div class="modal-content">
+        <div class="modal-header clearfix text-left">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Personal Key Result Due Date Selection</h4>
+        </div>
+        <hr/>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class='input-group date' id='personal_kr_datepicker'>
+              <input type='text' class="form-control" required/>
+              <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button id="btn_save_personal_kr_due_date" type="button" class="btn btn-complete" data-id="<%= @personal_key_result.id %>">Save</button>
+        </div>
       </div>
     </div>
   </div>

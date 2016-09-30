@@ -1,1 +1,0 @@
-json.partial! "personal_key_results/personal_key_result", personal_key_result: @personal_key_result

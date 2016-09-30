@@ -14,6 +14,10 @@ Rails.application.routes.draw do
     member do
       patch :user_update
       put   :user_update
+
+      patch :user_update_info
+      put   :user_update_info
+
       resources :personal_objectives, only: [:view_others_personal_okr] do
         collection do
           # Route to view other person personal OKR
@@ -21,11 +25,19 @@ Rails.application.routes.draw do
         end
       end
 
+      get   :check_first_time
+
       # Notifications section
       get   :notifications_read_status
       get   'update_notification_read_status/:notification_id' => 'users#update_notification_read_status'      
     end
   end
+
+  # -------------------------
+  # Roles and Security Module
+  # -------------------------
+
+  resources :okr_roles, path: 'role'
 
   # ----------------
   # Timeframe module
@@ -33,6 +45,9 @@ Rails.application.routes.draw do
   resources :timeframes do
     member do
       get   :set_system_timeframe_log_id
+    end
+    collection do
+      get   :get_current_quarter_end_date
     end
   end
   
@@ -76,9 +91,11 @@ Rails.application.routes.draw do
     resources :team_key_results do
       member do
         # Route to the team key result detail page
-        get :details
+        get   :details
         # Route to edit the team key result
-        post :edit_key_result
+        post  :edit_key_result
+        # Route to update due date
+        post  :insert_due_date
       end
     end
 
@@ -111,6 +128,8 @@ Rails.application.routes.draw do
     member do
       # Route to the company key result details
       get   :details
+      # Route to update due date
+      post  :insert_due_date
     end
     collection do
       # Route to edit company key result
@@ -147,6 +166,8 @@ Rails.application.routes.draw do
       post  :edit_key_result
       # Route for the personal key result details page
       get   :details
+      # Route to update due date
+      post  :insert_due_date
     end
 
   end
@@ -155,7 +176,12 @@ Rails.application.routes.draw do
   # Prototype 1
   # get 'app/dashboard'
   # Prototype 2
-  get 'app/dashboard_v2' => 'app#dashboard_v2'
+  resources :app, only: :dashboard_v2 do
+    collection do
+      get   :dashboard_v2
+    end 
+  end
+  
   # Route for the default page
   root 'app#dashboard_v2' 
 

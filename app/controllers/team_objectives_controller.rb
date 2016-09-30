@@ -1,16 +1,5 @@
 class TeamObjectivesController < ApplicationController
 
-  # GET /team_objectives
-  # GET /team_objectives.json
-  def index
-    @team_objectives = TeamObjective.all
-  end
-
-  # GET /team_objectives/1
-  # GET /team_objectives/1.json
-  def show
-  end
-
   # GET /team_objectives/new
   def new
     @team_objective = TeamObjective.new

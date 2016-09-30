@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160928053715) do
+ActiveRecord::Schema.define(version: 20160929074513) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20160928053715) do
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
     t.integer  "user_id"
+    t.date     "due_date"
     t.index ["company_objective_id"], name: "index_company_key_results_on_company_objective_id", using: :btree
     t.index ["user_id"], name: "index_company_key_results_on_user_id", using: :btree
   end
@@ -175,6 +176,7 @@ ActiveRecord::Schema.define(version: 20160928053715) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
     t.boolean  "is_completed"
+    t.date     "due_date"
     t.index ["personal_objective_id"], name: "index_personal_key_results_on_personal_objective_id", using: :btree
   end
 
@@ -196,6 +198,7 @@ ActiveRecord::Schema.define(version: 20160928053715) do
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
     t.integer  "user_id"
+    t.date     "due_date"
     t.index ["team_objective_id"], name: "index_team_key_results_on_team_objective_id", using: :btree
     t.index ["user_id"], name: "index_team_key_results_on_user_id", using: :btree
   end

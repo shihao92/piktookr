@@ -3,18 +3,7 @@
 # To be completed module : Delete OKR
 
 class TeamKeyResultsController < ApplicationController
-  before_action :set_team_key_result, only: [:show, :edit, :update, :destroy]
-
-  # GET /team_key_results
-  # GET /team_key_results.json
-  def index
-    @team_key_results = TeamKeyResult.all
-  end
-
-  # GET /team_key_results/1
-  # GET /team_key_results/1.json
-  def show
-  end
+  before_action :set_team_key_result, only: [:edit, :update, :destroy]
 
   # GET /team_key_results/new
   def new
@@ -113,6 +102,19 @@ class TeamKeyResultsController < ApplicationController
         format.json { render json: 'Team Key Result is updated successfully!', status: :ok }
       else
         format.json { render json: 'Fail to update team key result!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def insert_due_date
+    key_result_id = params[:id]
+    selected_due_date = params[:due_date]
+    status = TeamKeyResult.update_due_date(key_result_id, selected_due_date)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Due date is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
       end
     end
   end

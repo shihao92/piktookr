@@ -2,19 +2,27 @@
 // This JS file that controls personal okr page only.
 
 require(['pages/pages.blank', 
-'model/personal_key_result', 'model/personal_objective', 
+'model/personal_key_result', 'model/personal_objective', 'model/timeframe',
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
-'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh'],
+'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh',
+'view/library/bootstrap-datepicker'],
 function(pagesBlank, 
-personalKeyResultModel, personalObjectiveModel, 
+personalKeyResultModel, personalObjectiveModel, timeframeModel, 
 customModal, overlay, slider, customSelect2, 
-btnControl, textboxInput, checkboxControl, refreshPage) {
+btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
 
     const button_new_personal_objective = '#btn_new_personal_objective';
     const button_edit_personal_objective = '.edit_personal_objective';
     const button_update_progress_key_result = '#btn_update_progress';
     const button_edit_personal_key_result = '.edit_personal_key_result';
+    const button_save_personal_kr_due_date = '#btn_save_personal_kr_due_date';
     const textbox_new_personal_key_result = '.form-new-key-result';
+    const link_add_due_date_personal_kr = '#link_add_due_date_personal_kr';
+    const modal_personal_kr_due_date = '#personal_kr_due_date_modal';
+    const datepicker_personal_kr = '#personal_kr_datepicker';
+
+    // From layout page
+    const button_timeframe_dropdown = "#btn_timeframe_dropdown";
 
     let original_personal_objective = "";
     let checkbox_tick_amount = 0;
@@ -167,6 +175,35 @@ btnControl, textboxInput, checkboxControl, refreshPage) {
       }
     }
 
+    function getCurrentQuarterEndDate(){
+      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate();
+      get_current_quarter_end_date.then(initializeDatepicker, customModal.notificationModalToggle);
+    }
+
+    function initializeDatepicker(end_date){
+      let nowDate = new Date();
+      let today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+      $(datepicker_personal_kr).datepicker({
+        format: 'yyyy/mm/dd',
+        startDate: today,
+        endDate: end_date
+      });
+      $(modal_personal_kr_due_date).modal('show');
+    }
+
+    function savePersonalKeyResultDueDate(event){
+      let personal_key_result_id = $(event.target).attr('data-id');
+      personal_key_result_id = parseInt(personal_key_result_id);
+      let selected_due_date = $(modal_personal_kr_due_date).find('.form-control').val();
+      $(modal_personal_kr_due_date).modal('hide');
+      if(selected_due_date == ''){
+        customModal.notificationModalToggle("Due date cannot be empty!");
+      } else {
+        let update_due_date_promise = new personalKeyResultModel.updateDueDate(personal_key_result_id,selected_due_date);
+        update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      }  
+    }
+
     customModal.toggleProgressRingModal(0);
 
     $(document).ready(function(){
@@ -197,6 +234,10 @@ btnControl, textboxInput, checkboxControl, refreshPage) {
         // Key Result - Edit 
         btnControl.resolveButtonClick(button_edit_personal_key_result, editPersonalKeyResult);
         textboxInput.editPersonalKeyResult(editedPersonalKeyResult);
+
+        // Key Result - Add due date
+        btnControl.resolveButtonClick(link_add_due_date_personal_kr, getCurrentQuarterEndDate);
+        btnControl.resolveButtonClick(button_save_personal_kr_due_date, savePersonalKeyResultDueDate);
 
         btnControl.notificationDismissClick();
         

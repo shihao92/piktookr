@@ -213,12 +213,16 @@
                       <span> Go to details</span>
                     </a>
                   </li>
+                  <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
+                  <% @team_key_result = @team_key_result.count %>
+                  <% if @team_key_result == 0 %>
                   <li>
                     <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
                       <i class="fa fa-fw fa-trash-o"></i> 
                       <span> Delete</span>
                     </a>
                   </li>
+                  <% end %>
                 </ul>
               </div>
             </div>
@@ -256,7 +260,7 @@
             <% @team_key_result_completed = 0 %>
             <% @team_key_result.each_with_index do |item,index| %>
               <% if(item.progress == 100.00) %>
-              <%    @team_key_result_completed = @team_key_result_completed + 1 %>
+              <%   @team_key_result_completed = @team_key_result_completed + 1 %>
               <% end %>
               <div class="row accordion-item" id="team_kr_<%= item.id %>">
                 <div class="col-lg-11 col-md-11 col-sm-11">

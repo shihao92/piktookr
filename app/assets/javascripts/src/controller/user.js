@@ -24,6 +24,11 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
     const modal_team_invitation = '#team_invitation_modal';
     const button_accept_team_invite = '#btn_accept_team_invite';
 
+    // Controls at dashboard page
+    const overlay_first_timer = '#overlay_first_timer';
+    const overlay_first_timer_edit_profile = '#overlay_first_timer_edit_profile';
+    const button_first_timer_edit_profile = '#btn_first_timer_edit_profile';
+
     // Controls at Team Settings Page
     const button_remove_team_user = 'button[name=btn_remove_team_user]';
 
@@ -52,6 +57,7 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
       let user_id = $(event.target).attr('data-id');
       if(unread_notification_count > 0){
         let counter = 0;
+        $(bubble_new_notification).attr('style', 'display:none');
         while(counter < unread_notification_count){
           let notification_id = $(pending_notification).attr('data-id');
           $('[data-id=' + notification_id + ']').attr('class', 'alert-list READ');
@@ -146,6 +152,23 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
       overlay.toggleUserDetailsOverlay(1);
     }
 
+    function checkFirstTimeLogin(){
+      let current_user_id = $(toggle_notifications).attr('data-id');
+      let check_first_time_promise = new userModel.checkFirstTimeLogin(current_user_id);
+      check_first_time_promise.then(isFirstTimeLogin, customModal.notificationModalToggle);
+    }
+
+    function isFirstTimeLogin(message){
+      if(message === '1'){
+        overlay.toggleOverlay(overlay_first_timer, 1);
+      }
+    }
+
+    function firstTimerEditProfile(event){
+      overlay.toggleOverlay(overlay_first_timer, 0);
+      overlay.toggleOverlay(overlay_first_timer_edit_profile, 1);
+    }
+
     // --------------------------------------
     // User Related Team Details and Settings
     // --------------------------------------
@@ -160,6 +183,9 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
 
     $(document).ready(function(){
       
+      checkFirstTimeLogin();
+      btnControl.resolveButtonClick(button_first_timer_edit_profile, firstTimerEditProfile);
+
       // Display create new user overlay
       btnControl.resolveButtonClick(button_create_new_user, loadContentNewUserOverlay);
       btnControl.resolveButtonClick(button_create_another_user, loadContentNewUserOverlay);
