@@ -30,7 +30,18 @@ class TimeframeLog < ApplicationRecord
     # Obtain the current timeframe log id based on the current date
     def self.current_timeframe_log_id
       current_date = DateTime.now.to_date.strftime("%Y-%m-%d");
-      before_current_date = Date.today - 1
+      before_current_date = ""
+      check_start_date = TimeframeLog.find_by(start_date: current_date)
+      if check_start_date == nil
+        check_end_date = TimeframeLog.find_by(end_date: current_date)
+        if check_end_date == nil
+          before_current_date = current_date
+        else
+          before_current_date = Date.today - 1
+        end
+      else
+        before_current_date = current_date
+      end
       log = TimeframeLog.where("(start_date, end_date) OVERLAPS ('" + before_current_date.to_s + "'::DATE, '" + current_date + "'::DATE)");
       return log[0].id;
     end

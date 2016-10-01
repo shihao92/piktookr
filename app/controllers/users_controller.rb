@@ -172,6 +172,39 @@ class UsersController < ApplicationController
     end
   end
 
+  def favourite_user
+    favourite_user_id = params[:fav_user_id]
+    status = OkrUserFavourite.insert_favourite_list(current_user.id, favourite_user_id)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Updated favourite user list!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def remove_favourite_user
+    okr_user_fav_id = params[:okr_user_fav_id]
+    status = OkrUserFavourite.remove_favourite_id(okr_user_fav_id)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Updated favourite user list!', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def search_user_results
+    keyword = params[:keyword]
+    current_user_id = current_user.id
+    result_users = User.search_user_except_self(keyword, current_user_id)
+    respond_to do |format|
+      format.json { render json: result_users, status: :ok }  
+    end
+  end
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.

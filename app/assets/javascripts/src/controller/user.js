@@ -2,13 +2,17 @@
 // This JS file that controls user creation only.
 
 require(['model/user', 'model/notification', 'model/team',
-'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal'],
-function(userModel, notificationModel, teamModel, overlay, btnControl, customModal){
+'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal', 
+'view/controls/input_textbox', 'view/controls/page_refresh', 'view/search_result'],
+function(userModel, notificationModel, teamModel, overlay, btnControl, customModal, 
+textboxControl, refreshPage, searchResult){
 
     const document_url = document.URL;
     const button_create_new_user = '#btn_create_new_user_overlay';
     const button_create_another_user = '#btn_create_another_user_overlay';
     const button_confirm_delete_user = '#btn_confirm_delete_user';
+    const button_favourite_user = '#btn_fav_user';
+    const button_remove_favourite_user = '#btn_remove_fav_user';
     const overlay_create_new_user = '#overlay_create_new_user';
     const link_delete_user = "a[name=link_delete_user]";
     const link_edit_user = "a[name=link_edit_user]";
@@ -23,6 +27,9 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
     const pending_notification = '.PENDING';
     const modal_team_invitation = '#team_invitation_modal';
     const button_accept_team_invite = '#btn_accept_team_invite';
+    const overlay_search_user = '#user_search_result';
+    const input_overlay_search_user = '#overlay_search_user_input';
+    const div_search_users_results = '#div_search_users_results';
 
     // Controls at dashboard page
     const overlay_first_timer = '#overlay_first_timer';
@@ -180,11 +187,66 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
       remove_user_from_team_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
     }
 
+    // ---------------------
+    // User Favourite Module
+    // ---------------------
+
+    function addFavouriteUser(event){
+      let fav_user_id = $(event.currentTarget).attr('data-id');
+      let current_user_id = $(event.target).parents('.m-l-10').attr('data-id');
+      let add_favourite_user_promise = new userModel.addFavouriteUser(current_user_id, fav_user_id);
+      add_favourite_user_promise.then(addingFavouriteUser, customModal.notificationModalToggle);
+    }
+
+    function addingFavouriteUser(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
+    }
+
+    function removeFavouriteUser(event){
+      let okr_user_fav_id = $(event.currentTarget).attr('data-id');
+      let current_user_id = $(event.target).parents('.m-l-10').attr('data-id');
+      let remove_favourite_user_promise = new userModel.removeFavouriteUser(current_user_id, okr_user_fav_id);
+      remove_favourite_user_promise.then(removingFavouriteUser, customModal.notificationModalToggle);
+    }
+
+    function removingFavouriteUser(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
+    }
+
+    // ---------------------
+    // User Searching Module
+    // ---------------------
+
+    function searchUser(event){
+      overlay.toggleOverlay(overlay_search_user, 1);
+    }
+
+    function searchingUser(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_users_promise = new userModel.searchUsersLists(search_keyword);
+        search_users_promise.then(obtainSearchResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchResults(results, div_search_users_results);
+      customModal.toggleProgressRingModal(1);
+    }
+
 
     $(document).ready(function(){
       
       checkFirstTimeLogin();
       btnControl.resolveButtonClick(button_first_timer_edit_profile, firstTimerEditProfile);
+
+      // Search for user
+      textboxControl.searchUser(searchUser);
+      textboxControl.searchingUser(searchingUser);
 
       // Display create new user overlay
       btnControl.resolveButtonClick(button_create_new_user, loadContentNewUserOverlay);
@@ -213,6 +275,10 @@ function(userModel, notificationModel, teamModel, overlay, btnControl, customMod
       btnControl.resolveButtonClick(link_pending_team_invitation, acceptingTeamInvite);
       // Accept team invite
       btnControl.resolveButtonClick(button_accept_team_invite, acceptTeamInvite);
+
+      // User favourite module controls
+      btnControl.resolveButtonClick(button_favourite_user, addFavouriteUser);
+      btnControl.resolveButtonClick(button_remove_favourite_user, removeFavouriteUser);
 
     });
 

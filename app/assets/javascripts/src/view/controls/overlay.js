@@ -1,8 +1,8 @@
 // Date: 25 August 2016
 // JS File cater for no UI Slider control only.
 
-define(['helper/int_converter', 'view/controls/slider', 'view/library/select2.min'],
-function(intConverter, sliderParam, select2LibraryParam){
+define(['view/controls/slider', 'view/library/select2.min'],
+function(sliderParam, select2LibraryParam){
 
     // JQuery for the use of the pop up
     function loadOverlay()
@@ -71,7 +71,7 @@ function(intConverter, sliderParam, select2LibraryParam){
           setOverlayKeyResult(key_result,temp_id);
           sliderParam.contributionSliderControl(progress);
           initial_progress = progress;
-          initial_progress_int = intConverter.convertToInt(initial_progress);
+          initial_progress_int = parseInt(initial_progress);
           // Save initial progress value
           $('#popup_initial_progress').text(initial_progress_int);
           $('#key_result_id').text(temp_id);       

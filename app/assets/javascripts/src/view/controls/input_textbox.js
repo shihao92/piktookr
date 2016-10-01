@@ -173,6 +173,20 @@ function(overlayParam, btnControl){
     }, "input[name=edit_company_objective]");
   }
 
+  function searchUser(resolve){
+    $('#search_okr_users')
+    .on({
+      keypress: resolve
+    });
+  }
+
+  function searchingUser(resolve){
+    $('#overlay_search_user_input')
+    .on({
+      keypress: resolve
+    });
+  }
+
 
   return{
     addNewCompanyObjective,
@@ -193,7 +207,9 @@ function(overlayParam, btnControl){
     createInputTextboxForEditTeamObjective,
     createInputTextboxForEditTeamKeyResult,
     createInputTextboxForEditCompanyKeyResult,
-    createInputTextboxForEditCompanyObjective
+    createInputTextboxForEditCompanyObjective,
+    searchUser,
+    searchingUser
   }
 
 })

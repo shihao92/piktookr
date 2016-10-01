@@ -72,10 +72,85 @@ define (['model/server_url'], function (urlParam) {
     });
   }
 
+  function addFavouriteUser(user_id, fav_user_id)
+  {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/users/" + user_id + "/favourite_user", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        fav_user_id    : fav_user_id
+      }));
+    });
+  }
+
+  function removeFavouriteUser(user_id, okr_user_fav_id)
+  {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/users/" + user_id + "/remove_favourite_user", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        okr_user_fav_id    : okr_user_fav_id
+      }));
+    });
+  }
+
+  function searchUsersLists(keyword)
+  {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/users/search_user_results", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        keyword    : keyword
+      }));
+    });
+  }
+
   return {
     removeUserFromSystem,
     removeUserFromTeam,
-    checkFirstTimeLogin
+    checkFirstTimeLogin,
+    addFavouriteUser,
+    removeFavouriteUser,
+    searchUsersLists
   }
 
 })

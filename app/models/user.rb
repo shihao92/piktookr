@@ -103,4 +103,10 @@ class User < ActiveRecord::Base
     return status
   end
 
+  def self.search_user_except_self(keyword, current_user_id)
+    users = User.select("id, avatar_file_name, last_name, first_name, position")
+                .where("(last_name like ? or first_name like ?) and id != #{current_user_id}", "%#{keyword}%", "%#{keyword}%")
+    return users
+  end
+
 end

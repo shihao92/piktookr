@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160929074513) do
+ActiveRecord::Schema.define(version: 20160930151054) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,15 @@ ActiveRecord::Schema.define(version: 20160929074513) do
     t.string   "description"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+  end
+
+  create_table "okr_user_favourites", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "favourite_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["favourite_id"], name: "index_okr_user_favourites_on_favourite_id", using: :btree
+    t.index ["user_id"], name: "index_okr_user_favourites_on_user_id", using: :btree
   end
 
   create_table "okr_user_roles", force: :cascade do |t|
@@ -289,6 +298,7 @@ ActiveRecord::Schema.define(version: 20160929074513) do
   add_foreign_key "okr_company_teams", "team_objectives"
   add_foreign_key "okr_team_personals", "personal_objectives"
   add_foreign_key "okr_team_personals", "team_key_results"
+  add_foreign_key "okr_user_favourites", "users"
   add_foreign_key "okr_user_roles", "okr_roles"
   add_foreign_key "okr_user_roles", "users"
   add_foreign_key "okr_user_teams", "notifications"

@@ -50,7 +50,7 @@
             <label>TEAM MEMBERS</label>
             <br />
             <% @team_users.each do |item| %>
-            <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5">
+            <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5 tip" data-placement="bottom" data-toggle="tooltip">
               <%= image_tag item.avatar.url %>
             </span>
             <% end %>
@@ -193,7 +193,7 @@
                     <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
                     <br />
                     <div class="progress">
-                      <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                     </div>
                   </div>
                 </div>
@@ -294,7 +294,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
                       <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
                       <div class="progress">
-                        <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                        <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                       </div>    
                     </div>
                   </div>

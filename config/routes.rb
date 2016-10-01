@@ -6,9 +6,10 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => {:registrations => "registrations"}
   resources :users, except: [:create, :show] do
     collection do
-      get ':user_created' => 'users#index' 
-      post :create_member
-      post :edit_team
+      get   ':user_created' => 'users#index' 
+      post  :create_member
+      post  :edit_team
+      post  :search_user_results
     end
 
     member do
@@ -26,6 +27,10 @@ Rails.application.routes.draw do
       end
 
       get   :check_first_time
+
+      # User favourite module
+      post  :favourite_user
+      post  :remove_favourite_user
 
       # Notifications section
       get   :notifications_read_status

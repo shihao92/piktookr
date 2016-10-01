@@ -156,52 +156,29 @@
             </span>
           </li>
           <hr />
-          <% @users.each_with_index do |item,index| %>
-            <% if (item.id != current_user.id) %>
-              <% if (index == 0) %>
-              <li>
-                <a href="/users/<%= item.id %>/personal_objectives/view_others_personal_okr" class="detailed">
-                  <span class="title" id="user-name">
-                    <%= item.last_name %> <%= item.first_name %>
-                  </span>
-                  <p class="details details-layout" id="user-position">
-                    <%= item.position %>
-                  </p> 
-                </a>
-                <span class="icon-thumbnail">
-                  <span id="username-shortform">
-                    <% @user_shortform = item.first_name.scan(/[A-Z]/) %>
-                    <% @user_short_str = "" %>
-                    <% @user_shortform.each do |item| %>
-                      <% @user_short_str = @user_short_str + item %>   
-                    <% end %>
-                    <%= @user_short_str %>
-                  </span>
+          <% okr_user_favs = OkrUserFavourite.where(user_id: current_user.id) %>
+          <% okr_user_favs.each do |item| %>
+            <% this_user = User.find(item.favourite_id) %>
+            <li>
+              <a href="/users/<%= item.favourite_id %>/personal_objectives/view_others_personal_okr" class="detailed">
+                <span class="title" id="user-name">
+                  <%= this_user.last_name %> <%= this_user.first_name %>
                 </span>
-              </li>
-              <% else %>
-              <li>
-                <a href="/users/<%= item.id %>/personal_objectives/view_others_personal_okr" class="detailed">
-                  <span class="title" id="user-name">
-                    <%= item.last_name %> <%= item.first_name %>
-                  </span>
-                  <p class="details details-layout" id="user-position">
-                    <%= item.position %>
-                  </p> 
-                </a>
-                <span class="icon-thumbnail">
-                  <span id="username-shortform">
-                    <% @user_shortform = item.first_name.scan(/[A-Z]/) %>
-                    <% @user_short_str = "" %>
-                    <% @user_shortform.each do |item| %>
-                      <% @user_short_str = @user_short_str + item %>
-                    <% end %>
-                    <%= @user_short_str %>
-                  </span>
+                <p class="details details-layout" id="user-position">
+                  <%= this_user.position %>
+                </p> 
+              </a>
+              <span class="icon-thumbnail">
+                <span id="username-shortform">
+                  <% @user_shortform = this_user.first_name.scan(/[A-Z]/) %>
+                  <% @user_short_str = "" %>
+                  <% @user_shortform.each do |item| %>
+                    <% @user_short_str = @user_short_str + item %>
+                  <% end %>
+                  <%= @user_short_str %>
                 </span>
-              </li>
-              <% end %>
-            <% end %>
+              </span>
+            </li>
           <% end %>
         </ul>
         <div class="clearfix"></div>
@@ -249,8 +226,8 @@
               <img src="<%= @server_url %>/assets/img/logo.png" alt="logo" data-src="<%= @server_url %>/assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
             </div>
             <span class="search-link">
-              <label for="search-input"><i class="pg-search"></i></label>
-              <input id="search-input" type="text" class="custom-search" placeholder="Type to search"/>
+              <label for="search_okr_users"><i class="pg-search"></i></label>
+              <input id="search_okr_users" type="text" class="custom-search" placeholder="Type to search"/>
             </span> 
           </div>
         </div>
@@ -260,6 +237,7 @@
             <!-- Notification is in the right hand side bar -->
             <a id="toggle_notifications" data-id="<%= @session_user.id %>" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
               <span id="bubble_new_notification" class="bubble">
+                
               </span>
             </a>
             <!-- END NOTIFICATIONS LIST -->
@@ -641,6 +619,36 @@
           </div>
           <div class="col-sm-3 col-md-3 col-lg-3">
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Overlay for user searching-->
+    <div id="user_search_result" class="overlay hide">
+      <div class="overlay-content has-results m-t-20">
+        <a href="/" class="close-icon-light overlay-close text-black fs-16">
+          <i class="pg-close"></i>
+        </a>
+        <div class="col-sm-3 col-md-3 col-lg-3">
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6">
+          <div class="container-fluid">
+            <input id="overlay_search_user_input" class="no-border overlay-search bg-transparent" placeholder="Search..." autocomplete="off" spellcheck="false">
+            <br/>
+            <div class="inline-block m-l-10">
+              <p class="fs-13">Press enter to search (The search is case sensitive)</p>
+            </div>
+          </div>
+          <div class="container-fluid">
+            <div class="search-results m-t-40">
+              <p class="bold">PiktoOKR Search Results</p>
+              <div id="div_search_users_results" class="row">
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-3 col-lg-3">
         </div>
       </div>
     </div>

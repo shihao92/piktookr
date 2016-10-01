@@ -5,7 +5,7 @@ define(function(){
 
   function checkUncheckPersonalKeyResult(resolve)
   {
-    $('input[type=checkbox]').click(resolve);
+    $('input[name=personal_kr_checkbox]').click(resolve);
   }
 
   return{

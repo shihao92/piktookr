@@ -172,7 +172,7 @@
                     <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
                     <br />
                     <div class="progress">
-                      <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                     </div>
                   </div>
                 </div>
@@ -241,17 +241,17 @@
               <% end %>
               <div id="personal_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">
-                  <div class="row checkbox">
+                  <div class="row checkbox check-complete">
                     <div class="col-lg-6 col-md-6 col-sm-6 item-content">
                       <div class="accordion-item-title">
-                        <div class="checkbox-primary" id="personal_kr_<%= item.id %>">
+                        <div id="personal_kr_<%= item.id %>">
                           <% if(item.is_completed == true) %>
-                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" checked/>
+                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox" checked/>
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout"><%= raw(item.key_result) %></p>
                           </label>
                           <% else %>
-                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>"/>
+                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox"/>
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout">
                               <%= raw(item.key_result) %>
@@ -293,7 +293,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
                       <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
                       <div class="progress">
-                        <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                        <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                       </div>    
                     </div>
                   </div>

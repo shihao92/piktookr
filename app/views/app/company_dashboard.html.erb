@@ -28,7 +28,7 @@
       <div class="col-lg-5 col-md-5 col-sm-5 padding-body text-center">
         <h1>P</h1>
       </div>
-      <div class="col-lg-7 col-md-7 col-sm-7" >
+      <div class="col-lg-7 col-md-7 col-sm-7">
         <div class="row">
           <h5 class="bold">
             <span>Piktochart</span>
@@ -185,7 +185,7 @@
                     <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
                     <br />
                     <div class="progress">
-                      <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                     </div>
                   </div>
                 </div>
@@ -282,7 +282,7 @@
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
                       <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
                       <div class="progress">
-                        <div class="progress-bar progress-bar-primary" style="width:<%= item.progress %>%"></div>
+                        <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                       </div>    
                     </div>
                   </div>
