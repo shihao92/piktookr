@@ -42,7 +42,16 @@ Rails.application.routes.draw do
   # Roles and Security Module
   # -------------------------
 
-  resources :okr_roles, path: 'role'
+  resources :okr_roles, path: 'role' do
+    collection do
+      post  :insert_new_role_control
+      post  :remove_role_control
+    end
+
+    member do
+
+    end
+  end
 
   # ----------------
   # Timeframe module
@@ -53,6 +62,7 @@ Rails.application.routes.draw do
     end
     collection do
       get   :get_current_quarter_end_date
+      get   :is_next_year_log_presence
     end
   end
   

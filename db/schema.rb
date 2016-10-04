@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930151054) do
+ActiveRecord::Schema.define(version: 20161001060726) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -46,6 +46,20 @@ ActiveRecord::Schema.define(version: 20160930151054) do
     t.integer  "log_personal_key_result_id"
     t.index ["log_personal_key_result_id"], name: "index_contributions_on_log_personal_key_result_id", using: :btree
     t.index ["personal_key_result_id"], name: "index_contributions_on_personal_key_result_id", using: :btree
+  end
+
+  create_table "control_types", force: :cascade do |t|
+    t.string   "okr_system_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "controls", force: :cascade do |t|
+    t.string   "details"
+    t.integer  "control_type_id"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["control_type_id"], name: "index_controls_on_control_type_id", using: :btree
   end
 
   create_table "log_company_key_results", force: :cascade do |t|
@@ -127,6 +141,15 @@ ActiveRecord::Schema.define(version: 20160930151054) do
     t.datetime "updated_at",            null: false
     t.index ["company_key_result_id"], name: "index_okr_company_teams_on_company_key_result_id", using: :btree
     t.index ["team_objective_id"], name: "index_okr_company_teams_on_team_objective_id", using: :btree
+  end
+
+  create_table "okr_role_controls", force: :cascade do |t|
+    t.integer  "okr_role_id"
+    t.integer  "control_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["control_id"], name: "index_okr_role_controls_on_control_id", using: :btree
+    t.index ["okr_role_id"], name: "index_okr_role_controls_on_okr_role_id", using: :btree
   end
 
   create_table "okr_roles", force: :cascade do |t|
@@ -282,6 +305,7 @@ ActiveRecord::Schema.define(version: 20160930151054) do
   add_foreign_key "company_objectives", "users"
   add_foreign_key "contributions", "log_personal_key_results"
   add_foreign_key "contributions", "personal_key_results"
+  add_foreign_key "controls", "control_types"
   add_foreign_key "log_company_key_results", "company_key_results"
   add_foreign_key "log_company_key_results", "users"
   add_foreign_key "log_company_objectives", "company_objectives"
@@ -296,6 +320,8 @@ ActiveRecord::Schema.define(version: 20160930151054) do
   add_foreign_key "log_team_objectives", "users"
   add_foreign_key "okr_company_teams", "company_key_results"
   add_foreign_key "okr_company_teams", "team_objectives"
+  add_foreign_key "okr_role_controls", "controls"
+  add_foreign_key "okr_role_controls", "okr_roles"
   add_foreign_key "okr_team_personals", "personal_objectives"
   add_foreign_key "okr_team_personals", "team_key_results"
   add_foreign_key "okr_user_favourites", "users"

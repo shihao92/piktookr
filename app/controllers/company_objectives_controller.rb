@@ -63,6 +63,8 @@ class CompanyObjectivesController < ApplicationController
   end
 
   def company_dashboard
+    pages_initialization
+
     @company_objectives = CompanyObjective.where(timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
     @completed_objectives = 0
     @temp_progress_buffer = 0.00
@@ -82,16 +84,13 @@ class CompanyObjectivesController < ApplicationController
       end
       @percentage_completed_objective = (@completed_objectives.to_f / @company_objectives.count.to_f) * 100
       @total_progress = @temp_progress_buffer / @company_objectives.count
-      # Timeframe module
-      @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
     end
-
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/company_dashboard'
   end
 
   def details
+    pages_initialization
     @objective_id = params[:id]
     @company_objective = CompanyObjective.find(@objective_id)
     @company_key_results = CompanyKeyResult.where(company_objective_id: @objective_id)
@@ -100,8 +99,6 @@ class CompanyObjectivesController < ApplicationController
     @log = LogCompanyObjective.where(company_objective_id: @objective_id).order(id: :DESC)
 
     @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/company_objective_details'
   end
@@ -128,4 +125,5 @@ class CompanyObjectivesController < ApplicationController
     def company_objective_params
       params.require(:company_objective).permit(:objective, :progress, :timeframe_log_id);
     end
+    
 end

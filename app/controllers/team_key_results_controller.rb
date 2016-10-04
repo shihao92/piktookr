@@ -69,6 +69,8 @@ class TeamKeyResultsController < ApplicationController
     @key_result_id = params[:id]
     @team_id = params[:okr_team_id]
 
+    pages_initialization
+
     @okr_team = OkrTeam.find(@team_id)
     @team_key_result = TeamKeyResult.find(@key_result_id)
     @team_objective = TeamObjective.find(@team_key_result.team_objective_id)
@@ -83,9 +85,6 @@ class TeamKeyResultsController < ApplicationController
       @personal_objective = PersonalObjective.where(id: item.personal_objective_id).map{|obj| [obj.objective]}
       @temp_personal_objective.push(@personal_objective)
     end
-
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/team_key_result_details'
   end

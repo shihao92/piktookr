@@ -4,7 +4,12 @@ class TimeframesController < ApplicationController
   # GET /timeframes
   # GET /timeframes.json
   def index
+    pages_initialization
+
     @timeframes = Timeframe.all
+    @timeframe_logs = TimeframeLog.where('extract(year from start_date) = ?', Date.today.year).order(created_at: :ASC)
+    @next_timeframe_logs = TimeframeLog.where('extract(year from start_date) = ?', Date.today.year + 1)
+    @timeframe_logs_advanced_two_years = TimeframeLog.where('extract(year from start_date) = ?', Date.today.year + 2)
   end
 
   # GET /timeframes/1
@@ -24,15 +29,15 @@ class TimeframesController < ApplicationController
   # POST /timeframes
   # POST /timeframes.json
   def create
-    @timeframe = Timeframe.new(timeframe_params)
-    @start_date = Date.new(@timeframe.year,1,1);
+    year = params[:year]
+    timeframe_type = params[:type]
+
+    @timeframe = Timeframe.new(year: year, timeframe_type: timeframe_type)
     respond_to do |format|
       if @timeframe.save
-        create_timeframe_log(@timeframe.timeframe_type)
-        format.html { redirect_to @timeframe, notice: 'Timeframe was successfully created.' }
-        format.json { render :show, status: :created, location: @timeframe }
+        TimeframeLog.create_timeframe_log(@timeframe.year, @timeframe.id, @timeframe.timeframe_type)
+        format.json { render json: "Timeframe successfully created!", status: :created }
       else
-        format.html { render :new }
         format.json { render json: @timeframe.errors, status: :unprocessable_entity }
       end
     end
@@ -75,6 +80,17 @@ class TimeframesController < ApplicationController
     timeframe_log = TimeframeLog.find(@@system_timeframe_log_id)
     respond_to do |format|
       format.json { render json: timeframe_log.end_date, status: :ok }
+    end
+  end
+
+  def is_next_year_log_presence
+    next_year_timeframe_logs = TimeframeLog.where('extract(year from start_date) = ?', Date.today.year + 1).order(created_at: :ASC)
+    respond_to do |format|
+      if next_year_timeframe_logs == nil
+        format.json { render json: "Please setup the timeframe intervals for next year or system will set it automatically as quarter when the new year arrived.", status: :ok }
+      else
+        format.json { render json: "Timeframe for next year all set.", status: :ok }
+      end
     end
   end
 

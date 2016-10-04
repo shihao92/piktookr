@@ -70,7 +70,8 @@
           </li>
           <!--Section to link to own team(s)-->
           <!--If its admin user, then will display all team(s)-->
-          <% if @user_role.okr_role_id == 0 %>
+          <% if @user_role != nil %>
+          <% if @user_role.okr_role_id == @admin_id %>
             <% okr_teams = OkrTeam.all %>
             <% okr_teams.each do |item| %>
               <li>
@@ -129,6 +130,7 @@
             </li>
             <% end %>
             <% end %>
+          <% end %>
           <% end %>
           <!--Section to link to own personal OKR-->
           <li>
@@ -661,6 +663,7 @@
     <script src="/dist/user-webpack.js"></script>
     <script src="/dist/team-webpack.js"></script>
     <script src="/dist/timeframe-webpack.js"></script>
+    <script src="/dist/role-webpack.js"></script>
   </body>
 </html>
 <!-- modified -->

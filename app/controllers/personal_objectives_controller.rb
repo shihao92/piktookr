@@ -58,17 +58,15 @@ class PersonalObjectivesController < ApplicationController
 
   def details
     objective_id = params[:id]
+    pages_initialization
 
     @personal_objective = PersonalObjective.find(objective_id)
     okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
     @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
     @personal_key_results = PersonalKeyResult.where(personal_objective_id: objective_id)
- 
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
 
     @user_info = User.find(@personal_objective.user_id)
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     @log = LogPersonalObjective.where(personal_objective_id: objective_id).order(id: :DESC)
 
@@ -82,7 +80,8 @@ class PersonalObjectivesController < ApplicationController
     @role = OkrRole.find(okr_user_role.okr_role_id)    
     current_timeframe_log_id = TimeframeLog.current_timeframe_log_id
     @personal_objective = PersonalObjective.where(user_id: user_id, timeframe_log_id: @@system_timeframe_log_id) 
-    @completed_objective = 0   
+    @completed_objective = 0  
+    @admin_id = @@admin.id 
 
     if(@personal_objective.count != 0)  
       temp_date = [] 

@@ -72,7 +72,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       textboxControl.createInputTextboxForEditTeamObjective(team_objective_id, objective);
     }
 
-    function editedTeamObjective(event){
+    function editingTeamObjective(event){
       let key = event.which;
       if(key == 13){
         let updated_objective = $(event.target).val();
@@ -83,12 +83,17 @@ textboxControl, btnControl, customSelect2, refreshPage) {
           let edit_objective_promise = new teamObjectiveModel.editTeamObjective(
             editing_objective_id, updated_objective, original_objective, team_id
           );
-          edit_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_objective_promise.then(editedTeamObjective, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedTeamObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     // ---------------
@@ -124,7 +129,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       textboxControl.createInputTextboxForEditTeamKeyResult(team_key_result_id, team_key_result);
     }
 
-    function editedTeamKeyResult(event){
+    function editingTeamKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
@@ -135,12 +140,17 @@ textboxControl, btnControl, customSelect2, refreshPage) {
           let edit_key_result_promise = new teamKeyResultModel.editTeamKeyResult(
             editing_key_result_id, updated_key_result, original_key_result
           );
-          edit_key_result_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_key_result_promise.then(editedTeamKeyResult, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedTeamKeyResult(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function openTeamSettingOverlay(event){
@@ -185,7 +195,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         
         // Key result - Edit
         btnControl.resolveButtonClick(button_edit_team_key_result, editTeamKeyResult);
-        textboxControl.editTeamKeyResult(editedTeamKeyResult);
+        textboxControl.editTeamKeyResult(editingTeamKeyResult);
 
         // Key result - Set due Date
         btnControl.resolveButtonClick(link_due_date_team_kr, getCurrentQuarterEndDate);
@@ -198,7 +208,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         
         // Team Objective - Edit
         btnControl.resolveButtonClick(button_edit_team_objective, editTeamObjective);
-        textboxControl.editTeamObjective(editedTeamObjective);
+        textboxControl.editTeamObjective(editingTeamObjective);
 
         // Setting for the team
         btnControl.resolveButtonClick(button_team_setting, openTeamSettingOverlay);

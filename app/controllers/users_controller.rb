@@ -15,6 +15,9 @@ class UsersController < ApplicationController
     @user_status_selection = CONST_USER_STATUS
     @current_edit_user = User.find(@@editing_user_id)
     @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
+    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
+
+    @admin_id = @@admin.id
     
     @user = User.new
 

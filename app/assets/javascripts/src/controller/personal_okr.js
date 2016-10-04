@@ -73,7 +73,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
       original_personal_objective = original_objective;
     }
 
-    function editedPersonalObjective(event){
+    function editingPersonalObjective(event){
       let updated_objective = $(event.target).val();
       let current_editing_personal_objective_id = $(event.target).attr('data-id');
       let key = event.which;
@@ -83,12 +83,17 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
           let edit_objective_promise = new personalObjectiveModel.editPersonalObjective(
             current_editing_personal_objective_id, updated_objective, original_personal_objective
           );
-          edit_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_objective_promise.then(editedPersonalObjective, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedPersonalObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     // -------------------
@@ -107,10 +112,15 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
             let create_personal_kr_promise = new personalKeyResultModel.newPersonalKeyResult(
               temp_personal_key_result, current_focus_objective_id
             );   
-            create_personal_kr_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
+            create_personal_kr_promise.then(createdPersonalKeyResult, customModal.notificationModalToggle);
           }
         }
       }
+    }
+
+    function createdPersonalKeyResult(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function updateProgressPersonalKeyResult(){
@@ -157,7 +167,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
       btnControl.hideButton(button_edit_personal_key_result);
     }
 
-    function editedPersonalKeyResult(event){
+    function editingPersonalKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
@@ -167,12 +177,17 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
           let edit_kr_promise = new personalKeyResultModel.editPersonalKeyResult(
               editing_key_result_id, updated_key_result, original_key_result
           );
-          edit_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_kr_promise.then(editedPersonalKeyResult, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedPersonalKeyResult(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function getCurrentQuarterEndDate(){
@@ -219,7 +234,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
        
         // Personal Objective - Edit     
         btnControl.resolveButtonClick(button_edit_personal_objective, editPersonalObjective);
-        textboxInput.editPersonalObjective(editedPersonalObjective);
+        textboxInput.editPersonalObjective(editingPersonalObjective);
 
         // Key result - Create new  
         textboxInput.addNewPersonalKeyResult(createNewPersonalKeyResult);     
@@ -233,7 +248,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
         
         // Key Result - Edit 
         btnControl.resolveButtonClick(button_edit_personal_key_result, editPersonalKeyResult);
-        textboxInput.editPersonalKeyResult(editedPersonalKeyResult);
+        textboxInput.editPersonalKeyResult(editingPersonalKeyResult);
 
         // Key Result - Add due date
         btnControl.resolveButtonClick(link_add_due_date_personal_kr, getCurrentQuarterEndDate);

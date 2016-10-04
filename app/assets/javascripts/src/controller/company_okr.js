@@ -69,7 +69,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       textboxControl.createInputTextboxForEditCompanyObjective(objective_id, objective);
     }
 
-    function editedCompanyObjective(event){
+    function editingCompanyObjective(event){
       let key = event.which;
       if(key == 13){
         let updated_objective = $(event.target).val();
@@ -80,12 +80,17 @@ textboxControl, btnControl, customSelect2, refreshPage) {
           let edit_company_objective_promise = new companyObjectiveModel.editCompanyObjective(
             editing_objective_id, updated_objective, original_objective
           );
-          edit_company_objective_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_company_objective_promise.then(editedCompanyObjective, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedCompanyObjective(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     // ------------------
@@ -123,7 +128,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       btnControl.hideButton(button_edit_company_key_result);
     }
 
-    function editedCompanyKeyResult(event){
+    function editingCompanyKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
@@ -134,12 +139,17 @@ textboxControl, btnControl, customSelect2, refreshPage) {
           let edit_company_kr_promise = new companyKeyResultModel.editCompanyKeyResult(
             editing_key_result_id, updated_key_result, original_key_result
           );
-          edit_company_kr_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+          edit_company_kr_promise.then(editedCompanyKeyResult, customModal.notificationModalToggle);
         }
         else{
           location.reload();
         }
       }
+    }
+
+    function editedCompanyKeyResult(message){
+      customModal.toggleProgressRingModal(0);
+      refreshPage.refreshPage();
     }
 
     function getCurrentQuarterEndDate(){
@@ -177,7 +187,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
 
         // Key Result - Edit
         btnControl.resolveButtonClick(button_edit_company_key_result, editCompanyKeyResult);
-        textboxControl.editCompanyKeyResult(editedCompanyKeyResult);
+        textboxControl.editCompanyKeyResult(editingCompanyKeyResult);
 
         // Key Result - Update due date
         btnControl.resolveButtonClick(link_add_due_date_company_kr, getCurrentQuarterEndDate);
@@ -189,7 +199,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         
         // Company Objective - Edit
         btnControl.resolveButtonClick(button_edit_company_objective, editCompanyObjective);
-        textboxControl.editCompanyObjective(editedCompanyObjective);
+        textboxControl.editCompanyObjective(editingCompanyObjective);
 
     })
 

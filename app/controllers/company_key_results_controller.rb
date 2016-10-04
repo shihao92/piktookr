@@ -51,6 +51,8 @@ class CompanyKeyResultsController < ApplicationController
   end
 
   def details
+    pages_initialization
+
     @key_result_id = params[:id]
     @company_key_result = CompanyKeyResult.find(@key_result_id)
     @company_objective = CompanyObjective.find(@company_key_result.company_objective_id)
@@ -65,9 +67,8 @@ class CompanyKeyResultsController < ApplicationController
       @temp_team_objective.push(@team_objective)
     end
     
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
     @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
+
 
     render 'app/company_key_result_details'
   end

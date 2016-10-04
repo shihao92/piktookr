@@ -63,6 +63,7 @@ class TeamObjectivesController < ApplicationController
 
   def team_dashboard
     @team_id = params[:okr_team_id]
+    @admin_id = @@admin.id
     
     @okr_team = OkrTeam.find(@team_id)
     team_shortform = @okr_team.name.scan(/[A-Z]/) 
@@ -118,6 +119,8 @@ class TeamObjectivesController < ApplicationController
     @team_id = params[:okr_team_id]
     @okr_team = OkrTeam.find(@team_id)
 
+    pages_initialization
+
     @okr_company_team = OkrCompanyTeam.find_by(team_objective_id: @objective_id)
     @company_key_result = CompanyKeyResult.find(@okr_company_team.company_key_result_id)
     @team_objective = TeamObjective.find(@objective_id)
@@ -128,8 +131,6 @@ class TeamObjectivesController < ApplicationController
 
     @current_date = Time.now.strftime("%Y-%m-%d") 
     @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id) 
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/team_objective_details'
   end

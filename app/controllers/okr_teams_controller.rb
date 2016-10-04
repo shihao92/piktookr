@@ -4,8 +4,9 @@ class OkrTeamsController < ApplicationController
   # GET /okr_teams
   # GET /okr_teams.json
   def index
+    pages_initialization
+
     @okr_teams = OkrTeam.all
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     render 'app/system_teams'
   end

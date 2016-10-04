@@ -134,16 +134,15 @@ class PersonalKeyResultsController < ApplicationController
   end
 
   def details
+    pages_initialization
+
     @key_result_id = params[:id]
 
     @personal_key_result = PersonalKeyResult.find(@key_result_id)
     @personal_objective = PersonalObjective.find(@personal_key_result.personal_objective_id)
-    
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     @user_info = User.find(@personal_objective.user_id)
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
 
     @log = LogPersonalKeyResult.where(personal_key_result_id: @key_result_id).order(id: :DESC)
 
