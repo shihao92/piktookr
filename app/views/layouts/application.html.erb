@@ -71,7 +71,7 @@
           <!--Section to link to own team(s)-->
           <!--If its admin user, then will display all team(s)-->
           <% if @user_role != nil %>
-          <% if @user_role.okr_role_id == @admin_id %>
+          <% if @role.name == "Admin" %>
             <% okr_teams = OkrTeam.all %>
             <% okr_teams.each do |item| %>
               <li>

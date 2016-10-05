@@ -7,9 +7,6 @@ class ApplicationController < ActionController::Base
 
   # Timeframe module
   @@system_timeframe_log_id = TimeframeLog.current_timeframe_log_id
-  # Role and Security Profile
-  @@admin = OkrRole.find_by(name: "Admin")
-  @@team_lead = OkrRole.find_by(name: "Team Lead")
 
   def after_sign_in_path_for(resource)
     request.env['omniauth.origin'] || root_path
@@ -24,13 +21,13 @@ class ApplicationController < ActionController::Base
   end
 
   def pages_initialization
-    @admin_id = @@admin.id
-
     @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
     @user = User.find(current_user.id)
-    okr_user_role = OkrUserRole.find_by(user_id: current_user.id)  
+    okr_user_role = OkrUserRole.find_by(user_id: current_user.id)
     @role = OkrRole.find(okr_user_role.okr_role_id)
+
+    @controls = initialize_role_control(@role)
   end
 
 private
@@ -41,5 +38,15 @@ private
 
   def set_timezone(&action)
     Time.use_zone(current_user.time_zone, &action)
+  end
+  
+  def initialize_role_control(role)
+    okr_role_controls = OkrRoleControl.where(okr_role_id: role.id)
+    controls = []
+    okr_role_controls.each do |item|
+      control = Control.find(item.control_id)
+      controls << control.details
+    end
+    return controls
   end
 end

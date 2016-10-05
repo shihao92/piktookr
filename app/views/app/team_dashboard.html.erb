@@ -96,7 +96,8 @@
           <span>
             <span id="overall_okr_progress">
               <%= @total_progress.to_i %>%
-            </span> <br/>
+            </span> 
+            <br/>
             <p>overall progress</p>
           </span>
           <div class="slice">
@@ -119,7 +120,7 @@
                   <%= @date_difference.to_i %>
                 <% end %>                 
               <% end %>
-            </span>  
+            </span> 
             <p>days ago</p> 
           </span>
           <div class="slice">
@@ -166,10 +167,12 @@
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="pull-left">
+                      <% if @controls.include? 'Edit Team OKR' %>
                       <% if(item.progress != 100.00) %>
                       <button class="btn btn-accordion edit_team_objective" data-id="<%= item.id %>">
                         <i class="fa fa-pencil"></i>
                       </button>
+                      <% end %>
                       <% end %>
                     </div>
                   </div>
@@ -213,6 +216,7 @@
                       <span> Go to details</span>
                     </a>
                   </li>
+                  <% if @controls.include? 'Delete Team OKR' %>
                   <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
                   <% @team_key_result = @team_key_result.count %>
                   <% if @team_key_result == 0 %>
@@ -222,6 +226,7 @@
                       <span> Delete</span>
                     </a>
                   </li>
+                  <% end %>
                   <% end %>
                 </ul>
               </div>
@@ -274,10 +279,12 @@
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="pull-left">
+                        <% if @controls.include? 'Edit Team OKR' %>
                         <% if(item.progress != 100.00) %>
                         <button class="btn btn-accordion edit_team_key_result" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
+                        <% end %>
                         <% end %>
                       </div>
                     </div>
@@ -312,6 +319,7 @@
                            Go to details
                         </a>
                       </li>
+                      <% if @controls.include? 'Delete Team OKR' %>
                       <li>
                         <!-- Deletion of key result -->
                         <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
@@ -319,6 +327,7 @@
                            Delete
                         </a>
                       </li>
+                      <% end %>
                     </ul>
            	      </div>
                 </div>
@@ -351,9 +360,11 @@
               </div>
             <% end %>
             <!-- New row for the add in of new key results over here -->
+            <% if @controls.include? 'Create Team OKR' %>
             <div class="row accordion-item add-new-team-key-result">
               <input name="new_team_key_result" data-id="<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new team key result"/>
             </div>
+            <% end %>
           </div>
         </div>
         <div class="panel-footer">
@@ -376,15 +387,17 @@
       </div>
     <% end %>
 
+    <% if @controls.include? 'Create Team OKR' %>
     <div class="panel panel-default">
       <div class="panel-heading" role="tab">
         <h4 class="panel-title panel-title-custom">
-            <div id="add-new-team-objective">
-              <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-            </div>
+          <div id="add-new-team-objective">
+            <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+          </div>
         </h4>
       </div>
     </div>
+    <% end %>
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->
@@ -421,7 +434,7 @@
                 <!--Load all the key result of the particular team-->
                 <select id="company_key_result_selection" class="full-width" data-init-plugin="select2">
                   <% @company_key_results.each_with_index do |item,index| %>
-                    <option value="<%= item.id %>"><%= item.key_result %></option>
+                    <option value="<%= item[1] %>"><%= item[0] %></option>
                   <% end %>                             
                 </select>
               </div>

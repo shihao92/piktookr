@@ -74,14 +74,14 @@ class PersonalObjectivesController < ApplicationController
   end
 
   def view_others_personal_okr
+    pages_initialization
+
     user_id = params[:id]
     @user = User.find(user_id)     
     okr_user_role = OkrUserRole.find_by(user_id: user_id)
-    @role = OkrRole.find(okr_user_role.okr_role_id)    
-    current_timeframe_log_id = TimeframeLog.current_timeframe_log_id
+    @other_user_role = OkrRole.find(okr_user_role.okr_role_id)
     @personal_objective = PersonalObjective.where(user_id: user_id, timeframe_log_id: @@system_timeframe_log_id) 
     @completed_objective = 0  
-    @admin_id = @@admin.id 
 
     if(@personal_objective.count != 0)  
       temp_date = [] 
@@ -99,9 +99,6 @@ class PersonalObjectivesController < ApplicationController
       date_max = temp_date.max 
       @date_difference = (Time.now - date_max) / 86400 
     end 
-
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
 
     render 'app/personal_okr_others'
   end

@@ -24,9 +24,11 @@
     </h5>
   </div>
   <div class="col-md-6 col-sm-6">
+    <% if @controls.include? 'Create User' %>
     <button id="btn_create_new_user_overlay" class="btn btn-complete btn-cons btn-rounded btn-lg bold pull-right">
       Create New
     </button>
+    <% end %>
   </div>
 </div>
 <br/>
@@ -90,16 +92,20 @@
               <td><%= user.email %></td>
               <td><%= user.updated_at %></td>
               <td>
+                <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-pencil"></i> Edit
                   </a>
                 </span>
+                <% end %>
+                <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
+                <% end %>
               </td>
             </tr>
             <% end %>
@@ -150,16 +156,20 @@
               <td><%= user.email %></td>
               <td><%= user.updated_at %></td>
               <td>
+                <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-pencil"></i> Edit
                   </a>
                 </span>
+                <% end %>
+                <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
+                <% end %>
               </td>
             </tr>
             <% end %>
@@ -210,16 +220,20 @@
               <td><%= user.email %></td>
               <td><%= user.updated_at %></td>
               <td>
+                <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-pencil"></i> Edit
                   </a>
                 </span>
+                <% end %>
+                <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
+                <% end %>
               </td>
             </tr>
             <% end %>
@@ -270,16 +284,20 @@
               <td><%= user.email %></td>
               <td><%= user.updated_at %></td>
               <td>
+                <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-pencil"></i> Edit
                   </a>
                 </span>
+                <% end %>
+                <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
                     <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
+                <% end %>
               </td>
             </tr>
             <% end %>
@@ -370,7 +388,7 @@
             <% roles_array = OkrRole.all.map { |role| [role.name, role.id] } %>
             <div class="form-group">
               <%= f.label :role %><br />
-              <%= select("role", "role_id", roles_array, {include_blank: false}, class: "form-control") %>
+              <%= select("role", "id", roles_array, {include_blank: false}, class: "form-control") %>
             </div>
             <br/>
 
@@ -514,7 +532,7 @@
           <% roles_array = OkrRole.all.map { |role| [role.name, role.id] } %>
           <div class="form-group">
             <%= f.label :role %><br />
-            <%= select("role", "role_id", roles_array, {include_blank: false}, class: "form-control") %>
+            <%= select("role", "id", roles_array, {include_blank: false}, class: "form-control") %>
           </div>
           <br/>
           <div class="form-group">

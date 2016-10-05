@@ -47,7 +47,7 @@ class AppController < ApplicationController
       end 
       
       team_ids.each do |item|
-        team_objectives = TeamObjective.where(okr_team_id: item.okr_team_id).map{|obj| [obj.objective, obj.id] }
+        team_objectives = TeamObjective.where(okr_team_id: item.okr_team_id, timeframe_log_id: @selected_timeframe.id).map{|obj| [obj.objective, obj.id] }
         temp_team_objective.push(team_objectives)
       end
 

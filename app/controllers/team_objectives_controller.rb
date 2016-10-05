@@ -62,8 +62,9 @@ class TeamObjectivesController < ApplicationController
   end
 
   def team_dashboard
+    pages_initialization
+
     @team_id = params[:okr_team_id]
-    @admin_id = @@admin.id
     
     @okr_team = OkrTeam.find(@team_id)
     team_shortform = @okr_team.name.scan(/[A-Z]/) 
@@ -106,10 +107,16 @@ class TeamObjectivesController < ApplicationController
     end
 
     # Create new team objective section
-    @company_key_results = CompanyKeyResult.all   
-
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter 
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
+    @company_key_results = []
+    company_objectives = CompanyObjective.where(timeframe_log_id: @@system_timeframe_log_id)
+    if company_objectives.count != 0 
+      company_objectives.each do |item|
+        company_key_results = CompanyKeyResult.where(company_objective_id: item.id).map{|kr| [kr.key_result, kr.id]}
+        company_key_results.each do |element|
+          @company_key_results.push(element)
+        end    
+      end
+    end
 
     render 'app/team_dashboard'
   end

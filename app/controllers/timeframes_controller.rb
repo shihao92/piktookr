@@ -32,13 +32,13 @@ class TimeframesController < ApplicationController
     year = params[:year]
     timeframe_type = params[:type]
 
-    @timeframe = Timeframe.new(year: year, timeframe_type: timeframe_type)
+    timeframe = Timeframe.new(year: year, timeframe_type: timeframe_type)
     respond_to do |format|
-      if @timeframe.save
-        TimeframeLog.create_timeframe_log(@timeframe.year, @timeframe.id, @timeframe.timeframe_type)
-        format.json { render json: "Timeframe successfully created!", status: :created }
+      if timeframe.save
+        TimeframeLog.create_timeframe_log(timeframe.year, timeframe.id, timeframe.timeframe_type)
+        format.json { render json: "Timeframe successfully created!", status: :ok }
       else
-        format.json { render json: @timeframe.errors, status: :unprocessable_entity }
+        format.json { render json: "Error!", status: :unprocessable_entity }
       end
     end
   end
@@ -65,6 +65,21 @@ class TimeframesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to timeframes_url, notice: 'Timeframe was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def destroy_timeframe
+    timeframe_id = params[:timeframe_id]
+    respond_to do |format|
+      if TimeframeLog.where(timeframe_id: timeframe_id).destroy_all()
+        if Timeframe.find(timeframe_id).destroy
+          format.json { render json: "Record removed successfully!", status: :ok }
+        else
+          format.json { render json: "Error!", status: :unprocessable_entity }
+        end
+      else
+        format.json { render json: "Error!", status: :unprocessable_entity }
+      end
     end
   end
 

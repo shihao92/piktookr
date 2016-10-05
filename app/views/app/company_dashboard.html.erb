@@ -33,19 +33,27 @@
           <h5 class="bold">
             <span>Piktochart</span>
             <span class="p-l-10">
+              <% if @controls.include? 'View System Users Information' %>
               <a href="/users" class="btn btn-default no-padding" title="System Users">
                 <i class="fa fa-fw fa-user fa-lg"></i>
               </a>
+              <% end %>
+              <% if @controls.include? 'View System Teams Information' %>
               <a href="/team" class="btn btn-default no-padding" title="System Teams">
                 <i class="fa fa-fw fa-group fa-lg"></i>
               </a>
+              <% end %>
               <!--This catered for security and role settings for admin-->
+              <% if @role.name == "Admin" %>
               <a href="/role" class="btn btn-default no-padding" title="OKR System Settings">
                 <i class="fa fa-fw fa-gears fa-lg"></i>
               </a>
+              <% end %>
+              <% if @controls.include? 'View System Timeframes' %>
               <a href="/timeframes" class="btn btn-default no-padding" title="Timeframe Settings">
                 <i class="fa fa-fw fa-clock-o fa-lg"></i>
               </a>
+              <% end %>
             </span>
           </h5>
         </div>
@@ -158,10 +166,12 @@
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
                     <div class="pull-left">
+                      <% if @controls.include? 'Edit Company OKR' %>
                       <% if(item.progress != 100.00) %>
                       <button class="btn btn-accordion edit_company_objective" data-id="<%= item.id %>">
                         <i class="fa fa-pencil"></i>
                       </button>
+                      <% end %>
                       <% end %>
                     </div>
                   </div>
@@ -205,12 +215,14 @@
                       <span> Go to details</span>
                     </a>
                   </li>
+                  <% if @controls.include? 'Delete Company OKR' %>
                   <li>
                     <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
                       <i class="fa fa-fw fa-trash-o"></i> 
                       <span> Delete</span>
                     </a>
                   </li>
+                  <% end %>
                 </ul>
               </div>
             </div>
@@ -262,10 +274,12 @@
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="pull-left">
+                        <% if @controls.include? 'Edit Company OKR' %>
                         <% if(item.progress != 100.00) %>
                         <button class="btn btn-accordion edit_company_key_result" data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
+                        <% end %>
                         <% end %>
                       </div>
                     </div>
@@ -300,6 +314,7 @@
                            Go to details
                         </a>
                       </li>
+                      <% if @controls.include? 'Delete Company OKR' %>
                       <li>
                         <!-- Deletion of key result -->
                         <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
@@ -307,6 +322,7 @@
                            Delete
                         </a>
                       </li>
+                      <% end %>
                     </ul>
            	      </div>
                 </div>
@@ -339,9 +355,11 @@
               </div>
             <% end %>
             <!-- New row for the add in of new key results over here -->
+            <% if @controls.include? 'Create Company OKR' %>
             <div class="row accordion-item add-new-company-key-result">
               <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>             
             </div>
+            <% end %>
           </div>
         </div>
         <div class="panel-footer">
@@ -364,6 +382,7 @@
       </div>
     <% end %>
 
+    <% if @controls.include? 'Create Company OKR' %>
     <div class="panel panel-default">
       <div class="panel-heading" role="tab">
         <h4 class="panel-title panel-title-custom">
@@ -373,6 +392,7 @@
         </h4>
       </div>
     </div>
+    <% end %>
   </div>
 
   <!-- END PLACE PAGE CONTENT HERE -->

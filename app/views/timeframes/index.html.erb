@@ -47,9 +47,11 @@
       <% end %>
     <% end %>
     <% if timeframe_log_presence == false %>
+    <% if @controls.include? 'Set time interval for particular year' %>
     <button id="btn_new_timeframe_overlay" class="btn btn-complete btn-cons btn-rounded btn-lg bold pull-right">
       New Timeframe Setting
     </button>
+    <% end %>
     <% end %>
   </div>
 </div>
@@ -127,7 +129,7 @@
             </td>
             <td>
               <% if item.year > Date.today.year + 1 %>
-              <a name="link_delete_timeframe">
+              <a name="link_delete_timeframe" data-id="<%= item.id %>">
                 <i class="fa fa-fw fa-trash-o"></i> Delete
               </a>
               <% end %>

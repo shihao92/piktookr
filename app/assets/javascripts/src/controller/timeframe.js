@@ -16,6 +16,7 @@ btnControl, customModal, refreshPage, overlay){
   const button_new_timeframe_logs = '#btn_create_timeframe_log';
   const timeframe_status_reminder_bar = '#timeframe_status_reminder_bar';
   const timeframe_reminder_message = '#timeframe_reminder_message';
+  const link_delete_timeframe = 'a[name=link_delete_timeframe]';
 
 
   function updateSystemTimeframeLog(event){
@@ -59,6 +60,17 @@ btnControl, customModal, refreshPage, overlay){
     refreshPage.refreshPage();
   }
 
+  function removeTimeframe(event){
+    let timeframe_id = $(event.target).attr('data-id');
+    let remove_timeframe_promise = new timeframeModel.removeTimeframe(timeframe_id);
+    remove_timeframe_promise.then(removedTimeframe, customModal.notificationModalToggle);
+  }
+
+  function removedTimeframe(message){
+    customModal.toggleProgressRingModal(0);
+    refreshPage.refreshPage();
+  }
+
 
   $(document).ready(function(){
 
@@ -70,6 +82,9 @@ btnControl, customModal, refreshPage, overlay){
     // Create new timeframe logs for coming years
     btnControl.resolveButtonClick(button_new_timeframe_setting, setNewTimeframe);
     btnControl.resolveButtonClick(button_new_timeframe_logs, createTimeframeLogs);
+
+    // Remove timeframe - only future timeframe can be removed
+    btnControl.resolveButtonClick(link_delete_timeframe, removeTimeframe);
 
   });
 

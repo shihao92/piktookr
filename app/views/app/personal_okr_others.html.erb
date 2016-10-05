@@ -35,7 +35,7 @@
               <%= @user.last_name + " " + @user.first_name %>
             </span>
             <span class="m-l-10" data-id="<%= current_user.id %>">
-              <% current_user_fav = OkrUserFavourite.find_by(favourite_id: @user.id) %>
+              <% current_user_fav = OkrUserFavourite.find_by(user_id: current_user.id, favourite_id: @user.id) %>
               <% if current_user_fav != nil %>
               <a id="btn_remove_fav_user" class="btn btn-warning no-padding" data-id="<%= current_user_fav.id %>">
                 <i class="fa fa-fw fa-star-o fa-lg"></i>
@@ -51,7 +51,7 @@
         <div class="row">
           <div class="form-group">
             <label>ROLE</label>
-            <%= content_tag(:div, content_tag(:p, @role.name, class: "bold" )) %>
+            <%= content_tag(:div, content_tag(:p, @other_user_role.name, class: "bold" )) %>
           </div>
         </div>
         <div class="row">

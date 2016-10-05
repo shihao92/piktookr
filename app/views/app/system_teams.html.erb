@@ -24,9 +24,11 @@
     </h5>
   </div>
   <div class="col-md-6 col-sm-6">
+    <% if @controls.include? 'Create Team' %>
     <button id="btn_create_new_team_overlay" class="btn btn-complete btn-cons btn-rounded btn-lg bold pull-right">
       Create New
     </button>
+    <% end %>
   </div>
 </div>
 <br/>
@@ -71,16 +73,20 @@
                 <%= team.description %>  
               </td>
               <td>
+                <% if @controls.include? 'Edit Team Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_edit_team" data-id="<%= team.id %>">
                     <i class="fa fa-fw fa-pencil"></i> Edit
                   </a>
                 </span>
+                <% end %>
+                <% if @controls.include? 'Delete Team' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_team" data-id="<%= team.id %>">
                     <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
+                <% end %>
               </td>
             </tr>
             <% end %>

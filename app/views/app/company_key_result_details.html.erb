@@ -38,6 +38,7 @@
           </span>
         </span>
         <span>
+          <% if @controls.include? 'Edit Company OKR' %>
           <% if @company_key_result.due_date.to_s == '' %>
           <a id="link_add_due_date_company_kr">
             <i class="glyphicon glyphicon-time fa-lg"></i>
@@ -50,6 +51,17 @@
               <%= @company_key_result.due_date.to_s %>
             </span>
           </a>
+          <% end %>
+          <% else %>
+          <% if @company_key_result.due_date.to_s == '' %>
+          <i class="glyphicon glyphicon-time fa-lg"></i>
+            <%= @selected_timeframe.end_date %>
+          <% else %>
+          <i class="glyphicon glyphicon-time fa-lg"></i>
+          <span class="label-font">
+            <%= @company_key_result.due_date.to_s %>
+          </span>
+          <% end %>
           <% end %>
         </span>
         <br />

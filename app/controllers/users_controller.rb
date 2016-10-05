@@ -8,16 +8,14 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
-    @employees = OkrUserRole.where(okr_role_id: 2)
-    @team_leads = OkrUserRole.where(okr_role_id: 1)
-    @admins = OkrUserRole.where(okr_role_id: 0)
+    @employees = OkrUserRole.where(okr_role_id: 9)
+    @team_leads = OkrUserRole.where(okr_role_id: 8)
+    @admins = OkrUserRole.where(okr_role_id: 7)
 
     @user_status_selection = CONST_USER_STATUS
     @current_edit_user = User.find(@@editing_user_id)
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
-    @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
 
-    @admin_id = @@admin.id
+    pages_initialization
     
     @user = User.new
 
@@ -65,7 +63,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if @user.save      
-        OkrUserRole.create!(user_id: @user.id, okr_role_id: params[:role][:role_id])
+        OkrUserRole.create!(user_id: @user.id, okr_role_id: params[:role][:id])
         format.html { redirect_to '/users/:user_created=true', notice: 'User was successfully created.' }
       else
         format.html { redirect_to '/users/:user_created=false', notice: 'Error!' }
@@ -99,7 +97,7 @@ class UsersController < ApplicationController
                                                     first_name: user_params["first_name"], 
                                                     status: params[:status][:status_const],
                                                     position: user_params["position"])      
-        OkrUserRole.where(user_id: current_user_id).update_all(okr_role_id: params[:role][:role_id])
+        OkrUserRole.where(user_id: current_user_id).update_all(okr_role_id: params[:role][:id])
         format.html { redirect_to '/users', notice: 'User was successfully updated.' }
       else
         format.html { redirect_to '/users' }
