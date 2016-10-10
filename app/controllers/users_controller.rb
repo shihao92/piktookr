@@ -60,10 +60,12 @@ class UsersController < ApplicationController
   # POST /users.json
   def create_member
     @user = User.new(user_params.merge(status: params[:status][:status_const]))
+    timeframe_log_id = TimeframeLog.current_timeframe_log_id
 
     respond_to do |format|
       if @user.save      
-        OkrUserRole.create!(user_id: @user.id, okr_role_id: params[:role][:id])
+        OkrUserRole.create(user_id: @user.id, okr_role_id: params[:role][:id])
+        OkrUserTimeframe.create!(user_id: @user.id, timeframe_log_id: timeframe_log_id)
         format.html { redirect_to '/users/:user_created=true', notice: 'User was successfully created.' }
       else
         format.html { redirect_to '/users/:user_created=false', notice: 'Error!' }

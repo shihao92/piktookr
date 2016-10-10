@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
   end
 
   def pages_initialization
-    @selected_timeframe = TimeframeLog.find(@@system_timeframe_log_id)
+    okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
+    @selected_timeframe = TimeframeLog.find(okr_user_timeframe.timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
     @user = User.find(current_user.id)
     okr_user_role = OkrUserRole.find_by(user_id: current_user.id)

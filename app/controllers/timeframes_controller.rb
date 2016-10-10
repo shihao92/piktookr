@@ -85,7 +85,7 @@ class TimeframesController < ApplicationController
 
   def set_system_timeframe_log_id
     timeframe_id = params[:id]
-    @@system_timeframe_log_id = timeframe_id
+    OkrUserTimeframe.find_by(user_id: current_user.id).update(timeframe_log_id: timeframe_id)
     respond_to do |format|
       format.json { render json: "Timeframe Log updated successfully!", status: :ok }
     end

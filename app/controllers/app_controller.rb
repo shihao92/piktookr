@@ -24,7 +24,7 @@ class AppController < ApplicationController
       team_ids = OkrUserTeam.where(user_id: current_user.id) 
       temp_team_objective = []
 
-      @personal_objective = PersonalObjective.where(user_id: current_user.id, timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
+      @personal_objective = PersonalObjective.where(user_id: current_user.id, timeframe_log_id: @selected_timeframe.id).order(updated_at: :DESC)
       @completed_objective = 0 
       @total_progress = 0
       @temp_team_key_result = []                  

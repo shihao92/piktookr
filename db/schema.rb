@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161001060726) do
+ActiveRecord::Schema.define(version: 20161010060320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -201,6 +201,15 @@ ActiveRecord::Schema.define(version: 20161001060726) do
     t.index ["user_id"], name: "index_okr_user_teams_on_user_id", using: :btree
   end
 
+  create_table "okr_user_timeframes", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "timeframe_log_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["timeframe_log_id"], name: "index_okr_user_timeframes_on_timeframe_log_id", using: :btree
+    t.index ["user_id"], name: "index_okr_user_timeframes_on_user_id", using: :btree
+  end
+
   create_table "personal_key_results", force: :cascade do |t|
     t.string   "key_result"
     t.decimal  "progress",              precision: 5, scale: 2
@@ -330,6 +339,8 @@ ActiveRecord::Schema.define(version: 20161001060726) do
   add_foreign_key "okr_user_teams", "notifications"
   add_foreign_key "okr_user_teams", "okr_teams"
   add_foreign_key "okr_user_teams", "users"
+  add_foreign_key "okr_user_timeframes", "timeframe_logs"
+  add_foreign_key "okr_user_timeframes", "users"
   add_foreign_key "personal_key_results", "personal_objectives"
   add_foreign_key "personal_objectives", "timeframe_logs"
   add_foreign_key "personal_objectives", "users"

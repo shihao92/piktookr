@@ -65,7 +65,7 @@ class CompanyObjectivesController < ApplicationController
   def company_dashboard
     pages_initialization
 
-    @company_objectives = CompanyObjective.where(timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
+    @company_objectives = CompanyObjective.where(timeframe_log_id: @selected_timeframe.id).order(updated_at: :DESC)
     @completed_objectives = 0
     @temp_progress_buffer = 0.00
     @total_progress = 0

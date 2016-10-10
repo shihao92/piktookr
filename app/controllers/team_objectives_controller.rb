@@ -86,7 +86,7 @@ class TeamObjectivesController < ApplicationController
     # Find out the users list which are not in the team
     @users_not_in_team = User.return_users_lists_not_in_team(@team_id, current_user.id)    
 
-    @team_objective = TeamObjective.where(okr_team_id: @team_id, timeframe_log_id: @@system_timeframe_log_id).order(updated_at: :DESC)
+    @team_objective = TeamObjective.where(okr_team_id: @team_id, timeframe_log_id: @selected_timeframe.id).order(updated_at: :DESC)
     @completed_objective = 0 
     if(@team_objective.count != 0) 
       @progress_portion = 100 / @team_objective.count 
