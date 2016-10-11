@@ -1,0 +1,15 @@
+// SCSS File for icon styles only.
+
+@import 'declarations';
+
+.icon-light-grey {
+  color: $light-grey;
+}
+.icon-large {
+  width: 128px;
+  height: 128px;
+}
+
+.icon-thumbnail:hover, .icon-thumbnail:active, .icon-thumbnail:focus {
+  background: $dark-blue;
+}

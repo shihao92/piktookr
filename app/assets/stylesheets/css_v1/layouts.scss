@@ -1,0 +1,21 @@
+// SCSS File for layouts purpose.
+
+@import 'declarations';
+
+.centralize {
+  position: relative;
+  top: 20%;
+  transform: translateY(30%);
+}
+
+.padding-body {
+  padding-top: 10px;
+}
+
+.padding-accordion-group {
+  padding-top: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+

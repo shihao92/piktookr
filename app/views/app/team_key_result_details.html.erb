@@ -53,7 +53,7 @@
           </a>
           <% end %>
           <% else %>
-          <% if @team_key_result.due date == '' %>
+          <% if @team_key_result.due_date.to_s == '' %>
           <i class="glyphicon glyphicon-time fa-lg"></i>
           <span class="label-font">
             <%= @selected_timeframe.end_date.to_s %>

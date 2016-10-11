@@ -24,6 +24,8 @@
  *= require css/circle
  *= require css/jquery.nestable
  *= require css/jquery-dynatree/ui.dynatree
- *= require pikto_okr
+
+ *= require css_v1/app
+
  *= require_self
  */

@@ -57,7 +57,7 @@
     <!-- All the progress bars -->
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p100">
+        <div class="c100 p100 green">
           <span>
             <span id="okr_aligned_percentage">100%</span> <br/>
             <p>aligned</p>
@@ -74,7 +74,7 @@
         <% else %>
         <% percentage_completed_objective = 0 %>
         <% end %>
-        <div class="c100 p<%= percentage_completed_objective.to_i %>">
+        <div class="c100 p<%= percentage_completed_objective.to_i %> orange">
           <span>
             <span id="completed_objective_portion">
               <%= @completed_objective %>/<%= @personal_objective.count %>
@@ -102,7 +102,7 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p<%= @date_difference.to_i %>">
+        <div class="c100 p<%= @date_difference.to_i %> red">
           <span>
             <span id="last_updated">
               <% if(@personal_objective.count == 0) %>
@@ -142,9 +142,9 @@
                     <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
                     <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
                     <div id="personal_objective_<%= item.id %>">
-                      <p class="bold details-layout">
+                      <p class="bold details-layout objective">
                         <%= item.objective %>
-                      </p>  
+                      </p>
                     </div>
                   </div>
                   <div class="col-lg-1 col-md-1 col-sm-1">
@@ -242,7 +242,7 @@
               <div id="personal_key_result_<%= item.id %>" class="row accordion-item">
                 <div class="col-lg-11 col-md-11 col-sm-11">
                   <div class="row checkbox check-complete">
-                    <div class="col-lg-6 col-md-6 col-sm-6 item-content">
+                    <div class="col-lg-6 col-md-6 col-sm-6 p-l-0">
                       <div class="accordion-item-title">
                         <div id="personal_kr_<%= item.id %>">
                           <% if(item.is_completed == true) %>
@@ -384,7 +384,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <div class="pull-right bold small">
+              <div class="pull-right bold small completed-key-result">
                 <%= personal_key_result_completed %> Completed
               </div>
             </div>
@@ -394,9 +394,12 @@
     <% end %>
 
     <div class="panel panel-default">
-      <div class="panel-heading" role="tab">
+      <div class="panel-heading p-t-15 new-objective-input" role="tab">
         <h4 class="panel-title panel-title-custom">
-          <div id="add-new-personal-objective">
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+            <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+          </div>
+          <div id="add-new-personal-objective" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
             <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
           </div>
         </h4>
@@ -423,44 +426,44 @@
         <div class="col-lg-3 col-md-3 col-sm-3">
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
-        <div class="row">
-          <h5 class="m-b-5">
-            <span class="semi-bold result-name">
-            	Confirm progress update for: <br/>
-              <span class="bold" id="personal_key_result">xxxxxx</span>
-            </span>
-          </h5>
-        </div>
-        <div id="key_result_id" style="display:none;">
-        </div>
-        <div id="popup_initial_progress" style="display:none;">
-        </div>
-        <div class="row">
-          <div class="no-padding m-t-50">
-            <div class="bg-master" id="slider-tooltips">
-            </div>
+          <div class="row">
+            <h5 class="m-b-5">
+              <span class="result-name">
+              	<span class="bold modal-title-custom">Confirm progress update for:</span> <br/>
+                <span class="bold" id="personal_key_result">xxxxxx</span>
+              </span>
+            </h5>
           </div>
-        </div>
-        <br/>
-        <br/>
-        <div class="row">
-          <div class="row">           
-              <div class="form-group form-group-default">
-                <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
-                <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
-              </div>
+          <div id="key_result_id" style="display:none;">
+          </div>
+          <div id="popup_initial_progress" style="display:none;">
           </div>
           <div class="row">
-            <div class="pull-right">
-              <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
-                Cancel
-              </a>
-              <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
-                Save
-              </button>
+            <div class="no-padding m-t-50">
+              <div class="bg-master bg-complete-darker" id="slider-tooltips">
+              </div>
             </div>
           </div>
-        </div>
+          <br/>
+          <br/>
+          <div class="row">
+            <div class="row">           
+                <div class="form-group form-group-default">
+                  <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
+                  <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
+                </div>
+            </div>
+            <div class="row">
+              <div class="pull-right">
+                <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
+                  Cancel
+                </a>
+                <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3">
         </div>
@@ -484,7 +487,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
           <div class="row">
             <h5 class="m-b-5">
-              <span class="semi-bold result-name">
+              <span class="bold result-name objective">
               	New Personal Objective
               </span>
             </h5>
@@ -539,7 +542,7 @@
       <div class="col-sm-6 col-md-6 col-lg-6 centralize">
         <div class="row">
           <div class="text-center">
-            <img src="<%= @server_url %>/assets/img/logo.png"/>
+            <h4 class="brand-header">Pikto<span class="bold">OKR</span></h4>
           </div>
         </div>
         <hr/>
@@ -580,7 +583,7 @@
         <br/>
         <div class="row">
           <div class="text-center">
-            <img src="<%= @server_url %>/assets/img/logo.png"/>
+            <h4 class="brand-header">Pikto<span class="bold">OKR</span></h4>
           </div>
         </div>
         <hr/>

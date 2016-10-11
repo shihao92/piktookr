@@ -13,7 +13,7 @@
   <head>
     <title>PiktoOKR</title>
     <%= csrf_meta_tags %>
-    <%= stylesheet_link_tag    'application', media: 'all' %>  
+    <%= stylesheet_link_tag    'application', media: 'all' %>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     <script src="https://www.promisejs.org/polyfills/promise-6.1.0.js"></script>
   </head>
@@ -43,13 +43,13 @@
       </div>
 
       <div class="sidebar-header">
-        <img src="<%= @server_url %>/assets/img/logo_white.png" alt="logo" class="brand" data-src="<%= @server_url %>/assets/img/logo_white.png" data-src-retina="assets/img/logo_white_2x.png" width="78" height="22">
-        <div class="sidebar-header-controls">
+        <span class="brand brand-sidebar">Pikto<span class="bold">OKR</span></span>
+        <span class="sidebar-header-controls">
           <button type="button" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" data-pages-toggle="#appMenu"><i class="fa fa-angle-down fs-16"></i>
           </button>
           <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar"><i class="fa fs-12"></i>
           </button>
-        </div>
+        </span>
       </div>
 
       <div class="sidebar-menu scroll-wrapper">
@@ -204,8 +204,8 @@
           </div>
           <div class="pull-center hidden-md hidden-lg">
             <div class="header-inner">
-              <div class="brand inline">
-                <img src="<%= @server_url %>/assets/img/logo.png" alt="logo" data-src="<%= @server_url %>/assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+              <div class="brand inline m-l-5">
+                <h4 class="brand-header">Pikto<span class="bold">OKR</span></h4>
               </div>
             </div>
           </div>
@@ -224,8 +224,8 @@
         <!-- END MOBILE CONTROLS -->
         <div class="pull-left sm-table hidden-xs hidden-sm">
           <div class="header-inner">
-            <div class="brand inline">
-              <img src="<%= @server_url %>/assets/img/logo.png" alt="logo" data-src="<%= @server_url %>/assets/img/logo.png" data-src-retina="assets/img/logo_2x.png" width="78" height="22">
+            <div class="brand inline m-l-5">
+              <h4 class="brand-header">Pikto<span class="bold">OKR</span></h4>
             </div>
             <span class="search-link">
               <label for="search_okr_users"><i class="pg-search"></i></label>

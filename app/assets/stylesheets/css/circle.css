@@ -1051,7 +1051,7 @@
 }
 .c100.orange .bar,
 .c100.orange .fill {
-  border-color: #dd9d22 !important;
+  border-color: #ffa500 !important;
 }
 .c100.orange:hover > span {
   color: #dd9d22;
@@ -1062,4 +1062,18 @@
 }
 .c100.orange.dark:hover > span {
   color: #e08833;
+}
+.c100.red .bar,
+.c100.red .fill {
+  border-color: #ff3232 !important;
+}
+.c100.red:hover > span {
+  color: #ff3232;
+}
+.c100.red.dark .bar,
+.c100.red.dark .fill {
+  border-color: #e52d2d !important;
+}
+.c100.red.dark:hover > span {
+  color: #e52d2d;
 }

@@ -1,0 +1,21 @@
+// SCSS File for font controls.
+
+@import 'declarations';
+
+.brand-sidebar {
+  color: $native-white;
+  background: transparent;
+  font-size: $font-18;
+}
+
+.brand-header {
+  color: $dark-blue;
+}
+
+.objective {
+  color: $normal-blue;
+}
+.completed-key-result {
+  color: $dark-blue;
+}
+

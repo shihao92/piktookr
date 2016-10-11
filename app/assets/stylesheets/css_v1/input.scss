@@ -1,0 +1,48 @@
+// SCSS File for input controls styles only.
+
+@import 'declarations';
+
+.form-new-key-result {
+  display: inline-block;
+  border: none;
+  width: 100%;
+}
+.form-new-key-result:focus {
+  background: transparent;
+}
+
+.new-objective-input {
+  .icon-plus {
+    border-right: 1px solid $light-grey;
+    height: 25px;
+    padding-top: 2px;
+  }
+  .form-new-key-result {
+    display: inline-block;
+    border: none;
+    width: 100%;
+  }
+  .form-new-key-result:focus {
+    background: transparent;
+  }
+}
+.new-objective-input:hover, .new-objective-input:active, .new-objective-input:focus {
+  border: 1px solid $dark-blue;
+
+  .icon-plus {
+    color: $normal-blue;
+  }
+  .form-new-key-result {
+    font-weight: 600;
+    color: $darker-grey;
+  }
+}
+
+.header .search-link .custom-search {
+    border: 0;
+    width: 200px;
+    font-size: 16px;
+}
+.form-group-default .textarea-custom {
+    height: 100px;
+}

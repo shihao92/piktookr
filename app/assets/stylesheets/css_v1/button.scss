@@ -1,0 +1,14 @@
+// SCSS File for the button control.
+
+@import 'declarations';
+
+.btn-accordion {
+    outline: none;
+    border: 0px;
+    background: transparent;
+}
+.btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
+    border: 0px;
+    background: none;
+    background: transparent;
+}

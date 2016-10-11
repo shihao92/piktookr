@@ -61,7 +61,7 @@
     <!-- All the progress bars -->
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p100">
+        <div class="c100 p100 green">
           <span>
             <span id="okr_aligned_percentage">100%</span> <br/>
             <p>aligned</p>
@@ -78,7 +78,7 @@
         <% else %>
         <% @percentage_completed_objective = 0 %>
         <% end %>
-        <div class="c100 p<%= @percentage_completed_objective.to_i %>">
+        <div class="c100 p<%= @percentage_completed_objective.to_i %> orange">
           <span>
             <span id="completed_objective_portion">
               <%= @completed_objective %>/<%= @team_objective.count %>
@@ -107,7 +107,7 @@
         </div>
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
-        <div class="c100 p<%= @date_difference.to_i %>">
+        <div class="c100 p<%= @date_difference.to_i %> red">
           <span>
             <span id="last_updated">
               <% if(@team_objective.count == 0) %>
@@ -139,7 +139,7 @@
         <div class="panel-heading" role="tab">
           <div class="row">
             <h4 class="panel-title panel-title-custom collapsed">
-              <p class="bold details-layout no-objective-presence">
+              <p class="bold details-layout m-l-20">
                 No Team Objective is presence for this team
               </p>
             </h4>
@@ -160,7 +160,7 @@
                     <% @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id) %>
                     <%= content_tag(:p, @company_key_result[0].key_result, class: "small details-layout" ) %>
                     <div id="team_objective_<%= item.id %>" data-id="<%= @team_id %>">
-                      <p class="bold details-layout">
+                      <p class="bold details-layout objective">
                         <%= item.objective %>
                       </p>
                     </div>
@@ -270,7 +270,7 @@
               <div class="row accordion-item" id="team_kr_<%= item.id %>">
                 <div class="col-lg-11 col-md-11 col-sm-11">
                   <div class="row checkbox">
-                    <div class="col-lg-6 col-md-6 col-sm-6 item-content">
+                    <div class="col-lg-6 col-md-6 col-sm-6 p-l-0">
                       <div class="accordion-item-title">
                         <div class="checkbox-primary">
                           <p class="details-layout"><%= item.key_result %></p>
@@ -378,7 +378,7 @@
               </div>
             </div>
             <div class="col-md-4 col-sm-4">
-              <div class="pull-right bold small">
+              <div class="pull-right bold small completed-key-result">
                 <%= @team_key_result_completed %> Completed
               </div>
             </div>
@@ -389,9 +389,12 @@
 
     <% if @controls.include? 'Create Team OKR' %>
     <div class="panel panel-default">
-      <div class="panel-heading" role="tab">
+      <div class="panel-heading p-t-15 new-objective-input" role="tab">
         <h4 class="panel-title panel-title-custom">
-          <div id="add-new-team-objective">
+          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+            <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+          </div>
+          <div id="add-new-team-objective" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
             <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
           </div>
         </h4>
@@ -420,7 +423,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
           <div class="row">
             <h5 class="m-b-5">
-              <span class="semi-bold result-name">
+              <span class="semi-bold result-name bold objective">
               	New Team Objective
               </span>
             </h5>
