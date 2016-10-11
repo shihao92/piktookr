@@ -1,0 +1,8 @@
+// SCSS File for dropdown control.
+
+@import 'declarations';
+
+.dropdown-menu > li > a:hover,
+.dropdown-menu > li > a:focus {
+  color: $dark-blue;
+}

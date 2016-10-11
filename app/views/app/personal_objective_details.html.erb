@@ -70,7 +70,7 @@
     </div>
     <br />
     <div class="row">
-      <div class="col-lg-8 col-md-8 col-sm-8">
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
         <h4 class="semi-bold">Timeline</h4>
         <div class="top-circle">
           <section class="timeline">
@@ -116,30 +116,44 @@
           </section>
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-4">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4">
         <h4 class="semi-bold">Alignment</h4>
-        <div class="list-group list-group-root">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <i class="pg-arrow_right"></i>
+        <ul class="treeview">
+          <li>
+            <button class="leaf-point" title="<%= @team_kr_user_info.first_name %>">
+              <%= @tkr_user_short_str %>
+            </button>
+            <span class="description semi-bold">
               <%= @team_key_result.key_result %>
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <i class="pg-map"></i>
+            </span>
+            
+            <ul>
+              <li>
+                <button class="leaf-point level-2" title="<%= @user_info.first_name %>">
+                  <%= @obj_user_short_str %>
+                </button>
+                <span class="description semi-bold">
                   <%= @personal_objective.objective %>
-                  <ul class="list-group">
-                    <% @personal_key_results.each do |item| %>
-                    <li class="list-group-item">
-                      <i class="pg-arrow_right"></i>
+                </span>
+
+                <ul>
+                  <% @personal_key_results.each do |item| %>
+                  <li>
+                    <button class="leaf-point level-3" title="<%= @user_info.first_name %>">
+                      <%= @obj_user_short_str %>
+                    </button>
+                    <span class="description semi-bold">
                       <%= item.key_result %>
-                    </li>
-                    <% end %>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+                    </span>
+                  </li>
+                  <% end %>
+                </ul>
+
+              </li>
+            </ul>
+
+          </li>
+        </ul>
       </div>
     </div>
   </div>

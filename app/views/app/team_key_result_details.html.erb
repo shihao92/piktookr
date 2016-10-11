@@ -141,28 +141,42 @@
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4">
         <h4 class="semi-bold">Alignment</h4>
-        <div class="list-group list-group-root">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <i class="pg-map"></i>
+        <ul class="treeview">
+          <li>
+            <button class="leaf-point" title="<%= @obj_user_info.first_name %>">
+              <%= @obj_user_short_str %>
+            </button>
+            <span class="description semi-bold">
               <%= @team_objective.objective %>
-              <ul class="list-group">
-                <li class="list-group-item">
-                  <i class="pg-arrow_right"></i>
+            </span>
+
+            <ul>
+              <li>
+                <button class="leaf-point level-2" title="<%= @user_info.first_name %>">
+                  <%= @obj_user_short_str %>
+                </button>
+                <span class="description semi-bold">
                   <%= @team_key_result.key_result %>
-                  <ul class="list-group">
-                    <% @temp_personal_objective.each do |item| %>
-                      <li class="list-group-item">
-                        <i class="pg-map"></i>
-                        <%= item[0][0] %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
+                </span>
+
+                <ul>
+                <% @temp_personal_objective.each do |item| %>
+                  <% user_info = User.find(item[0][1]) %>
+                  <% usr_short_str = Shortform.get_string_shortform(user_info.first_name) %>
+                  <li>
+                    <button class="leaf-point level-3" title="<%= user_info.first_name %>">
+                      <%= usr_short_str %>
+                    </button>
+                    <span class="description semi-bold">
+                      <%= item[0][0] %>
+                    </span>
+                  </li>
+                <% end %>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

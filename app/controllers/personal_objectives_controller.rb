@@ -62,10 +62,17 @@ class PersonalObjectivesController < ApplicationController
 
     @personal_objective = PersonalObjective.find(objective_id)
     okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
+    
     @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
-    @personal_key_results = PersonalKeyResult.where(personal_objective_id: objective_id)
+    @team_kr_user_info = User.find(@team_key_result.user_id)
+    
+    @tkr_user_short_str = Shortform.get_string_shortform(@team_kr_user_info.first_name)
 
     @user_info = User.find(@personal_objective.user_id)
+    @obj_user_short_str = Shortform.get_string_shortform(@user_info.first_name)
+
+    @personal_key_results = PersonalKeyResult.where(personal_objective_id: objective_id)
+    
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
 
     @log = LogPersonalObjective.where(personal_objective_id: objective_id).order(id: :DESC)

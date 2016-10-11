@@ -92,7 +92,7 @@
                         <span class="small">Less than 1 day ago</span>
                       <% else %>
                       <% @day_difference = @time_difference / 86400 %>
-                        <h5><%= @user_info.first_name %></h5>
+                        <h5><%= @user_info.last_name %> <%= @user_info.first_name %></h5>
                         <% if(@day_difference.to_i > 1) %>
                         <span class="small"><%= @day_difference.to_i %> days ago</span>
                         <% else %>
@@ -112,22 +112,31 @@
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4">
         <h4 class="semi-bold">Alignment</h4>
-        <div class="list-group list-group-root">
-          <ul class="list-group">
-            <li class="list-group-item">
-              <i class="pg-map"></i>
+        <ul class="treeview">
+          <li>
+            <button class="leaf-point" title="<%= @user_info.first_name %>">
+              <%= @user_shortform %>
+            </button>
+            <span class="description semi-bold">
               <%= @company_objective.objective %>
-              <ul class="list-group">
-                <% @company_key_results.each do |item| %>
-                  <li class="list-group-item">
-                    <i class="pg-arrow_right"></i>
-                    <%= item.key_result %>
-                  </li>
-                <% end %>
-              </ul>
-            </li>
-          </ul>
-        </div>
+            </span>
+
+            <ul>
+              <% @company_key_results.each do |item| %>
+              <% ckr_user_info = User.find(item.user_id) %>
+              <% ckr_user_shortform = Shortform.get_string_shortform(ckr_user_info.first_name) %>
+              <li>
+                <button class="leaf-point" title="<%= ckr_user_info.first_name %>">
+                  <%= ckr_user_shortform %>
+                </button>
+                <span class="description semi-bold">
+                  <%= item.key_result %>
+                </span>
+              </li>
+              <% end %>
+            </ul>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

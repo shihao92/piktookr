@@ -95,6 +95,7 @@ class CompanyObjectivesController < ApplicationController
     @company_objective = CompanyObjective.find(@objective_id)
     @company_key_results = CompanyKeyResult.where(company_objective_id: @objective_id)
     @user_info = User.find(@company_objective.user_id)
+    @user_shortform = Shortform.get_string_shortform(@user_info.first_name)
 
     @log = LogCompanyObjective.where(company_objective_id: @objective_id).order(id: :DESC)
 

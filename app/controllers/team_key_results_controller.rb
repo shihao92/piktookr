@@ -74,15 +74,18 @@ class TeamKeyResultsController < ApplicationController
     @okr_team = OkrTeam.find(@team_id)
     @team_key_result = TeamKeyResult.find(@key_result_id)
     @team_objective = TeamObjective.find(@team_key_result.team_objective_id)
+    @obj_user_info = User.find(@team_objective.user_id)
+    @obj_user_short_str = Shortform.get_string_shortform(@obj_user_info.first_name)
+
     @user_info = User.find(@team_key_result.user_id)
 
     @log = LogTeamKeyResult.where(team_key_result_id: @key_result_id).order(id: :DESC)
     @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id)
 
     @temp_personal_objective = []
-    @okr_team_personals = OkrTeamPersonal.where(team_key_result_id: @key_result_id)
-    @okr_team_personals.each do |item|
-      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).map{|obj| [obj.objective]}
+    okr_team_personals = OkrTeamPersonal.where(team_key_result_id: @key_result_id)
+    okr_team_personals.each do |item|
+      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).map{|obj| [obj.objective, obj.user_id]}
       @temp_personal_objective.push(@personal_objective)
     end
 

@@ -56,14 +56,18 @@ class CompanyKeyResultsController < ApplicationController
     @key_result_id = params[:id]
     @company_key_result = CompanyKeyResult.find(@key_result_id)
     @company_objective = CompanyObjective.find(@company_key_result.company_objective_id)
+    @co_user_info = User.find(@company_objective.user_id)
+    @co_user_shortform = Shortform.get_string_shortform(@co_user_info.first_name)
+
     @user_info = User.find(@company_key_result.user_id)
+    @user_shortform = Shortform.get_string_shortform(@user_info.first_name)
 
     @log = LogCompanyKeyResult.where(company_key_result_id: @key_result_id).order(id: :DESC)
 
     @temp_team_objective = []
     @okr_company_teams = OkrCompanyTeam.where(company_key_result_id: @key_result_id)
     @okr_company_teams.each do |item|
-      @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.objective]}
+      @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.objective, obj.user_id]}
       @temp_team_objective.push(@team_objective)
     end
     

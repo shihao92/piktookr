@@ -142,6 +142,9 @@ class PersonalKeyResultsController < ApplicationController
     @personal_objective = PersonalObjective.find(@personal_key_result.personal_objective_id)
 
     @user_info = User.find(@personal_objective.user_id)
+    
+    @obj_user_short_str = Shortform.get_string_shortform(@user_info.first_name)
+    
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
 
     @log = LogPersonalKeyResult.where(personal_key_result_id: @key_result_id).order(id: :DESC)

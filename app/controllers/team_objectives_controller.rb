@@ -130,11 +130,15 @@ class TeamObjectivesController < ApplicationController
 
     @okr_company_team = OkrCompanyTeam.find_by(team_objective_id: @objective_id)
     @company_key_result = CompanyKeyResult.find(@okr_company_team.company_key_result_id)
+    @ckr_user_info = User.find(@company_key_result.user_id)
+    @ckr_user_shortform = Shortform.get_string_shortform(@ckr_user_info.first_name)
+    
     @team_objective = TeamObjective.find(@objective_id)
     @team_key_results = TeamKeyResult.where(team_objective_id: @objective_id)
     @log = LogTeamObjective.where(team_objective_id: @objective_id).order(id: :DESC)
 
     @user_info = User.find(@team_objective.user_id)
+    @team_obj_user_shortform = Shortform.get_string_shortform(@user_info.first_name)
 
     @current_date = Time.now.strftime("%Y-%m-%d") 
     @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id) 
