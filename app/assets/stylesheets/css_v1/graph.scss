@@ -1,0 +1,35 @@
+// SCSS File for graphs in d3js.
+
+@import 'declarations';
+
+.graph-background {
+  background: $native-white;
+  border: 2px solid $dark-grey-border;
+}
+
+path { 
+  stroke: $light-blue;
+  stroke-width: 2;
+  fill: $lighter-blue;
+}
+
+.area {
+  fill: $lighter-blue;
+}
+
+.dot {
+  fill: $light-blue;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: $light-grey;
+  stroke-width: 1.5;
+}
+
+text {
+  font-size: $font-12;
+  font-weight: 600;
+  fill: $darker-grey;
+}

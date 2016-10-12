@@ -152,6 +152,23 @@ class PersonalKeyResultsController < ApplicationController
     render "app/personal_key_result_details"
   end
 
+  def get_contribution
+    key_result_id = params[:id]
+    contributions_log = LogPersonalKeyResult.retrieve_contribution(key_result_id)
+
+    respond_to do |format|
+      format.json { render json: contributions_log, status: :ok }
+    end
+  end
+
+  def get_created_date
+    key_result_id = params[:id]
+    kr_created_date = PersonalKeyResult.retrieve_created_date(key_result_id)
+    respond_to do |format|
+      format.json { render json: kr_created_date, status: :ok }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_personal_key_result

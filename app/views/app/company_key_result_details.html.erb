@@ -150,7 +150,7 @@
 
             <ul>
               <li>
-                <button class="leaf-point" title="<%= @user_info.first_name %>">
+                <button class="leaf-point level-2" title="<%= @user_info.first_name %>">
                   <%= @user_shortform %>
                 </button>
                 <span class="description semi-bold">
@@ -162,7 +162,7 @@
                   <% user_info = User.find(item[0][1]) %>
                   <% user_shortform = Shortform.get_string_shortform(user_info.first_name) %>
                   <li>
-                    <button class="leaf-point" title="<%= user_info.first_name %>">
+                    <button class="leaf-point level-3" title="<%= user_info.first_name %>">
                       <%= user_shortform %>
                     </button>
                     <span class="description semi-bold">

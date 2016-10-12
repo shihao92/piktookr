@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = {
     context: "app/assets/javascripts/src/",
     entry: {
-      vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap.min'],
+      vendor: ['jquery','jquery-ujs','plugins/bootstrapv3/js/bootstrap.min','d3'],
       login: 'controller/login.js',
       user: 'controller/user.js',
       team: 'controller/team.js',
@@ -21,7 +21,8 @@ module.exports = {
     },
     resolve: {
       alias: {
-        'jquery': 'plugins/jquery/jquery-1.11.1.min'
+        'jquery': 'plugins/jquery/jquery-1.11.1.min',
+        'd3': 'plugins/d3/d3.min'
       },
       root: [
         // register root here
@@ -52,6 +53,9 @@ module.exports = {
         $: "jquery",
         jQuery: "jquery",
         "window.jQuery": "jquery"
+      }),
+      new webpack.ProvidePlugin({
+        d3: "d3"
       })
     ]
   };

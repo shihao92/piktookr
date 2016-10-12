@@ -181,4 +181,9 @@ class PersonalKeyResult < ApplicationRecord
       return status
     end
 
+    def self.retrieve_created_date(key_result_id)
+      personal_key_result = PersonalKeyResult.find(key_result_id)
+      return personal_key_result.created_at
+    end
+
 end

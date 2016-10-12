@@ -126,7 +126,7 @@
               <% ckr_user_info = User.find(item.user_id) %>
               <% ckr_user_shortform = Shortform.get_string_shortform(ckr_user_info.first_name) %>
               <li>
-                <button class="leaf-point" title="<%= ckr_user_info.first_name %>">
+                <button class="leaf-point level-2" title="<%= ckr_user_info.first_name %>">
                   <%= ckr_user_shortform %>
                 </button>
                 <span class="description semi-bold">

@@ -3,13 +3,16 @@
 
 require(['pages/pages.blank', 
 'model/personal_key_result', 'model/personal_objective', 'model/timeframe',
+'helper/date_converter',
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
 'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh',
+'view/d3_engine',
 'view/library/bootstrap-datepicker'],
 function(pagesBlank, 
 personalKeyResultModel, personalObjectiveModel, timeframeModel, 
+dateHelper,
 customModal, overlay, slider, customSelect2, 
-btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
+btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
 
     const button_new_personal_objective = '#btn_new_personal_objective';
     const button_edit_personal_objective = '.edit_personal_objective';
@@ -20,6 +23,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
     const link_add_due_date_personal_kr = '#link_add_due_date_personal_kr';
     const modal_personal_kr_due_date = '#personal_kr_due_date_modal';
     const datepicker_personal_kr = '#personal_kr_datepicker';
+    const page_personal_key_result_details = '#page_personal_key_result_details';
+    const graph_personal_key_result_progress_overtime = '#graph_personal_key_result_progress_overtime';
 
     // From layout page
     const button_timeframe_dropdown = "#btn_timeframe_dropdown";
@@ -219,6 +224,79 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
       }  
     }
 
+    function getContribution(){
+      $(page_personal_key_result_details).ready(function(event){
+        let key_result_id = $(page_personal_key_result_details).attr('data-id');
+        if(key_result_id != undefined) {
+          let get_contribution_promise = new personalKeyResultModel.getContribution(key_result_id);
+          get_contribution_promise.then(processContributionKeyResult, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getCreatedDate(){
+      $(page_personal_key_result_details).ready(function(event){
+        let key_result_id = $(page_personal_key_result_details).attr('data-id');
+        if(key_result_id != undefined) {
+          let get_created_date_promise = new personalKeyResultModel.getCreatedDate(key_result_id);
+          get_created_date_promise.then(obtainCreatedDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    let created_date = "";
+    function obtainCreatedDate(data){
+      created_date = data;
+      let created_at_time_index = created_date.indexOf('T');
+      let created_at_underscore_index = created_date.indexOf('-');
+
+      created_date = created_date.substring(1, created_at_time_index);
+      created_date = created_date.substring(created_at_underscore_index + 1, created_date.length);
+      created_date = dateHelper.formatConverter(created_date);
+
+      getContribution();
+    }
+
+    function processContributionKeyResult(data){
+      data = JSON.parse(data);
+      let counter = 0;
+      let x_axis = [];
+      let y_axis = [];
+
+      x_axis.push(created_date);
+      y_axis.push(0);
+
+      let previous_progress = 0.00;
+      let current_progress = 0.00;
+
+      while(counter < data.length) {
+        let created_at_time_index = data[counter].created_at.indexOf('T');
+        let created_at_underscore_index = data[counter].created_at.indexOf('-');
+        let log_content_plus_index = data[counter].log_content.indexOf('+');
+        let log_content_percentage_index = data[counter].log_content.indexOf('%');
+        data[counter].created_at = data[counter].created_at.substring(0, created_at_time_index);
+        data[counter].created_at = data[counter].created_at.substring(created_at_underscore_index + 1, (data[counter].created_at).length);
+        data[counter].log_content = data[counter].log_content.substring(log_content_plus_index + 1, log_content_percentage_index);
+        data[counter].log_content = parseFloat(data[counter].log_content);
+        
+        if(counter == 0) {
+          previous_progress = data[counter].log_content;
+        } else {
+          data[counter].log_content = previous_progress + data[counter].log_content;
+          previous_progress = data[counter].log_content;
+        }
+
+        data[counter].created_at = dateHelper.formatConverter(data[counter].created_at);
+
+        x_axis.push(data[counter].created_at);
+        y_axis.push(data[counter].log_content);
+        
+        counter = counter + 1;
+      }
+
+      d3_engine.generateSimpleLineGraph(graph_personal_key_result_progress_overtime, x_axis, y_axis);
+    }
+
     customModal.toggleProgressRingModal(0);
 
     $(document).ready(function(){
@@ -255,6 +333,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, datepicker) {
         btnControl.resolveButtonClick(button_save_personal_kr_due_date, savePersonalKeyResultDueDate);
 
         btnControl.notificationDismissClick();
+
+        getCreatedDate();
         
     });
 

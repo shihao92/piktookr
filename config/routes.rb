@@ -184,6 +184,10 @@ Rails.application.routes.draw do
       get   :details
       # Route to update due date
       post  :insert_due_date
+      # Route to get contribution value
+      get   :get_contribution
+      # Route to get created date
+      get   :get_created_date
     end
 
   end
