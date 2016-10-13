@@ -55,11 +55,6 @@ function(){
         });
     }
 
-    function accordionSliderControl(id,progress)
-    {
-        
-    }
-
     return {
         contributionSliderControl: contributionSliderControl
     }

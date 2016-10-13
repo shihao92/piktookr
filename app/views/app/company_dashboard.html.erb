@@ -25,8 +25,10 @@
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-      <div class="col-lg-5 col-md-5 col-sm-5 padding-body text-center">
-        <h1>P</h1>
+      <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
+        <div style="background: #48b0f7; padding: 10px; width: 120px;">
+          <img src="<%= @server_url %>/pikto-logo.svg" style="width: 100px; height: 100px;"></img>
+        </div>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
         <div class="row">
@@ -357,7 +359,12 @@
             <!-- New row for the add in of new key results over here -->
             <% if @controls.include? 'Create Company OKR' %>
             <div class="row accordion-item add-new-company-key-result">
-              <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>             
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+                <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+              </div>
+              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
+                <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>
+              </div>          
             </div>
             <% end %>
           </div>

@@ -100,7 +100,6 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     function getObjectiveCreatedDate(){
       $(page_company_objective_details).ready(function(event){
         let objective_id = $(page_company_objective_details).attr('data-id');
-        alert(objective_id);
         if(objective_id != undefined) {
           let get_created_date_promise = new companyObjectiveModel.getCreatedDate(objective_id);
           get_created_date_promise.then(obtainObjectiveCreatedDate, customModal.notificationModalToggle);

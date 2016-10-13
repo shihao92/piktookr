@@ -1,0 +1,48 @@
+// Style for Accordion Item (OKR)
+
+@import "declarations";
+
+.accordion-item {
+  border: 1px solid $dark-grey-border;
+  padding-left: 0px;
+  min-height: 48px;
+  width: 100%;
+  padding-top: 5px;
+  background: $pale-grey;
+
+  .accordion-item-title{
+    font-family: $montserrat;
+    display: inline-block;
+    letter-spacing: 0.02em;
+    font-size: $font-12;
+    font-weight: $font-weight-600;
+    line-height: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-text-stroke: 0px;
+    filter: alpha(opacity=40);
+    width: 100%;
+  }
+
+  &.add-new-personal-key-result {
+    background: transparent;
+  }
+  &.add-new-personal-key-result:hover, .add-new-personal-key-result:active {
+    background: transparent;
+  }
+  &.add-new-team-key-result {
+    background: transparent;
+  }
+  &.add-new-team-key-result:hover, .add-new-team-key-result:active {
+    background: transparent;
+  }
+  &.add-new-company-key-result {
+    background: transparent;
+  }
+  &.add-new-company-key-result:hover, .add-new-company-key-result:active {
+    background: transparent;
+  }
+}
+.accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
+  background: $normal-grey;
+}

@@ -1,9 +1,10 @@
 // Date : 20 September 2016
 // This JS file that process the data before being feed into the d3 engine.
 
-define(['helper/date_converter', 'view/d3_engine'], function(dateHelper, d3_engine){
+define(['helper/date_converter', 'view/d3_engine', 'view/controls/spin-progress'], function(dateHelper, d3_engine, spinProgress){
 
   const graph_progress_overtime = '#graph_progress_overtime';
+  const timeline_progress_ring = "#timeline-progress-ring";
 
   function processCreatedDate(input){
     created_date = input;
@@ -57,7 +58,9 @@ define(['helper/date_converter', 'view/d3_engine'], function(dateHelper, d3_engi
   }
 
   function drawGraph(x_axis, y_axis){
+    spinProgress.defineProgressSpin();
     d3_engine.generateSimpleLineGraph(graph_progress_overtime, x_axis, y_axis);
+    $(timeline_progress_ring).attr('style', 'display: none;');
   }
 
   return {
