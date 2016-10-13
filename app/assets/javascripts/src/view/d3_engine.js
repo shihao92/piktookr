@@ -43,7 +43,15 @@ define(function() {
       };
     });   
     
-    x.domain([data[0].date, data[1].date, data[2].date, data[3].date, data[4].date, data[5].date]);
+    let data_count = data.length;
+    let object_array = [];
+    let counter = 0;
+    while(counter < data_count) {
+      object_array.push(data[counter].date);
+      counter = counter + 1;
+    }
+
+    x.domain(object_array);
     y.domain([0, d3.max(data, function(d) { return d.close + 2; })]).range([300, 0]);   
 
     svg.append("g")
