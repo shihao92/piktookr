@@ -69,4 +69,9 @@ class CompanyObjective < ApplicationRecord
       return status
     end
 
+    def self.retrieve_created_date(objective_id)
+      company_objective = CompanyObjective.find(objective_id)
+      return company_objective.created_at
+    end 
+
 end

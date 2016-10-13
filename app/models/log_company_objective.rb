@@ -39,6 +39,11 @@ class LogCompanyObjective < ApplicationRecord
     def self.save_new_log(log_content, objective_id, user_id)
       new_log = LogCompanyObjective.new(log_content: log_content, company_objective_id: objective_id, user_id: user_id)
       new_log.save
+    end
+
+    def self.retrieve_contribution(objective_id)
+      log_content = LogCompanyObjective.select("log_content, created_at").where('company_objective_id = ? and log_content like ?', objective_id, 'Contributed%').limit(5)
+      return log_content
     end 
 
 end

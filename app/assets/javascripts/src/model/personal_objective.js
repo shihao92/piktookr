@@ -53,7 +53,7 @@ define(['model/server_url'], function(urlParam) {
       });
     }
 
-    function getObjectiveCreatedDate(objective_id) {
+    function getCreatedDate(objective_id) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -74,7 +74,7 @@ define(['model/server_url'], function(urlParam) {
       });
     }
 
-    function getObjectiveContribution(objective_id) {
+    function getContribution(objective_id) {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -98,8 +98,8 @@ define(['model/server_url'], function(urlParam) {
     return {
       newPersonalObjective,
       editPersonalObjective,
-      getObjectiveCreatedDate,
-      getObjectiveContribution
+      getCreatedDate,
+      getContribution
     }
 
 })

@@ -2,12 +2,12 @@
 // This JS file that controls team okr page only.
 
 require(['model/team_key_result','model/team_objective', 'model/timeframe',
-'helper/date_converter', 'helper/d3_data_input_process',
+'helper/d3_data_input_process',
 'view/library/bootstrap-datepicker', 'view/d3_engine',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
 'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(teamKeyResultModel, teamObjectiveModel, timeframeModel,
-dateHelper, d3DataHelper,
+d3DataHelper,
 datepicker, d3_engine,
 overlay, select2, customModal,
 textboxControl, btnControl, customSelect2, refreshPage) {
@@ -21,6 +21,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     const link_due_date_team_kr = '#link_add_due_date_team_kr';
     const modal_team_kr_due_date = '#team_kr_due_date_modal';
     const datepicker_team_kr = '#team_kr_datepicker';
+    const page_team_objective_details = '#page_team_objective_details';
     const page_team_key_result_details = '#page_team_key_result_details';
 
     let original_team_objective = "";
@@ -98,6 +99,37 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     function editedTeamObjective(message){
       customModal.toggleProgressRingModal(0);
       refreshPage.refreshPage();
+    }
+
+    function getObjectiveCreatedDate(){
+      $(page_team_objective_details).ready(function(event){
+        let team_id = $(page_team_objective_details).attr('data-team');
+        let objective_id = $(page_team_objective_details).attr('data-id');
+        if(objective_id != undefined) {
+          let get_created_date_promise = new teamObjectiveModel.getCreatedDate(team_id, objective_id);
+          get_created_date_promise.then(obtainObjectiveCreatedDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getObjectiveContribution(){
+      $(page_team_objective_details).ready(function(event){
+        let team_id = $(page_team_objective_details).attr('data-team');
+        let objective_id = $(page_team_objective_details).attr('data-id');
+        if(objective_id != undefined) {
+          let get_contribution_promise = new teamObjectiveModel.getContribution(team_id, objective_id);
+          get_contribution_promise.then(obtainObjectiveContribution, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function obtainObjectiveContribution(data){
+      d3DataHelper.processData(created_date, data);
+    }
+
+    function obtainObjectiveCreatedDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
+      getObjectiveContribution();
     }
 
     // ---------------
@@ -191,13 +223,13 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       } 
     }
 
-    function getCreationDate(){
+    function getKeyResultCreationDate(){
       $(page_team_key_result_details).ready(function(){
         let team_id = $(modal_team_kr_due_date).attr('data-id');
         let key_result_id = $(page_team_key_result_details).attr('data-id');
         if(key_result_id !== undefined) {
           let get_created_date_promise = new teamKeyResultModel.getCreatedDate(team_id, key_result_id);
-          get_created_date_promise.then(obtainCreationDate, customModal.notificationModalToggle);
+          get_created_date_promise.then(obtainKeyResultCreationDate, customModal.notificationModalToggle);
         }
       });
     }
@@ -208,17 +240,17 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         let key_result_id = $(page_team_key_result_details).attr('data-id');
         if(key_result_id !== undefined) {
           let get_contribution_promise = new teamKeyResultModel.getContribution(team_id, key_result_id);
-          get_contribution_promise.then(obtainContribution, customModal.notificationModalToggle);
+          get_contribution_promise.then(obtainKeyResultContribution, customModal.notificationModalToggle);
         }
       });
     }
 
-    function obtainCreationDate(data){
+    function obtainKeyResultCreationDate(data){
       created_date = d3DataHelper.processCreatedDate(data);
       getKeyResultContribution();
     }
 
-    function obtainContribution(data){
+    function obtainKeyResultContribution(data){
       d3DataHelper.processData(created_date, data);
     }
 
@@ -247,7 +279,9 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         // Setting for the team
         btnControl.resolveButtonClick(button_team_setting, openTeamSettingOverlay);
 
-        getCreationDate();
+        getObjectiveCreatedDate();
+
+        getKeyResultCreationDate();
 
     })
 

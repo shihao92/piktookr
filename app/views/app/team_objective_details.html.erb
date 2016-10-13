@@ -17,7 +17,7 @@
 </div>
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
-<div class="bg-master-lighter">
+<div id="page_team_objective_details" class="bg-master-lighter" data-id="<%= @team_objective.id %>" data-team="<%= @team_id %>">
   <div class="container-fluid container-fixed-lg">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
@@ -68,7 +68,7 @@
     </div>
     <br />
     <div class="row">
-      <div class="col-lg-8 col-md-8 col-sm-8">
+      <div class="col-lg-7 col-md-7 col-sm-7">
         <h4 class="semi-bold">Timeline</h4>
         <div class="top-circle">
           <section class="timeline">
@@ -112,7 +112,7 @@
           </section>
         </div>
       </div>
-      <div class="col-lg-4 col-md-4 col-sm-4">
+      <div class="col-lg-5 col-md-5 col-sm-5">
         <h4 class="semi-bold">Alignment</h4>
         <ul class="treeview">
           <li>
@@ -150,6 +150,12 @@
             </ul>
           </li>  
         </ul>
+        <br/>
+        <h4 class="semi-bold">Progress over time</h4>
+        <br/>
+        <div id="graph_progress_overtime" style="overflow: hidden;">
+          
+        </div>
       </div>
     </div>
   </div>

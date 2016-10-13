@@ -3,11 +3,13 @@
 
 require([
 'model/company_key_result', 'model/company_objective', 'model/timeframe',
+'helper/d3_data_input_process',
 'view/library/bootstrap-datepicker',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
 'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(
 companyKeyResultModel, companyObjectiveModel, timeframeModel,
+d3DataHelper,
 datepicker,
 overlay, select2, customModal,
 textboxControl, btnControl, customSelect2, refreshPage) {
@@ -21,6 +23,8 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     const link_add_due_date_company_kr = '#link_add_due_date_company_kr';
     const modal_company_kr_due_date = '#company_kr_due_date_modal';
     const datepicker_company_kr = '#company_kr_datepicker';
+    const page_company_objective_details = '#page_company_objective_details';
+    const page_company_key_result_details = '#page_company_key_result_details';
 
     let original_company_objective = "";
     let original_company_key_result = "";
@@ -92,6 +96,36 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       customModal.toggleProgressRingModal(0);
       refreshPage.refreshPage();
     }
+
+    function getObjectiveCreatedDate(){
+      $(page_company_objective_details).ready(function(event){
+        let objective_id = $(page_company_objective_details).attr('data-id');
+        alert(objective_id);
+        if(objective_id != undefined) {
+          let get_created_date_promise = new companyObjectiveModel.getCreatedDate(objective_id);
+          get_created_date_promise.then(obtainObjectiveCreatedDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getObjectiveContribution(){
+      $(page_company_objective_details).ready(function(event){
+        let objective_id = $(page_company_objective_details).attr('data-id');
+        if(objective_id != undefined) {
+          let get_contribution_promise = new companyObjectiveModel.getContribution(objective_id);
+          get_contribution_promise.then(obtainObjectiveContribution, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function obtainObjectiveContribution(data){
+      d3DataHelper.processData(created_date, data);
+    }
+
+    function obtainObjectiveCreatedDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
+      getObjectiveContribution();
+    } 
 
     // ------------------
     // Company Key Result
@@ -178,6 +212,35 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         let update_due_date_promise = new companyKeyResultModel.updateDueDate(company_key_result_id, selected_due_date);
         update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
       }  
+    }
+
+    function getKeyResultCreationDate(){
+      $(page_company_key_result_details).ready(function(){
+        let key_result_id = $(page_company_key_result_details).attr('data-id');
+        if(key_result_id !== undefined) {
+          let get_created_date_promise = new companyKeyResultModel.getCreatedDate(key_result_id);
+          get_created_date_promise.then(obtainKeyResultCreationDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getKeyResultContribution(){
+      $(page_company_key_result_details).ready(function(){
+        let key_result_id = $(page_company_key_result_details).attr('data-id');
+        if(key_result_id !== undefined) {
+          let get_contribution_promise = new companyKeyResultModel.getContribution(key_result_id);
+          get_contribution_promise.then(obtainKeyResultContribution, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function obtainKeyResultCreationDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
+      getKeyResultContribution();
+    }
+
+    function obtainKeyResultContribution(data){
+      d3DataHelper.processData(created_date, data);
     } 
 
     $(document).ready(function() {
@@ -200,6 +263,9 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         // Company Objective - Edit
         btnControl.resolveButtonClick(button_edit_company_objective, editCompanyObjective);
         textboxControl.editCompanyObjective(editingCompanyObjective);
+
+        getObjectiveCreatedDate();
+        getKeyResultCreationDate();
 
     })
 

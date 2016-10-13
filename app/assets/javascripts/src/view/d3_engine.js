@@ -10,7 +10,7 @@ define(function() {
     }
      
     let margin = {top: 20, right: 30, bottom: 30, left: 50},
-        width = 450 - margin.left - margin.right,
+        width = 400 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
     let x = d3.scalePoint()

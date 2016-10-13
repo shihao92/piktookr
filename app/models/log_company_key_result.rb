@@ -37,4 +37,9 @@ class LogCompanyKeyResult < ApplicationRecord
       new_log.save
     end
 
+    def self.retrieve_contribution(key_result_id)
+      log_content = LogCompanyKeyResult.select("log_content, created_at").where('company_key_result_id = ? and log_content like ?', key_result_id, 'Contributed%').limit(5)
+      return log_content
+    end
+
 end

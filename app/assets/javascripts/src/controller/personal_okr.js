@@ -3,14 +3,14 @@
 
 require(['pages/pages.blank', 
 'model/personal_key_result', 'model/personal_objective', 'model/timeframe',
-'helper/date_converter', 'helper/d3_data_input_process',
+'helper/d3_data_input_process',
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
 'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh',
 'view/d3_engine',
 'view/library/bootstrap-datepicker'],
 function(pagesBlank, 
 personalKeyResultModel, personalObjectiveModel, timeframeModel, 
-dateHelper, d3DataHelper,
+d3DataHelper,
 customModal, overlay, slider, customSelect2, 
 btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
 
@@ -106,7 +106,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
       $(page_personal_objective_details).ready(function(event){
         let objective_id = $(page_personal_objective_details).attr('data-id');
         if(objective_id != undefined) {
-          let get_created_date_promise = new personalObjectiveModel.getObjectiveCreatedDate(objective_id);
+          let get_created_date_promise = new personalObjectiveModel.getCreatedDate(objective_id);
           get_created_date_promise.then(obtainObjectiveCreatedDate, customModal.notificationModalToggle);
         }
       });
@@ -116,7 +116,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
       $(page_personal_objective_details).ready(function(event){
         let objective_id = $(page_personal_objective_details).attr('data-id');
         if(objective_id != undefined) {
-          let get_contribution_promise = new personalObjectiveModel.getObjectiveContribution(objective_id);
+          let get_contribution_promise = new personalObjectiveModel.getContribution(objective_id);
           get_contribution_promise.then(obtainObjectiveContribution, customModal.notificationModalToggle);
         }
       });
@@ -254,17 +254,17 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
       }  
     }
 
-    function getContribution(){
+    function getKeyResultContribution(){
       $(page_personal_key_result_details).ready(function(event){
         let key_result_id = $(page_personal_key_result_details).attr('data-id');
         if(key_result_id != undefined) {
           let get_contribution_promise = new personalKeyResultModel.getContribution(key_result_id);
-          get_contribution_promise.then(obtainedContribution, customModal.notificationModalToggle);
+          get_contribution_promise.then(obtainedKeyResultContribution, customModal.notificationModalToggle);
         }
       });
     }
 
-    function obtainedContribution(data){
+    function obtainedKeyResultContribution(data){
       d3DataHelper.processData(created_date, data);
     }
 
@@ -280,7 +280,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
 
     function obtainKeyResultCreatedDate(data){
       created_date = d3DataHelper.processCreatedDate(data);
-      getContribution();
+      getKeyResultContribution();
     }
 
 

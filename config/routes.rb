@@ -94,9 +94,13 @@ Rails.application.routes.draw do
     resources :team_objectives do
       member do
         # Route to the team objective detail page
-        get :details
+        get   :details
         # Route to edit the team objective
-        post :edit_objective
+        post  :edit_objective
+        # Route to get creation date
+        get   :get_created_date
+        # Route to get contribution
+        get   :get_contribution
       end
       collection do
         # Route to the team dashboard
@@ -140,6 +144,10 @@ Rails.application.routes.draw do
     member do
       # Route to company objective details
       get   :details
+      # Route to get created date
+      get   :get_created_date
+      # Route to get contribution
+      get   :get_contribution
     end  
 
   end
@@ -150,6 +158,10 @@ Rails.application.routes.draw do
       get   :details
       # Route to update due date
       post  :insert_due_date
+      # Route to get created date
+      get   :get_created_date
+      # Route to get contribution
+      get   :get_contribution
     end
     collection do
       # Route to edit company key result

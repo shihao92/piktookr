@@ -160,7 +160,25 @@ class TeamObjectivesController < ApplicationController
         format.json { render json: 'Fail to update team objective!', status: :unprocessable_entity }
       end
     end
-  end 
+  end
+
+  def get_created_date 
+    objective_id = params[:id]
+    objective_created_date = TeamObjective.retrieve_created_date(objective_id)
+
+    respond_to do |format|
+      format.json { render json: objective_created_date, status: :ok }
+    end
+  end
+
+  def get_contribution
+    objective_id = params[:id]
+    contributions_log = LogTeamObjective.retrieve_contribution(objective_id)
+
+    respond_to do |format|
+      format.json { render json: contributions_log, status: :ok }
+    end
+  end
 
   private
 

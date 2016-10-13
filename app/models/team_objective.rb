@@ -119,4 +119,9 @@ class TeamObjective < ApplicationRecord
       )
     end
 
+    def self.retrieve_created_date(objective_id)
+      team_objective = TeamObjective.find(objective_id)
+      return team_objective.created_at
+    end
+
 end

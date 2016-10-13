@@ -118,4 +118,9 @@ class PersonalObjective < ApplicationRecord
       )
     end
 
+    def self.retrieve_created_date(objective_id)
+      personal_objective = PersonalObjective.find(objective_id)
+      return personal_objective.created_at
+    end
+
 end

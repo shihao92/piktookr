@@ -111,4 +111,9 @@ class CompanyKeyResult < ApplicationRecord
       return status
     end
 
+    def self.retrieve_created_date(key_result_id)
+      company_key_result = CompanyKeyResult.find(key_result_id)
+      return company_key_result.created_at
+    end
+
 end
