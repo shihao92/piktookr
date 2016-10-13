@@ -126,6 +126,25 @@ class PersonalObjectivesController < ApplicationController
     end       
   end
 
+  def get_contribution
+    objective_id = params[:id]
+    contributions_log = LogPersonalObjective.retrieve_contribution(objective_id)
+
+    respond_to do |format|
+      format.json { render json: contributions_log, status: :ok }
+    end
+  end
+
+  def get_created_date 
+    objective_id = params[:id]
+    personal_objective = PersonalObjective.find(objective_id)
+    objective_created_date = personal_objective.created_at
+
+    respond_to do |format|
+      format.json { render json: objective_created_date, status: :ok }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_personal_objective

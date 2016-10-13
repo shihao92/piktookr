@@ -3,14 +3,14 @@
 
 require(['pages/pages.blank', 
 'model/personal_key_result', 'model/personal_objective', 'model/timeframe',
-'helper/date_converter',
+'helper/date_converter', 'helper/d3_data_input_process',
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
 'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh',
 'view/d3_engine',
 'view/library/bootstrap-datepicker'],
 function(pagesBlank, 
 personalKeyResultModel, personalObjectiveModel, timeframeModel, 
-dateHelper,
+dateHelper, d3DataHelper,
 customModal, overlay, slider, customSelect2, 
 btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
 
@@ -24,7 +24,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     const modal_personal_kr_due_date = '#personal_kr_due_date_modal';
     const datepicker_personal_kr = '#personal_kr_datepicker';
     const page_personal_key_result_details = '#page_personal_key_result_details';
-    const graph_personal_key_result_progress_overtime = '#graph_personal_key_result_progress_overtime';
+    const page_personal_objective_details = '#page_personal_objective_details';
 
     // From layout page
     const button_timeframe_dropdown = "#btn_timeframe_dropdown";
@@ -32,6 +32,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     let original_personal_objective = "";
     let checkbox_tick_amount = 0;
     let original_personal_key_result = "";
+    let created_date = "";
 
     // ------------------
     // Personal Objective
@@ -99,6 +100,35 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     function editedPersonalObjective(message){
       customModal.toggleProgressRingModal(0);
       refreshPage.refreshPage();
+    }
+
+    function getObjectiveCreatedDate(){
+      $(page_personal_objective_details).ready(function(event){
+        let objective_id = $(page_personal_objective_details).attr('data-id');
+        if(objective_id != undefined) {
+          let get_created_date_promise = new personalObjectiveModel.getObjectiveCreatedDate(objective_id);
+          get_created_date_promise.then(obtainObjectiveCreatedDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getObjectiveContribution(){
+      $(page_personal_objective_details).ready(function(event){
+        let objective_id = $(page_personal_objective_details).attr('data-id');
+        if(objective_id != undefined) {
+          let get_contribution_promise = new personalObjectiveModel.getObjectiveContribution(objective_id);
+          get_contribution_promise.then(obtainObjectiveContribution, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function obtainObjectiveContribution(data){
+      d3DataHelper.processData(created_date, data);
+    }
+
+    function obtainObjectiveCreatedDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
+      getObjectiveContribution();
     }
 
     // -------------------
@@ -229,73 +259,30 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
         let key_result_id = $(page_personal_key_result_details).attr('data-id');
         if(key_result_id != undefined) {
           let get_contribution_promise = new personalKeyResultModel.getContribution(key_result_id);
-          get_contribution_promise.then(processContributionKeyResult, customModal.notificationModalToggle);
+          get_contribution_promise.then(obtainedContribution, customModal.notificationModalToggle);
         }
       });
     }
 
-    function getCreatedDate(){
+    function obtainedContribution(data){
+      d3DataHelper.processData(created_date, data);
+    }
+
+    function getKeyResultCreatedDate(){
       $(page_personal_key_result_details).ready(function(event){
         let key_result_id = $(page_personal_key_result_details).attr('data-id');
         if(key_result_id != undefined) {
           let get_created_date_promise = new personalKeyResultModel.getCreatedDate(key_result_id);
-          get_created_date_promise.then(obtainCreatedDate, customModal.notificationModalToggle);
+          get_created_date_promise.then(obtainKeyResultCreatedDate, customModal.notificationModalToggle);
         }
       });
     }
 
-    let created_date = "";
-    function obtainCreatedDate(data){
-      created_date = data;
-      let created_at_time_index = created_date.indexOf('T');
-      let created_at_underscore_index = created_date.indexOf('-');
-
-      created_date = created_date.substring(1, created_at_time_index);
-      created_date = created_date.substring(created_at_underscore_index + 1, created_date.length);
-      created_date = dateHelper.formatConverter(created_date);
-
+    function obtainKeyResultCreatedDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
       getContribution();
     }
 
-    function processContributionKeyResult(data){
-      data = JSON.parse(data);
-      let counter = 0;
-      let x_axis = [];
-      let y_axis = [];
-
-      x_axis.push(created_date);
-      y_axis.push(0);
-
-      let previous_progress = 0.00;
-      let current_progress = 0.00;
-
-      while(counter < data.length) {
-        let created_at_time_index = data[counter].created_at.indexOf('T');
-        let created_at_underscore_index = data[counter].created_at.indexOf('-');
-        let log_content_plus_index = data[counter].log_content.indexOf('+');
-        let log_content_percentage_index = data[counter].log_content.indexOf('%');
-        data[counter].created_at = data[counter].created_at.substring(0, created_at_time_index);
-        data[counter].created_at = data[counter].created_at.substring(created_at_underscore_index + 1, (data[counter].created_at).length);
-        data[counter].log_content = data[counter].log_content.substring(log_content_plus_index + 1, log_content_percentage_index);
-        data[counter].log_content = parseFloat(data[counter].log_content);
-        
-        if(counter == 0) {
-          previous_progress = data[counter].log_content;
-        } else {
-          data[counter].log_content = previous_progress + data[counter].log_content;
-          previous_progress = data[counter].log_content;
-        }
-
-        data[counter].created_at = dateHelper.formatConverter(data[counter].created_at);
-
-        x_axis.push(data[counter].created_at);
-        y_axis.push(data[counter].log_content);
-        
-        counter = counter + 1;
-      }
-
-      d3_engine.generateSimpleLineGraph(graph_personal_key_result_progress_overtime, x_axis, y_axis);
-    }
 
     customModal.toggleProgressRingModal(0);
 
@@ -334,7 +321,9 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
 
         btnControl.notificationDismissClick();
 
-        getCreatedDate();
+        getObjectiveCreatedDate();
+
+        getKeyResultCreatedDate();
         
     });
 

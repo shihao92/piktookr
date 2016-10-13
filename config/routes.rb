@@ -112,6 +112,10 @@ Rails.application.routes.draw do
         post  :edit_key_result
         # Route to update due date
         post  :insert_due_date
+        # Route to get created date
+        get   :get_created_date
+        # Route to get contribution
+        get   :get_contribution
       end
     end
 
@@ -163,6 +167,10 @@ Rails.application.routes.draw do
       get   :details
       # Route to edit the personal objective
       post  :edit_objective
+      # Route to get contribution data
+      get   :get_contribution
+      # Route to get the creation date
+      get   :get_created_date
     end
 
     collection do

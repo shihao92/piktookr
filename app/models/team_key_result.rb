@@ -112,4 +112,9 @@ class TeamKeyResult < ApplicationRecord
       return status
     end
 
+    def self.retrieve_created_date(key_result_id)
+      team_key_result = TeamKeyResult.find(key_result_id)
+      return team_key_result.created_at
+    end
+
 end

@@ -43,4 +43,9 @@ class LogPersonalObjective < ApplicationRecord
       new_log.save
     end
 
+    def self.retrieve_contribution(objective_id)
+      log_content = LogPersonalObjective.select("log_content, created_at").where('personal_objective_id = ? and log_content like ?', objective_id, 'Contributed%').limit(5)
+      return log_content
+    end
+
 end

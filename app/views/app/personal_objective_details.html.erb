@@ -17,7 +17,7 @@
 </div>
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
-<div class="bg-master-lighter">
+<div id="page_personal_objective_details" class="bg-master-lighter" data-id="<%= @personal_objective.id %>">
   <div class="container-fluid container-fixed-lg">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
@@ -154,6 +154,12 @@
 
           </li>
         </ul>
+        <br/>
+        <h4 class="semi-bold">Progress over time</h4>
+        <br/>
+        <div id="graph_progress_overtime" style="overflow: hidden;">
+          
+        </div>
       </div>
     </div>
   </div>

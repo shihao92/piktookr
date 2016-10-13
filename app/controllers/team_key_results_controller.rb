@@ -121,6 +121,23 @@ class TeamKeyResultsController < ApplicationController
     end
   end
 
+  def get_created_date
+    key_result_id = params[:id]
+    kr_created_date = TeamKeyResult.retrieve_created_date(key_result_id)
+    respond_to do |format|
+      format.json { render json: kr_created_date, status: :ok }
+    end
+  end
+
+  def get_contribution
+    key_result_id = params[:id]
+    contributions_log = LogTeamKeyResult.retrieve_contribution(key_result_id)
+
+    respond_to do |format|
+      format.json { render json: contributions_log, status: :ok }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team_key_result

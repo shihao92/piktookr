@@ -2,11 +2,13 @@
 // This JS file that controls team okr page only.
 
 require(['model/team_key_result','model/team_objective', 'model/timeframe',
-'view/library/bootstrap-datepicker',
+'helper/date_converter', 'helper/d3_data_input_process',
+'view/library/bootstrap-datepicker', 'view/d3_engine',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
 'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
 function(teamKeyResultModel, teamObjectiveModel, timeframeModel,
-datepicker,
+dateHelper, d3DataHelper,
+datepicker, d3_engine,
 overlay, select2, customModal,
 textboxControl, btnControl, customSelect2, refreshPage) {
 
@@ -19,9 +21,11 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     const link_due_date_team_kr = '#link_add_due_date_team_kr';
     const modal_team_kr_due_date = '#team_kr_due_date_modal';
     const datepicker_team_kr = '#team_kr_datepicker';
+    const page_team_key_result_details = '#page_team_key_result_details';
 
     let original_team_objective = "";
     let original_team_key_result = "";
+    let creation_date = "";
 
     // --------------
     // Team Objective
@@ -187,6 +191,36 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       } 
     }
 
+    function getCreationDate(){
+      $(page_team_key_result_details).ready(function(){
+        let team_id = $(modal_team_kr_due_date).attr('data-id');
+        let key_result_id = $(page_team_key_result_details).attr('data-id');
+        if(key_result_id !== undefined) {
+          let get_created_date_promise = new teamKeyResultModel.getCreatedDate(team_id, key_result_id);
+          get_created_date_promise.then(obtainCreationDate, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function getKeyResultContribution(){
+      $(page_team_key_result_details).ready(function(){
+        let team_id = $(modal_team_kr_due_date).attr('data-id');
+        let key_result_id = $(page_team_key_result_details).attr('data-id');
+        if(key_result_id !== undefined) {
+          let get_contribution_promise = new teamKeyResultModel.getContribution(team_id, key_result_id);
+          get_contribution_promise.then(obtainContribution, customModal.notificationModalToggle);
+        }
+      });
+    }
+
+    function obtainCreationDate(data){
+      created_date = d3DataHelper.processCreatedDate(data);
+      getKeyResultContribution();
+    }
+
+    function obtainContribution(data){
+      d3DataHelper.processData(created_date, data);
+    }
 
     $(document).ready(function() {
         
@@ -212,6 +246,8 @@ textboxControl, btnControl, customSelect2, refreshPage) {
 
         // Setting for the team
         btnControl.resolveButtonClick(button_team_setting, openTeamSettingOverlay);
+
+        getCreationDate();
 
     })
 
