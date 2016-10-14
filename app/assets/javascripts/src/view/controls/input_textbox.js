@@ -41,13 +41,13 @@ function(overlayParam, btnControl){
   }
 
   function editPersonalKeyResult(resolve){
-    $('.checkbox-primary')
+    $('.accordion-item-title')
     .on({
       keypress: resolve,
       focusout: function() {
         location.reload();
       }
-    },'.add-new-personal-key-result');
+    }, '.add-new-personal-key-result');
   }
 
   function createInputTextboxForEditPersonalObjective(objective_id, original_objective){

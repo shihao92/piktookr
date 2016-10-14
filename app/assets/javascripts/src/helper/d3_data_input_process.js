@@ -7,6 +7,7 @@ define(['helper/date_converter', 'view/d3_engine', 'view/controls/spin-progress'
   const timeline_progress_ring = "#timeline-progress-ring";
 
   function processCreatedDate(input){
+    spinProgress.defineProgressSpin();
     created_date = input;
     let created_at_time_index = created_date.indexOf('T');
     let created_at_underscore_index = created_date.indexOf('-');
@@ -54,11 +55,11 @@ define(['helper/date_converter', 'view/d3_engine', 'view/controls/spin-progress'
       
       counter = counter + 1;
     }
+    
     drawGraph(x_axis, y_axis);
   }
 
   function drawGraph(x_axis, y_axis){
-    spinProgress.defineProgressSpin();
     d3_engine.generateSimpleLineGraph(graph_progress_overtime, x_axis, y_axis);
     $(timeline_progress_ring).attr('style', 'display: none;');
   }

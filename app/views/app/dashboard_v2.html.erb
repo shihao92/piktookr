@@ -368,7 +368,12 @@
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-personal-key-result">
               <div name="new_key_result_objective_<%= item.id %>">
-                <input name="new_key_result" data-id="<%= item.id %>" type="text" class="form-control form-new-key-result" placeholder="Add new key result"/>         
+                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input">
+                  <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+                </div>
+                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
+                  <input name="new_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new team key result" data-id="<%= item.id %>"/>
+                </div>      
               </div>
             </div>
           </div>
