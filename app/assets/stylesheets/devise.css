@@ -17,5 +17,8 @@
  *= require css/switchery.min
  *= require css/pages/pages-icons
  *= require css/pages/pages
+
+ *= require css_v1/app
+
  *= require_self
  */
