@@ -34,11 +34,13 @@
             <span>
               <%= @okr_team.name %>
             </span>
+            <% if @controls.include? 'Edit Team Information' %>
             <span class="p-l-10">
               <button id="team_setting" class="btn btn-default no-padding">
                 <i class="fa fa-fw fa-gears fa-lg"></i>
               </button>
             </span>
+            <% end %>
           </h5>
         </div>
         <div class="row">
