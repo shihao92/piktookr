@@ -42,8 +42,7 @@ class User < ActiveRecord::Base
   validates   :password, presence: true, length: { minimum: 5 }, confirmation: true
   validates   :last_name, presence: true
   validates   :first_name, presence: true
-  validates   :status, inclusion: { in: %w(ACTIVE INACTIVE), 
-                                    message: "%{value} is not a valid status!"}
+  enum status: { active: 0, inactive: 1 }
   validates   :position, presence: true, length: { minimum: 2 }
   
 

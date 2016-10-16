@@ -45,4 +45,18 @@ Control.create!(details: "View System Teams Information", control_type_id: team_
 Control.create!(details: "Set time interval for particular year", control_type_id: timeframe_control.id)
 Control.create!(details: "View System Timeframes", control_type_id: timeframe_control.id)
 
+# ----------------
+# Timeframe Module 
+# ----------------
+
+timeframe = Timeframe.create!(year: "2016", timeframe_type: "Quarterly")
+
+TimeframeLog.create!(start_date: "2016-01-01", end_date: "2016-03-31", timeframe_id: timeframe.id)
+TimeframeLog.create!(start_date: "2016-04-01", end_date: "2016-06-30", timeframe_id: timeframe.id)
+TimeframeLog.create!(start_date: "2016-07-01", end_date: "2016-09-30", timeframe_id: timeframe.id)
+TimeframeLog.create!(start_date: "2016-10-01", end_date: "2016-12-31", timeframe_id: timeframe.id)
+
+
+
+
 

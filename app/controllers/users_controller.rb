@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-  CONST_USER_STATUS = ["ACTIVE", "INACTIVE"]
+  CONST_USER_STATUS = ["active", "inactive"]
 
   @@editing_user_id = 1
 

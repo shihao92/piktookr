@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010060320) do
+ActiveRecord::Schema.define(version: 20161016033436) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -299,10 +299,10 @@ ActiveRecord::Schema.define(version: 20161010060320) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.string   "last_name"
-    t.string   "status"
     t.integer  "teams_id"
     t.string   "position"
     t.string   "first_name"
+    t.integer  "status"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["teams_id"], name: "index_users_on_teams_id", using: :btree
