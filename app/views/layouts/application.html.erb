@@ -265,7 +265,7 @@
                   </a>
                 </li>
                 <li>
-                  <a href="/">
+                  <a id="link_feedback_form">
                     <i class="pg-outdent"></i> 
                     Feedback
                   </a>
@@ -429,7 +429,7 @@
           <hr/>
           <div class="modal-body">
             <div class="form-group">
-              <p id="notification_message">Key result is completed!</p>
+              <p id="notification_message"></p>
             </div>
           </div>
           <div class="modal-footer">
@@ -490,7 +490,7 @@
           <div class="col-sm-6 col-md-6 col-lg-6">
             <div class="row">
               <h5 class="m-b-5">
-                <span class="bold result-name">
+                <span class="bold result-name objective">
                 	User Profile
                 </span>
               </h5>
@@ -606,7 +606,7 @@
                           </span>
                         </div>
                         <div class="col-lg-2 col-md-2 col-sm-2">
-                          <div class="pull-right">
+                          <div class="pull-right hide">
                             <button data-id="<%= item.id %>" id="btn_remove_team" class="btn btn-accordion no-padding">
                               <i class="pg-close"></i>
                             </button>
@@ -652,6 +652,80 @@
         </div>
         <div class="col-sm-3 col-md-3 col-lg-3">
         </div>
+      </div>
+    </div>
+
+    <div id="feedback_form" class="overlay hide">
+      <div class="overlay-content has-results m-t-20">
+        <div class="container-fluid">
+          <a href="/" class="close-icon-light overlay-close text-black fs-16">
+            <i class="pg-close"></i>
+          </a>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+          </div>
+          <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="row">
+              <h5 class="m-b-5">
+                <span class="bold result-name objective">
+                	Feedback Form
+                </span>
+              </h5>
+              <hr/>
+            </div>
+            <div class="row">
+              <div class="col-md-2 col-sm-2">
+                <img src="<%= @server_url %>/wink.png" style="width:36px;"/>
+              </div>
+              <div class="col-md-10 col-sm-10">
+                <p class="bold">Anything on your mind that you'd like to share?</p>
+                <p>Please be as detailed as possible to allow effective plannings on improving the system.</p>
+              </div>
+            </div>
+            <br/>
+            <div class="row">
+              <div class="form-group form-group-default required">
+                <label>Feedback</label>
+                <textarea id="textarea_feedback" class="note-editable feedback-textarea">
+                </textarea>
+              </div>
+            </div>
+            <br/>
+            <div class="row pull-right">
+              <a href="/" class="btn btn-default btn-rounded btn-cons">
+                Cancel
+              </a>
+              <button id="btn_submit_feedback" class="btn btn-complete btn-rounded btn-cons">
+                Submit
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-3 col-lg-3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal_delete_feedback_confirmation" class="modal fade stick-up" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+        <div class="modal-background">
+          <div class="modal-header clearfix text-left">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Delete Feedback</h4>
+          </div>
+          <hr/>
+          <div class="modal-body">
+            <div class="form-group">
+              <p id="notification_message">Are you sure to remove this feedback?</p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button id="btn_confirm_delete_feedback" type="button" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+      
       </div>
     </div>
     

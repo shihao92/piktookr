@@ -31,6 +31,15 @@ textboxControl, refreshPage, searchResult){
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_users_results = '#div_search_users_results';
 
+    // Feedback module
+    const link_feedback_form = '#link_feedback_form';
+    const feedback_form = '#feedback_form';
+    const textarea_feedback = '#textarea_feedback';
+    const button_submit_feedback = '#btn_submit_feedback';
+    const button_confirm_delete_feedback = '#btn_confirm_delete_feedback';
+    const link_remove_feedback = 'a[name=link_delete_feedback]';
+    const modal_delete_feedback_confirmation = '#modal_delete_feedback_confirmation';
+
     // Controls at dashboard page
     const overlay_first_timer = '#overlay_first_timer';
     const overlay_first_timer_edit_profile = '#overlay_first_timer_edit_profile';
@@ -238,6 +247,38 @@ textboxControl, refreshPage, searchResult){
       customModal.toggleProgressRingModal(1);
     }
 
+    // ---------------
+    // Feedback Module
+    // ---------------
+
+    function onFeedbackOverlay(){
+      overlay.toggleOverlay(feedback_form, 1);
+    }
+
+    function submitFeedback(event){
+      // Check whether information is inserted
+      let feedback_content = $(textarea_feedback).val().trim();
+      if(feedback_content !== ""){
+        let feedback_promise = new userModel.insertFeedback(feedback_content);
+        feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      } else {
+        customModal.notificationModalToggle("Feedback cannot be empty!");
+      }
+    }
+
+    let temp_feedback_id = 0;
+    function removeFeedback(event){
+      let feedback_id = $(event.target).attr('data-id');
+      temp_feedback_id = feedback_id;
+      $(modal_delete_feedback_confirmation).modal('show');
+    }
+
+    function confirmDeleteFeedback(event){
+      $(modal_delete_feedback_confirmation).modal('hide');
+      let delete_feedback_promise = new userModel.removeFeedback(temp_feedback_id);
+      delete_feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+    }
+
 
     $(document).ready(function(){
       
@@ -279,6 +320,13 @@ textboxControl, refreshPage, searchResult){
       // User favourite module controls
       btnControl.resolveButtonClick(button_favourite_user, addFavouriteUser);
       btnControl.resolveButtonClick(button_remove_favourite_user, removeFavouriteUser);
+
+      // Feedback module
+      btnControl.resolveButtonClick(link_feedback_form, onFeedbackOverlay);
+      btnControl.resolveButtonClick(button_submit_feedback, submitFeedback);
+
+      btnControl.resolveButtonClick(link_remove_feedback, removeFeedback);
+      btnControl.resolveButtonClick(button_confirm_delete_feedback, confirmDeleteFeedback);
 
     });
 

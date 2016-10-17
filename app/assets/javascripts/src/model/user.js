@@ -144,13 +144,61 @@ define (['model/server_url'], function (urlParam) {
     });
   }
 
+  function insertFeedback(feedback) {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/users/insert_feedback", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        content    : feedback
+      }));
+    });
+  }
+
+  function removeFeedback(feedback_id) {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/app/remove_feedback", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        feedback_id    : feedback_id
+      }));
+    });
+  }
+
   return {
     removeUserFromSystem,
     removeUserFromTeam,
     checkFirstTimeLogin,
     addFavouriteUser,
     removeFavouriteUser,
-    searchUsersLists
+    searchUsersLists,
+    insertFeedback,
+    removeFeedback
   }
 
 })

@@ -64,5 +64,29 @@ class AppController < ApplicationController
 
       render "app/dashboard_v2"
     end
+
+    # ---------------
+    # Feedback Module
+    # ---------------
+
+    def feedback_page
+      pages_initialization
+      @new_feedbacks = Feedback.where(feedback_status: 0)
+      @seen_feedbacks = Feedback.where(feedback_status: 1)
+      @replied_feedbacks = Feedback.where(feedback_status: 2)
+
+      render 'app/feedback_module'
+    end
+
+    def remove_feedback
+      feedback_id = params[:feedback_id]
+      respond_to do |format|
+        if Feedback.find(feedback_id).destroy
+          format.json { render json: 'Feedback removed!', status: :ok }
+        else
+          format.json { render json: 'Error!', status: :unprocessable_entity }
+        end
+      end
+    end
     
 end

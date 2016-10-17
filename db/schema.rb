@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161016033436) do
+ActiveRecord::Schema.define(version: 20161017012809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,6 +60,15 @@ ActiveRecord::Schema.define(version: 20161016033436) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
     t.index ["control_type_id"], name: "index_controls_on_control_type_id", using: :btree
+  end
+
+  create_table "feedbacks", force: :cascade do |t|
+    t.string   "content"
+    t.integer  "user_id"
+    t.integer  "feedback_status"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["user_id"], name: "index_feedbacks_on_user_id", using: :btree
   end
 
   create_table "log_company_key_results", force: :cascade do |t|
@@ -315,6 +324,7 @@ ActiveRecord::Schema.define(version: 20161016033436) do
   add_foreign_key "contributions", "log_personal_key_results"
   add_foreign_key "contributions", "personal_key_results"
   add_foreign_key "controls", "control_types"
+  add_foreign_key "feedbacks", "users"
   add_foreign_key "log_company_key_results", "company_key_results"
   add_foreign_key "log_company_key_results", "users"
   add_foreign_key "log_company_objectives", "company_objectives"

@@ -208,6 +208,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def insert_feedback
+    feedback_content = params[:content]
+    respond_to do |format|
+      if Feedback.create!(content: feedback_content, user_id: current_user.id, feedback_status: 'recent')
+        format.json { render json: 'Thank you for the feedback :)', status: :ok }
+      else
+        format.json { render json: 'Error!', status: :unprocessable_entity }
+      end
+    end
+  end
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.

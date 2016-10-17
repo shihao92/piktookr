@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       post  :create_member
       post  :edit_team
       post  :search_user_results
+      post  :insert_feedback
     end
 
     member do
@@ -219,6 +220,8 @@ Rails.application.routes.draw do
   resources :app, only: :dashboard_v2 do
     collection do
       get   :dashboard_v2
+      get   :feedback_page
+      post  :remove_feedback
     end 
   end
   

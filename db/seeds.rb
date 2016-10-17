@@ -25,6 +25,7 @@ team_okr_control = ControlType.create!(okr_system_type: "Team OKR")
 user_control = ControlType.create!(okr_system_type: "User Admin")
 team_control = ControlType.create!(okr_system_type: "Team Admin")
 timeframe_control = ControlType.create!(okr_system_type: "Timeframe Control")
+feedback_control = ControlType.create!(okr_system_type: "Feedback Control")
 
 # Controls
 
@@ -44,6 +45,8 @@ Control.create!(details: "Delete Team", control_type_id: team_control.id)
 Control.create!(details: "View System Teams Information", control_type_id: team_control.id)
 Control.create!(details: "Set time interval for particular year", control_type_id: timeframe_control.id)
 Control.create!(details: "View System Timeframes", control_type_id: timeframe_control.id)
+Control.create!(details: "View Feedbacks", control_type_id: feedback_control.id)
+
 
 # ----------------
 # Timeframe Module 

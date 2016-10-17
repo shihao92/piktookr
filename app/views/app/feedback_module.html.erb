@@ -1,0 +1,177 @@
+<!-- START JUMBOTRON -->
+<div class="jumbotron" data-pages="parallax">
+  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+    <div class="inner">
+      <!-- START BREADCRUMB -->
+      <ul class="breadcrumb">
+        <li>
+          <p>HOME</p>
+        </li>
+        <li>
+          <a href="/app/feedback_page" class="active">FEEDBACK</a>
+        </li>
+      </ul>
+      <!-- END BREADCRUMB -->
+    </div>
+  </div>
+</div>
+<!-- END JUMBOTRON -->
+<!-- START CONTAINER FLUID -->
+<div class="container-fluid container-fixed-lg">
+  <div class="col-md-6 col-sm-6">
+    <h5 class="semi-bold">
+      Feedbacks
+    </h5>
+  </div>
+  <div class="col-md-6 col-sm-6">
+  </div>
+  <br/>
+</div>
+<div class="container-fluid container-fixed-lg">
+  <div class="panel">
+    <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" role="tablist" data-init-reponsive-tabs="collapse">
+      <li class="active">
+        <a href="#new_feedback_lists" data-toggle="tab" role="tab">Inbox (<%= @new_feedbacks.count %>)</a>
+      </li>
+      <!--<li>
+        <a href="#seen_feedback_lists" data-toggle="tab" role="tab">Seen (<%= @seen_feedbacks.count %>)</a>
+      </li>
+      <li>
+        <a href="#replied_feedback_lists" data-toggle="tab" role="tab">Replied (<%= @replied_feedbacks.count %>)</a>
+      </li>-->
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="new_feedback_lists">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width:60%">
+                FEEDBACK
+              </th>
+              <th style="width:20%">
+                SENDER EMAIL
+              </th>
+              <th style="width:20%">
+                ACTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @new_feedbacks.each do |item| %>
+            <tr>
+              <td>
+                <%= item.content %>
+              </td>
+              <td>
+                <% user = User.select("email").find(item.user_id) %>
+                <%= user.email %>
+              </td>
+              <td>
+                <!--<span class="col-md-6 col-sm-6">
+                  <a name="link_reply_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Reply
+                  </a>
+                </span>-->
+                <span class="col-md-12 col-sm-12">
+                  <a name="link_delete_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Delete
+                  </a>
+                </span>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="seen_feedback_lists">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width:60%">
+                FEEDBACK
+              </th>
+              <th style="width:20%">
+                SENDER EMAIL
+              </th>
+              <th style="width:20%">
+                ACTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @seen_feedbacks.each do |item| %>
+            <tr>
+              <td>
+                <%= item.content %>
+              </td>
+              <td>
+                <% user = User.select("email").find(item.user_id) %>
+                <%= user.email %>
+              </td>
+              <td>
+                <!--<span class="col-md-6 col-sm-6">
+                  <a name="link_reply_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Reply
+                  </a>
+                </span>-->
+                <span class="col-md-6 col-sm-6">
+                  <a name="link_delete_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Delete
+                  </a>
+                </span>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="replied_feedback_lists">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width:60%">
+                FEEDBACK
+              </th>
+              <th style="width:20%">
+                SENDER EMAIL
+              </th>
+              <th style="width:20%">
+                ACTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @replied_feedbacks.each do |item| %>
+            <tr>
+              <td>
+                <%= item.content %>
+              </td>
+              <td>
+                <% user = User.select("email").find(item.user_id) %>
+                <%= user.email %>
+              </td>
+              <td>
+                <!--<span class="col-md-6 col-sm-6">
+                  <a name="link_reply_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Reply
+                  </a>
+                </span>-->
+                <span class="col-md-6 col-sm-6">
+                  <a name="link_delete_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-pencil"></i> Delete
+                  </a>
+                </span>
+              </td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END CONTAINER FLUID -->
+
+
+
+

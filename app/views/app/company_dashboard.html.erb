@@ -56,6 +56,11 @@
                 <i class="fa fa-fw fa-clock-o fa-lg"></i>
               </a>
               <% end %>
+              <% if @controls.include? 'View Feedbacks' %>
+              <a href="/app/feedback_page" class="btn btn-default no-padding" title="Feedback Module">
+                <i class="fa fa-fw fa-comments-o fa-lg"></i>
+              </a>
+              <% end %>
             </span>
           </h5>
         </div>
