@@ -38,6 +38,7 @@
           </span>
         </span>
         <span>
+          <% if @selected_timeframe.id == @system_timeframe_log_id %>
           <% if @personal_key_result.due_date.to_s == '' %>
           <a id="link_add_due_date_personal_kr" data-toggle="modal" data-target="personal_kr_due_date_modal">
             <i class="glyphicon glyphicon-time fa-lg"></i>
@@ -50,6 +51,7 @@
               <%= @personal_key_result.due_date.to_s %>
             </span>
           </a>
+          <% end %>
           <% end %>
         </span>
         <br />

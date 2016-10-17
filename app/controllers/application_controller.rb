@@ -5,9 +5,6 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  # Timeframe module
-  @@system_timeframe_log_id = TimeframeLog.current_timeframe_log_id
-
   def after_sign_in_path_for(resource)
     request.env['omniauth.origin'] || root_path
   end
@@ -22,6 +19,7 @@ class ApplicationController < ActionController::Base
 
   def pages_initialization
     okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
+    @system_timeframe_log_id = TimeframeLog.current_timeframe_log_id
     @selected_timeframe = TimeframeLog.find(okr_user_timeframe.timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
     @user = User.find(current_user.id)

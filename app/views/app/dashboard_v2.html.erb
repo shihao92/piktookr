@@ -365,6 +365,7 @@
               </div>
             <% end %>
 
+            <% if @selected_timeframe.id == @system_timeframe_log_id %>
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-personal-key-result">
               <div name="new_key_result_objective_<%= item.id %>">
@@ -376,6 +377,7 @@
                 </div>      
               </div>
             </div>
+            <% end %>
           </div>
         </div>
         <div class="panel-footer">
@@ -398,6 +400,7 @@
       </div>
     <% end %>
 
+    <% if @selected_timeframe.id == @system_timeframe_log_id %>
     <div class="panel panel-default">
       <div class="panel-heading p-t-15 new-objective-input" role="tab">
         <h4 class="panel-title panel-title-custom">
@@ -410,6 +413,7 @@
         </h4>
       </div>
     </div>
+    <% end %>
 
   </div>
 

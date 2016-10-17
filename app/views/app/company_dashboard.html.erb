@@ -362,6 +362,7 @@
               </div>
             <% end %>
             <!-- New row for the add in of new key results over here -->
+            <% if @selected_timeframe.id == @system_timeframe_log_id %>
             <% if @controls.include? 'Create Company OKR' %>
             <div class="row accordion-item add-new-company-key-result">
               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input">
@@ -371,6 +372,7 @@
                 <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>
               </div>          
             </div>
+            <% end %>
             <% end %>
           </div>
         </div>
@@ -394,6 +396,7 @@
       </div>
     <% end %>
 
+    <% if @selected_timeframe.id == @system_timeframe_log_id %>
     <% if @controls.include? 'Create Company OKR' %>
     <div class="panel panel-default">
       <div class="panel-heading p-t-15 new-objective-input" role="tab">
@@ -407,6 +410,7 @@
         </h4>
       </div>
     </div>
+    <% end %>
     <% end %>
   </div>
 

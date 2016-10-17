@@ -38,6 +38,7 @@
           </span>
         </span>
         <span>
+          <% if @selected_timeframe.id == @system_timeframe_log_id %>
           <% if @controls.include? 'Edit Company OKR' %>
           <% if @company_key_result.due_date.to_s == '' %>
           <a id="link_add_due_date_company_kr">
@@ -61,6 +62,7 @@
           <span class="label-font">
             <%= @company_key_result.due_date.to_s %>
           </span>
+          <% end %>
           <% end %>
           <% end %>
         </span>
