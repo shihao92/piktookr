@@ -302,7 +302,15 @@
                     </a>
                   </li>
                 <% end %>
-
+                <% if @role.name == "Admin" %>
+                <% @future_timeframe_logs.each do |item| %>
+                  <li>
+                    <a name="timeframe_log_selection" data-id="<%= item.id %>">
+                      <%= item.quarter %>
+                    </a>
+                  </li>
+                <% end %>
+                <% end %>
               </ul>
             </div>
           </div>

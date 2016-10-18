@@ -26,7 +26,8 @@ class TeamObjective < ApplicationRecord
 
     def self.new_team_objective(objective, company_key_result_id, user_id, team_id)
       status = 0
-      log_id = TimeframeLog.current_timeframe_log_id
+      okr_user_timeframe = OkrUserTimeframe.find_by(user_id: user_id)
+      log_id = okr_user_timeframe.timeframe_log_id
       new_team_objective = TeamObjective.new(
         objective: objective,
         progress: 0.0, 

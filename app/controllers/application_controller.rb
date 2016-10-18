@@ -27,6 +27,7 @@ class ApplicationController < ActionController::Base
 
     @current_date = Time.now.strftime("%Y-%m-%d")
     @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'")
+    @future_timeframe_logs = TimeframeLog.where("start_date > '" + @current_date + "'")
 
     @users = User.all
     @user = User.find(current_user.id)

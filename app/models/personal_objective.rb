@@ -29,12 +29,13 @@ class PersonalObjective < ApplicationRecord
 
     def self.new_personal_objective(objective, team_key_result_id, user_id)
       status = 0
-      time_log_id = TimeframeLog.current_timeframe_log_id
+      okr_user_timeframe = OkrUserTimeframe.find_by(user_id: user_id)
+      log_id = okr_user_timeframe.timeframe_log_id
 
       new_personal_objective = PersonalObjective.new(
         objective: objective, 
         progress: 0.0, 
-        timeframe_log_id: time_log_id, 
+        timeframe_log_id: log_id, 
         user_id: user_id
       )
 
