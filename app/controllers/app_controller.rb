@@ -48,14 +48,15 @@ class AppController < ApplicationController
       end 
       
       team_ids.each do |item|
-        team_objectives = TeamObjective.where(okr_team_id: item.okr_team_id, timeframe_log_id: @selected_timeframe.id).map{|obj| [obj.objective, obj.id] }
+        okr_team = OkrTeam.find(item.okr_team_id)
+        team_objectives = TeamObjective.where(okr_team_id: item.okr_team_id, timeframe_log_id: @selected_timeframe.id).map{|obj| [obj.objective, obj.id, okr_team.name] }
         temp_team_objective.push(team_objectives)
       end
 
       temp_team_objective.each do |item|
         count = 0
         while(count < item.count)
-          team_key_results = TeamKeyResult.where(team_objective_id: item[count][1]).map{|kr| [kr.key_result, kr.id]}
+          team_key_results = TeamKeyResult.where(team_objective_id: item[count][1]).map{|kr| [kr.key_result, kr.id, item[count][2]]}
           team_key_results.each do |element|
             @temp_team_key_result.push(element)
           end

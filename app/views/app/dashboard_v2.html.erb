@@ -520,8 +520,24 @@
                 <label>Select the alignment Team Key Result</label>
                 <!--Load all the key result of the particular team-->
                 <select id="team_key_result_selection" class="full-width">
-                  <% @temp_team_key_result.each do |item| %>
-                    <option value="<%= item[1] %>"><%= item[0] %></option>
+                  <% temp_okr_team = "" %>
+                  <% @temp_team_key_result.each_with_index do |item, index| %>
+                  <% if index == 0 %>
+                  <% temp_okr_team = item[2] %>
+                  <optgroup label="<%= temp_okr_team %>">
+                  <% end %>
+                  <% if item[2] != temp_okr_team %>
+                  <% temp_okr_team = item[2] %>
+                  <optgroup label="<%= temp_okr_team %>">
+                  <% end %>
+                    <option value="<%= item[1] %>">
+                      <%= item[0] %>
+                    </option>
+                  <% if item[index + 1] != nil %>
+                  <% if item[index + 1] != temp_okr_team %>
+                  </optgroup>
+                  <% end %>
+                  <% end %>
                   <% end %>                             
                 </select>
               </div>
