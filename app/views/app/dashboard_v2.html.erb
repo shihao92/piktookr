@@ -139,8 +139,14 @@
                 <div class="row">
                   <div class="col-lg-6 col-md-6 col-sm-6">
                     <% @okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: item.id) %>
-                    <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
-                    <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
+                    <% if @okr_team_personal != nil %>
+                      <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
+                      <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
+                    <% else %>
+                      <% @okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: item.id) %>
+                      <% @company_key_result = CompanyKeyResult.find(@okr_company_personal.company_key_result_id) %>
+                      <%= content_tag(:p, @company_key_result.key_result, class: "small details-layout" ) %>
+                    <% end %>
                     <div id="personal_objective_<%= item.id %>">
                       <p class="bold details-layout objective">
                         <%= item.objective %>
@@ -501,15 +507,29 @@
               </span>
             </h5>
             <hr />
-            <br />
           </div>      
           <div class="row">
+            <div class="radio radio-complete">
+              <input type="radio" value="company_kr" name="option_kr" id="radio_company_kr" />
+              <label for="radio_company_kr">Company Key Result</label>
+              <input type="radio" checked="checked" value="team_kr" name="option_kr" id="radio_team_kr" />
+              <label for="radio_team_kr">Team Key Result</label>
+            </div>
             <form role="form">
-              <div class="form-group">
+              <div id="selection_team_kr" class="form-group">
                 <label>Select the alignment Team Key Result</label>
                 <!--Load all the key result of the particular team-->
                 <select id="team_key_result_selection" class="full-width">
                   <% @temp_team_key_result.each do |item| %>
+                    <option value="<%= item[1] %>"><%= item[0] %></option>
+                  <% end %>                             
+                </select>
+              </div>
+              <div id="selection_company_kr" class="form-group" style="display: none;">
+                <label>Select the alignment Company Key Result</label>
+                <!--Load all the key result of the particular team-->
+                <select id="company_key_result_selection" style="width: 100%;">
+                  <% @temp_company_key_result.each do |item| %>
                     <option value="<%= item[1] %>"><%= item[0] %></option>
                   <% end %>                             
                 </select>

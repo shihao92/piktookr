@@ -10,6 +10,9 @@ class CompanyKeyResult < ApplicationRecord
     has_many     :okr_company_teams
     has_many     :team_objectives, :through => :okr_company_teams
 
+    has_many     :okr_company_personals
+    has_many     :personal_objectives, :through => :okr_company_personals
+
     has_many     :log_company_key_results
 
     # -----------

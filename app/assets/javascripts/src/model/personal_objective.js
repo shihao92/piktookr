@@ -2,7 +2,8 @@
 // This JS file that communicates with database for personal objective module. 
 define(['model/server_url'], function(urlParam) {
 
-    function newPersonalObjective(objective, team_key_result_id) {
+    function newPersonalObjective(objective, team_key_result_id) 
+    {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
@@ -22,6 +23,31 @@ define(['model/server_url'], function(urlParam) {
         xhttp.send(JSON.stringify({
           objective                 : objective,
           team_key_result_id        : parseInt(team_key_result_id)
+        }));
+      });
+    }
+
+    function newPersonalObjectiveLinkedCompany(objective, company_key_result_id) 
+    {
+      return new Promise((resolve, reject) => {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if(this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText);
+          }
+          else if(this.readyState === 4 && this.status !== 200){
+            reject("Error!");
+          }
+        };
+        xhttp.open(
+          "POST", 
+          urlParam.server_url() + "/personal_objectives/create_linked_company", 
+          true
+        );
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify({
+          objective                    : objective,
+          company_key_result_id        : parseInt(company_key_result_id)
         }));
       });
     }
@@ -97,6 +123,7 @@ define(['model/server_url'], function(urlParam) {
 
     return {
       newPersonalObjective,
+      newPersonalObjectiveLinkedCompany,
       editPersonalObjective,
       getCreatedDate,
       getContribution

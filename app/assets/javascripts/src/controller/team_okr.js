@@ -37,6 +37,7 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         $('#new_objective_popup').attr('class','overlay');
         $('#team_objective_textarea').text($('#new_team_objective').val());
         $('#company_key_result_selection').select2();
+        btnControl.toggleDisabledSaveNewTeamObjectiveButton(0);
       }
     }
 

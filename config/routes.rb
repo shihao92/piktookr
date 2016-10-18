@@ -187,7 +187,7 @@ Rails.application.routes.draw do
     end
 
     collection do
-
+      post  :create_linked_company
     end
 
   end

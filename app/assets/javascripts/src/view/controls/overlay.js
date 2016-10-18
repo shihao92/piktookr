@@ -113,6 +113,7 @@ function(sliderParam, select2LibraryParam){
     function loadNewPersonalObjectiveOverlayContent(){
       $('#new_objective_popup').attr('class','overlay');
       $('#team_key_result_selection').select2();
+      $('#company_key_result_selection').select2();
     }
 
     function loadNewUserOverlayContent(){

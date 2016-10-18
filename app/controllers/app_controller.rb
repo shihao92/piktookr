@@ -27,7 +27,8 @@ class AppController < ApplicationController
       @personal_objective = PersonalObjective.where(user_id: current_user.id, timeframe_log_id: @selected_timeframe.id).order(updated_at: :DESC)
       @completed_objective = 0 
       @total_progress = 0
-      @temp_team_key_result = []                  
+      @temp_team_key_result = []     
+      @temp_company_key_result = []           
       
       personal_objective_count = @personal_objective.count
       if(personal_objective_count != 0) 
@@ -60,6 +61,14 @@ class AppController < ApplicationController
           end
           count = count + 1
         end      
+      end
+
+      company_objectives = CompanyObjective.where(timeframe_log_id: @selected_timeframe.id)
+      company_objectives.each do |item|
+        company_key_results = CompanyKeyResult.where(company_objective_id: item.id).map{|kr| [kr.key_result, kr.id]}
+        company_key_results.each do |element|
+          @temp_company_key_result.push(element)
+        end
       end
 
       render "app/dashboard_v2"

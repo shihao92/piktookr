@@ -6,6 +6,10 @@ class PersonalObjective < ApplicationRecord
 
     has_many           :okr_team_personals
     has_many           :team_key_results, :through => :okr_team_personals
+
+    has_many           :okr_company_personals
+    has_many           :company_key_results, :through => :okr_company_personals
+    
     belongs_to         :timeframe_log
     belongs_to         :user
 
@@ -45,15 +49,48 @@ class PersonalObjective < ApplicationRecord
       return status
     end
 
+    def self.new_personal_objective_linked_company(objective, company_key_result_id, user_id)
+      status = 0
+      time_log_id = TimeframeLog.current_timeframe_log_id
+
+      new_personal_objective = PersonalObjective.new(
+        objective: objective, 
+        progress: 0.0, 
+        timeframe_log_id: time_log_id, 
+        user_id: user_id
+      )
+
+      if new_personal_objective.save
+        status = 200
+        OkrCompanyPersonal.create!(company_key_result_id: company_key_result_id, personal_objective_id: new_personal_objective.id)
+        company_key_result = CompanyKeyResult.find(company_key_result_id)
+        LogPersonalObjective.log_new_personal_objective(objective, new_personal_objective.id, company_key_result.key_result, user_id)
+        cascade_company_key_result("", company_key_result_id, 0)
+      end
+
+      return status
+    end
+
     def self.update_progress_objective(personal_key_result, objective_id, progress, user_id)
       # If user_id is 0, system is updating the progress of the OKR that had been newly created.
       # Therefore, no log is required to be generated when update progress.
       okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
-      if PersonalObjective.where(id: objective_id).update_all(progress: progress)
-        if user_id != 0            
-          cascade_team_key_result(personal_key_result, okr_team_personal.team_key_result_id, user_id)
-        else
-          cascade_team_key_result("", okr_team_personal.team_key_result_id, user_id)
+      if okr_team_personal == nil
+        okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: objective_id)
+        if PersonalObjective.where(id: objective_id).update_all(progress: progress)
+          if user_id != 0            
+            cascade_company_key_result(personal_key_result, okr_company_personal.company_key_result_id, user_id)
+          else
+            cascade_company_key_result("", okr_company_personal.company_key_result_id, user_id)
+          end
+        end
+      else
+        if PersonalObjective.where(id: objective_id).update_all(progress: progress)
+          if user_id != 0            
+            cascade_team_key_result(personal_key_result, okr_team_personal.team_key_result_id, user_id)
+          else
+            cascade_team_key_result("", okr_team_personal.team_key_result_id, user_id)
+          end
         end
       end
     end
@@ -75,23 +112,38 @@ class PersonalObjective < ApplicationRecord
       return status
     end
 
-    def self.delete_personal_objective(personal_objective)
-      status = 0
-      okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: personal_objective.id)
-      team_key_result_id = okr_team_personal.team_key_result_id
-      OkrTeamPersonal.where(personal_objective_id: personal_objective.id).destroy_all()
-
+    def self.remove_related_data(personal_objective)
       LogPersonalObjective.where(personal_objective_id: personal_objective.id).destroy_all()
       PersonalKeyResult.where(personal_objective_id: personal_objective.id).each do |item|
         LogPersonalKeyResult.where(personal_key_result_id: item.id).destroy_all()
       end
       PersonalKeyResult.where(personal_objective_id: personal_objective.id).destroy_all()
+    end
 
-      if personal_objective.destroy
-        cascade_team_key_result("", okr_team_personal.team_key_result_id, 0)
-        status = 200
+    def self.delete_personal_objective(personal_objective)
+      status = 0
+      okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: personal_objective.id)
+      if okr_team_personal != nil
+        team_key_result_id = okr_team_personal.team_key_result_id
+        OkrTeamPersonal.where(personal_objective_id: personal_objective.id).destroy_all()
+        remove_related_data(personal_objective)
+        if personal_objective.destroy
+          cascade_team_key_result("", team_key_result_id, 0)
+          status = 200
+        else
+          status = 0
+        end
       else
-        status = 0
+        okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: personal_objective.id)
+        company_key_result_id = okr_company_personal.company_key_result_id
+        OkrCompanyPersonal.where(personal_objective_id: personal_objective.id).destroy_all()
+        remove_related_data(personal_objective)
+        if personal_objective.destroy
+          cascade_company_key_result("", company_key_result_id, 0)
+          status = 200
+        else
+          status = 0
+        end
       end
 
       return status
@@ -114,6 +166,34 @@ class PersonalObjective < ApplicationRecord
         personal_key_result, 
         key_result_id, 
         progress_contribution, 
+        user_id
+      )
+    end
+
+    def self.cascade_company_key_result(personal_key_result, key_result_id, user_id)
+      company_personal_objectives = OkrCompanyPersonal.where(company_key_result_id: key_result_id)
+      company_team_objectives = OkrCompanyTeam.where(company_key_result_id: key_result_id)
+
+      total_progress = 0.00
+
+      company_personal_objectives.each do |item|
+        personal_objective = PersonalObjective.find(item.personal_objective_id)
+        total_progress = total_progress + personal_objective.progress
+      end
+
+      company_team_objectives.each do |item|
+        team_objective = TeamObjective.find(item.team_objective_id)
+        total_progress = total_progress + team_objective.progress
+      end
+
+      company_key_result = CompanyKeyResult.find(key_result_id)
+      linked_objectives_count = company_personal_objectives.count + company_team_objectives.count
+      progress_contribution = total_progress / linked_objectives_count
+
+      CompanyKeyResult.update_progress_key_result(
+        personal_key_result,
+        key_result_id,
+        progress_contribution,
         user_id
       )
     end

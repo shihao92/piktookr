@@ -25,6 +25,21 @@ class PersonalObjectivesController < ApplicationController
     end
   end
 
+  # POST /personal_objectives/create_linked_company
+  # POST /personal_objectives.json
+  def create_linked_company
+    objective = params[:objective]
+    company_key_result_id = params[:company_key_result_id]
+    status = PersonalObjective.new_personal_objective_linked_company(objective, company_key_result_id, current_user.id)
+    respond_to do |format|
+      if status == 200
+        format.json { render json: 'Personal Objective is created successfully!', status: :ok }
+      else
+        format.json { render json: 'Failed to create personal objective!', status: :ok }
+      end
+    end
+  end
+
   # PATCH/PUT /personal_objectives/1
   # PATCH/PUT /personal_objectives/1.json
   def update
@@ -63,8 +78,14 @@ class PersonalObjectivesController < ApplicationController
     @personal_objective = PersonalObjective.find(objective_id)
     okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: objective_id)
     
-    @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
-    @team_kr_user_info = User.find(@team_key_result.user_id)
+    if okr_team_personal != nil
+      @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
+      @team_kr_user_info = User.find(@team_key_result.user_id)
+    else
+      okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: objective_id)
+      @team_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
+      @team_kr_user_info = User.find(@team_key_result.user_id)
+    end
     
     @tkr_user_short_str = Shortform.get_string_shortform(@team_kr_user_info.first_name)
 

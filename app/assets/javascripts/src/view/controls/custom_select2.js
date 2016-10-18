@@ -9,6 +9,9 @@ function(select2LibraryParam, btnControl, textboxControl){
     $('#team_key_result_selection').on('change', function() {
       textboxControl.checkPersonalObjectiveInput();
     }); 
+    $('#company_key_result_selection').on('change', function() {
+      textboxControl.checkPersonalObjectiveInput();
+    }); 
   }
 
   function companyKeyResultSelectionChanged(){

@@ -25,6 +25,15 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     const datepicker_personal_kr = '#personal_kr_datepicker';
     const page_personal_key_result_details = '#page_personal_key_result_details';
     const page_personal_objective_details = '#page_personal_objective_details';
+    const radio_selection_kr_type = 'input[name=option_kr]:checked';
+    const radio_company_kr = '#radio_company_kr';
+    const radio_team_kr = '#radio_team_kr';
+    const selection_team_kr = '#selection_team_kr';
+    const selection_company_kr = '#selection_company_kr';
+    const selection_team_key_result = '#team_key_result_selection';
+    const selection_company_key_result = '#company_key_result_selection';
+    const textarea_personal_objective = '#personal_objective_textarea';
+
 
     // From layout page
     const button_timeframe_dropdown = "#btn_timeframe_dropdown";
@@ -46,16 +55,25 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
           temp_personal_objective = $('#new_personal_objective').val();
           overlay.loadNewPersonalObjectiveOverlayContent();
           $('#personal_objective_textarea').text(temp_personal_objective);
+          btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
         }
       }   
     }
 
     function createNewPersonalObjective(){
-      let personal_objective = $('#personal_objective_textarea').val();
-      let team_key_result_id = $('#team_key_result_selection').val();
-      team_key_result_id = parseInt(team_key_result_id);
-      let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
-      create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+      let personal_objective = $(textarea_personal_objective).val();
+      let selected_radio_value = $(radio_selection_kr_type).val();
+      if(selected_radio_value === "team_kr"){
+        let team_key_result_id = $(selection_team_key_result).val();
+        team_key_result_id = parseInt(team_key_result_id);
+        let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
+        create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+      } else {
+        let company_key_result_id = $(selection_company_key_result).val();
+        company_key_result_id = parseInt(company_key_result_id);
+        let create_personal_objective_link_company = new personalObjectiveModel.newPersonalObjectiveLinkedCompany(personal_objective, company_key_result_id);
+        create_personal_objective_link_company.then(createdPersonalObjective, customModal.notificationModalToggle);
+      }
     }
 
     function createdPersonalObjective(message){
@@ -129,6 +147,16 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     function obtainObjectiveCreatedDate(data){
       created_date = d3DataHelper.processCreatedDate(data);
       getObjectiveContribution();
+    }
+
+    function radioButtonTeamKRSelectionChanged(event){
+      $(selection_team_kr).attr("style", "display: inline-block;");
+      $(selection_company_kr).attr("style", "display: none;");
+    }
+
+    function radioButtonCompanyKRSelectionChanged(event){
+      $(selection_team_kr).attr("style", "display: none;");
+      $(selection_company_kr).attr("style", "display: inline-block;");
     }
 
     // -------------------
@@ -293,6 +321,9 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
         overlay.clickProgressUpdateOverlay();
 
         //Personal Objective - Create new
+        btnControl.resolveButtonClick(radio_company_kr, radioButtonCompanyKRSelectionChanged);
+        btnControl.resolveButtonClick(radio_team_kr, radioButtonTeamKRSelectionChanged);
+
         textboxInput.addNewPersonalObjective(displayCreatePersonalObjectiveOverlay);
         customSelect2.teamKeyResultSelectionChanged();  
         btnControl.resolveButtonClick(button_new_personal_objective, createNewPersonalObjective);   
