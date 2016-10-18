@@ -302,7 +302,7 @@
                     </a>
                   </li>
                 <% end %>
-                <% if @role.name == "Admin" %>
+                <% if @controls.include? 'View Future Timeframes' %>
                 <% @future_timeframe_logs.each do |item| %>
                   <li>
                     <a name="timeframe_log_selection" data-id="<%= item.id %>">
@@ -428,7 +428,7 @@
           <hr/>
           <div class="modal-body">
             <div class="form-group">
-              <p id="notification_message"></p>
+              <p id="notification_message">Key result is completed!</p>
             </div>
           </div>
           <div class="modal-footer">

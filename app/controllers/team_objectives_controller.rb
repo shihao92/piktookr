@@ -108,7 +108,7 @@ class TeamObjectivesController < ApplicationController
 
     # Create new team objective section
     @company_key_results = []
-    company_objectives = CompanyObjective.where(timeframe_log_id: @system_timeframe_log_id)
+    company_objectives = CompanyObjective.where(timeframe_log_id: @selected_timeframe.id)
     if company_objectives.count != 0 
       company_objectives.each do |item|
         company_key_results = CompanyKeyResult.where(company_objective_id: item.id).map{|kr| [kr.key_result, kr.id]}

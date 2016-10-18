@@ -52,12 +52,13 @@ class PersonalObjective < ApplicationRecord
 
     def self.new_personal_objective_linked_company(objective, company_key_result_id, user_id)
       status = 0
-      time_log_id = TimeframeLog.current_timeframe_log_id
+      okr_user_timeframe = OkrUserTimeframe.find_by(user_id: user_id)
+      log_id = okr_user_timeframe.timeframe_log_id
 
       new_personal_objective = PersonalObjective.new(
         objective: objective, 
         progress: 0.0, 
-        timeframe_log_id: time_log_id, 
+        timeframe_log_id: log_id, 
         user_id: user_id
       )
 
@@ -189,6 +190,9 @@ class PersonalObjective < ApplicationRecord
 
       company_key_result = CompanyKeyResult.find(key_result_id)
       linked_objectives_count = company_personal_objectives.count + company_team_objectives.count
+      if linked_objectives_count == 0
+        linked_objectives_count = 1
+      end
       progress_contribution = total_progress / linked_objectives_count
 
       CompanyKeyResult.update_progress_key_result(

@@ -86,6 +86,7 @@ class PersonalKeyResult < ApplicationRecord
 
     # This route is for logging purpose to allow record of progress increment in all 3 OKR Modules
     def self.increment_okr_progress(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
+      company_key_result_increment = 0.00
       # Personal Objective progress increment
       personal_objective_increment = PersonalObjective.calculate_and_log_progress_increment(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
       # Team Key Result progress increment
