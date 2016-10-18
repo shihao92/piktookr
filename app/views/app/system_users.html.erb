@@ -331,7 +331,7 @@
           <p>Fill in the fields in order to create a new user. The user will be active after the first sign-in.</p>
         </div>
         <div class="row">
-          <%= form_for @user, url: { action: "create_member" } do |f| %>
+          <%= form_for @new_user, url: { action: "create_member" } do |f| %>
             <div class="form-group form-group-default required">
               <%= f.label :email %>
               <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "example@gmail.com", required: true %>

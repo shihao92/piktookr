@@ -81,6 +81,7 @@ class User < ActiveRecord::Base
     personal_objectives = PersonalObjective.where(user_id: user_id)
     personal_objectives.each do |item|
       OkrTeamPersonal.where(personal_objective_id: item.personal_objective_id)
+      OkrCompanyPersonal.where(personal_objective_id: item.personal_objective_id)
     end
     personal_objectives.destroy_all()
     TeamKeyResult.where(user_id: user_id).destroy_all()
@@ -95,6 +96,8 @@ class User < ActiveRecord::Base
     OkrUserTeam.where(user_id: user_id).destroy_all()
     # Remove from OKR Role Module
     OkrUserRole.where(user_id: user_id).destroy_all()
+    # Remove from timeframe module
+    OkrUserTimeframe.where(user_id: user_id).destroy_all()
     # Remove from user table
     User.where(id: user_id).destroy_all()
 

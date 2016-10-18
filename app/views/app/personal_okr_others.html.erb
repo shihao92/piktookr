@@ -8,7 +8,7 @@
           <p>HOME</p>
         </li>
         <li>
-          <a href="/users/<%= @user.id %>/personal_objectives/view_others_personal_okr" class="active"><%= @user.last_name %> PERSONAL OKRs</a>
+          <a href="/users/<%= @other_user.id %>/personal_objectives/view_others_personal_okr" class="active"><%= @other_user.last_name %> PERSONAL OKRs</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -20,28 +20,28 @@
 <div class="container-fluid container-fixed-lg">
 
   <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold"><%= @user.last_name %> personal OKRs</h5>
+  <h5 class="semi-bold"><%= @other_user.last_name %> personal OKRs</h5>
 
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
       <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-        <%= image_tag @user.avatar.url %>
+        <%= image_tag @other_user.avatar.url %>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
         <div class="row">
           <h5 class="bold">
             <span>
-              <%= @user.last_name + " " + @user.first_name %>
+              <%= @other_user.last_name + " " + @other_user.first_name %>
             </span>
             <span class="m-l-10" data-id="<%= current_user.id %>">
-              <% current_user_fav = OkrUserFavourite.find_by(user_id: current_user.id, favourite_id: @user.id) %>
+              <% current_user_fav = OkrUserFavourite.find_by(user_id: current_user.id, favourite_id: @other_user.id) %>
               <% if current_user_fav != nil %>
               <a id="btn_remove_fav_user" class="btn btn-warning no-padding" data-id="<%= current_user_fav.id %>">
                 <i class="fa fa-fw fa-star-o fa-lg"></i>
               </a>
               <% else %>
-              <a id="btn_fav_user" class="btn btn-default no-padding" data-id="<%= @user.id %>">
+              <a id="btn_fav_user" class="btn btn-default no-padding" data-id="<%= @other_user.id %>">
                 <i class="fa fa-fw fa-star-o fa-lg"></i>
               </a>
               <% end %>
@@ -58,8 +58,8 @@
           <div class="form-group">
             <label class="small">TEAMS</label>
             <div>
-              <%  @user.okr_teams.each_with_index do |team,index|  %>  
-                <% if index == @user.okr_teams.size - 1 %>
+              <%  @other_user.okr_teams.each_with_index do |team,index|  %>  
+                <% if index == @other_user.okr_teams.size - 1 %>
                   <%= content_tag(:span, team.name, class: "bold" ) %>
                 <% else %>
                   <%= content_tag(:span, team.name + ",", class: "bold" ) %>
@@ -151,7 +151,7 @@
           <div class="row">
             <h4 class="panel-title panel-title-custom">
               <p class="bold details-layout m-l-20">
-                No Personal Objective is created by <%= @user.last_name %>
+                No Personal Objective is created by <%= @other_user.last_name %>
               </p>
             </h4>
           </div>

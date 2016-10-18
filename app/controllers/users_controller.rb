@@ -17,7 +17,7 @@ class UsersController < ApplicationController
 
     pages_initialization
     
-    @user = User.new
+    @new_user = User.new
 
     render 'app/system_users'
   end

@@ -1,13 +1,3 @@
-<% #User listing module %>
-<% @users = User.all %>
-<% @current_date = Time.now.strftime("%Y-%m-%d") %>
-<% @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'") %>
-
-
-<% @server_url = "http://localhost:3000" %>
-<% @session_user = User.find(current_user.id) %>
-<% @user_role = OkrUserRole.find_by(user_id: current_user.id) %>
-
 <!DOCTYPE html>
 <html>
   <head>
@@ -70,7 +60,7 @@
           </li>
           <!--Section to link to own team(s)-->
           <!--If its admin user, then will display all team(s)-->
-          <% if @user_role != nil %>
+          <% if @role != nil %>
           <% if @role.name == "Admin" %>
             <% okr_teams = OkrTeam.all %>
             <% okr_teams.each do |item| %>
@@ -136,15 +126,15 @@
           <li>
             <a href="/" class="detailed">
               <span class="title" id="user-name">
-                <%= @session_user.last_name + " " + @session_user.first_name %>
+                <%= @user.last_name + " " + @user.first_name %>
               </span>
               <p class="details details-layout" id="user-position">
-                <%= @session_user.position %>
+                <%= @user.position %>
               </p> 
             </a>
             <span class="icon-thumbnail">
               <span id="username-shortform">
-                <% @user_shortform = @session_user.first_name.scan(/[A-Z]/) %>
+                <% @user_shortform = @user.first_name.scan(/[A-Z]/) %>
                 <% @user_short_str = "" %>
                 <% counter = 0 %>
                 <% @user_shortform.each do |item| %>
@@ -237,7 +227,7 @@
           <div class="header-inner">
             <!-- START NOTIFICATION LIST -->
             <!-- Notification is in the right hand side bar -->
-            <a id="toggle_notifications" data-id="<%= @session_user.id %>" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
+            <a id="toggle_notifications" data-id="<%= @user.id %>" class="btn-link fa fa-fw fa-bell-o fa-lg menu-hambuger-plus m-l-20 sm-no-margin hidden-sm hidden-xs" data-toggle="quickview" data-toggle-element="#quickview">
               <span id="bubble_new_notification" class="bubble">
                 
               </span>
@@ -249,12 +239,12 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <span class="semi-bold"><%= @session_user.last_name + " " + @session_user.first_name %></span> 
+              <span class="semi-bold"><%= @user.last_name + " " + @user.first_name %></span> 
             </div>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="thumbnail-wrapper d32 circular inline m-t-5">
-                  <%= image_tag @session_user.avatar.url %>
+                  <%= image_tag @user.avatar.url %>
                 </span>
               </button>
               <ul class="dropdown-menu profile-dropdown" role="menu">
@@ -304,7 +294,7 @@
                 </span>
                 <span class="caret"></span> 
               </button>
-              <ul class="dropdown-menu profile-dropdown" role="menu">
+              <ul class="dropdown-menu" role="menu">
                 <% @timeframe_logs.each do |item| %>
                   <li>
                     <a name="timeframe_log_selection" data-id="<%= item.id %>">
@@ -312,6 +302,7 @@
                     </a>
                   </li>
                 <% end %>
+
               </ul>
             </div>
           </div>
@@ -511,9 +502,9 @@
                 </ul>
                 <div class="tab-content">
                   <div class="tab-pane active" id="user_details_tab">
-                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update_info" do |f| %>
+                    <%= form_for @user, url: "/users/#{current_user.id}/user_update_info" do |f| %>
                       <div class="text-center">
-                        <%= image_tag @session_user.avatar.url %>
+                        <%= image_tag @user.avatar.url %>
                       </div>
                       <br/>
                       <div class="row">
@@ -567,7 +558,7 @@
                     <% end %>
                   </div>
                   <div class="tab-pane" id="password_settings_tab">
-                    <%= form_for @session_user, url: "/users/#{current_user.id}/user_update" do |f| %>
+                    <%= form_for @user, url: "/users/#{current_user.id}/user_update" do |f| %>
                       <div class="row">
                         <div class="col-sm-6 col-md-6">
                           <div class="form-group form-group-default required">

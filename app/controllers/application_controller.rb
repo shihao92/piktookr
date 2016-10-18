@@ -18,10 +18,17 @@ class ApplicationController < ActionController::Base
   end
 
   def pages_initialization
+    @server_url = "http://localhost:3000"
+    
     okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
     @system_timeframe_log_id = TimeframeLog.current_timeframe_log_id
     @selected_timeframe = TimeframeLog.find(okr_user_timeframe.timeframe_log_id)
     @remaining_quarter_days = Timeframe.calculate_remaining_days_current_quarter
+
+    @current_date = Time.now.strftime("%Y-%m-%d")
+    @timeframe_logs = TimeframeLog.where("start_date <= '" + @current_date + "'")
+
+    @users = User.all
     @user = User.find(current_user.id)
     okr_user_role = OkrUserRole.find_by(user_id: current_user.id)
     @role = OkrRole.find(okr_user_role.okr_role_id)

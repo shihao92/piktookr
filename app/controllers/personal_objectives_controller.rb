@@ -105,10 +105,10 @@ class PersonalObjectivesController < ApplicationController
     pages_initialization
 
     user_id = params[:id]
-    @user = User.find(user_id)     
-    okr_user_role = OkrUserRole.find_by(user_id: user_id)
+    @other_user = User.find(user_id)     
+    okr_user_role = OkrUserRole.find_by(user_id: @other_user.id)
     @other_user_role = OkrRole.find(okr_user_role.okr_role_id)
-    @personal_objective = PersonalObjective.where(user_id: user_id, timeframe_log_id: @selected_timeframe.id)
+    @personal_objective = PersonalObjective.where(user_id: @other_user.id, timeframe_log_id: @selected_timeframe.id)
     @completed_objective = 0  
 
     if(@personal_objective.count != 0)  
