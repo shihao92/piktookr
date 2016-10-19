@@ -138,6 +138,15 @@ class CompanyObjectivesController < ApplicationController
     end
   end
 
+  def search_objective
+    keyword = params[:keyword]
+    okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
+    result_objectives = CompanyObjective.search_objective(keyword, okr_user_timeframe.timeframe_log_id)
+    respond_to do |format|
+      format.json { render json: result_objectives, status: :ok }  
+    end
+  end
+
   private
 
     # Never trust parameters from the scary internet, only allow the white list through.

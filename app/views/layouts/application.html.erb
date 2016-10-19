@@ -630,26 +630,41 @@
         <a href="/" class="close-icon-light overlay-close text-black fs-16">
           <i class="pg-close"></i>
         </a>
-        <div class="col-sm-3 col-md-3 col-lg-3">
-        </div>
-        <div class="col-sm-6 col-md-6 col-lg-6">
-          <div class="container-fluid">
-            <input id="overlay_search_user_input" class="no-border overlay-search bg-transparent" placeholder="Search..." autocomplete="off" spellcheck="false">
-            <br/>
-            <div class="inline-block m-l-10">
-              <p class="fs-13">Press enter to search (The search is case sensitive)</p>
-            </div>
+        <div class="container-fluid">
+          <input id="overlay_search_user_input" class="no-border overlay-search bg-transparent" placeholder="Search..." autocomplete="off" spellcheck="false">
+          <br/>
+          <div class="inline-block m-l-10">
+            <p class="fs-13">Press enter to search (The search is case sensitive)</p>
           </div>
-          <div class="container-fluid">
-            <div class="search-results m-t-40">
-              <p class="bold">PiktoOKR Search Results</p>
-              <div id="div_search_users_results" class="row">
-
+        </div>
+        <div class="container-fluid">
+          <div class="search-results m-t-40" style="width: 1366px;">
+            <div class="row">
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                <p class="bold">System Users Search Results</p>
+                <div id="div_search_users_results"></div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                <p class="bold">System Teams Search Results</p>
+                <div id="div_search_teams_results"></div>
+              </div>
+              <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+                <p class="bold">OKR Search Results</p>
+                <div class="row">
+                  <div id="div_search_company_objectives_results"></div>
+                  <div id="div_search_company_kr_results"></div>
+                </div>
+                <div class="row">
+                  <div id="div_search_team_objectives_results"></div>
+                  <div id="div_search_team_kr_results"></div>
+                </div>
+                <div class="row">
+                  <div id="div_search_personal_objectives_results"></div>
+                  <div id="div_search_personal_kr_results"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-3 col-md-3 col-lg-3">
         </div>
       </div>
     </div>

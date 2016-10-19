@@ -2,9 +2,10 @@
 // This JS file that controls team related module.
 
 require(['model/team',
-'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal'], 
+'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal', 'view/controls/input_textbox',
+'view/search_result'], 
 function(teamModel,
-overlay, btnControl, customModal){
+overlay, btnControl, customModal, inputControl, searchResult){
 
   const container_team_dashboard = '#team_page_container';
   const button_new_team_overlay = '#btn_create_new_team_overlay';
@@ -21,6 +22,8 @@ overlay, btnControl, customModal){
   const span_deleting_team_name = '#name_deleting_team';
   const input_edit_team_name = '#edit_team_name';
   const input_edit_team_description = '#edit_team_description';
+  const input_overlay_search_user = '#overlay_search_user_input';
+  const div_search_teams_results = '#div_search_teams_results';
 
   // Create new team
   const input_new_team_name = '#new_team_name';
@@ -107,6 +110,21 @@ overlay, btnControl, customModal){
     team_invitation_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
   }
 
+  function searchingTeam(event){
+    let key = event.which;
+    if(key === 13){
+      let search_keyword = $(input_overlay_search_user).val();
+      let search_users_promise = new teamModel.searchTeams(search_keyword);
+      search_users_promise.then(obtainSearchResults, customModal.notificationModalToggle);
+    }
+  }
+
+  function obtainSearchResults(results){
+    customModal.toggleProgressRingModal(0);
+    searchResult.generateSearchTeamResults(results, div_search_teams_results);
+    customModal.toggleProgressRingModal(1);
+  }
+
   $(document).ready(function(){
 
     // Create new team overlay
@@ -124,6 +142,8 @@ overlay, btnControl, customModal){
     // Send team invitation
     btnControl.resolveButtonClick(button_invite_team, sendTeamInvitation);
 
+    // Search Team
+    inputControl.searchingUser(searchingTeam);
 
   });
 

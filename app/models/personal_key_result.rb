@@ -194,4 +194,10 @@ class PersonalKeyResult < ApplicationRecord
       return personal_key_result.created_at
     end
 
+    def self.search_key_result(keyword, timeframe_log_id)
+      personal_key_result = PersonalKeyResult.joins("inner join personal_objectives on personal_objectives.id = personal_key_results.personal_objective_id")
+                                             .where("personal_objectives.timeframe_log_id = ? and key_result like ?", timeframe_log_id, "%#{keyword}%")
+      return personal_key_result
+    end
+
 end

@@ -165,6 +165,15 @@ class PersonalObjectivesController < ApplicationController
     end
   end
 
+  def search_objective
+    keyword = params[:keyword]
+    okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
+    result_objectives = PersonalObjective.search_objective(keyword, okr_user_timeframe.timeframe_log_id)
+    respond_to do |format|
+      format.json { render json: result_objectives, status: :ok }  
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_personal_objective

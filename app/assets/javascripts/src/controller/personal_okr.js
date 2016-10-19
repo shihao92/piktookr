@@ -6,13 +6,13 @@ require(['pages/pages.blank',
 'helper/d3_data_input_process',
 'view/controls/custom_modal', 'view/controls/overlay', 'view/controls/slider', 'view/controls/custom_select2', 
 'view/controls/button', 'view/controls/input_textbox', 'view/controls/checkbox', 'view/controls/page_refresh',
-'view/d3_engine',
+'view/d3_engine', 'view/search_result',
 'view/library/bootstrap-datepicker'],
 function(pagesBlank, 
 personalKeyResultModel, personalObjectiveModel, timeframeModel, 
 d3DataHelper,
 customModal, overlay, slider, customSelect2, 
-btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
+btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult, datepicker) {
 
     const button_new_personal_objective = '#btn_new_personal_objective';
     const button_edit_personal_objective = '.edit_personal_objective';
@@ -34,6 +34,9 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     const selection_company_key_result = '#company_key_result_selection';
     const textarea_personal_objective = '#personal_objective_textarea';
 
+    const input_overlay_search_user = '#overlay_search_user_input';
+    const div_search_personal_objectives_results = '#div_search_personal_objectives_results';
+    const div_search_personal_kr_results = '#div_search_personal_kr_results';
 
     // From layout page
     const button_timeframe_dropdown = "#btn_timeframe_dropdown";
@@ -157,6 +160,21 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
     function radioButtonCompanyKRSelectionChanged(event){
       $(selection_team_kr).attr("style", "display: none;");
       $(selection_company_kr).attr("style", "display: inline-block;");
+    }
+
+    function searchPersonalObjective(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_objective_promise = new personalObjectiveModel.searchObjective(search_keyword);
+        search_objective_promise.then(obtainSearchObjectiveResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchObjectiveResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchPersonalObjectiveResults(results, div_search_personal_objectives_results);
+      customModal.toggleProgressRingModal(1);
     }
 
     // -------------------
@@ -311,6 +329,21 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
       getKeyResultContribution();
     }
 
+    function searchPersonalKeyResult(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_kr_promise = new personalKeyResultModel.searchKeyResult(search_keyword);
+        search_kr_promise.then(obtainSearchKRResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchKRResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchPersonalKRResults(results, div_search_personal_kr_results);
+      customModal.toggleProgressRingModal(1);
+    }
+
 
     customModal.toggleProgressRingModal(0);
 
@@ -355,6 +388,10 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, datepicker) {
         getObjectiveCreatedDate();
 
         getKeyResultCreatedDate();
+
+        // Search module
+        textboxInput.searchingUser(searchPersonalObjective);
+        textboxInput.searchingUser(searchPersonalKeyResult);
         
     });
 

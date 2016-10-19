@@ -5,12 +5,13 @@ require(['model/team_key_result','model/team_objective', 'model/timeframe',
 'helper/d3_data_input_process',
 'view/library/bootstrap-datepicker', 'view/d3_engine',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
-'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
+'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh',
+'view/search_result'], 
 function(teamKeyResultModel, teamObjectiveModel, timeframeModel,
 d3DataHelper,
 datepicker, d3_engine,
 overlay, select2, customModal,
-textboxControl, btnControl, customSelect2, refreshPage) {
+textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     const container_team_dashboard = '#team_page_container';
     const button_create_team_objective = '#btn_new_team_objective';
@@ -23,6 +24,9 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     const datepicker_team_kr = '#team_kr_datepicker';
     const page_team_objective_details = '#page_team_objective_details';
     const page_team_key_result_details = '#page_team_key_result_details';
+    const input_overlay_search_user = '#overlay_search_user_input';
+    const div_search_team_objectives_results = '#div_search_team_objectives_results';
+    const div_search_team_kr_results = '#div_search_team_kr_results';
 
     let original_team_objective = "";
     let original_team_key_result = "";
@@ -131,6 +135,21 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     function obtainObjectiveCreatedDate(data){
       created_date = d3DataHelper.processCreatedDate(data);
       getObjectiveContribution();
+    }
+
+    function searchTeamObjective(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_objective_promise = new teamObjectiveModel.searchObjective(search_keyword);
+        search_objective_promise.then(obtainSearchObjectiveResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchObjectiveResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchTeamObjectiveResults(results, div_search_team_objectives_results);
+      customModal.toggleProgressRingModal(1);
     }
 
     // ---------------
@@ -255,6 +274,21 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       d3DataHelper.processData(created_date, data);
     }
 
+    function searchTeamKeyResult(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_kr_promise = new teamKeyResultModel.searchKeyResult(search_keyword);
+        search_kr_promise.then(obtainSearchKRResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchKRResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchTeamKRResults(results, div_search_team_kr_results);
+      customModal.toggleProgressRingModal(1);
+    }
+
     $(document).ready(function() {
         
         // Key result - Create new  
@@ -283,6 +317,10 @@ textboxControl, btnControl, customSelect2, refreshPage) {
         getObjectiveCreatedDate();
 
         getKeyResultCreationDate();
+
+        // Search Module
+        textboxControl.searchingUser(searchTeamObjective);
+        textboxControl.searchingUser(searchTeamKeyResult);
 
     })
 

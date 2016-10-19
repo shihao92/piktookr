@@ -6,13 +6,14 @@ require([
 'helper/d3_data_input_process',
 'view/library/bootstrap-datepicker',
 'view/controls/overlay', 'view/library/select2.min', 'view/controls/custom_modal',
-'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh'], 
+'view/controls/input_textbox', 'view/controls/button', 'view/controls/custom_select2', 'view/controls/page_refresh',
+'view/search_result'], 
 function(
 companyKeyResultModel, companyObjectiveModel, timeframeModel,
 d3DataHelper,
 datepicker,
 overlay, select2, customModal,
-textboxControl, btnControl, customSelect2, refreshPage) {
+textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     const button_create_company_objective = '#btn_new_company_objective';
     const button_edit_company_objective = '.edit_company_objective';
@@ -25,6 +26,9 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     const datepicker_company_kr = '#company_kr_datepicker';
     const page_company_objective_details = '#page_company_objective_details';
     const page_company_key_result_details = '#page_company_key_result_details';
+    const input_overlay_search_user = '#overlay_search_user_input';
+    const div_search_company_objectives_results = '#div_search_company_objectives_results';
+    const div_search_company_kr_results = '#div_search_company_kr_results';
 
     let original_company_objective = "";
     let original_company_key_result = "";
@@ -124,7 +128,22 @@ textboxControl, btnControl, customSelect2, refreshPage) {
     function obtainObjectiveCreatedDate(data){
       created_date = d3DataHelper.processCreatedDate(data);
       getObjectiveContribution();
-    } 
+    }
+
+    function searchCompanyObjective(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_objective_promise = new companyObjectiveModel.searchObjective(search_keyword);
+        search_objective_promise.then(obtainSearchObjectiveResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchObjectiveResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchCompanyObjectiveResults(results, div_search_company_objectives_results);
+      customModal.toggleProgressRingModal(1);
+    }
 
     // ------------------
     // Company Key Result
@@ -242,6 +261,21 @@ textboxControl, btnControl, customSelect2, refreshPage) {
       d3DataHelper.processData(created_date, data);
     } 
 
+    function searchCompanyKeyResult(event){
+      let key = event.which;
+      if(key === 13){
+        let search_keyword = $(input_overlay_search_user).val();
+        let search_kr_promise = new companyKeyResultModel.searchKeyResult(search_keyword);
+        search_kr_promise.then(obtainSearchKRResults, customModal.notificationModalToggle);
+      }
+    }
+
+    function obtainSearchKRResults(results){
+      customModal.toggleProgressRingModal(0);
+      searchResult.generateSearchCompanyKRResults(results, div_search_company_kr_results);
+      customModal.toggleProgressRingModal(1);
+    }
+
     $(document).ready(function() {
         
         // Key Result - Create new 
@@ -265,6 +299,10 @@ textboxControl, btnControl, customSelect2, refreshPage) {
 
         getObjectiveCreatedDate();
         getKeyResultCreationDate();
+
+        // Searching Module
+        textboxControl.searchingUser(searchCompanyObjective);
+        textboxControl.searchingUser(searchCompanyKeyResult);
 
     })
 

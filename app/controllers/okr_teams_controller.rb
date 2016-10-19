@@ -128,6 +128,14 @@ class OkrTeamsController < ApplicationController
     end
   end
 
+  def search_teams
+    keyword = params[:keyword]
+    okr_teams_search = OkrTeam.search_team(keyword)
+    respond_to do |format|
+      format.json { render json: okr_teams_search, status: :ok }
+    end
+  end
+
   private
 
     # Use callbacks to share common setup or constraints between actions.

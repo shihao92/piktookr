@@ -119,4 +119,10 @@ class CompanyKeyResult < ApplicationRecord
       return company_key_result.created_at
     end
 
+    def self.search_key_result(keyword, timeframe_log_id)
+      company_key_result = CompanyKeyResult.joins("inner join company_objectives on company_objectives.id = company_key_results.company_objective_id")
+                                           .where("company_objectives.timeframe_log_id = ? and key_result like ?", timeframe_log_id, "%#{keyword}%")
+      return company_key_result
+    end
+
 end

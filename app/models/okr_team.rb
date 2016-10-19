@@ -28,4 +28,9 @@ class OkrTeam < ApplicationRecord
       return status
     end
 
+    def self.search_team(keyword)
+      okr_teams = OkrTeam.select("id, name").where("name like ?", "%#{keyword}%")
+      return okr_teams
+    end
+
 end

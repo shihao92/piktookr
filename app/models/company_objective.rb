@@ -75,4 +75,9 @@ class CompanyObjective < ApplicationRecord
       return company_objective.created_at
     end 
 
+    def self.search_objective(keyword, timeframe_log_id)
+      company_objective = CompanyObjective.select("id, objective").where("objective like ? and timeframe_log_id = ?", "%#{keyword}%", timeframe_log_id)
+      return company_objective
+    end
+
 end

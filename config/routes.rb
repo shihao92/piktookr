@@ -71,10 +71,24 @@ Rails.application.routes.draw do
   # ---------------
   # OKR Team Module
   # ---------------
+
+  resources :team_objectives do
+    collection do
+      post  :search_objective
+    end
+  end
+
+  resources :team_key_results do
+    collection do
+      post  :search_key_result
+    end
+  end
+
   resources :okr_teams, path: 'team' do
 
     collection do
       post  :remove_user_from_team
+      post  :search_teams
 
       # ------------
       # Notification
@@ -106,6 +120,7 @@ Rails.application.routes.draw do
       collection do
         # Route to the team dashboard
         get :team_dashboard, shallow: true
+
       end
     end
 
@@ -121,6 +136,8 @@ Rails.application.routes.draw do
         get   :get_created_date
         # Route to get contribution
         get   :get_contribution
+        # Route to search key result
+        post  :search_key_result
       end
     end
 
@@ -140,6 +157,8 @@ Rails.application.routes.draw do
       post  :create_new_objective
       # Route to edit company objective
       post  :edit_objective
+      # Route to search objective
+      post  :search_objective
     end
 
     member do
@@ -167,6 +186,8 @@ Rails.application.routes.draw do
     collection do
       # Route to edit company key result
       post  :edit_key_result
+      # Route to search key result
+      post  :search_key_result
     end
   end
 
@@ -188,6 +209,8 @@ Rails.application.routes.draw do
 
     collection do
       post  :create_linked_company
+      # Route to search objective
+      post  :search_objective
     end
 
   end
@@ -209,6 +232,11 @@ Rails.application.routes.draw do
       get   :get_contribution
       # Route to get created date
       get   :get_created_date
+    end
+
+    collection do
+      # Route to search key result
+      post  :search_key_result
     end
 
   end

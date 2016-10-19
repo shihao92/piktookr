@@ -125,4 +125,9 @@ class TeamObjective < ApplicationRecord
       return team_objective.created_at
     end
 
+    def self.search_objective(keyword, timeframe_log_id)
+      team_objective = TeamObjective.select("id, objective, okr_team_id").where("objective like ? and timeframe_log_id = ?", "%#{keyword}%", timeframe_log_id)
+      return team_objective
+    end
+
 end

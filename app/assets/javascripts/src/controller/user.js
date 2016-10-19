@@ -243,7 +243,7 @@ textboxControl, refreshPage, searchResult){
 
     function obtainSearchResults(results){
       customModal.toggleProgressRingModal(0);
-      searchResult.generateSearchResults(results, div_search_users_results);
+      searchResult.generateSearchUserResults(results, div_search_users_results);
       customModal.toggleProgressRingModal(1);
     }
 

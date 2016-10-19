@@ -208,4 +208,9 @@ class PersonalObjective < ApplicationRecord
       return personal_objective.created_at
     end
 
+    def self.search_objective(keyword, timeframe_log_id)
+      personal_objective = PersonalObjective.select("id, objective").where("objective like ? and timeframe_log_id = ?", "%#{keyword}%", timeframe_log_id)
+      return personal_objective
+    end
+
 end

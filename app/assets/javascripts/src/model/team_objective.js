@@ -100,11 +100,37 @@ define (['model/server_url'], function (urlParam) {
       });
     } 
 
+    function searchObjective(keyword)
+    {
+      return new Promise((resolve, reject) => {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+          if(this.readyState === 4 && this.status === 200) {
+            resolve(this.responseText);
+          }
+          else if(this.readyState === 0 && this.status !== 200){
+            reject("Error!");
+          }
+        };
+        // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
+        xhttp.open(
+          "POST", 
+          urlParam.server_url() + "/team_objectives/search_objective", 
+          true
+        );
+        xhttp.setRequestHeader('Content-Type', 'application/json');
+        xhttp.send(JSON.stringify({
+          keyword                  : keyword
+        }));
+      });
+    }
+
     return {
       newTeamObjective,
       editTeamObjective,
       getCreatedDate,
-      getContribution
+      getContribution,
+      searchObjective
     }
 
 })

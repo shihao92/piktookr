@@ -117,4 +117,10 @@ class TeamKeyResult < ApplicationRecord
       return team_key_result.created_at
     end
 
+    def self.search_key_result(keyword, timeframe_log_id)
+      team_key_result = TeamKeyResult.select("team_key_results.id, team_key_results.key_result, team_objectives.okr_team_id").joins("inner join team_objectives on team_objectives.id = team_key_results.team_objective_id")
+                                           .where("team_objectives.timeframe_log_id = ? and key_result like ?", timeframe_log_id, "%#{keyword}%")
+      return team_key_result
+    end
+
 end
