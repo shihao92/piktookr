@@ -29,6 +29,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_company_objectives_results = '#div_search_company_objectives_results';
     const div_search_company_kr_results = '#div_search_company_kr_results';
+    const lists_timeframe_logs = '#lists_timeframe_logs';
 
     let original_company_objective = "";
     let original_company_key_result = "";
@@ -205,7 +206,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     }
 
     function getCurrentQuarterEndDate(){
-      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate();
+      let system_timeframe_log_id = $(lists_timeframe_logs).attr('data-id');
+      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate(system_timeframe_log_id);
       get_current_quarter_end_date.then(initializeDatepicker, customModal.notificationModalToggle);
     }
 

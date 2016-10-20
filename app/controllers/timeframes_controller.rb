@@ -92,7 +92,8 @@ class TimeframesController < ApplicationController
   end
 
   def get_current_quarter_end_date
-    timeframe_log = TimeframeLog.find(@@system_timeframe_log_id)
+    system_timeframe_log_id = params[:timeframe_log_id]
+    timeframe_log = TimeframeLog.find(system_timeframe_log_id)
     respond_to do |format|
       format.json { render json: timeframe_log.end_date, status: :ok }
     end

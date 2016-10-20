@@ -297,7 +297,27 @@
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="text-center">
-                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
+                        <% if item.due_date == nil %>
+                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                          <% remained_completion_days = 0 %>
+                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                          <% remained_completion_days = "" %>
+                          <% else %>
+                          <% remained_completion_days = @remaining_quarter_days  %>
+                          <% end %>
+                        <% else %>
+                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                          <% remained_completion_days = 0 %>
+                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                          <% remained_completion_days = "" %>
+                          <% else %>
+                          <% remained_completion_days = item.due_date - Date.today %>
+                          <% end %>
+                          <% if remained_completion_days < 1 %>
+                          <% remained_completion_days = 0 %>
+                          <% end %>
+                        <% end %>              
+                        <span class="bold"><%= remained_completion_days.to_i %></span>
                       </div>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding">

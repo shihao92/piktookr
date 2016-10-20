@@ -23,7 +23,7 @@ define (['model/server_url'], function (urlParam) {
     });
   }
 
-  function getCurrentQuarterEndDate(){
+  function getCurrentQuarterEndDate(timeframe_log_id){
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function() {
@@ -35,11 +35,14 @@ define (['model/server_url'], function (urlParam) {
         }
       };
       xhttp.open(
-        "GET", 
+        "POST", 
         urlParam.server_url() + "/timeframes/get_current_quarter_end_date", 
         true
       );
-      xhttp.send();
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        timeframe_log_id: timeframe_log_id
+      }));
     });
   }
 

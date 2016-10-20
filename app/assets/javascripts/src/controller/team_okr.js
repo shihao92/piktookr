@@ -215,7 +215,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     }
 
     function getCurrentQuarterEndDate(){
-      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate();
+      let system_timeframe_log_id = $(lists_timeframe_logs).attr('data-id');
+      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate(system_timeframe_log_id);
       get_current_quarter_end_date.then(initializeDatepicker, customModal.notificationModalToggle);
     }
 

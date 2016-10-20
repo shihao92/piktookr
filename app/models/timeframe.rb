@@ -35,7 +35,7 @@ class Timeframe < ApplicationRecord
         remaining_quarter_days = 90
       end
        
-      return remaining_quarter_days
+      return remaining_quarter_days.to_i
     end
 
 end

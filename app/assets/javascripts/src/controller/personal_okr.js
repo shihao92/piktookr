@@ -284,7 +284,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     }
 
     function getCurrentQuarterEndDate(){
-      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate();
+      let system_timeframe_log_id = $(lists_timeframe_logs).attr('data-id');
+      let get_current_quarter_end_date = new timeframeModel.getCurrentQuarterEndDate(system_timeframe_log_id);
       get_current_quarter_end_date.then(initializeDatepicker, customModal.notificationModalToggle);
     }
 
@@ -388,6 +389,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         checkboxControl.checkUncheckPersonalKeyResult(checkedUncheckedPersonalKeyResult);
         btnControl.resolveButtonClick(button_confirm_checked_kr, confirmedCompletedKeyResult);
         btnControl.resolveButtonClick(button_remove_checked_kr, removeCompletedKeyResult);
+        customModal.detectCheckedConfirmationModalClose();
         
         // Key Result - Edit 
         btnControl.resolveButtonClick(button_edit_personal_key_result, editPersonalKeyResult);

@@ -17,6 +17,13 @@ function(modalLibraryParam, spinProgressParam){
     }
   }
 
+  function detectCheckedConfirmationModalClose(){
+    $("#modal_checked_personal_kr_confirmation").on('hidden.bs.modal', function(){
+      let key_result_id = $('#btn_remove_checked_kr').attr('data-id');
+      $('#personalkrcompleted_' + key_result_id).removeProp('checked');
+    });
+  }
+
   function notificationModalToggle(message)
   {
     $('#notification_message').text(message);
@@ -25,7 +32,8 @@ function(modalLibraryParam, spinProgressParam){
 
   return {
     toggleProgressRingModal,
-    notificationModalToggle
+    notificationModalToggle,
+    detectCheckedConfirmationModalClose
   }
 
 })

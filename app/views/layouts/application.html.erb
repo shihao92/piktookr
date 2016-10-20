@@ -294,7 +294,7 @@
                 </span>
                 <span class="caret"></span> 
               </button>
-              <ul class="dropdown-menu" role="menu">
+              <ul id="lists_timeframe_logs" class="dropdown-menu" role="menu" data-id="<%= @system_timeframe_log_id %>">
                 <% @timeframe_logs.each do |item| %>
                   <li>
                     <a name="timeframe_log_selection" data-id="<%= item.id %>">

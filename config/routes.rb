@@ -62,7 +62,7 @@ Rails.application.routes.draw do
       get   :set_system_timeframe_log_id
     end
     collection do
-      get   :get_current_quarter_end_date
+      post  :get_current_quarter_end_date
       get   :is_next_year_log_presence
       post  :destroy_timeframe
     end
