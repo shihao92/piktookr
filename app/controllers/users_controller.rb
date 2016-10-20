@@ -109,7 +109,6 @@ class UsersController < ApplicationController
 
   def user_update_info
     current_user_id = params[:id]
-    current_user.user_update = true
     current_edit_user = User.find(current_user_id)
     current_edit_user.update(user_params.merge(:user_update => true))
     respond_to do |format|

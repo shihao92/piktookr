@@ -12,7 +12,7 @@ define(['helper/date_converter', 'view/d3_engine', 'view/controls/spin-progress'
     let created_at_time_index = created_date.indexOf('T');
     let created_at_underscore_index = created_date.indexOf('-');
 
-    created_date = created_date.substring(1, created_at_time_index);
+    created_date = created_date.substring(0, created_at_time_index);
     created_date = created_date.substring(created_at_underscore_index + 1, created_date.length);
     created_date = dateHelper.formatConverter(created_date);
 
