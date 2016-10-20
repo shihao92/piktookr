@@ -33,19 +33,26 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "100x100>" }, default_url: "/images/:style/missing.png"
+  has_attached_file :avatar, styles: { medium: "300x300>", thumb: "128x128>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+  validates_attachment_size :avatar, :in => 0.megabytes..2.megabytes
 
   # Validations on the entities
   validates   :email, presence: true, :format => { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i,
                                                    message: 'Is not a valid email address' }
-  validates   :password, presence: true, length: { minimum: 5 }, confirmation: true
+  validates   :password, presence: true, length: { minimum: 5 }, confirmation: true, :unless => :user_update
   validates   :last_name, presence: true
   validates   :first_name, presence: true
   enum status: { active: 0, inactive: 1 }
   validates   :position, presence: true, length: { minimum: 2 }
-  
 
+  attr_accessor :user_update
+
+  before_commit on: :update do
+    true if self.user_update
+    false
+  end
+  
   def self.return_users_lists_not_in_team(team_id, current_user_id) 
     okr_user_teams = OkrUserTeam.where(okr_team_id: team_id)
     users_list = Array.new

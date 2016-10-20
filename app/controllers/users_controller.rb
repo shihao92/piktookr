@@ -109,8 +109,9 @@ class UsersController < ApplicationController
 
   def user_update_info
     current_user_id = params[:id]
+    current_user.user_update = true
     current_edit_user = User.find(current_user_id)
-    current_edit_user.update(user_params)
+    current_edit_user.update(user_params.merge(:user_update => true))
     respond_to do |format|
       format.html { redirect_to '/', notice: 'User was successfully updated.' }
     end
@@ -121,10 +122,10 @@ class UsersController < ApplicationController
     current_user_id = params[:id]
     current_edit_user = User.find(current_user_id)
     respond_to do |format|
-      if current_edit_user.update(user_params)      
+      if current_edit_user.update(password: user_params["password"], password_confirmation: user_params["password_confirmation"])      
         format.html { redirect_to '/', notice: 'User was successfully updated.' }
       else
-        format.html { redirect_to '/' }
+        format.html { redirect_to '/', notice: 'Failed to update password!' }
       end
     end
   end
@@ -228,10 +229,12 @@ class UsersController < ApplicationController
         :last_name, 
         :first_name, 
         :password,
+        :password_confirmation,
         :status, 
         :avatar, 
         :position, 
-        :team
+        :team,
+        :user_update
       )
     end
 
