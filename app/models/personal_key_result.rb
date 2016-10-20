@@ -114,14 +114,10 @@ class PersonalKeyResult < ApplicationRecord
       status = 0
       if PersonalKeyResult.where(id: key_result_id).update_all(is_completed: completed_flag)
         if completed_flag == "true"
-          # Update progress starting from personal objective onwards
-          # Status update for the personal key result does not require contribution input
-          cascade_personal_objective("", objective_id, user_id)
           # Only completed key result will be logged
           LogPersonalKeyResult.log_update_status_key_result(key_result_id, user_id)
         else
           personal_key_result = PersonalKeyResult.find(key_result_id)
-          cascade_personal_objective("", objective_id, 0)
           # Remove all marked completed log
           LogPersonalKeyResult.remove_log_completed_key_result(key_result_id)
         end
@@ -159,10 +155,8 @@ class PersonalKeyResult < ApplicationRecord
       total_progress = 0.00
       item_count = 0
       personal_key_results.each do |item|
-        if item.is_completed != true
-          total_progress = total_progress + item.progress
-          item_count = item_count + 1
-        end   
+        total_progress = total_progress + item.progress
+        item_count = item_count + 1 
       end
       # If all the personal key result is being marked as completed
       if item_count == 0 

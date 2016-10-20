@@ -22,6 +22,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const textbox_new_personal_key_result = '.form-new-key-result';
     const link_add_due_date_personal_kr = '#link_add_due_date_personal_kr';
     const modal_personal_kr_due_date = '#personal_kr_due_date_modal';
+    const modal_checked_personal_kr_confirmation = '#modal_checked_personal_kr_confirmation';
     const datepicker_personal_kr = '#personal_kr_datepicker';
     const page_personal_key_result_details = '#page_personal_key_result_details';
     const page_personal_objective_details = '#page_personal_objective_details';
@@ -34,6 +35,11 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const selection_company_key_result = '#company_key_result_selection';
     const textarea_personal_objective = '#personal_objective_textarea';
 
+    const checked_personal_kr_prompt = '#checked_personal_kr_prompt';
+    const button_confirm_checked_kr = '#btn_confirm_checked_kr';
+    const button_remove_checked_kr = '#btn_remove_checked_kr';
+
+    // Search Module
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_personal_objectives_results = '#div_search_personal_objectives_results';
     const div_search_personal_kr_results = '#div_search_personal_kr_results';
@@ -218,23 +224,29 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       update_kr_progress_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
     }
 
-    function checkedUncheckedPersonalKeyResult(){
+    function checkedUncheckedPersonalKeyResult(event){
       // 1 - checked 
       // 0 - not check
       let checked_value = $('input[type=checkbox]:checked').length;
-      let key_result_id = $(this).attr('id');
-      let underscore_index = key_result_id.indexOf('_');
-      key_result_id = key_result_id.substring(underscore_index + 1, key_result_id.length);
-      if(checked_value < checkbox_tick_amount)
+      let key_result_id = $(event.target).attr('data-id');
+      if(checked_value > checkbox_tick_amount)
       {
-        let update_kr_status_promise = new personalKeyResultModel.updatePersonalKeyResultStatus(key_result_id, false);
-        update_kr_status_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+        $(button_confirm_checked_kr).attr('data-id', key_result_id);
+        $(button_remove_checked_kr).attr('data-id', key_result_id);
+        $(modal_checked_personal_kr_confirmation).modal('show');
       }
-      else
-      {
-        let update_kr_status_promise = new personalKeyResultModel.updatePersonalKeyResultStatus(key_result_id, true);
-        update_kr_status_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
-      }
+    }
+
+    function confirmedCompletedKeyResult(event){
+      $(modal_checked_personal_kr_confirmation).modal('hide');
+      let key_result_id = $(event.target).attr("data-id");
+      let update_kr_status_promise = new personalKeyResultModel.updatePersonalKeyResultStatus(key_result_id, true);
+      update_kr_status_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+    }
+
+    function removeCompletedKeyResult(event){
+      let key_result_id = $(event.target).attr("data-id");
+      $('#personalkrcompleted_' + key_result_id).removeProp('checked');
     }
 
     function editPersonalKeyResult(event){
@@ -374,6 +386,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         // Key result - Checked completed key result
         checkbox_tick_amount = $('input[type=checkbox]:checked').length;
         checkboxControl.checkUncheckPersonalKeyResult(checkedUncheckedPersonalKeyResult);
+        btnControl.resolveButtonClick(button_confirm_checked_kr, confirmedCompletedKeyResult);
+        btnControl.resolveButtonClick(button_remove_checked_kr, removeCompletedKeyResult);
         
         // Key Result - Edit 
         btnControl.resolveButtonClick(button_edit_personal_key_result, editPersonalKeyResult);

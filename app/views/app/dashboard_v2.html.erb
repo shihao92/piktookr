@@ -252,12 +252,12 @@
                       <div class="accordion-item-title">
                         <div id="personal_kr_<%= item.id %>">
                           <% if(item.is_completed == true) %>
-                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox" checked/>
+                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" disabled="true" checked/>
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout"><%= raw(item.key_result) %></p>
                           </label>
                           <% else %>
-                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox"/>
+                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox" data-id="<%= item.id %>"/>
                           <label for="personalkrcompleted_<%= item.id %>">
                             <p class="details-layout">
                               <%= raw(item.key_result) %>
