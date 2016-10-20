@@ -296,11 +296,21 @@
               </button>
               <ul id="lists_timeframe_logs" class="dropdown-menu" role="menu" data-id="<%= @system_timeframe_log_id %>">
                 <% @timeframe_logs.each do |item| %>
+                  <% if item.id == @system_timeframe_log_id %>
+                  <hr class="divider" />
                   <li>
                     <a name="timeframe_log_selection" data-id="<%= item.id %>">
                       <%= item.quarter %>
                     </a>
                   </li>
+                  <hr class="divider" />
+                  <% else %>
+                  <li>
+                    <a name="timeframe_log_selection" data-id="<%= item.id %>">
+                      <%= item.quarter %>
+                    </a>
+                  </li>
+                  <% end %>
                 <% end %>
                 <% if @controls.include? 'View Future Timeframes' %>
                 <% @future_timeframe_logs.each do |item| %>

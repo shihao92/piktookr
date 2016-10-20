@@ -190,7 +190,11 @@
                     <div class="text-center">
                       <p class="small">Days left</p>
                       <div class="text-center">
+                        <% if @selected_timeframe.id == @system_timeframe_log_id %>
                         <span class="bold"><%= @remaining_quarter_days.to_i %></span>
+                        <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
+                        <span class="bold"><%= 0 %></span>
+                        <% end %>
                       </div>
                     </div>
                   </div>
