@@ -13,6 +13,7 @@ textboxControl, refreshPage, searchResult){
     const button_confirm_delete_user = '#btn_confirm_delete_user';
     const button_favourite_user = '#btn_fav_user';
     const button_remove_favourite_user = '#btn_remove_fav_user';
+    const button_cancel_user_creation_overlay = '#btn_cancel_user_creation_overlay';
     const overlay_create_new_user = '#overlay_create_new_user';
     const link_delete_user = "a[name=link_delete_user]";
     const link_edit_user = "a[name=link_edit_user]";
@@ -27,7 +28,9 @@ textboxControl, refreshPage, searchResult){
     const pending_notification = '.PENDING';
     const modal_team_invitation = '#team_invitation_modal';
     const button_accept_team_invite = '#btn_accept_team_invite';
+    const button_close_user_details_overlay = 'a[name=btn_close_user_details_overlay]';
     const overlay_search_user = '#user_search_result';
+    const overlay_user_profile = '#overlay_user_profile';
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_users_results = '#div_search_users_results';
 
@@ -118,6 +121,10 @@ textboxControl, refreshPage, searchResult){
       overlay.loadNewUserOverlayContent();
     }
 
+    function closeCreateNewUserOverlay(event){
+      overlay.toggleOverlay(overlay_create_new_user, 0);
+    }
+
     function checkUserCreationStatus(){
       let user_creation_status_index = document_url.indexOf(":user_created=");
       let user_creation_status = document_url.substring(42, document_url.length);
@@ -165,7 +172,11 @@ textboxControl, refreshPage, searchResult){
     }
 
     function displayUserDetailsOverlay(){
-      overlay.toggleUserDetailsOverlay(1);
+      overlay.toggleOverlay(overlay_user_profile, 1);
+    }
+
+    function closeUserDetailsOverlay(){
+      overlay.toggleOverlay(overlay_user_profile, 0);
     }
 
     function checkFirstTimeLogin(){
@@ -292,6 +303,7 @@ textboxControl, refreshPage, searchResult){
       // Display create new user overlay
       btnControl.resolveButtonClick(button_create_new_user, loadContentNewUserOverlay);
       btnControl.resolveButtonClick(button_create_another_user, loadContentNewUserOverlay);
+      btnControl.resolveButtonClick(button_cancel_user_creation_overlay, closeCreateNewUserOverlay);
 
       checkUserCreationStatus();
 
@@ -302,6 +314,7 @@ textboxControl, refreshPage, searchResult){
 
       // User Profile Section
       btnControl.resolveButtonClick(link_user_profile, displayUserDetailsOverlay); 
+      btnControl.resolveButtonClick(button_close_user_details_overlay, closeUserDetailsOverlay);
 
       // User removal from team
       btnControl.resolveButtonClick(button_remove_team_user, removeUserFromTeam);

@@ -1,0 +1,20 @@
+// SCSS file catered for overlay.
+
+@import 'declarations';
+
+.overlay-padding {
+  padding-top: 245px;
+}
+.user-overlay-padding {
+  padding-top: 155px;
+}
+
+.contribution-overlay {
+  .aligned-company-objective {
+    color: $lighter-black;
+    font-family: ProximaNovaSoft;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 28px;
+  }
+}

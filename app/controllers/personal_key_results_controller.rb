@@ -178,6 +178,14 @@ class PersonalKeyResultsController < ApplicationController
     end
   end
 
+  def get_linked_company_objective
+    key_result_id = params[:id]
+    company_objective = PersonalKeyResult.search_linked_company_objective(key_result_id)
+    respond_to do |format|
+      format.json { render json: company_objective, status: :ok }  
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_personal_key_result

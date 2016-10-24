@@ -2,14 +2,74 @@
 
 @import 'declarations';
 
+@font-face {
+  font-family: 'ProximaNovaSoft';
+  src:font-url('/assets/css/fonts/proxima-nova-soft/proxima-nova-soft.woff2') format('woff2'),
+      font-url('/assets/css/fonts/proxima-nova-soft/proxima-nova-soft.woff') format('woff'),
+      font-url('/assets/css/fonts/proxima-nova-soft/proxima-nova-soft.ttf') format('truetype');
+}
+.proxima-nova-soft-font {
+  font-family: ProximaNovaSoft;
+}
+
+// Login Page
+.login-brand {
+  font-family: ProximaNovaSoft;
+  font-size: 36px;
+  color: $normal-blue;
+}
+.login-subtitle {
+  font-size: 15px;
+  font-family: ProximaNovaSoft;
+}
+.support-link {
+  color: $darker-black;
+  font-size: 13px;
+  font-family: ProximaNovaSoft;
+}
+.login-image-title {
+  font-family: ProximaNovaSoft;
+  font-size: 30px;
+}
+.login-image-subtitle {
+  font-family: ProximaNovaSoft;
+  font-size: 18px;
+}
+
+// Default Layout Page
 .brand-sidebar {
   color: $native-white;
   background: transparent;
   font-size: $font-18;
+  font-family: ProximaNovaSoft;
+}
+.brand-header {
+  color: $normal-blue;
+  font-family: ProximaNovaSoft;
 }
 
-.brand-header {
-  color: $dark-blue;
+// Overlay text related styling
+.overlay-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: $normal-blue;
+  font-family: ProximaNovaSoft;
+
+  &.overlay-title-md {
+    font-size: 20px;
+    font-weight: 500;
+  }
+}
+.overlay-subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  color: $dark-black;
+  font-family: ProximaNovaSoft;
+
+  &.progress-update {
+    color: $lighter-black;
+  }
 }
 
 .objective {

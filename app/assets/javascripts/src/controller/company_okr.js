@@ -19,8 +19,12 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const button_edit_company_objective = '.edit_company_objective';
     const button_edit_company_key_result = '.edit_company_key_result';
     const button_save_company_kr_due_date = '#btn_save_company_kr_due_date';
+    const button_close_create_company_objective = '#btn_close_create_company_objective';
     const textbox_new_company_objective = '#add-new-company-objective';
     const textbox_new_company_key_result = '.form-new-key-result';
+    const new_company_objective = '#new_company_objective';
+    const company_objective_textarea = '#company_objective_textarea';
+    const new_objective_popup = '#new_objective_popup';
     const link_add_due_date_company_kr = '#link_add_due_date_company_kr';
     const modal_company_kr_due_date = '#company_kr_due_date_modal';
     const datepicker_company_kr = '#company_kr_datepicker';
@@ -39,9 +43,9 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     // -----------------
 
     function focusOutCreateNewCompanyObjective(event){
-      if($('#new_company_objective').val() != '') {
-        $('#new_objective_popup').attr('class','overlay');
-        $('#company_objective_textarea').text($('#new_company_objective').val());
+      if($(new_company_objective).val() != '') {
+        overlay.toggleOverlay(new_objective_popup, 1);
+        $(company_objective_textarea).text($(new_company_objective).val());
         btnControl.toggleButtonDisability(button_create_company_objective, 0)
       } 
     }
@@ -49,18 +53,26 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     function enterCreateNewCompanyObjective(event){
       let key = event.which;
       if(key == 13){
-        if($('#new_company_objective').val() != '') {
-          $('#new_objective_popup').attr('class','overlay');
-          $('#company_objective_textarea').text($('#new_company_objective').val());
-          btnControl.toggleButtonDisability(button_create_company_objective, 0)
+        if($(new_company_objective).val() != '') {
+          overlay.toggleOverlay(new_objective_popup, 1);
+          $(company_objective_textarea).text($(new_company_objective).val());
+          btnControl.toggleButtonDisability(button_create_company_objective, 0);
         }
       }  
     }
 
+    function closeCreateCompanyObjective(event){
+      overlay.toggleOverlay(new_objective_popup, 0);
+    }
+
     function createNewCompanyObjective(event){
-      let company_objective = $('#company_objective_textarea').val();
-      let create_company_objective_promise = new companyObjectiveModel.newCompanyObjective(company_objective);
-      create_company_objective_promise.then(createdCompanyObjective, customModal.notificationModalToggle);
+      let company_objective = $(company_objective_textarea).val();
+      if(company_objective != ''){
+        let create_company_objective_promise = new companyObjectiveModel.newCompanyObjective(company_objective);
+        create_company_objective_promise.then(createdCompanyObjective, customModal.notificationModalToggle);
+      } else {
+        customModal.notificationModalToggle("Company objective cannot be empty!");
+      }
     }
 
     function createdCompanyObjective(message){
@@ -294,7 +306,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
         // Company Objective - Create new
         textboxControl.addNewCompanyObjective(focusOutCreateNewCompanyObjective, enterCreateNewCompanyObjective);
         btnControl.resolveButtonClick(button_create_company_objective, createNewCompanyObjective);
-        
+        btnControl.resolveButtonClick(button_close_create_company_objective, closeCreateCompanyObjective);
+
         // Company Objective - Edit
         btnControl.resolveButtonClick(button_edit_company_objective, editCompanyObjective);
         textboxControl.editCompanyObjective(editingCompanyObjective);

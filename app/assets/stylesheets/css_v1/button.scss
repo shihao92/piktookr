@@ -2,12 +2,42 @@
 
 @import 'declarations';
 
-.btn-accordion {
-    outline: none;
-    border: 0px;
-    background: transparent;
+.btn-accordion, .btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
+  outline: none;
+  border: 0px;
+  background: transparent;
 }
-.btn-accordion:hover, .btn-accordion:active, .btn-accordion:focus {
-    border: 0px;
-    background: transparent;
+
+.btn-cancel, .btn-cancel:focus, .btn-cancel:active, .btn-cancel:hover {
+  color: #2c2c2c;
+  background-color: #d5e0e5;
+  border-color: #d5e0e5;
+  font-family: ProximaNovaSoft;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.btn-danger, .btn-danger:focus {
+  color: #fff;
+  background-color: #f16078;
+  border-color: #f16078;
+  font-family: ProximaNovaSoft;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.btn-complete, .btn-complete:focus {
+  color: #fff;
+  background-color: #039be5;
+  border-color: #039be5;
+  font-family: ProximaNovaSoft;
+  font-size: 15px;
+  font-weight: 500;
+
+  // Login Page
+  &.login-button {
+    font-weight: 570;
+    font-size: 15px;
+    height: 35px;
+  }
 }

@@ -15,6 +15,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     const container_team_dashboard = '#team_page_container';
     const button_create_team_objective = '#btn_new_team_objective';
+    const button_close_create_team_objective = '#btn_close_create_team_objective'
     const button_edit_team_objective = '.edit_team_objective';
     const button_edit_team_key_result = '.edit_team_key_result';
     const button_team_setting = '#team_setting';
@@ -27,6 +28,10 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_team_objectives_results = '#div_search_team_objectives_results';
     const div_search_team_kr_results = '#div_search_team_kr_results';
+    const new_objective_popup = '#new_objective_popup';
+    const new_team_objective = '#new_team_objective';
+    const team_objective_textarea = '#team_objective_textarea';
+    const company_key_result_selection = '#company_key_result_selection';
 
     let original_team_objective = "";
     let original_team_key_result = "";
@@ -37,10 +42,10 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     // --------------
 
     function focusOutCreateNewTeamObjective(event){
-      if($('#new_team_objective').val() != '') {
-        $('#new_objective_popup').attr('class','overlay');
-        $('#team_objective_textarea').text($('#new_team_objective').val());
-        $('#company_key_result_selection').select2();
+      if($(new_team_objective).val() != '') {
+        overlay.toggleOverlay(new_objective_popup, 1);
+        $(team_objective_textarea).text($(new_team_objective).val());
+        $(company_key_result_selection).select2();
         btnControl.toggleDisabledSaveNewTeamObjectiveButton(0);
       }
     }
@@ -48,24 +53,32 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     function enterCreateNewTeamObjective(event){
       let key = event.which;
       if(key == 13){
-        if($('#new_team_objective').val() != '') {
-          $('#new_objective_popup').attr('class','overlay');
-          $('#team_objective_textarea').text($('#new_team_objective').val());
-          $('#company_key_result_selection').select2();
+        if($(new_team_objective).val() != '') {
+          overlay.toggleOverlay(new_objective_popup, 1);
+          $(team_objective_textarea).text($(new_team_objective).val());
+          $(company_key_result_selection).select2();
         }
       }
     }
 
+    function closeNewTeamObjective(event){
+      overlay.toggleOverlay(new_objective_popup, 0);
+    }
+
     function createTeamObjective(event){
-      let team_objective = $('#team_objective_textarea').val();
-      let company_key_result_id = $('#company_key_result_selection').val();
+      let team_objective = $(team_objective_textarea).val();
+      let company_key_result_id = $(company_key_result_selection).val();
       let team_id = $(container_team_dashboard).attr('data-id');
       company_key_result_id = parseInt(company_key_result_id);
       team_id = parseInt(team_id);
-      let create_objective_promise = new teamObjectiveModel.newTeamObjective(
+      if(team_objective != ''){
+        let create_objective_promise = new teamObjectiveModel.newTeamObjective(
           team_objective, company_key_result_id, team_id
-      );
-      create_objective_promise.then(createdTeamObjective, customModal.notificationModalToggle);
+        );
+        create_objective_promise.then(createdTeamObjective, customModal.notificationModalToggle);
+      } else {
+        customModal.notificationModalToggle("Team objective cannot be empty!");
+      }
     }
 
     function createdTeamObjective(message){
@@ -307,6 +320,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
         textboxControl.addNewTeamObjective(focusOutCreateNewTeamObjective, enterCreateNewTeamObjective);
         customSelect2.companyKeyResultSelectionChanged();  
         btnControl.resolveButtonClick(button_create_team_objective, createTeamObjective);
+        btnControl.resolveButtonClick(button_close_create_team_objective, closeNewTeamObjective);
         
         // Team Objective - Edit
         btnControl.resolveButtonClick(button_edit_team_objective, editTeamObjective);

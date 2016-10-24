@@ -117,6 +117,19 @@ class UsersController < ApplicationController
   end
 
   # User update
+  def user_update_first_time
+    current_user_id = params[:id]
+    current_edit_user = User.find(current_user_id)
+    respond_to do |format|
+      if current_edit_user.update(user_params)      
+        format.html { redirect_to '/', notice: 'User was successfully updated.' }
+      else
+        format.html { redirect_to '/', notice: 'Failed to update password!' }
+      end
+    end
+  end
+
+  # User update
   def user_update
     current_user_id = params[:id]
     current_edit_user = User.find(current_user_id)

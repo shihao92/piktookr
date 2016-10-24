@@ -46,6 +46,13 @@ class TimeframeLog < ApplicationRecord
       return log[0].id;
     end
 
+    # Obtain current quarter end date
+    def self.current_quarter_end_date
+      current_timeframe_id = current_timeframe_log_id
+      end_date_info = TimeframeLog.find(current_timeframe_id)
+      return end_date_info.end_date
+    end
+
     def self.create_timeframe_log(timeframe_year, timeframe_id, period)
       start_date = Date.new(timeframe_year,1,1);
       if(period == "Yearly")

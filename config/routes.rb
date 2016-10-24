@@ -20,6 +20,9 @@ Rails.application.routes.draw do
       patch :user_update_info
       put   :user_update_info
 
+      patch :user_update_first_time
+      put   :user_update_first_time
+
       resources :personal_objectives, only: [:view_others_personal_okr] do
         collection do
           # Route to view other person personal OKR
@@ -232,6 +235,8 @@ Rails.application.routes.draw do
       get   :get_contribution
       # Route to get created date
       get   :get_created_date
+      # Route to get connected company objective
+      get   :get_linked_company_objective
     end
 
     collection do

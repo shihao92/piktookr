@@ -255,10 +255,10 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/company_objectives/<%= item.id %>">
+                <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_objectives/<%= item.id %>">
                   Delete
                 </a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
               </div>
             </div>                
           </div>
@@ -346,6 +346,9 @@
                         </a>
                       </li>
                       <% if @controls.include? 'Delete Company OKR' %>
+                      <% okr_company_personal = OkrCompanyPersonal.find_by(company_key_result_id: item.id) %>
+                      <% okr_company_team = OkrCompanyTeam.find_by(company_key_result_id: item.id) %>
+                      <% if okr_company_personal == nil && okr_company_team == nil %>
                       <li>
                         <!-- Deletion of key result -->
                         <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
@@ -353,6 +356,7 @@
                            Delete
                         </a>
                       </li>
+                      <% end %>
                       <% end %>
                     </ul>
            	      </div>
@@ -375,10 +379,10 @@
                       </div>
                     </div>
                     <div class="modal-footer">
-                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/company_key_results/<%= item.id %>">
+                      <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_key_results/<%= item.id %>">
                         Delete
                       </a>
-                      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
                     </div>
                   </div>
                 
@@ -447,7 +451,7 @@
 <div class="overlay hide" id="new_objective_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/company_objectives/company_dashboard" class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -458,7 +462,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
           <div class="row">
             <h5 class="m-b-5">
-              <span class="semi-bold result-name bold objective">
+              <span class="overlay-title overlay-title-md">
               	New Company Objective
               </span>
             </h5>
@@ -473,7 +477,7 @@
           </div>
           <div class="row">
             <div class="pull-right">
-              <a href="/company_objectives/company_dashboard" class="btn btn-default btn-cons btn-rounded m-t-10">
+              <a id="btn_close_create_company_objective" class="btn btn-cancel btn-cons btn-rounded m-t-10">
                 Cancel
               </a>
               <button id="btn_new_company_objective" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">

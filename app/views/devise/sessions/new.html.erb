@@ -2,10 +2,10 @@
   <div class="bg-pic">
     <img src="/app_cover.jpg" data-src="/app_cover.jpg" data-src-retina="/app_cover.jpg" alt="" class="lazy">
     <div class="bg-caption pull-bottom sm-pull-bottom text-white p-l-20 m-b-20">
-      <h2 class="semi-bold text-white">
+      <h2 class="semi-bold text-white login-image-title">
 			  Pikto Retreat 2016 - Langkawi
       </h2>
-      <p class="small">
+      <p class="small login-image-subtitle">
         Weygen & Flavian
       </p>
     </div>
@@ -13,11 +13,11 @@
   <!-- Login Background -->
   <div class="login-container bg-white">
     <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
-      <h2 class="objective">Pikto<span class="bold">OKR</span></h1>
-      <p class="p-t-35">Sign into your PiktoOKR account</p>
+      <h2 class="login-brand">Pikto<span class="bold">OKR</span></h2>
+      <p class="p-t-10 p-b-10 login-subtitle"><span class="bold">Sign In</span> using your Piktochart account</p>
       <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "p-t-15") do |f| %>
         <div class="form-group form-group-default">
-          <%= f.label :login %>
+          <%= f.label :login, 'USER NAME' %>
           <div class="controls">
             <%= f.email_field :email, autofocus: true, class: "form-control", required: true, placeholder: "Email" %>
           </div>
@@ -30,21 +30,26 @@
           </div>
         </div>    
 
+        <div class="row small">
+          <%= flash[:alert] %>
+        </div>
+
         <div class="row">
           <div class="col-md-6 no-padding">
             <% if devise_mapping.rememberable? -%>
               <div class="checkbox check-complete">
-                <%= f.check_box :remember_me%>
-                <%= f.label :remember_me %>
+                <% @remember_me = "Keep Me Signed In" %>
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me, @remember_me, class: "hint-text" %>
               </div>
             <% end %> 
           </div>
-          <div class="col-md-6 text-right small">
-            <%= flash[:alert] %>
+          <div class="col-md-6 text-right">
+            
           </div>
         </div>   
 
-        <%= f.submit "Sign in", class: "btn btn-complete btn-cons btn-rounded m-t-10 bold" %>
+        <%= f.submit "Sign in", class: "btn btn-complete btn-cons btn-rounded m-t-10 login-button" %>
       <% end %>
     </div>
   </div>

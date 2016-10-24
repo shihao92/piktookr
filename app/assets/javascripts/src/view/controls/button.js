@@ -43,10 +43,12 @@ function(overlay, personalObjectiveModel){
     $(btn_info).attr('style', 'visibility: hidden;');
   }
 
-  function notificationDismissClick(){
-    $('#notification_dismiss_btn').click(function() {
+  function notificationDismissClick(input){
+    if(input == 1){
+      $('#notification_dismiss_btn').click(function(event) {
         location.reload();
-    });
+      });
+    }
   }
 
   return{

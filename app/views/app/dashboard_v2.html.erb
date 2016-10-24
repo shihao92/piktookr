@@ -234,10 +234,10 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
+                <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
                   Delete
                 </a>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
               </div>
             </div>                
           </div>
@@ -293,7 +293,6 @@
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1">
                       <div class="text-center">
-                        <span class="bold">
                         <% if item.due_date == nil %>
                           <% if @selected_timeframe.id < @system_timeframe_log_id %>
                           <% remained_completion_days = 0 %>
@@ -313,13 +312,14 @@
                           <% if remained_completion_days < 1 %>
                           <% remained_completion_days = 0 %>
                           <% end %>
-                        <% end %>              
-                        <%= remained_completion_days.to_i %>
+                        <% end %>    
+                        <span name="personal_kr_due_date" class="bold" data-end-date="<%= item.due_date %>">          
+                          <%= remained_completion_days.to_i %>
                         </span>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
-                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
+                    <div class="col-lg-3 col-md-3 col-sm-3 no-padding key-result-progress">
+                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", data: {progress: item.progress} ), class: "text-center small") %>
                       <div class="progress">
                         <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
                       </div>    
@@ -341,7 +341,7 @@
                              Progress update
                           </a>
                         <% else %>
-                          <a href="/" data-toggle="search" data-target="#contribution_popup" id="keyresultprogress_<%= item.id %>">
+                          <a name="link_contribution_overlay" data-id="<%= item.id %>">
                             <i class="pg-plus"></i> 
                              Progress update
                           </a>
@@ -371,26 +371,24 @@
               </div>
               <!-- Confirmation modal for personal key result deletion -->
               <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-background">
                 
                   <!-- Modal content-->
-                  <div class="modal-background">
-                    <div class="modal-header clearfix text-left">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Warning</h4>
+                  <div class="modal-header clearfix text-left">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Warning</h4>
+                  </div>
+                  <hr/>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <p id="prompt_message">Are you sure?</p>
                     </div>
-                    <hr/>
-                    <div class="modal-body">
-                      <div class="form-group">
-                        <p id="prompt_message">Are you sure?</p>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <a class="btn btn-danger" rel="nofollow" data-method="delete" href="/personal_key_results/<%= item.id %>">
-                        Delete
-                      </a>
-                      <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/personal_key_results/<%= item.id %>">
+                      Delete
+                    </a>
+                    <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
                   </div>
                 
                 </div>
@@ -455,55 +453,53 @@
 <!-- END CONTAINER FLUID -->
 
 <!-- Overlay for the contribution module -->
-<div id="contribution_popup" class="overlay hide" data-pages="search">
+<div id="contribution_overlay" class="overlay hide" data-pages="search">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
     </div>
-    <div class="centralize">
+    <div class="centralize contribution-overlay">
       <div class="container-fluid">
         <div class="col-lg-3 col-md-3 col-sm-3">
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
-          <div class="row">
-            <h5 class="m-b-5">
-              <span class="result-name">
-              	<span class="bold modal-title-custom">Confirm progress update for:</span> <br/>
-                <span class="bold" id="personal_key_result">xxxxxx</span>
-              </span>
-            </h5>
-          </div>
-          <div id="key_result_id" style="display:none;">
-          </div>
+          <h5 id="personal_key_result_contribution" class="overlay-title overlay-title-md" data-id="0">
+          </h5>
+          <hr/>
+          <span class="overlay-subtitle progress-update">
+            Progress update <span id="contribution_progress_update" class="bold">30</span>%
+          </span>
           <div id="popup_initial_progress" style="display:none;">
           </div>
-          <div class="row">
-            <div class="no-padding m-t-50">
-              <div class="bg-master bg-complete-darker" id="slider-tooltips">
-              </div>
+          <div class="no-padding m-t-20 m-b-30">
+            <div class="bg-master bg-complete-darker" id="contribution_sliders">
             </div>
           </div>
-          <br/>
-          <br/>
-          <div class="row">
-            <div class="row">           
-                <div class="form-group form-group-default">
-                  <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
-                  <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
-                </div>
+          <span class="col-lg-6 col-md-6 col-sm-6 col-xs-6 no-padding">
+            <div class="aligned-company-objective">
+              <span class="fa fa-fw fa-lock fa-lg"></span>
+              <span id="aligned_company_objective">Aligned Company Objective</span>
             </div>
-            <div class="row">
-              <div class="pull-right">
-                <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
-                  Cancel
-                </a>
-                <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
-                  Save
-                </button>
-              </div>
+          </span>
+          <span class="col-lg-6 col-md-6 col-sm-6 col-xs-6 no-padding text-right">
+            <div class="aligned-company-objective">
+              <span class="fa fa-fw fa-clock-o fa-lg"></span>
+              <span id="personal_key_result_due_date"></span>
             </div>
+          </span>
+          <div class="form-group form-group-default">
+            <label>WHAT DID YOU CONTRIBUTE TO THIS KEY RESULT?</label>
+            <textarea id="contribution_textarea" class="form-control textarea-custom" required></textarea>
+          </div>
+          <div class="pull-right">
+            <a id="btn_close_contribution_overlay" class="btn btn-cancel btn-cons btn-rounded m-t-10">
+              Cancel
+            </a>
+            <button id="btn_update_progress" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
+              Save
+            </button>
           </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3">
@@ -517,7 +513,7 @@
 <div id="new_objective_popup" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -528,7 +524,7 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
           <div class="row">
             <h5 class="m-b-5">
-              <span class="bold result-name objective">
+              <span class="overlay-title overlay-title-md">
               	New Personal Objective
               </span>
             </h5>
@@ -585,7 +581,7 @@
           </div>
           <div class="row">
             <div class="pull-right">
-              <a href="/" class="btn btn-default btn-cons btn-rounded m-t-10">
+              <a id="btn_close_creation_personal_objective" class="btn btn-cancel btn-cons btn-rounded m-t-10">
                 Cancel
               </a>
               <button id="btn_new_personal_objective" class="btn btn-complete btn-cons btn-rounded m-t-10" disabled="true">
@@ -669,7 +665,7 @@
         </div>
         <br/>
         <div class="row">
-          <%= form_for @user, url: "/users/#{current_user.id}/user_update" do |f| %>
+          <%= form_for @user, url: "/users/#{current_user.id}/user_update_first_time" do |f| %>
             <div class="text-center">
               <%= image_tag @user.avatar.url %>
             </div>

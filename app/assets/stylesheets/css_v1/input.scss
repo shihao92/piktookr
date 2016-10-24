@@ -49,8 +49,17 @@
     width: 200px;
     font-size: 16px;
 }
+.form-group-default {
+  label {
+    color: $native-grey;
+  }
+}
 .form-group-default .textarea-custom {
-    height: 100px;
+  height: 100px;
+  font-family: ProximaNovaSoft;
+  font-weight: 550;
+  color: $darker-black;
+  font-size: 15px;
 }
 
 .feedback-textarea {

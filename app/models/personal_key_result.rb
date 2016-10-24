@@ -24,11 +24,13 @@ class PersonalKeyResult < ApplicationRecord
     def self.new_personal_key_result(key_result, objective_id, user_id)
       status = 0
       personal_objective = PersonalObjective.find(objective_id)
+      current_quarter_end_date = TimeframeLog.current_quarter_end_date
       @new_personal_key_result = PersonalKeyResult.new(
         progress: 0.0, 
         key_result: key_result, 
         personal_objective_id: objective_id,
-        is_completed: false
+        is_completed: false,
+        due_date: current_quarter_end_date
       )
       if @new_personal_key_result.save
         LogPersonalKeyResult.log_new_personal_key_result(@new_personal_key_result.id, personal_objective.objective, user_id)    
@@ -192,6 +194,21 @@ class PersonalKeyResult < ApplicationRecord
       personal_key_result = PersonalKeyResult.joins("inner join personal_objectives on personal_objectives.id = personal_key_results.personal_objective_id")
                                              .where("personal_objectives.timeframe_log_id = ? and key_result like ?", timeframe_log_id, "%#{keyword}%")
       return personal_key_result
+    end
+
+    def self.search_linked_company_objective(key_result_id)
+      personal_key_result = PersonalKeyResult.find(key_result_id)
+      personal_objective = PersonalObjective.find(personal_key_result.personal_objective_id)
+      okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: personal_objective.id)
+      if okr_team_personal == nil
+        okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: personal_objective.id)
+        company_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
+      else
+        company_key_result = CompanyKeyResult.find(okr_team_personal.company_key_result_id)
+      end
+      company_objective = CompanyObjective.find(company_key_result.company_objective_id)
+
+      return company_objective.objective
     end
 
 end

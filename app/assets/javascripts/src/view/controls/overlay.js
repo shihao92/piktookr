@@ -32,7 +32,7 @@ function(sliderParam, select2LibraryParam){
             brand: '.brand'
         });  
 
-        $('#create_new_user').search({
+        $('#overlay_create_new_user').search({
             // Bind elements that are included inside search overlay
             searchField: '#overlay-search',
             closeButton: '.overlay-close',
@@ -112,13 +112,14 @@ function(sliderParam, select2LibraryParam){
 
     function loadNewPersonalObjectiveOverlayContent(){
       $('#new_objective_popup').attr('class','overlay');
+      $('#new_objective_popup').attr('style','display: block;');
       $('#team_key_result_selection').select2();
       $('#company_key_result_selection').select2();
     }
 
     function loadNewUserOverlayContent(){
       $('#overlay_create_new_user').attr('class','overlay');
-      $('#status_status_const').select2();
+      $('#overlay_create_new_user').attr('style','display: block;');
       $('#role_role_id').select2();
     }
 
@@ -139,6 +140,7 @@ function(sliderParam, select2LibraryParam){
         case 0: $('#overlay_user_profile').attr('class', 'overlay hide');
                 break;
         case 1: $('#overlay_user_profile').attr('class', 'overlay');
+                $('#overlay_user_profile').attr('style', 'display: block;');
                 break;
       }
     }
@@ -148,6 +150,7 @@ function(sliderParam, select2LibraryParam){
         case 0: $(control_info).attr('class', 'overlay hide');
                 break;
         case 1: $(control_info).attr('class', 'overlay');
+                $(control_info).attr('style', 'display: block;');
                 break;
       }
     }

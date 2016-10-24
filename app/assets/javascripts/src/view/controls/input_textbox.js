@@ -11,12 +11,10 @@ function(overlayParam, btnControl){
     });
   }
 
-  function checkPersonalObjectiveInput(){
+  function checkPersonalObjectiveInput(resolve){
     $('#personal_objective_textarea')
     .on({
-      keypress: function(){
-        btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
-      }
+      keypress: resolve
     })
   }
 

@@ -15,6 +15,7 @@ customModal, overlay, slider, customSelect2,
 btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult, datepicker) {
 
     const button_new_personal_objective = '#btn_new_personal_objective';
+    const button_close_creation_personal_objective = '#btn_close_creation_personal_objective';
     const button_edit_personal_objective = '.edit_personal_objective';
     const button_update_progress_key_result = '#btn_update_progress';
     const button_edit_personal_key_result = '.edit_personal_key_result';
@@ -34,6 +35,15 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const selection_team_key_result = '#team_key_result_selection';
     const selection_company_key_result = '#company_key_result_selection';
     const textarea_personal_objective = '#personal_objective_textarea';
+    const new_personal_objective = '#new_personal_objective';
+    const new_objective_popup = '#new_objective_popup';
+    const button_close_contribution_overlay = '#btn_close_contribution_overlay';
+
+    const link_contribution_overlay = 'a[name=link_contribution_overlay]';
+    const contribution_overlay = '#contribution_overlay';
+    const personal_key_result_contribution = '#personal_key_result_contribution';
+    const contribution_sliders = '#contribution_sliders';
+    const contribution_textarea = '#contribution_textarea';
 
     const checked_personal_kr_prompt = '#checked_personal_kr_prompt';
     const button_confirm_checked_kr = '#btn_confirm_checked_kr';
@@ -58,30 +68,48 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
 
     function displayCreatePersonalObjectiveOverlay(event){
       let key = event.which;
-      if($('#new_personal_objective').val() !== '') {
+      if($(new_personal_objective).val() !== '') {
         if(key == 13){
           let temp_personal_objective = "";
-          temp_personal_objective = $('#new_personal_objective').val();
+          temp_personal_objective = $(new_personal_objective).val();
           overlay.loadNewPersonalObjectiveOverlayContent();
-          $('#personal_objective_textarea').text(temp_personal_objective);
+          $(textarea_personal_objective).text(temp_personal_objective);
           btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
+          textboxInput.checkPersonalObjectiveInput(checkPersonalObjectiveTextarea);
         }
       }   
+    }
+
+    function closePersonalObjectiveOverlay(event){
+      overlay.toggleOverlay(new_objective_popup, 0);
+    }
+
+    function checkPersonalObjectiveTextarea(event){
+      let personal_objective = $(event.target).val();
+      if(personal_objective.length < 2){
+        btnControl.toggleDisabledSaveNewPersonalObjectiveButton(1);
+      } else {
+        btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
+      }
     }
 
     function createNewPersonalObjective(){
       let personal_objective = $(textarea_personal_objective).val();
       let selected_radio_value = $(radio_selection_kr_type).val();
-      if(selected_radio_value === "team_kr"){
-        let team_key_result_id = $(selection_team_key_result).val();
-        team_key_result_id = parseInt(team_key_result_id);
-        let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
-        create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+      if(personal_objective != ''){
+        if(selected_radio_value === "team_kr"){
+          let team_key_result_id = $(selection_team_key_result).val();
+          team_key_result_id = parseInt(team_key_result_id);
+          let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
+          create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+        } else {
+          let company_key_result_id = $(selection_company_key_result).val();
+          company_key_result_id = parseInt(company_key_result_id);
+          let create_personal_objective_link_company = new personalObjectiveModel.newPersonalObjectiveLinkedCompany(personal_objective, company_key_result_id);
+          create_personal_objective_link_company.then(createdPersonalObjective, customModal.notificationModalToggle);
+        }
       } else {
-        let company_key_result_id = $(selection_company_key_result).val();
-        company_key_result_id = parseInt(company_key_result_id);
-        let create_personal_objective_link_company = new personalObjectiveModel.newPersonalObjectiveLinkedCompany(personal_objective, company_key_result_id);
-        create_personal_objective_link_company.then(createdPersonalObjective, customModal.notificationModalToggle);
+        customModal.notificationModalToggle("Personal objective cannot be empty!");
       }
     }
 
@@ -210,19 +238,53 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       refreshPage.refreshPage();
     }
 
+    function openContributionOverlay(event){
+      let control_parent = $(event.target).parents('.accordion-item');
+      let personal_key_result = $(control_parent).find('.details-layout').text();
+      let current_progress = $(control_parent).find('.key-result-progress').find('span').attr('data-progress');
+      let due_date = $(control_parent).find('span[name=personal_kr_due_date]').attr('data-end-date');
+      let key_result_id = $(event.target).attr('data-id');
+      $('#popup_initial_progress').text(current_progress);
+      $('#personal_key_result_due_date').text(due_date);
+      $(personal_key_result_contribution).attr('data-id', key_result_id);
+      $(personal_key_result_contribution).text(personal_key_result);
+      slider.contributionSliderControl(current_progress);
+
+      let linked_company_objective_promise = new personalKeyResultModel.getLinkedCompanyObjective(key_result_id);
+      linked_company_objective_promise.then(getLinkedCompanyObjective, customModal.notificationModalToggle);
+
+      overlay.toggleOverlay(contribution_overlay, 1);
+    }
+
+    function getLinkedCompanyObjective(data){
+      $('#aligned_company_objective').text(data);
+    }
+
+    function closeContributionOverlay(event){
+      let parent_target = $(contribution_sliders).parents(".no-padding");
+      $(contribution_sliders)[0].destroy();
+      $(parent_target).html('<div class="bg-master bg-complete-darker" id="contribution_sliders"></div>');
+      overlay.toggleOverlay(contribution_overlay, 0);
+    }
+
     function updateProgressPersonalKeyResult(){
-      let progress = $('#slider-tooltips').val();
+      let progress = $(contribution_sliders).val();
       let initial_progress = $('#popup_initial_progress').text();
-      let key_result_id = $('#key_result_id').text();
-      let contribution = $('#contribution_textarea').val();
+      let key_result_id = $(personal_key_result_contribution).attr('data-id');
+      let contribution = $(contribution_textarea).val();
       key_result_id = parseInt(key_result_id);
 
       // AJAX call to update the personal key result progress
-      let update_kr_progress_promise = new personalKeyResultModel.updatePersonalKeyResultProgress(
+      if(contribution != ''){
+        let update_kr_progress_promise = new personalKeyResultModel.updatePersonalKeyResultProgress(
           key_result_id, progress, initial_progress, contribution
-      );  
-      update_kr_progress_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
-    }
+        );  
+        update_kr_progress_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+        btnControl.notificationDismissClick(1);
+      } else {
+        customModal.notificationModalToggle("Contribution cannot be empty!");
+      }
+    } 
 
     function checkedUncheckedPersonalKeyResult(event){
       // 1 - checked 
@@ -310,6 +372,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       } else {
         let update_due_date_promise = new personalKeyResultModel.updateDueDate(personal_key_result_id,selected_due_date);
         update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+        refreshPage.refreshPage();
       }  
     }
 
@@ -372,7 +435,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
 
         textboxInput.addNewPersonalObjective(displayCreatePersonalObjectiveOverlay);
         customSelect2.teamKeyResultSelectionChanged();  
-        btnControl.resolveButtonClick(button_new_personal_objective, createNewPersonalObjective);   
+        btnControl.resolveButtonClick(button_new_personal_objective, createNewPersonalObjective);
+        btnControl.resolveButtonClick(button_close_creation_personal_objective, closePersonalObjectiveOverlay);   
        
         // Personal Objective - Edit     
         btnControl.resolveButtonClick(button_edit_personal_objective, editPersonalObjective);
@@ -382,6 +446,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         textboxInput.addNewPersonalKeyResult(createNewPersonalKeyResult);     
         
         // Key result - Update progress
+        btnControl.resolveButtonClick(link_contribution_overlay, openContributionOverlay);
+        btnControl.resolveButtonClick(button_close_contribution_overlay, closeContributionOverlay);
         btnControl.resolveButtonClick(button_update_progress_key_result, updateProgressPersonalKeyResult);
 
         // Key result - Checked completed key result
@@ -398,8 +464,6 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         // Key Result - Add due date
         btnControl.resolveButtonClick(link_add_due_date_personal_kr, getCurrentQuarterEndDate);
         btnControl.resolveButtonClick(button_save_personal_kr_due_date, savePersonalKeyResultDueDate);
-
-        btnControl.notificationDismissClick();
 
         getObjectiveCreatedDate();
 
