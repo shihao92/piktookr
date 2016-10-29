@@ -7,21 +7,30 @@
   border: none;
   width: 100%;
   background: transparent;
+  font-family: ProximaNovaSoft;
+  font-size: 16px;
+  color: $placeholder-grey;
 }
 .form-new-key-result:focus {
   background: transparent;
 }
 
 .new-objective-input {
+  background: $native-white;
+  border: 1px solid $border-grey;
+  height: 65px;
+
   .icon-plus {
     border-right: 1px solid $light-grey;
     height: 25px;
-    padding-top: 2px;
+    margin-top: 20px;
+    margin-left: 40px;
+    margin-right: 15px;
   }
   .form-new-key-result {
     display: inline-block;
     border: none;
-    width: 100%;
+    margin-top: 15px;
   }
   .form-new-key-result:focus {
     background: transparent;
@@ -40,14 +49,20 @@
 }
 
 .key-result-input {
-  margin-top: 7px; 
   border-right: 1px solid $native-black;
+  margin-top: 10px;
 }
 
 .header .search-link .custom-search {
-    border: 0;
-    width: 200px;
-    font-size: 16px;
+  border: 0;
+  width: 200px;
+  font-size: 17px;
+  font-family: ProximaNovaSoft;
+  color: $search-bar-grey;
+}
+.header .search-link .custom-search::-webkit-input-placeholder:after {
+  content:"h";
+  font-weight: 600;
 }
 .form-group-default {
   label {
@@ -61,8 +76,22 @@
   color: $darker-black;
   font-size: 15px;
 }
+.form-group {
+  font-family: ProximaNovaSoft;
+  label {
+    font-size: 11px;
+    font-weight: bold;
+    color: $info-grey;
+  }
+  .name {
+    font-size: 16px;
+    font-weight: 600;
+    color: $darker-black;
+  }
+}
 
 .feedback-textarea {
   width: 100%;
   resize: vertical;
+  font-family: ProximaNovaSoft;
 }

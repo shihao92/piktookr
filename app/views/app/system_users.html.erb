@@ -5,7 +5,7 @@
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
         <li>
-          <p>HOME</p>
+          <a href="/">HOME</a>
         </li>
         <li>
           <a href="/users" class="active">SYSTEM USERS</a>
@@ -19,7 +19,7 @@
 <!-- START CONTAINER FLUID -->
 <div class="container-fluid container-fixed-lg">
   <div class="col-md-6 col-sm-6">
-    <h5 class="semi-bold">
+    <h5 class="dashboard-title">
       System Users
     </h5>
   </div>
@@ -534,7 +534,7 @@
           <br/>
           <div class="form-group">
             <div class="text-right">
-              <a href="/users" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <a href="/users" class="btn btn-cancel btn-rounded btn-cons">Cancel</a>
               <%= f.submit "Submit", class: "btn btn-complete btn-rounded btn-cons" %>
             </div>
           </div>

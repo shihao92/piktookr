@@ -5,7 +5,7 @@
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
         <li>
-          <p>HOME</p>
+          <a href="/">HOME</a>
         </li>
         <li>
           <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="active"><%= @okr_team.name %> TEAM OKRs</a>
@@ -21,23 +21,24 @@
   <div class="container-fluid container-fixed-lg">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
-        <h3 class="semi-bold">
+        <h3 class="details-page title">
           <%= @team_key_result.key_result %>
         </h3>
         <br/>
         <span class="okr-details-header-info">
           <i class="glyphicon glyphicon-user fa-lg"></i>
-          <span class="label-font">
+          <span class="details-page info-display">
             <%= @user_info.last_name %> <%= @user_info.first_name %>
           </span>
         </span>
         <span class="okr-details-header-info">
           <i class="glyphicon glyphicon-calendar fa-lg"></i>
-          <span class="label-font">
+          <span class="details-page info-display">
             <%= @timeframe_log.quarter %>
           </span>
         </span>
         <span>
+          <% if current_user.id == @user_info.id %>
           <% if @selected_timeframe.id == @system_timeframe_log_id %>
           <% if @controls.include? 'Edit Team OKR' %>
           <% if @team_key_result.due_date.to_s == '' %>
@@ -48,17 +49,11 @@
           <% else %>
           <a id="link_add_due_date_team_kr">
             <i class="glyphicon glyphicon-time fa-lg"></i>
-            <span class="label-font">
+            <span class="details-page info-display">
               <%= @team_key_result.due_date.to_s %>
             </span>
           </a>
           <% end %>
-          <% else %>
-          <% if @team_key_result.due_date.to_s == '' %>
-          <i class="glyphicon glyphicon-time fa-lg"></i>
-          <span class="label-font">
-            <%= @selected_timeframe.end_date.to_s %>
-          </span>
           <% else %>
           <i class="glyphicon glyphicon-time fa-lg"></i>
           <span class="label-font">
@@ -66,11 +61,14 @@
           </span>
           <% end %>
           <% end %>
+          <% else %>
+          <i class="glyphicon glyphicon-time fa-lg"></i>
+          <span class="label-font">
+            <%= @team_key_result.due_date.to_s %>
+          </span>
           <% end %>
         </span>
-        <br />
-        <br />
-        <hr />
+        <hr class="m-t-40"/>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4">
         <div class="pull-right padding-body">
@@ -100,10 +98,11 @@
     <br />
     <div class="row">
       <div class="col-lg-7 col-md-7 col-sm-7">
-        <h4 class="semi-bold">Timeline</h4>
+        <h4 class="details-page subtitle">Timeline</h4>
         <div class="top-circle">
           <section class="timeline">
             <% @log.each do |item| %>
+            <% other_user_info = User.find(item.user_id) %>
               <div class="timeline-block">
                 <div class="timeline-point complete">
                   <% if item.log_content.include? "Created" %>
@@ -117,23 +116,38 @@
                 <div class="timeline-content">
                   <div class="card share full-width">
                     <div class="card-header clearfix">
+                      <span class="thumbnail-wrapper d32 circular inline m-r-10">
+                        <%= image_tag other_user_info.avatar.url %>
+                      </span>
+                      <h5><%= other_user_info.last_name %> <%= other_user_info.first_name %></h5>
                       <% @time_difference = Time.now - item.created_at %>
                       <% if @time_difference < 86400 %>
-                        <h5><%= @user_info.last_name %> <%= @user_info.first_name %></h5>
                         <span class="small">Less than 1 day ago</span>
                       <% else %>
                       <% @day_difference = @time_difference / 86400 %>
-                        <h5><%= @user_info.first_name %></h5>
                         <% if(@day_difference.to_i > 1) %>
                         <span class="small"><%= @day_difference.to_i %> days ago</span>
                         <% else %>
                         <span class="small"><%= @day_difference.to_i %> day ago</span>
                         <% end %>
                       <% end %>
+                      <% if item.log_content.include? "Contributed" %>
+                        <% contribution_temp = item.log_content %>
+                        <span class="contribution-comment pull-right"><%= raw(contribution_temp.partition('via').first) %></span>
+                      <% end %>
                     </div>
-                    <div class="card-description"> 
-                      <p><%= raw(item.log_content) %></p>             
+                    <% if item.log_content.include? "Contributed" %>
+                    <div class="card-okr">
+                      <span class="fa fa-fw fa-compass fa-lg m-r-10"></span>
+                      <span class="okr-title">
+                        <%= raw(item.log_content.partition('via').last) %>
+                      </span>    
                     </div>
+                    <% else %>
+                    <div class="card-description">
+                      <%= raw(item.log_content) %>
+                    </div>
+                    <% end %>
                   </div>
                 </div>
               </div>
@@ -142,7 +156,7 @@
         </div>
       </div>
       <div class="col-lg-5 col-md-5 col-sm-5">
-        <h4 class="semi-bold">Alignment</h4>
+        <h4 class="details-page subtitle">Alignment</h4>
         <ul class="treeview">
           <li>
             <button class="leaf-point" title="<%= @obj_user_info.first_name %>">
@@ -180,7 +194,7 @@
           </li>
         </ul>
         <br/>
-        <h4 class="semi-bold">Progress over time</h4>
+        <h4 class="details-page subtitle">Progress over time</h4>
         <br/>
         <div id="graph_progress_overtime" style="overflow: hidden;">
           <div id="timeline-progress-ring"></div>
@@ -211,8 +225,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button id="btn_save_team_kr_due_date" type="button" class="btn btn-complete" data-id="<%= @team_key_result.id %>">Save</button>
+          <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
+          <button id="btn_save_team_kr_due_date" type="button" class="btn btn-complete btn-rounded" data-id="<%= @team_key_result.id %>">Save</button>
         </div>
       </div>
     </div>

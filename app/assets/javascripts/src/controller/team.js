@@ -55,6 +55,10 @@ overlay, btnControl, customModal, inputControl, searchResult){
     }
   }
 
+  function createdNewTeam(message){
+    refreshPage.refreshPage();
+  }
+
   function displayDeleteTeamOverlay(event){
     let target_team_id = $(event.target).attr('data-id');
     $(button_delete_team).attr('data-id', target_team_id);

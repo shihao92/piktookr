@@ -5,7 +5,7 @@
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
         <li>
-          <p>HOME</p>
+          <a href="/">HOME</a>
         </li>
         <li>
           <a href="/company_objectives/company_dashboard" class="active">Company OKRs</a>
@@ -19,56 +19,47 @@
 <!-- START CONTAINER FLUID -->
 <div class="container-fluid container-fixed-lg">
 
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold">Company OKRs</h5>
-
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-      <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-        <div style="background: #48b0f7; padding: 10px; width: 120px;">
-          <img src="<%= @server_url %>/pikto-logo.svg" style="width: 100px; height: 100px;"></img>
+      <div class="col-lg-5 col-md-5 col-sm-5 text-center">
+        <div class="company-logo">
+          <img src="<%= @server_url %>/pikto-logo.svg" class="logo-definition"></img>
         </div>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
-        <div class="row">
-          <h5 class="bold">
-            <span>Piktochart</span>
-            <span class="p-l-10">
-              <% if @controls.include? 'View System Users Information' %>
-              <a href="/users" class="btn btn-default no-padding" title="System Users">
-                <i class="fa fa-fw fa-user fa-lg"></i>
-              </a>
-              <% end %>
-              <% if @controls.include? 'View System Teams Information' %>
-              <a href="/team" class="btn btn-default no-padding" title="System Teams">
-                <i class="fa fa-fw fa-group fa-lg"></i>
-              </a>
-              <% end %>
-              <!--This catered for security and role settings for admin-->
-              <% if @role.name == "Admin" %>
-              <a href="/role" class="btn btn-default no-padding" title="OKR System Settings">
-                <i class="fa fa-fw fa-gears fa-lg"></i>
-              </a>
-              <% end %>
-              <% if @controls.include? 'View System Timeframes' %>
-              <a href="/timeframes" class="btn btn-default no-padding" title="Timeframe Settings">
-                <i class="fa fa-fw fa-clock-o fa-lg"></i>
-              </a>
-              <% end %>
-              <% if @controls.include? 'View Feedbacks' %>
-              <a href="/app/feedback_page" class="btn btn-default no-padding" title="Feedback Module">
-                <i class="fa fa-fw fa-comments-o fa-lg"></i>
-              </a>
-              <% end %>
-            </span>
-          </h5>
-        </div>
-        <div class="row">
-          <div class="form-group">
-            <label>CEO</label>
-            <p class="bold">Goh Ai Ching</p>
-          </div>
+        <span class="dashboard-title">Piktochart</span>
+        <span class="m-l-10">
+          <% if @controls.include? 'View System Users Information' %>
+          <a href="/users" class="btn btn-default no-padding" title="System Users">
+            <i class="fa fa-fw fa-user fa-lg"></i>
+          </a>
+          <% end %>
+          <% if @controls.include? 'View System Teams Information' %>
+          <a href="/team" class="btn btn-default no-padding" title="System Teams">
+            <i class="fa fa-fw fa-group fa-lg"></i>
+          </a>
+          <% end %>
+          <!--This catered for security and role settings for admin-->
+          <% if @role.name == "Admin" %>
+          <a href="/role" class="btn btn-default no-padding" title="OKR System Settings">
+            <i class="fa fa-fw fa-gears fa-lg"></i>
+          </a>
+          <% end %>
+          <% if @controls.include? 'View System Timeframes' %>
+          <a href="/timeframes" class="btn btn-default no-padding" title="Timeframe Settings">
+            <i class="fa fa-fw fa-clock-o fa-lg"></i>
+          </a>
+          <% end %>
+          <% if @controls.include? 'View Feedbacks' %>
+          <a href="/app/feedback_page" class="btn btn-default no-padding" title="Feedback Module">
+            <i class="fa fa-fw fa-comments-o fa-lg"></i>
+          </a>
+          <% end %>
+        </span>
+        <div class="form-group m-t-10">
+          <label>CEO</label>
+          <p class="name">Goh Ai Ching</p>
         </div>
       </div>
     </div>
@@ -139,304 +130,256 @@
       </div>
     </div>
   </div>
-  <br/>
+  
   <!-- Accordion involved all the OKR progresses -->
-  <div class="padding-accordion-group">
+  <div class="layout-accordion-group">
     <% if @company_objectives.count == 0 %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-          <div class="row">
-            <h4 class="panel-title panel-title-custom collapsed">
-              <p class="bold details-layout m-l-20">
-                No Company Objective is presence for the Company
-              </p>
-            </h4>
-          </div>
-        </div>
+      <div class="panel panel-default panel-heading">
+        <h4 class="panel-title panel-title-custom bold details-layout m-l-20">
+          No Company Objective is presence for the Company
+        </h4>
       </div>
     <% end %>
     <% @company_objectives.each_with_index do |item,index| %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-          <div class="row">
-            <div class="col-lg-11 col-md-11 col-sm-11">
-              <h4 class="panel-title panel-title-custom">
-                <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#company_obj_<%= index %>" aria-expanded="false" aria-controls="company_obj_<%= index %>">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6">
-                    <p class="small details-layout"></p>
-                    <div id="company_objective_<%= item.id %>">
-                      <p class="bold details-layout objective">
-                        <%= item.objective %>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="pull-left">
-                      <% if @controls.include? 'Edit Company OKR' %>
-                      <% if(item.progress != 100.00) %>
-                      <button class="btn btn-accordion edit_company_objective" data-id="<%= item.id %>">
-                        <i class="fa fa-pencil"></i>
-                      </button>
-                      <% end %>
-                      <% end %>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <!--<div class="text-center">
-                      <p class="small">Contribution</p>
-                      <div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>
-                    </div>-->
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="text-center">
-                      <p class="small">Days left</p>
-                      <div class="text-center">
-                        <% if @selected_timeframe.id == @system_timeframe_log_id %>
-                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
-                        <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
-                        <span class="bold"><%= 0 %></span>
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-3" style="padding-left:0px;">
-                    <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
-                    <br />
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
-                    </div>
-                  </div>
-                </div>
-                </a>
-              </h4>
+    <div class="panel">
+      <div class="custom-panel-heading" role="tab">
+        <div class="col-lg-11 col-md-11 col-sm-11 no-padding">
+          <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#company_obj_<%= index %>" aria-expanded="false" aria-controls="company_obj_<%= index %>">
+            <div id="company_objective_<%= item.id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding accordion-obj-title p-t-5">
+              <%= item.objective %>
             </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-              <div class="dropdown pull-right">
-                <button class="btn btn-accordion" data-toggle="dropdown" type="button">
-                  <i class="pg-menu"></i>   
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <!--View detailed of the personal key result-->
-                    <a href="/company_objectives/<%= item.id %>/details">
-                      <i class="pg-search"></i> 
-                      <span> Go to details</span>
-                    </a>
-                  </li>
-                  <% if @controls.include? 'Delete Company OKR' %>
-                  <li>
-                    <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
-                      <i class="fa fa-fw fa-trash-o"></i> 
-                      <span> Delete</span>
-                    </a>
-                  </li>
-                  <% end %>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Confirmation Modal before personal objective deletion -->
-        <div id="confirmation_obj_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
-          <div class="modal-dialog">                   
-            <!-- Modal content-->
-            <div style="background:#ffffff;">
-              <div class="modal-header clearfix text-left">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Warning</h4>
-              </div>
-              <hr/>
-              <div class="modal-body">
-                <div class="form-group">
-                  <p>Are you sure? </p>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_objectives/<%= item.id %>">
-                  Delete
-                </a>
-                <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
-              </div>
-            </div>                
-          </div>
-        </div>
-        <div id="company_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_obj_<%= index %> ">
-          <div class="panel-body no-padding">
-            <!-- Find out the key result linked to the objective -->
-            <% @company_key_results = CompanyKeyResult.where(company_objective_id: item.id).order(updated_at: :DESC) %>
-            <% @company_key_results_count = @company_key_results.count %>
-            <% @company_key_result_completed = 0 %>
-            <% @company_key_results.each_with_index do |item,index| %>
-              <% if(item.progress == 100.00) %>
-              <%   @company_key_result_completed = @company_key_result_completed + 1 %>
+            <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+              <% if @controls.include? 'Edit Company OKR' %>
+              <% if(item.progress != 100.00) %>
+              <button class="btn btn-accordion edit_company_objective" data-id="<%= item.id %>">
+                <i class="fa fa-pencil"></i>
+              </button>
               <% end %>
-              <div id="company_key_result_<%= item.id %>" class="row accordion-item">
-                <div class="col-lg-11 col-md-11 col-sm-11">
-                  <div class="row checkbox">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-l-0">
-                      <div class="accordion-item-title">
-                        <div id="company_kr_<%= item.id %>" class="checkbox-primary">
-                          <p class="details-layout"><%= item.key_result %></p>
-                        </div> 
-                      </div>
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="pull-left">
-                        <% if @controls.include? 'Edit Company OKR' %>
-                        <% if(item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_company_key_result" data-id="<%= item.id %>">
-                          <i class="fa fa-pencil"></i>
-                        </button>
-                        <% end %>
-                        <% end %>
-                      </div>
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <!--<div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>-->
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="text-center">
-                        <% if item.due_date == nil %>
-                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
-                          <% remained_completion_days = 0 %>
-                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
-                          <% remained_completion_days = "" %>
-                          <% else %>
-                          <% remained_completion_days = @remaining_quarter_days  %>
-                          <% end %>
-                        <% else %>
-                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
-                          <% remained_completion_days = 0 %>
-                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
-                          <% remained_completion_days = "" %>
-                          <% else %>
-                          <% remained_completion_days = item.due_date - Date.today %>
-                          <% end %>
-                          <% if remained_completion_days < 1 %>
-                          <% remained_completion_days = 0 %>
-                          <% end %>
-                        <% end %>              
-                        <span class="bold"><%= remained_completion_days.to_i %></span>
-                      </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
-                      <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
-                      <div class="progress">
-                        <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
-                      </div>    
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-1 col-md-1 col-sm-1">
-                  <div class="dropdown pull-right">
-           	        <button class="btn btn-accordion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           	          <i class="pg-menu"></i>
-           	        </button>
-                    <ul class="dropdown-menu">
-                      <li>
-                        <!--View detailed of the company key result-->
-                        <a href="/company_key_results/<%= item.id %>/details">
-                          <i class="pg-search"></i> 
-                           Go to details
-                        </a>
-                      </li>
-                      <% if @controls.include? 'Delete Company OKR' %>
-                      <% okr_company_personal = OkrCompanyPersonal.find_by(company_key_result_id: item.id) %>
-                      <% okr_company_team = OkrCompanyTeam.find_by(company_key_result_id: item.id) %>
-                      <% if okr_company_personal == nil && okr_company_team == nil %>
-                      <li>
-                        <!-- Deletion of key result -->
-                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
-                          <i class="pg-trash_line"></i> 
-                           Delete
-                        </a>
-                      </li>
-                      <% end %>
-                      <% end %>
-                    </ul>
-           	      </div>
-                </div>
-              </div>
-              <!-- Confirmation modal for personal key result deletion -->
-              <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
-                <div class="modal-dialog">
-                
-                  <!-- Modal content-->
-                  <div class="modal-background">
-                    <div class="modal-header clearfix text-left">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
-                      <h4 class="modal-title">Warning</h4>
-                    </div>
-                    <hr/>
-                    <div class="modal-body">
-                      <div class="form-group">
-                        <p id="prompt_message">Are you sure?</p>
-                      </div>
-                    </div>
-                    <div class="modal-footer">
-                      <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_key_results/<%= item.id %>">
-                        Delete
-                      </a>
-                      <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
-                    </div>
-                  </div>
-                
-                </div>
-              </div>
-            <% end %>
-            <!-- New row for the add in of new key results over here -->
-            <% if @selected_timeframe.id >= @system_timeframe_log_id %>
-            <% if @controls.include? 'Create Company OKR' %>
-            <div class="row accordion-item add-new-company-key-result">
-              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input">
-                <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
-              </div>
-              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-                <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new company key result" data-id="<%= item.id %>"/>
-              </div>          
+              <% end %>
             </div>
-            <% end %>
-            <% end %>
-          </div>
+            <div class="col-lg-2 col-md-2 col-sm-2 no-padding text-center">
+              <p class="accordion-header-title">Days left</p>
+              <% if @selected_timeframe.id == @system_timeframe_log_id %>
+              <span class="accordion-obj-subtitle"><%= @remaining_quarter_days.to_i %></span>
+              <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
+              <span class="accordion-obj-subtitle"><%= 0 %></span>
+              <% end %>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
+              <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center accordion-obj-subtitle m-b-10") %>
+              <div class="progress">
+                <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
+              </div>
+            </div>
+          </a>
         </div>
-        <div class="panel-footer">
-          <div class="row">
-            <div class="col-md-4 col-sm-4 bold small">
-              <%= @company_key_results_count %> Key Results
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="text-center">
-                <span class="caret"></span>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="pull-right bold small completed-key-result">
-                <%= @company_key_result_completed %> Completed
-              </div>
-            </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+          <div class="dropdown pull-right">
+            <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" type="button">
+              <i class="pg-menu"></i>   
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <!--View detailed of the personal key result-->
+                <a href="/company_objectives/<%= item.id %>/details">
+                  <i class="pg-search"></i> 
+                  <span> Go to details</span>
+                </a>
+              </li>
+              <% company_key_results = CompanyKeyResult.where(company_objective_id: item.id) %>
+              <% if company_key_results.count == 0 %>
+              <% if @controls.include? 'Delete Company OKR' %>
+              <li>
+                <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                  <i class="fa fa-fw fa-trash-o"></i> 
+                  <span> Delete</span>
+                </a>
+              </li>
+              <% end %>
+              <% end %>
+            </ul>
           </div>
         </div>
       </div>
+      <!-- Confirmation Modal before personal objective deletion -->
+      <div id="confirmation_obj_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
+        <div class="modal-dialog">                   
+          <!-- Modal content-->
+          <div style="background:#ffffff;">
+            <div class="modal-header clearfix text-left">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Warning</h4>
+            </div>
+            <hr/>
+            <div class="modal-body">
+              <div class="form-group">
+                <p>Are you sure? </p>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_objectives/<%= item.id %>">
+                Delete
+              </a>
+              <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
+            </div>
+          </div>                
+        </div>
+      </div>
+      <div id="company_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_obj_<%= index %> ">
+        <div class="panel-body no-padding">
+          <!-- Find out the key result linked to the objective -->
+          <% @company_key_results = CompanyKeyResult.where(company_objective_id: item.id).order(updated_at: :DESC) %>
+          <% @company_key_results_count = @company_key_results.count %>
+          <% @company_key_result_completed = 0 %>
+          <% @company_key_results.each_with_index do |item,index| %>
+            <% if(item.progress == 100.00) %>
+            <%   @company_key_result_completed = @company_key_result_completed + 1 %>
+            <% end %>
+            <div id="company_key_result_<%= item.id %>" class="row accordion-item custom-accordion-item">
+              <div class="col-lg-11 col-md-11 col-sm-11 no-padding">
+                <div class="checkbox checkbox-primary">
+                  <div id="company_kr_<%= item.id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding key-result">
+                    <%= item.key_result %>
+                  </div>
+                  <div class="col-lg-1 col-md-1 col-sm-1 pull-left">
+                    <% if @controls.include? 'Edit Company OKR' %>
+                    <% if(item.progress != 100.00) %>
+                    <button class="btn btn-accordion edit_company_key_result no-padding" data-id="<%= item.id %>">
+                      <i class="fa fa-pencil"></i>
+                    </button>
+                    <% end %>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2 text-center">
+                    <% if item.due_date == nil %>
+                      <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                      <% remained_completion_days = 0 %>
+                      <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                      <% remained_completion_days = "" %>
+                      <% else %>
+                      <% remained_completion_days = @remaining_quarter_days  %>
+                      <% end %>
+                    <% else %>
+                      <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                      <% remained_completion_days = 0 %>
+                      <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                      <% remained_completion_days = "" %>
+                      <% else %>
+                      <% remained_completion_days = item.due_date - Date.today %>
+                      <% end %>
+                      <% if remained_completion_days < 1 %>
+                      <% remained_completion_days = 0 %>
+                      <% end %>
+                    <% end %>              
+                    <span class="bold"><%= remained_completion_days.to_i %></span>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-3 no-padding key-result-progress">
+                    <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
+                    <div class="progress">
+                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
+                    </div>    
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+                <div class="dropdown pull-right">
+         	        <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         	          <i class="pg-menu"></i>
+         	        </button>
+                  <ul class="dropdown-menu">
+                    <li>
+                      <!--View detailed of the company key result-->
+                      <a href="/company_key_results/<%= item.id %>/details">
+                        <i class="pg-search"></i> 
+                         Go to details
+                      </a>
+                    </li>
+                    <% if @controls.include? 'Delete Company OKR' %>
+                    <% okr_company_personal = OkrCompanyPersonal.find_by(company_key_result_id: item.id) %>
+                    <% okr_company_team = OkrCompanyTeam.find_by(company_key_result_id: item.id) %>
+                    <% if okr_company_personal == nil && okr_company_team == nil %>
+                    <li>
+                      <!-- Deletion of key result -->
+                      <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
+                        <i class="pg-trash_line"></i> 
+                         Delete
+                      </a>
+                    </li>
+                    <% end %>
+                    <% end %>
+                  </ul>
+         	      </div>
+              </div>
+            </div>
+            <!-- Confirmation modal for personal key result deletion -->
+            <div id="confirmation_kr_deletion_modal_<%= item.id %>" class="modal fade stick-up" role="dialog">
+              <div class="modal-dialog">
+              
+                <!-- Modal content-->
+                <div class="modal-background">
+                  <div class="modal-header clearfix text-left">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Warning</h4>
+                  </div>
+                  <hr/>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <p id="prompt_message">Are you sure?</p>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/company_key_results/<%= item.id %>">
+                      Delete
+                    </a>
+                    <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              
+              </div>
+            </div>
+          <% end %>
+          <!-- New row for the add in of new key results over here -->
+          <% if @selected_timeframe.id >= @system_timeframe_log_id %>
+          <% if @controls.include? 'Create Company OKR' %>
+          <div class="row accordion-item add-new-company-key-result">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
+              <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+            </div>
+            <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
+              <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Company Key Result" data-id="<%= item.id %>"/>
+            </div>          
+          </div>
+          <% end %>
+          <% end %>
+        </div>
+      </div>
+      <div class="panel-footer">
+        <div class="row no-margin no-padding">
+          <div class="col-md-4 col-sm-4 bold small">
+            <%= @company_key_results_count %> Key Results
+          </div>
+          <div class="col-md-4 col-sm-4 text-center">
+            <a data-toggle="collapse" data-parent="#accordion" href="#company_obj_<%= index %>" aria-expanded="false" aria-controls="personal_obj_<%= item.id %>" class="btn sidebar-slide-toggle btn-link no-padding no-margin">
+              <i class="fa fa-angle-down fs-16"></i>
+            </a>
+          </div>
+          <div class="col-md-4 col-sm-4 bold small completed-key-result text-right">
+            <%= @company_key_result_completed %> Completed
+          </div>
+        </div>
+      </div>
+    </div>
     <% end %>
 
     <% if @selected_timeframe.id >= @system_timeframe_log_id %>
     <% if @controls.include? 'Create Company OKR' %>
-    <div class="panel panel-default">
-      <div class="panel-heading p-t-15 new-objective-input" role="tab">
-        <h4 class="panel-title panel-title-custom">
-          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5 text-center">
-            <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
-          </div>
-          <div id="add-new-company-objective" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-            <input id="new_company_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-          </div>
-        </h4>
-      </div>
+    <div class="new-objective-input">
+      <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+        <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+      </span>
+      <span id="add-new-company-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <input id="new_company_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+      </span>
     </div>
     <% end %>
     <% end %>

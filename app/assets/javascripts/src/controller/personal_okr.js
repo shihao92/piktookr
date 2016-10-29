@@ -123,7 +123,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       let current_editing_objective_id = 0;
       let objective_id = $(this).attr('data-id');
       current_editing_objective_id = parseInt(objective_id);    
-      let objective = $('#personal_objective_' + objective_id).find('.details-layout').text();
+      let objective = $('#personal_objective_' + objective_id).find('.accordion-obj-title').text();
       objective = objective.trim();
 
       original_objective = objective;
@@ -240,7 +240,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
 
     function openContributionOverlay(event){
       let control_parent = $(event.target).parents('.accordion-item');
-      let personal_key_result = $(control_parent).find('.details-layout').text();
+      let personal_key_result = $(control_parent).find('.key-result').text();
       let current_progress = $(control_parent).find('.key-result-progress').find('span').attr('data-progress');
       let due_date = $(control_parent).find('span[name=personal_kr_due_date]').attr('data-end-date');
       let key_result_id = $(event.target).attr('data-id');
@@ -303,7 +303,12 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       $(modal_checked_personal_kr_confirmation).modal('hide');
       let key_result_id = $(event.target).attr("data-id");
       let update_kr_status_promise = new personalKeyResultModel.updatePersonalKeyResultStatus(key_result_id, true);
-      update_kr_status_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      update_kr_status_promise.then(doneConfirmedCompletedKeyResult, customModal.notificationModalToggle);
+    }
+
+    function doneConfirmedCompletedKeyResult(message){
+      customModal.notificationModalToggle(message);
+      refreshPage.refreshPage();
     }
 
     function removeCompletedKeyResult(event){
@@ -313,7 +318,7 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
 
     function editPersonalKeyResult(event){
       let key_result_id = $(this).attr('data-id');
-      let key_result = $('#personal_kr_' + key_result_id).find('.details-layout').text();
+      let key_result = $('#personal_kr_' + key_result_id).find('.key-result').text();
       key_result = key_result.trim();
 
       textboxInput.createInputTextboxForEditPersonalKeyResult(key_result_id, key_result);
@@ -371,9 +376,12 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         customModal.notificationModalToggle("Due date cannot be empty!");
       } else {
         let update_due_date_promise = new personalKeyResultModel.updateDueDate(personal_key_result_id,selected_due_date);
-        update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
-        refreshPage.refreshPage();
+        update_due_date_promise.then(successUpdateDueDate, customModal.notificationModalToggle);
       }  
+    }
+
+    function successUpdateDueDate(message){
+      refreshPage.refreshPage();
     }
 
     function getKeyResultContribution(){

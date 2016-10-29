@@ -3,7 +3,7 @@
 @import "declarations";
 
 .accordion-item {
-  border: 1px solid $dark-grey-border;
+  border-top: 1px solid $border-grey;
   padding-left: 0px;
   min-height: 48px;
   width: 100%;
@@ -11,33 +11,37 @@
   background: $pale-grey;
 
   .accordion-item-title{
-    font-family: $montserrat;
+    font-family: ProximaNovaSoft;
     display: inline-block;
     letter-spacing: 0.02em;
-    font-size: $font-12;
-    font-weight: $font-weight-600;
+    font-size: 16px;
+    font-weight: 500;
     line-height: normal;
     overflow: hidden;
     text-overflow: ellipsis;
     -webkit-text-stroke: 0px;
     filter: alpha(opacity=40);
     width: 100%;
+    color: $darker-black;
   }
 
   &.add-new-personal-key-result {
     background: transparent;
+    height: 55px;
   }
   &.add-new-personal-key-result:hover, .add-new-personal-key-result:active {
     background: transparent;
   }
   &.add-new-team-key-result {
     background: transparent;
+    height: 55px;
   }
   &.add-new-team-key-result:hover, .add-new-team-key-result:active {
     background: transparent;
   }
   &.add-new-company-key-result {
     background: transparent;
+    height: 55px;
   }
   &.add-new-company-key-result:hover, .add-new-company-key-result:active {
     background: transparent;
@@ -45,4 +49,48 @@
 }
 .accordion-item:hover, .accordion-item:active, .accordion-item:focus, .accordion-item:visited {
   background: $normal-grey;
+}
+
+.clear { clear: both; }
+
+.panel {
+  font-family: ProximaNovaSoft;
+  .custom-panel-heading {
+    border-top: 1px solid $border-pale-grey;
+    border-left: 1px solid $border-pale-grey;
+    border-right: 1px solid $border-pale-grey;
+    padding: 20px 30px 10px 30px;
+    min-height: 80px;
+    display: flex;
+  }
+  .panel-collapse {
+    border-left: 1px solid $border-grey;
+    border-right: 1px solid $border-grey;
+  }
+  .custom-accordion-item {
+    padding-right: 30px;
+    padding-left: 30px;
+    display: flex;
+    padding-bottom: 10px;
+  }
+  .panel-footer {
+    border-left: 1px solid $border-grey;
+    border-right: 1px solid $border-grey;
+    border-bottom: 1px solid $border-grey;
+
+    .caret-down {
+      border-top: 8px solid $info-grey;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;  
+      margin: 0px;
+      padding: 0px;
+      height: 8px;
+    }
+  }
+}
+
+.caret-up {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid $info-grey;
 }

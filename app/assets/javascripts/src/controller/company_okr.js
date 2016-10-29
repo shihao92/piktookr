@@ -83,7 +83,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     function editCompanyObjective(event){
       let objective_id = event.currentTarget.getAttribute('data-id');
       objective_id = parseInt(objective_id);
-      let objective = $('#company_objective_' + objective_id).find('.details-layout').text();
+      let objective = $('#company_objective_' + objective_id).text();
       objective = objective.trim();  
       original_company_objective = objective;
       btnControl.hideButton(button_edit_company_objective); 
@@ -185,7 +185,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     function editCompanyKeyResult(event){
       let key_result_id = event.currentTarget.getAttribute('data-id');
-      let key_result = $('#company_kr_' + key_result_id).find('.details-layout').text();
+      let key_result = $('#company_kr_' + key_result_id).text();
       key_result = key_result.trim();
       key_result_id = parseInt(key_result_id);
       textboxControl.createInputTextboxForEditCompanyKeyResult(key_result_id, key_result);
@@ -242,8 +242,12 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
         customModal.notificationModalToggle("Due date cannot be empty!");
       } else {
         let update_due_date_promise = new companyKeyResultModel.updateDueDate(company_key_result_id, selected_due_date);
-        update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+        update_due_date_promise.then(successSaveDueDate, customModal.notificationModalToggle);
       }  
+    }
+
+    function successSaveDueDate(message){
+      refreshPage.refreshPage();
     }
 
     function getKeyResultCreationDate(){

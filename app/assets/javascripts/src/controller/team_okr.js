@@ -33,6 +33,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const team_objective_textarea = '#team_objective_textarea';
     const company_key_result_selection = '#company_key_result_selection';
 
+    const overlay_team_setting = '#teammate_list';
+
     let original_team_objective = "";
     let original_team_key_result = "";
     let creation_date = "";
@@ -88,7 +90,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     function editTeamObjective(event){
       let team_objective_id = event.currentTarget.getAttribute('data-id');   
-      let objective = $('#team_objective_' + team_objective_id).find('.details-layout').text();
+      let objective = $('#team_objective_' + team_objective_id).find('.accordion-obj-title').text();
       objective = objective.trim();  
       original_team_objective = objective;     
       btnControl.hideButton(button_edit_team_objective);
@@ -192,7 +194,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     function editTeamKeyResult(event){
       let team_key_result_id = event.currentTarget.getAttribute('data-id');
       team_key_result_id = parseInt(team_key_result_id);
-      let team_key_result = $('#team_kr_' + team_key_result_id).find('.details-layout').text();    
+      let team_key_result = $('#team_kr_' + team_key_result_id).find('.key-result').text();    
       team_key_result = team_key_result.trim();
       original_team_key_result = team_key_result;
       textboxControl.createInputTextboxForEditTeamKeyResult(team_key_result_id, team_key_result);
@@ -224,7 +226,7 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     function openTeamSettingOverlay(event){
       $('#user_invitation_selection').select2();
-      $('#teammate_list').attr('class','overlay');
+      overlay.toggleOverlay(overlay_team_setting, 1);
     }
 
     function getCurrentQuarterEndDate(){
@@ -253,8 +255,12 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
         customModal.notificationModalToggle("Due date cannot be empty!");
       } else {
         let update_due_date_promise = new teamKeyResultModel.updateDueDate(team_id, key_result_id, due_date);
-        update_due_date_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle); 
+        update_due_date_promise.then(successSaveDueDate, customModal.notificationModalToggle); 
       } 
+    }
+
+    function successSaveDueDate(message){
+      refreshPage.refreshPage();
     }
 
     function getKeyResultCreationDate(){

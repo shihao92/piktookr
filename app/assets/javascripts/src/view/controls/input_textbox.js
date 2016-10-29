@@ -54,6 +54,13 @@ function(overlayParam, btnControl){
     .html('<input type="text" class="form-control form-new-key-result add-new-personal-key-result" data-id="' + objective_id + '"/>')
     .find('.form-new-key-result')
     .val(original_objective);
+
+    $('#personal_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#personal_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function createInputTextboxForEditPersonalKeyResult(key_result_id, original_key_result){
@@ -61,6 +68,13 @@ function(overlayParam, btnControl){
     .empty()
     .html('<input type="text" class="form-control form-new-key-result add-new-personal-key-result" data-id="' + key_result_id + '" />')
     .find('.form-new-key-result').val(original_key_result);
+
+    $('#personal_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#personal_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function createInputTextboxForEditTeamObjective(objective_id, original_objective){
@@ -69,6 +83,13 @@ function(overlayParam, btnControl){
     .html('<input type="text" class="form-control form-new-key-result add-new-team-key-result" data-id="' + objective_id + '"/>')
     .find('.form-new-key-result')
     .val(original_objective);
+
+    $('#team_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#team_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function createInputTextboxForEditTeamKeyResult(key_result_id, original_key_result){
@@ -77,6 +98,13 @@ function(overlayParam, btnControl){
     .html('<input type="text" class="form-control form-new-key-result add-new-team-key-result" data-id="' + key_result_id + '"/>')
     .find('.form-new-key-result')
     .val(original_key_result);
+
+    $('#team_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#team_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function createInputTextboxForEditCompanyKeyResult(key_result_id, original_key_result){
@@ -85,6 +113,13 @@ function(overlayParam, btnControl){
     .html('<input name="edit_company_key_result" type="text" class="form-control form-new-key-result add-new-company-key-result" data-id="' + key_result_id + '"/>')
     .find('.form-new-key-result')
     .val(original_key_result);
+
+    $('#company_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#company_kr_' + key_result_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function createInputTextboxForEditCompanyObjective(objective_id, original_objective){
@@ -93,6 +128,13 @@ function(overlayParam, btnControl){
     .html('<input name="edit_company_objective" type="text" class="form-control form-new-key-result add-new-company-key-result" data-id="' + objective_id + '"/>')
     .find('.form-new-key-result')
     .val(original_objective);
+
+    $('#company_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .focus();
+    $('#company_objective_' + objective_id)
+    .find('.form-new-key-result')
+    .select();
   }
 
   function addNewTeamObjective(resolveFocusOut, resolveKeypress){
@@ -145,11 +187,12 @@ function(overlayParam, btnControl){
 
   function editCompanyKeyResult(resolve){
     $(".checkbox-primary")
+    .find('.key-result')
     .on({
-        focusout: function() {
-            location.reload();
-        },
-        keypress: resolve
+      keypress: resolve,
+      focusout: function() {
+        location.reload();
+      }
     });
   }
 
@@ -174,7 +217,7 @@ function(overlayParam, btnControl){
   function searchUser(resolve){
     $('#search_okr_users')
     .on({
-      keypress: resolve
+      click: resolve
     });
   }
 

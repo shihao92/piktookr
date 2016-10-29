@@ -4,26 +4,42 @@
 //     Color Scheme
 // ---------------------
 
-$native-white       : #ffffff;
-$pale-grey          : #eeeeee;
-$normal-grey        : #c7c7c7;
-$light-grey         : #b3b3b3;
-$native-grey        : #bfc9ce;
-$dark-grey          : #a1a1a1;
-$dark-grey-border   : rgba(230, 230, 230, 0.7);
-$darker-grey        : #6b6b6b;
-$lighter-black      : #6c6c6c;
-$light-black        : #353535;
-$dark-black         : #373544;
-$darker-black       : #1e1d26;
-$native-black       : #000000;
+$native-white             : #ffffff;
+$pale-grey                : #eeeeee;
+$border-pale-grey         : #e6e6e6;
+$details-grey             : #f5f5f5;
+$details-darker-grey      : #f9f9f9;
+$normal-grey              : #c7c7c7;
+$graph-axis-grey          : #d8d8d8;
+$border-grey              : #d6d8db;
+$light-grey               : #b3b3b3;
+$native-grey              : #bfc9ce;
+$dark-grey                : #a1a1a1;
+$dark-grey-border         : #d6d8db;
+$info-grey                : #90989b;
+$header-grey-light        : #908f8f;
+$search-bar-grey          : #919191;
+$linked-kr-grey           : #7a7c7e;
+$graph-grey               : #788195;
+$darker-grey              : #6b6b6b;
+$lighter-black            : #6c6c6c;
+$placeholder-grey         : #5f6264;
+$header-grey-dark         : #3c3b3b;
+$light-black              : #353535;
+$dark-black               : #373544;
+$darker-black             : #1e1d26;
+$native-black             : #000000;
 
-$lighter-blue       : #daeffd;
-$light-blue         : #6dc0f9;
-$normal-blue        : #039be5;
-$dark-blue          : #3a8fc8;
-$darker-blue        : #2b6a94;
+$lighter-blue             : #daeffd;
+$light-blue               : #6dc0f9;
+$pale-blue                : #3a8fc8;
+$normal-blue              : #039be5;
+$dark-blue                : #0277bd;
+$graph-bg                 : rgba(2, 155, 229, 0.15);
+$darker-blue              : #2b6a94;
+$darkest-blue             : #01579b;
 
+$light-green        : #1cafa2;
 $normal-green       : #008000;
 
 // ---------------------

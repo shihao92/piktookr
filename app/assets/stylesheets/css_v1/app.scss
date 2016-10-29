@@ -13,27 +13,32 @@
 @import "graph";
 @import "accordion";
 @import "overlay";
+@import 'timeline';
 
 .user-menu {
   word-wrap: break-word;
+  font-family: ProximaNovaSoft;
 }
 .details-layout{
-    word-break: keep-all;
+  word-break: keep-all;
+  font-family: ProximaNovaSoft;
 }
 
+.sidebar-menu > ul > li {
+  .icon-thumbnail {
+    font-family: ProximaNovaSoft;
+  }
+}
 .sidebar-menu > ul > li:hover, li:active, li:focus {
   .icon-thumbnail {
     background: $dark-blue;
+    font-family: ProximaNovaSoft;
   }
 }
 
 .okr-details-header-info {
   margin-right: 40px;
-
-  .label-font {
-    font-size: 16px;
-    margin-left: 10px;
-  }
+  color: $info-grey;
 }
 
 .panel-title-custom {
@@ -41,6 +46,16 @@
 
   .panel-heading-a {
     width: 90%;
+  }
+}
+
+.company-logo {
+  background: $normal-blue; 
+  padding: 10px; 
+  width: 120px;
+  .logo-definition {
+    width: 100px; 
+    height: 100px;
   }
 }
 

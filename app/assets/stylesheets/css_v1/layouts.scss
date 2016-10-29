@@ -12,10 +12,18 @@
   padding-top: 10px;
 }
 
-.padding-accordion-group {
-  padding-top: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
+.layout-accordion-group {
+  margin-top: 40px;
 }
+
+.bg-light-grey {
+  background: $details-grey;
+  padding: 30px;
+}
+
+.header-bg {
+  box-shadow: 0 1px 0 1px #e3e3e3;
+}
+
 
 

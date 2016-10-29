@@ -79,6 +79,14 @@ function(sliderParam, select2LibraryParam){
           suggestions: '#overlay-suggestions',
           brand: '.brand'
         });
+
+        $('#feedback_form').search({
+            // Bind elements that are included inside search overlay
+            searchField: '#overlay-search',
+            closeButton: '.overlay-close',
+            suggestions: '#overlay-suggestions',
+            brand: '.brand'
+        });
     }
 
     function setOverlayKeyResult(key_result,key_result_id)

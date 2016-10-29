@@ -22,7 +22,7 @@ class LogTeamObjective < ApplicationRecord
     end
 
     def self.log_update_progress_objective(personal_key_result, progress, objective_id, user_id)
-      log_content = 'Contributed <span class="bold">+' + ('%.02f' % progress).to_s + '%</span> via <p class="bold">' + personal_key_result + '</p>'
+      log_content = 'Contributed <span class="bold">+' + ('%.02f' % progress).to_s + '%</span> via <span class="bold">' + personal_key_result + '</span>'
       save_new_log(log_content, objective_id, user_id)
     end
 

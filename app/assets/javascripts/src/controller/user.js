@@ -40,6 +40,7 @@ textboxControl, refreshPage, searchResult){
     const textarea_feedback = '#textarea_feedback';
     const button_submit_feedback = '#btn_submit_feedback';
     const button_confirm_delete_feedback = '#btn_confirm_delete_feedback';
+    const button_close_feedback_overlay = '#btn_close_feedback_overlay';
     const link_remove_feedback = 'a[name=link_delete_feedback]';
     const modal_delete_feedback_confirmation = '#modal_delete_feedback_confirmation';
 
@@ -266,15 +267,24 @@ textboxControl, refreshPage, searchResult){
       overlay.toggleOverlay(feedback_form, 1);
     }
 
+    function offFeedbackOverlay(){
+      overlay.toggleOverlay(feedback_form, 0);
+    }
+
     function submitFeedback(event){
       // Check whether information is inserted
       let feedback_content = $(textarea_feedback).val().trim();
       if(feedback_content !== ""){
         let feedback_promise = new userModel.insertFeedback(feedback_content);
-        feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+        feedback_promise.then(submittedFeedback, customModal.notificationModalToggle);
       } else {
         customModal.notificationModalToggle("Feedback cannot be empty!");
       }
+    }
+
+    function submittedFeedback(message){
+      refreshPage.refreshPage();
+      customModal.notificationModalToggle(message);
     }
 
     let temp_feedback_id = 0;
@@ -336,6 +346,7 @@ textboxControl, refreshPage, searchResult){
 
       // Feedback module
       btnControl.resolveButtonClick(link_feedback_form, onFeedbackOverlay);
+      btnControl.resolveButtonClick(button_close_feedback_overlay, offFeedbackOverlay);
       btnControl.resolveButtonClick(button_submit_feedback, submitFeedback);
 
       btnControl.resolveButtonClick(link_remove_feedback, removeFeedback);

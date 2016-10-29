@@ -5,7 +5,7 @@
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
         <li>
-          <p>HOME</p>
+          <a href="/">HOME</a>
         </li>
         <li>
           <a href="/" class="active">MY PERSONAL OKRs</a>
@@ -19,38 +19,29 @@
 <!-- START CONTAINER FLUID -->
 <div class="container-fluid container-fixed-lg">
 
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold">My personal OKRs</h5>
-
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-      <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
+      <div class="col-lg-5 col-md-5 col-sm-5 text-center">
         <%= image_tag @user.avatar.url(:thumb) %>
       </div>
-      <div class="col-lg-7 col-md-7 col-sm-7" >
-        <div class="row">
-          <%= content_tag(:div, content_tag(:h5, @user.last_name + " " + @user.first_name, class: "bold")) %>
+      <div class="col-lg-7 col-md-7 col-sm-7">
+        <%= content_tag(:div, @user.last_name + " " + @user.first_name, class: "dashboard-title m-b-10") %>
+        <div class="form-group">
+          <label>ROLE</label>
+          <%= content_tag(:p, @role.name, class: "name" ) %>
         </div>
-        <div class="row">
-          <div class="form-group">
-            <label>ROLE</label>
-            <%= content_tag(:div, content_tag(:p, @role.name, class: "bold" )) %>
-          </div>
-        </div>
-        <div class="row">
-          <div class="form-group">
-            <label class="small">TEAMS</label>
-            <div>
-              <%  @user.okr_teams.each_with_index do |team,index|  %>  
-                <% if index == @user.okr_teams.size - 1 %>
-                  <%= content_tag(:span, team.name, class: "bold" ) %>
-                <% else %>
-                  <%= content_tag(:span, team.name + ",", class: "bold" ) %>
-                <% end %>
-              <% end %>
-            </div>
-          </div>
+        <div class="form-group">
+          <label>TEAMS</label>
+          <p>
+          <% @user.okr_teams.each_with_index do |team,index|  %>  
+            <% if index == @user.okr_teams.size - 1 %>
+              <%= content_tag(:span, team.name, class: "name" ) %>
+            <% else %>
+              <%= content_tag(:span, team.name + ",", class: "name" ) %>
+            <% end %>
+          <% end %>
+          </p>
         </div>
       </div>
     </div>
@@ -128,93 +119,74 @@
   </div>
 
   <!-- Accordion involved all the OKR progresses -->
-  <div class="padding-accordion-group">
+  <div class="layout-accordion-group">
     <% @personal_objective.each do |item| %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-          <div class="row">
-            <div class="col-lg-11 col-md-11 col-sm-11">
-              <h4 class="panel-title panel-title-custom">
-                <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= item.id %>" aria-expanded="false" aria-controls="personal_obj_<%= item.id %>">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6">
-                    <% @okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: item.id) %>
-                    <% if @okr_team_personal != nil %>
-                      <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
-                      <%= content_tag(:p, @team_key_result.key_result, class: "small details-layout" ) %>
-                    <% else %>
-                      <% @okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: item.id) %>
-                      <% @company_key_result = CompanyKeyResult.find(@okr_company_personal.company_key_result_id) %>
-                      <%= content_tag(:p, @company_key_result.key_result, class: "small details-layout" ) %>
-                    <% end %>
-                    <div id="personal_objective_<%= item.id %>">
-                      <p class="bold details-layout objective">
-                        <%= item.objective %>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <button class="btn btn-accordion edit_personal_objective" data-id="<%= item.id %>" name="personalobj_<%= item.id %>">
-                      <i class="fa fa-pencil"></i>
-                    </button>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <!--<div class="text-center">
-                      <p class="small">Contribution</p>
-                      <div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>
-                    </div>-->
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="text-center">
-                      <p class="small">Days left</p>
-                      <div class="text-center">
-                        <% if @selected_timeframe.id == @system_timeframe_log_id %>
-                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
-                        <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
-                        <span class="bold"><%= 0 %></span>
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-3" style="padding-left:0px;">
-                    <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
-                    <br />
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
-                    </div>
+      <div class="panel">
+        <div class="custom-panel-heading" role="tab">
+          <div class="col-lg-11 col-md-11 col-sm-11">
+            <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= item.id %>" aria-expanded="false" aria-controls="personal_obj_<%= item.id %>">
+              <div class="row">
+                <div id="personal_objective_<%= item.id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding">
+                  <% @okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: item.id) %>
+                  <% if @okr_team_personal != nil %>
+                    <% @team_key_result = TeamKeyResult.find(@okr_team_personal.team_key_result_id) %>
+                    <%= content_tag(:p, @team_key_result.key_result, class: "accordion-header-title" ) %>
+                  <% else %>
+                    <% @okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: item.id) %>
+                    <% @company_key_result = CompanyKeyResult.find(@okr_company_personal.company_key_result_id) %>
+                    <%= content_tag(:p, @company_key_result.key_result, class: "accordion-header-title" ) %>
+                  <% end %>
+                  <div class="accordion-obj-title">
+                    <%= item.objective %>
                   </div>
                 </div>
-                </a>
-              </h4>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-              <div class="dropdown pull-right">
-                <button class="btn btn-accordion" data-toggle="dropdown" type="button">
-                  <i class="pg-menu"></i>   
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <!--View detailed of the personal objective-->
-                    <a href="/personal_objectives/<%= item.id %>/details">
-                      <i class="pg-search"></i> 
-                      <span> Go to details</span>
-                    </a>
-                  </li>
-                  <% personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id).order(updated_at: :DESC) %>
-                  <% if @selected_timeframe.id == @system_timeframe_log_id %>        
-                  <% if personal_key_result.count == 0 %>
-                  <li>
-                    <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
-                      <i class="fa fa-fw fa-trash-o"></i> 
-                      <span> Delete</span>
-                    </a>
-                  </li>
+                <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+                  <button class="btn btn-accordion edit_personal_objective" data-id="<%= item.id %>">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-2 no-padding text-center">
+                  <p class="accordion-header-title">Days left</p>
+                  <% if @selected_timeframe.id == @system_timeframe_log_id %>
+                  <span class="accordion-obj-subtitle"><%= @remaining_quarter_days.to_i %></span>
+                  <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
+                  <span class="accordion-obj-subtitle"><%= 0 %></span>
                   <% end %>
-                  <% end %>
-                </ul>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
+                  <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center accordion-obj-subtitle m-b-10") %>
+                  <div class="progress">
+                    <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
+                  </div>
+                </div>
               </div>
+            </a> 
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+            <div class="dropdown pull-right">
+              <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" type="button">
+                <i class="pg-menu"></i>   
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <!--View detailed of the personal objective-->
+                  <a href="/personal_objectives/<%= item.id %>/details">
+                    <i class="pg-search"></i> 
+                    <span> Go to details</span>
+                  </a>
+                </li>
+                <% personal_key_result = PersonalKeyResult.where(personal_objective_id: item.id).order(updated_at: :DESC) %>
+                <% if @selected_timeframe.id == @system_timeframe_log_id %>        
+                <% if personal_key_result.count == 0 %>
+                <li>
+                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> 
+                    <span> Delete</span>
+                  </a>
+                </li>
+                <% end %>
+                <% end %>
+              </ul>
             </div>
           </div>
         </div>
@@ -251,72 +223,59 @@
               <% if(item.progress == 100.00 || item.is_completed == true) %>
               <%    personal_key_result_completed = personal_key_result_completed + 1 %>
               <% end %>
-              <div id="personal_key_result_<%= item.id %>" class="row accordion-item">
-                <div class="col-lg-11 col-md-11 col-sm-11">
-                  <div class="row checkbox check-complete">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-l-0">
-                      <div class="accordion-item-title">
-                        <div id="personal_kr_<%= item.id %>">
-                          <% if item.is_completed == true %>
-                          <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" disabled="true" checked/>
-                          <label for="personalkrcompleted_<%= item.id %>">
-                            <p class="details-layout"><%= raw(item.key_result) %></p>
-                          </label>
-                          <% else %>
-                          <% if @selected_timeframe.id != @system_timeframe_log_id %>
-                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" disabled="true"/>
-                          <% else %>
-                          <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox" data-id="<%= item.id %>"/>
-                          <% end %>
-                          <label for="personalkrcompleted_<%= item.id %>">
-                            <p class="details-layout">
-                              <%= raw(item.key_result) %>
-                            </p>
-                          </label>
-                          <% end %>
-                        </div> 
-                      </div>
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="pull-left">
-                        <% if(item.is_completed != true || item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_personal_key_result" name="personalkr_<%= item.id %>"  data-id="<%= item.id %>">
-                          <i class="fa fa-pencil"></i>
-                        </button>
+              <div id="personal_key_result_<%= item.id %>" class="row accordion-item custom-accordion-item">
+                <div class="col-lg-11 col-md-11 col-sm-11 no-padding">
+                  <div class="checkbox check-complete">
+                    <div class="col-lg-6 col-md-6 col-sm-6 no-padding">
+                      <div id="personal_kr_<%= item.id %>" class="accordion-item-title">
+                        <% if item.is_completed == true %>
+                        <input type="checkbox" value="0" id="personalkrcompleted_<%= item.id %>" disabled="true" checked/>
+                        <label for="personalkrcompleted_<%= item.id %>">
+                          <p class="key-result"><%= raw(item.key_result) %></p>
+                        </label>
+                        <% else %>
+                        <% if @selected_timeframe.id != @system_timeframe_log_id %>
+                        <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" disabled="true"/>
+                        <% else %>
+                        <input type="checkbox" value="1" id="personalkrcompleted_<%= item.id %>" name="personal_kr_checkbox" data-id="<%= item.id %>"/>
+                        <% end %>
+                        <label for="personalkrcompleted_<%= item.id %>">
+                          <p class="key-result"><%= raw(item.key_result) %></p>
+                        </label>
                         <% end %>
                       </div>
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <!--<div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>-->
+                    <div class="col-lg-1 col-md-1 col-sm-1 pull-left">
+                      <% if(item.is_completed != true || item.progress != 100.00) %>
+                      <button class="btn btn-accordion edit_personal_key_result no-padding" name="personalkr_<%= item.id %>"  data-id="<%= item.id %>">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                      <% end %>
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <div class="text-center">
-                        <% if item.due_date == nil %>
-                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
-                          <% remained_completion_days = 0 %>
-                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
-                          <% remained_completion_days = "" %>
-                          <% else %>
-                          <% remained_completion_days = @remaining_quarter_days  %>
-                          <% end %>
+                    <div class="col-lg-2 col-md-2 col-sm-2 no-padding text-center">
+                      <% if item.due_date == nil %>
+                        <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                        <% remained_completion_days = 0 %>
+                        <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                        <% remained_completion_days = "" %>
                         <% else %>
-                          <% if @selected_timeframe.id < @system_timeframe_log_id %>
-                          <% remained_completion_days = 0 %>
-                          <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
-                          <% remained_completion_days = "" %>
-                          <% else %>
-                          <% remained_completion_days = item.due_date - Date.today %>
-                          <% end %>
-                          <% if remained_completion_days < 1 %>
-                          <% remained_completion_days = 0 %>
-                          <% end %>
-                        <% end %>    
-                        <span name="personal_kr_due_date" class="bold" data-end-date="<%= item.due_date %>">          
-                          <%= remained_completion_days.to_i %>
-                        </span>
-                      </div>
+                        <% remained_completion_days = @remaining_quarter_days  %>
+                        <% end %>
+                      <% else %>
+                        <% if @selected_timeframe.id < @system_timeframe_log_id %>
+                        <% remained_completion_days = 0 %>
+                        <% elsif @selected_timeframe.id > @system_timeframe_log_id %>
+                        <% remained_completion_days = "" %>
+                        <% else %>
+                        <% remained_completion_days = item.due_date - Date.today %>
+                        <% end %>
+                        <% if remained_completion_days < 1 %>
+                        <% remained_completion_days = 0 %>
+                        <% end %>
+                      <% end %>    
+                      <span name="personal_kr_due_date" class="bold" data-end-date="<%= item.due_date %>">          
+                        <%= remained_completion_days.to_i %>
+                      </span>
                     </div>
                     <div class="col-lg-3 col-md-3 col-sm-3 no-padding key-result-progress">
                       <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", data: {progress: item.progress} ), class: "text-center small") %>
@@ -326,9 +285,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-1 col-md-1 col-sm-1">
+                <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
                   <div class="dropdown pull-right">
-           	        <button class="btn btn-accordion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           	        <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            	          <i class="pg-menu"></i>
            	        </button>
                     <ul class="dropdown-menu">
@@ -398,32 +357,28 @@
             <% if @selected_timeframe.id >= @system_timeframe_log_id %>
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-personal-key-result">
-              <div name="new_key_result_objective_<%= item.id %>">
-                <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input">
-                  <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
-                </div>
-                <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-                  <input name="new_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new personal key result" data-id="<%= item.id %>"/>
-                </div>      
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
+                <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+              </div>
+              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
+                <input name="new_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Key Result" data-id="<%= item.id %>"/>
               </div>
             </div>
             <% end %>
           </div>
         </div>
         <div class="panel-footer">
-          <div class="row">
+          <div class="row no-margin no-padding">
             <div class="col-md-4 col-sm-4 bold small">
               <%= personal_key_result_count %> Key Results
             </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="text-center">
-                <span class="caret"></span>
-              </div>
+            <div class="col-md-4 col-sm-4 text-center">
+              <a data-toggle="collapse" data-parent="#accordion" href="#personal_obj_<%= item.id %>" aria-expanded="false" aria-controls="personal_obj_<%= item.id %>" class="btn sidebar-slide-toggle btn-link no-padding no-margin">
+                <i class="fa fa-angle-down fs-16"></i>
+              </a>
             </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="pull-right bold small completed-key-result">
-                <%= personal_key_result_completed %> Completed
-              </div>
+            <div class="col-md-4 col-sm-4 bold small completed-key-result text-right">
+              <%= personal_key_result_completed %> Completed
             </div>
           </div>
         </div>
@@ -431,17 +386,13 @@
     <% end %>
 
     <% if @selected_timeframe.id >= @system_timeframe_log_id %>
-    <div class="panel panel-default">
-      <div class="panel-heading p-t-15 new-objective-input" role="tab">
-        <h4 class="panel-title panel-title-custom">
-          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
-            <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
-          </div>
-          <div id="add-new-personal-objective" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-            <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-          </div>
-        </h4>
-      </div>
+    <div class="new-objective-input">
+      <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+        <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+      </span>
+      <span id="add-new-personal-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+      </span>
     </div>
     <% end %>
 

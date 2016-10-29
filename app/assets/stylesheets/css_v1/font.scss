@@ -46,6 +46,61 @@
 .brand-header {
   color: $normal-blue;
   font-family: ProximaNovaSoft;
+  font-size: 30px;
+  margin-left: 24px;
+}
+
+// Default Layout Header
+.user-name {
+  font-family: ProximaNovaSoft;
+  font-size: 16px;
+  color: $lighter-black;
+}
+.day-left {
+  font-family: ProximaNovaSoft;
+  font-size: 16px;
+  color: $header-grey-light;
+  &.number {
+    font-weight: 600;
+    color: $header-grey-dark;
+  }
+}
+.notifications-font {
+  font-family: ProximaNovaSoft;
+}
+
+// Dashboard styling
+.dashboard-title {
+  font-family: ProximaNovaSoft;
+  font-size: 22px;
+  font-weight: 600;
+  color: $darker-black;
+}
+
+// OKR accordion
+.accordion-header-title {
+  color: $linked-kr-grey;
+  font-size: 14px;
+  font-weight: 600;
+  word-break: keep-all;
+  padding: 0px;
+  margin: 0px;
+}
+.accordion-obj-title {
+  margin: 0px;
+  padding: 0px;
+  font-size: 19px;
+  font-weight: 600;
+}
+.accordion-obj-subtitle {
+  font-size: 17px;
+  font-weight: 600;
+}
+.key-result {
+  font-family: ProximaNovaSoft;
+  font-size: 16px;
+  font-weight: 500;
+  color: $darker-black;
 }
 
 // Overlay text related styling
@@ -77,6 +132,25 @@
 }
 .completed-key-result {
   color: $dark-blue;
+}
+
+.details-page {
+  font-family: ProximaNovaSoft;
+  color: $darker-black;
+
+  &.title {
+    font-size: 26px;
+    font-weight: bold;
+  }
+  &.subtitle {
+    font-size: 22px;
+  }
+  &.info-display {
+    font-size: 16px;
+    color: $info-grey;
+    font-weight: 600;
+    margin-left: 10px;
+  }
 }
 
 .tree-progress {

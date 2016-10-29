@@ -55,12 +55,12 @@ define(function() {
     y.domain([0, d3.max(data, function(d) { return d.close + 2; })]).range([300, 0]);   
 
     svg.append("g")
-        .attr("class", "x axis")
+        .attr("class", "x axis label-graph")
         .attr("transform", "translate(0, 300)")
         .call(d3.axisBottom(x));   
 
     svg.append("g")
-        .attr("class", "y axis")
+        .attr("class", "y axis label-graph")
         .call(d3.axisLeft(y));  
 
     svg.append("path")
@@ -77,6 +77,7 @@ define(function() {
        .data(data)
        .enter().append("circle")
        .attr("class", "dot")
+       .attr("style", "border: solid 2px #fff;")
        .attr("r", 5)
        .attr("cx", function(d) { return x(d.date); })
        .attr("cy", function(d) { return y(d.close); });

@@ -16,22 +16,24 @@
   background: $normal-blue;
   color: $native-white;
   font-weight: bold;
-  font-size: $font-16;
+  font-size: 15px;
+  font-family: ProximaNovaSoft;
 
   &.level-2 {
     background: $dark-blue;
   }
   &.level-3 {
-    background: $darker-blue;
+    background: $darkest-blue;
   }
 }
 .description {
   position: block;
-  color: $light-black;
-  font-size: $font-14;
-  font-weight: bold;
+  color: $dark-black;
+  font-size: 14px;
+  font-weight: 600;
   word-wrap: true;
   margin-left: 10px;
+  font-family: ProximaNovaSoft;
 }
 .branch-line {
   position: relative;

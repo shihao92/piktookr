@@ -9,34 +9,9 @@
   </head>
   <body class="fixed-header">
     <nav class="page-sidebar" data-pages="sidebar">
-      <div class="sidebar-overlay-slide from-top" id="appMenu">
-        <div class="row">
-          <div class="col-xs-6 no-padding">
-            <a href="#" class="p-l-40"><img src="<%= @server_url %>/assets/img/demo/social_app.svg" alt="socail">
-            </a>
-          </div>
-          <div class="col-xs-6 no-padding">
-            <a href="#" class="p-l-10"><img src="<%= @server_url %>/assets/img/demo/email_app.svg" alt="socail">
-            </a>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-xs-6 m-t-20 no-padding">
-            <a href="#" class="p-l-40"><img src="<%= @server_url %>/assets/img/demo/calendar_app.svg" alt="socail">
-            </a>
-          </div>
-          <div class="col-xs-6 m-t-20 no-padding">
-            <a href="#" class="p-l-10"><img src="<%= @server_url %>/assets/img/demo/add_more.svg" alt="socail">
-            </a>
-          </div>
-        </div>
-      </div>
-
       <div class="sidebar-header">
         <span class="brand brand-sidebar">Pikto<span class="bold">OKR</span></span>
-        <span class="sidebar-header-controls">
-          <button type="button" class="btn btn-xs sidebar-slide-toggle btn-link m-l-20" data-pages-toggle="#appMenu"><i class="fa fa-angle-down fs-16"></i>
-          </button>
+        <span class="sidebar-header-controls m-l-20">
           <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar"><i class="fa fs-12"></i>
           </button>
         </span>
@@ -47,7 +22,7 @@
           <!-- Section to link to company -->
           <li class="m-t-30">
             <a href="/company_objectives/company_dashboard" class="detailed">
-              <span class="title">
+              <span class="title proxima-nova-soft-font">
                 Piktochart
               </span> 
               <p class="details details-layout">
@@ -66,7 +41,7 @@
             <% okr_teams.each do |item| %>
               <li>
                 <a href="/team/<%= item.id %>/team_objectives/team_dashboard" class="detailed">
-                  <span class="title" id="team-name">
+                  <span class="title proxima-nova-soft-font" id="team-name">
                     <%= item.name %>
                   </span> 
                   <p class="details details-layout" id="team-position">
@@ -96,7 +71,7 @@
             <% @okr_team = OkrTeam.find(item.okr_team_id) %>
             <li>
               <a href="/team/<%= item.okr_team_id %>/team_objectives/team_dashboard" class="detailed">
-                <span class="title" id="team-name">
+                <span class="title proxima-nova-soft-font" id="team-name">
                   <%= @okr_team.name %>
                 </span> 
                 <p class="details details-layout" id="team-position">
@@ -125,7 +100,7 @@
           <!--Section to link to own personal OKR-->
           <li>
             <a href="/" class="detailed">
-              <span class="title" id="user-name">
+              <span class="title proxima-nova-soft-font" id="user-name">
                 <%= @user.last_name + " " + @user.first_name %>
               </span>
               <p class="details details-layout" id="user-position">
@@ -153,7 +128,7 @@
             <% this_user = User.find(item.favourite_id) %>
             <li>
               <a href="/users/<%= item.favourite_id %>/personal_objectives/view_others_personal_okr" class="detailed">
-                <span class="title" id="user-name">
+                <span class="title proxima-nova-soft-font" id="user-name">
                   <%= this_user.last_name %> <%= this_user.first_name %>
                 </span>
                 <p class="details details-layout" id="user-position">
@@ -214,12 +189,12 @@
         <!-- END MOBILE CONTROLS -->
         <div class="pull-left sm-table hidden-xs hidden-sm">
           <div class="header-inner">
-            <div class="brand inline m-l-5">
+            <a href="/" class="brand inline m-l-5">
               <h4 class="brand-header">Pikto<span class="bold">OKR</span></h4>
-            </div>
-            <span class="search-link">
-              <label for="search_okr_users"><i class="pg-search"></i></label>
-              <input id="search_okr_users" type="text" class="custom-search" placeholder="Type to search"/>
+            </a>
+            <span id="search_okr_users" class="search-link">
+              <label><i class="pg-search"></i></label>
+              <input type="text" class="custom-search" placeholder="Click on me to search" disabled="true"/>
             </span> 
           </div>
         </div>
@@ -239,7 +214,7 @@
           <!-- START User Info-->
           <div class="visible-lg visible-md m-t-10">
             <div class="pull-left p-r-10 p-t-10 p-l-20 fs-16 font-heading">
-              <span class="semi-bold"><%= @user.last_name + " " + @user.first_name %></span> 
+              <span class="user-name"><%= @user.last_name + " " + @user.first_name %></span> 
             </div>
             <div class="dropdown pull-right">
               <button class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -276,8 +251,8 @@
             <!-- START day notification for timeframe -->
             <div class="no-margin hidden-sm hidden-xs b-grey b-l b-r p-l-20 p-r-20">
               <div class="text-center">
-                <span class="bold"><%= @remaining_quarter_days.to_i %></span>
-                <span class="text-master">days left</span>
+                <span class="day-left number"><%= @remaining_quarter_days.to_i %></span>
+                <span class="day-left">days left</span>
               </div>
             </div>
             <!-- END NOTIFICATIONS LIST -->
@@ -289,12 +264,12 @@
             <div class="dropdown pull-right">
               <button id="btn_timeframe_dropdown" class="profile-dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-id="<%= @selected_timeframe.id %>">
                 <span class="fa fa-fw fa-calendar fa-lg"></span>
-                <span class="text-master">
+                <span class="user-name">
                   <%= @selected_timeframe.quarter%>
                 </span>
                 <span class="caret"></span> 
               </button>
-              <ul id="lists_timeframe_logs" class="dropdown-menu" role="menu" data-id="<%= @system_timeframe_log_id %>">
+              <ul id="lists_timeframe_logs" class="dropdown-menu user-name" role="menu" data-id="<%= @system_timeframe_log_id %>">
                 <% @timeframe_logs.each do |item| %>
                   <% if item.id == @system_timeframe_log_id %>
                   <hr class="divider" />
@@ -331,7 +306,7 @@
       <!-- START PAGE CONTENT WRAPPER -->
       <div class="page-content-wrapper ">
         <!-- START PAGE CONTENT -->
-        <div class="content ">         
+        <div class="content" style="padding-bottom: 104px;">         
           <%= yield %>
         </div>
         <!-- END PAGE CONTENT -->
@@ -371,7 +346,7 @@
         <div class="tab-pane no-padding active" id="quickview-alerts">
           <div class="view-port clearfix" id="alerts">
             <!-- BEGIN Alerts View !-->
-            <div class="view bg-white">
+            <div class="view bg-white notifications-font">
               <!-- BEGIN View Header !-->
               <div class="navbar navbar-default navbar-sm">
                 <div class="navbar-inner">
@@ -617,7 +592,7 @@
     <!--Overlay for user searching-->
     <div id="user_search_result" class="overlay hide">
       <div class="overlay-content has-results m-t-20">
-        <a href="/" class="close-icon-light overlay-close text-black fs-16">
+        <a class="close-icon-light overlay-close text-black fs-16">
           <i class="pg-close"></i>
         </a>
         <div class="container-fluid">
@@ -662,7 +637,7 @@
     <div id="feedback_form" class="overlay hide">
       <div class="overlay-content has-results m-t-20">
         <div class="container-fluid">
-          <a href="/" class="close-icon-light overlay-close text-black fs-16">
+          <a class="close-icon-light overlay-close text-black fs-16">
             <i class="pg-close"></i>
           </a>
           <div class="col-sm-3 col-md-3 col-lg-3">
@@ -670,7 +645,7 @@
           <div class="col-sm-6 col-md-6 col-lg-6">
             <div class="row">
               <h5 class="m-b-5">
-                <span class="bold result-name objective">
+                <span class="overlay-title">
                 	Feedback Form
                 </span>
               </h5>
@@ -695,7 +670,7 @@
             </div>
             <br/>
             <div class="row pull-right">
-              <a href="/" class="btn btn-default btn-rounded btn-cons">
+              <a id="btn_close_feedback_overlay" class="btn btn-cancel btn-rounded btn-cons">
                 Cancel
               </a>
               <button id="btn_submit_feedback" class="btn btn-complete btn-rounded btn-cons">
@@ -725,8 +700,8 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <button id="btn_confirm_delete_feedback" type="button" class="btn btn-danger">Delete</button>
+            <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
+            <button id="btn_confirm_delete_feedback" type="button" class="btn btn-danger btn-rounded">Delete</button>
           </div>
         </div>
       

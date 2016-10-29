@@ -1,0 +1,55 @@
+// SCSS File catered for timeline at details pages.
+
+@import 'declarations';
+
+.card.share {
+  font-family: ProximaNovaSoft;
+
+  .card-header {
+    min-height: 83px;
+    padding: 25px;
+
+    .contribution-comment {
+      color: $light-green;
+      font-size: 16px;
+    }
+  }
+
+  .card-okr {
+    height: 40px;
+    background: $details-darker-grey;
+    padding: 10px 25px;
+    border-bottom: 1px solid $border-pale-grey;
+    display: flex;
+    
+    .okr-title {
+      font-family: ProximaNovaSoft;
+      font-size: 13px;
+      font-weight: 600;
+      color: $lighter-black;
+    }
+  }
+
+  .card-description {
+    padding-left: 25px;
+    padding-right: 25px;
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      color: $dark-black;
+    }
+  }
+
+  .timeline-user-info {
+    color: $darker-black;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .subtitle {
+    color: $info-grey;
+    font-size: 13px;
+    font-weight: 600;
+  }
+}

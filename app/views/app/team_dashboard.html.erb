@@ -5,7 +5,7 @@
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
         <li>
-          <p>HOME</p>
+          <a href="/">HOME</a>
         </li>
         <li>
           <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="active"><%= @okr_team.name %> TEAM OKRs</a>
@@ -19,44 +19,36 @@
 <!-- START CONTAINER FLUID -->
 <div class="container-fluid container-fixed-lg" id="team_page_container" data-id="<%= @team_id %>">
 
-  <!-- BEGIN PlACE PAGE CONTENT HERE -->
-  <h5 class="semi-bold"><%= @okr_team.name %> team OKRs</h5>
-
   <div class="row">
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-      <div class="col-lg-5 col-md-5 col-sm-5 padding-body text-center">
+      <div class="col-lg-5 col-md-5 col-sm-5 text-center">
         <h1><%= @team_short_str %></h1>
       </div>
-      <div class="col-lg-7 col-md-7 col-sm-7" >
-        <div class="row">
-          <h5 class="bold">
-            <span>
-              <%= @okr_team.name %>
-            </span>
-            <% if @controls.include? 'Edit Team Information' %>
-            <span class="p-l-10">
-              <button id="team_setting" class="btn btn-default no-padding">
-                <i class="fa fa-fw fa-gears fa-lg"></i>
-              </button>
-            </span>
-            <% end %>
-          </h5>
+      <div class="col-lg-7 col-md-7 col-sm-7">
+        <div class="dashboard-title m-b-10">
+          <%= @okr_team.name.upcase %> Team
+          <% if @controls.include? 'Edit Team Information' %>
+          <span class="p-l-10">
+            <button id="team_setting" class="btn btn-default no-padding">
+              <i class="fa fa-fw fa-gears fa-lg"></i>
+            </button>
+          </span>
+          <% end %>
         </div>
-        <div class="row">
-          <div class="form-group">
-            <label>TEAM LEAD/PM</label>
-            <p class="bold"><%= @team_lead %></p>
-          </div>
-          <div class="form-group">
-            <label>TEAM MEMBERS</label>
-            <br />
-            <% @team_users.each do |item| %>
-            <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5 tip" data-placement="bottom" data-toggle="tooltip">
-              <%= image_tag item.avatar.url %>
-            </span>
-            <% end %>
-          </div>
+        <div class="form-group">
+          <label>TEAM LEAD/PM</label>
+          <p class="name"><%= @team_lead %></p>
+        </div>
+        <div class="form-group">
+          <label>TEAM MEMBERS</label>
+          <p>
+          <% @team_users.each do |item| %>
+          <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5 tip" data-placement="bottom" data-toggle="tooltip">
+            <%= image_tag item.avatar.url %>
+          </span>
+          <% end %>
+          </p>
         </div>
       </div>
     </div>
@@ -135,107 +127,84 @@
   </div>
 
   <!-- Accordion involved all the OKR progresses -->
-  <div class="padding-accordion-group">
+  <div class="layout-accordion-group">
     <% if @team_objective.count == 0 %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-          <div class="row">
-            <h4 class="panel-title panel-title-custom collapsed">
-              <p class="bold details-layout m-l-20">
-                No Team Objective is presence for this team
-              </p>
-            </h4>
-          </div>
-        </div>
+      <div class="panel panel-default panel-heading">
+        <h4 class="panel-title panel-title-custom bold details-layout m-l-20">
+          No Team Objective is presence for the Company
+        </h4>
       </div>
     <% end %>
     <% @team_objective.each_with_index do |item,index| %>
-      <div class="panel panel-default">
-        <div class="panel-heading" role="tab">
-          <div class="row">
-            <div class="col-lg-11 col-md-11 col-sm-11">
-              <h4 class="panel-title panel-title-custom">
-                <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#team_obj_<%= index %>" aria-expanded="false" aria-controls="team_obj_<%= index %>">
-                <div class="row">
-                  <div class="col-lg-6 col-md-6 col-sm-6">
-                    <% @okr_company_team = OkrCompanyTeam.where(team_objective_id: item.id) %>
-                    <% @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id) %>
-                    <%= content_tag(:p, @company_key_result[0].key_result, class: "small details-layout" ) %>
-                    <div id="team_objective_<%= item.id %>" data-id="<%= @team_id %>">
-                      <p class="bold details-layout objective">
-                        <%= item.objective %>
-                      </p>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="pull-left">
-                      <% if @controls.include? 'Edit Team OKR' %>
-                      <% if(item.progress != 100.00) %>
-                      <button class="btn btn-accordion edit_team_objective" data-id="<%= item.id %>">
-                        <i class="fa fa-pencil"></i>
-                      </button>
-                      <% end %>
-                      <% end %>
-                    </div>
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <!--<div class="text-center">
-                      <p class="small">Contribution</p>
-                      <div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>
-                    </div>-->
-                  </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1">
-                    <div class="text-center">
-                      <p class="small">Days left</p>
-                      <div class="text-center">
-                        <% if @selected_timeframe.id == @system_timeframe_log_id %>
-                        <span class="bold"><%= @remaining_quarter_days.to_i %></span>
-                        <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
-                        <span class="bold"><%= 0 %></span>
-                        <% end %>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-3" style="padding-left:0px;">
-                    <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center") %>
-                    <br />
-                    <div class="progress">
-                      <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
-                    </div>
-                  </div>
-                </div>
-                </a>
-              </h4>
-            </div>
-            <div class="col-lg-1 col-md-1 col-sm-1">
-              <div class="dropdown pull-right">
-                <button class="btn btn-accordion" data-toggle="dropdown" type="button">
-                  <i class="pg-menu"></i>   
-                </button>
-                <ul class="dropdown-menu">
-                  <li>
-                    <!--View detailed of the personal key result-->
-                    <a href="/team/<%= @team_id %>/team_objectives/<%= item.id %>/details">
-                      <i class="pg-search"></i> 
-                      <span> Go to details</span>
-                    </a>
-                  </li>
-                  <% if @controls.include? 'Delete Team OKR' %>
-                  <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
-                  <% @team_key_result = @team_key_result.count %>
-                  <% if @team_key_result == 0 %>
-                  <li>
-                    <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
-                      <i class="fa fa-fw fa-trash-o"></i> 
-                      <span> Delete</span>
-                    </a>
-                  </li>
-                  <% end %>
-                  <% end %>
-                </ul>
+      <div class="panel">
+        <div class="custom-panel-heading" role="tab">
+          <div class="col-lg-11 col-md-11 col-sm-11">
+            <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#team_obj_<%= index %>" aria-expanded="false" aria-controls="team_obj_<%= index %>">
+            <div class="row">
+              <div id="team_objective_<%= item.id %>" data-id="<%= @team_id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding">
+                <% @okr_company_team = OkrCompanyTeam.where(team_objective_id: item.id) %>
+                <% @company_key_result = CompanyKeyResult.where(id: @okr_company_team[0].company_key_result_id) %>
+                <%= content_tag(:p, @company_key_result[0].key_result, class: "accordion-header-title" ) %>
+                <p class="accordion-obj-title">  
+                  <%= item.objective %>
+                </p>
               </div>
+              <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+                <div class="pull-left">
+                  <% if @controls.include? 'Edit Team OKR' %>
+                  <% if(item.progress != 100.00) %>
+                  <button class="btn btn-accordion edit_team_objective" data-id="<%= item.id %>">
+                    <i class="fa fa-pencil"></i>
+                  </button>
+                  <% end %>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-2 no-padding">
+                <div class="text-center">
+                  <p class="accordion-header-title">Days left</p>
+                  <% if @selected_timeframe.id == @system_timeframe_log_id %>
+                  <p class="accordion-obj-subtitle"><%= @remaining_quarter_days.to_i %></p>
+                  <% elsif @selected_timeframe.id < @system_timeframe_log_id %>
+                  <p class="accordion-obj-subtitle"><%= 0 %></p>
+                  <% end %>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
+                <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold" ), class: "text-center accordion-obj-subtitle m-b-10") %>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
+                </div>
+              </div>
+            </div>
+            </a>
+          </div>
+          <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+            <div class="dropdown pull-right">
+              <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" type="button">
+                <i class="pg-menu"></i>   
+              </button>
+              <ul class="dropdown-menu">
+                <li>
+                  <!--View detailed of the personal key result-->
+                  <a href="/team/<%= @team_id %>/team_objectives/<%= item.id %>/details">
+                    <i class="pg-search"></i> 
+                    <span> Go to details</span>
+                  </a>
+                </li>
+                <% if @controls.include? 'Delete Team OKR' %>
+                <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
+                <% @team_key_result = @team_key_result.count %>
+                <% if @team_key_result == 0 %>
+                <li>
+                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                    <i class="fa fa-fw fa-trash-o"></i> 
+                    <span> Delete</span>
+                  </a>
+                </li>
+                <% end %>
+                <% end %>
+              </ul>
             </div>
           </div>
         </div>
@@ -273,33 +242,28 @@
               <% if(item.progress == 100.00) %>
               <%   @team_key_result_completed = @team_key_result_completed + 1 %>
               <% end %>
-              <div class="row accordion-item" id="team_kr_<%= item.id %>">
-                <div class="col-lg-11 col-md-11 col-sm-11">
-                  <div class="row checkbox">
-                    <div class="col-lg-6 col-md-6 col-sm-6 p-l-0">
+              <div class="row accordion-item custom-accordion-item">
+                <div class="col-lg-11 col-md-11 col-sm-11 no-padding">
+                  <div class="checkbox">
+                    <div id="team_kr_<%= item.id %>" class="col-lg-6 col-md-6 col-sm-6 p-l-0">
                       <div class="accordion-item-title">
                         <div class="checkbox-primary">
-                          <p class="details-layout"><%= item.key_result %></p>
+                          <p class="key-result"><%= item.key_result %></p>
                         </div> 
                       </div>
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
+                    <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
                       <div class="pull-left">
                         <% if @controls.include? 'Edit Team OKR' %>
                         <% if(item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_team_key_result" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
+                        <button class="btn btn-accordion edit_team_key_result no-padding" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
                           <i class="fa fa-pencil"></i>
                         </button>
                         <% end %>
                         <% end %>
                       </div>
                     </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
-                      <!--<div class="text-center">
-                        <span class="bold">21%</span>
-                      </div>-->
-                    </div>
-                    <div class="col-lg-1 col-md-1 col-sm-1">
+                    <div class="col-lg-2 col-md-2 col-sm-2">
                       <div class="text-center">
                         <% if item.due_date == nil %>
                           <% if @selected_timeframe.id < @system_timeframe_log_id %>
@@ -324,7 +288,7 @@
                         <span class="bold"><%= remained_completion_days.to_i %></span>
                       </div>
                     </div>
-                    <div class="col-lg-3 col-md-3 col-sm-3 no-padding">
+                    <div class="col-lg-3 col-md-3 col-sm-3 no-padding key-result-progress">
                       <%= content_tag(:div, content_tag(:span, item.progress.to_s + "%", class: "bold", id: "personal_kr_progress_" + item.id.to_s ), class: "text-center small") %>
                       <div class="progress">
                         <div class="progress-bar progress-bar-complete" style="width:<%= item.progress %>%"></div>
@@ -332,9 +296,9 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-1 col-md-1 col-sm-1">
+                <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
                   <div class="dropdown pull-right">
-           	        <button class="btn btn-accordion" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           	        <button class="btn btn-accordion no-padding p-t-10" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            	          <i class="pg-menu"></i>
            	        </button>
                     <ul class="dropdown-menu">
@@ -389,11 +353,11 @@
             <% if @selected_timeframe.id >= @system_timeframe_log_id %>
             <% if @controls.include? 'Create Team OKR' %>
             <div class="row accordion-item add-new-team-key-result">
-              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input">
+              <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
                 <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
               </div>
-              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-                <input name="new_team_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new team key result" data-id="<%= item.id %>"/>
+              <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
+                <input name="new_team_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Team Key Result" data-id="<%= item.id %>"/>
               </div>
             </div>
             <% end %>
@@ -401,19 +365,17 @@
           </div>
         </div>
         <div class="panel-footer">
-          <div class="row">
+          <div class="row no-margin no-padding">
             <div class="col-md-4 col-sm-4 bold small">
               <%= @team_key_result_count %> Key Results
             </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="text-center">
-                <span class="caret"></span>
-              </div>
+            <div class="col-md-4 col-sm-4 text-center">
+              <a type="button" data-toggle="collapse" data-parent="#accordion" href="#team_obj_<%= index %>" aria-expanded="false" aria-controls="team_obj_<%= index %>" class="btn sidebar-slide-toggle btn-link no-padding no-margin">
+                <i class="fa fa-angle-down fs-16"></i>
+              </a>
             </div>
-            <div class="col-md-4 col-sm-4">
-              <div class="pull-right bold small completed-key-result">
-                <%= @team_key_result_completed %> Completed
-              </div>
+            <div class="col-md-4 col-sm-4 bold small completed-key-result text-right">
+              <%= @team_key_result_completed %> Completed
             </div>
           </div>
         </div>
@@ -422,23 +384,17 @@
 
     <% if @selected_timeframe.id >= @system_timeframe_log_id %>
     <% if @controls.include? 'Create Team OKR' %>
-    <div class="panel panel-default">
-      <div class="panel-heading p-t-15 new-objective-input" role="tab">
-        <h4 class="panel-title panel-title-custom">
-          <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5 text-center">
-            <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
-          </div>
-          <div id="add-new-team-objective" class="col-lg-11 col-md-11 col-sm-11 col-xs-11 m-b-5">
-            <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
-          </div>
-        </h4>
-      </div>
+    <div class="new-objective-input">
+      <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+        <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+      </span>
+      <span id="add-new-team-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+      </span>
     </div>
     <% end %>
     <% end %>
   </div>
-
-  <!-- END PLACE PAGE CONTENT HERE -->
 
 </div>
 <!-- END CONTAINER FLUID -->
@@ -505,97 +461,89 @@
 <div class="overlay hide" id="teammate_list">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/team/<%= @team_id %>/team_objectives/team_dashboard" class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close text-black fs-16">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">
       </div>
       <div class="col-lg-6 col-md-6 col-sm-6 overlay-padding">
-        <div class="row">
-          <h5 class="m-b-5">
-            <span class="overlay-title">
-              <%= @okr_team.name.upcase %> team 
-            </span>
-          </h5>
+        <div class="row overlay-title">
+          <%= @okr_team.name.upcase %> team 
           <hr />
         </div>
-        <div class="row">
-          <div class="panel panel-transparent">
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" data-init-reponsive-tabs="dropdownfx">
-              <li class="active">
-                <a data-toggle="tab" href="#team_details">
-                  <span>Team Details</span>
-                </a>
-              </li>
-              <li>
-                <a data-toggle="tab" href="#team_members">
-                  <span>Team Members (<%= @team_users.count %>)</span>
-                </a>
-              </li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="team_details">
-                <div class="col-lg-5 col-md-5 col-sm-5">
-                  <h1 class="text-center centralize">
-                    <%= @team_short_str %>
-                  </h1>
+        <div class="row panel panel-transparent">
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" data-init-reponsive-tabs="dropdownfx">
+            <li class="active">
+              <a data-toggle="tab" href="#team_details">
+                <span>Team Details</span>
+              </a>
+            </li>
+            <li>
+              <a data-toggle="tab" href="#team_members">
+                <span>Team Members (<%= @team_users.count %>)</span>
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="team_details">
+              <div class="col-lg-5 col-md-5 col-sm-5 text-center centralize">
+                <h1><%= @team_short_str %></h1>
+              </div>
+              <div class="col-lg-7 col-md-7 col-sm-7">
+                <div class="form-group form-group-default">
+                  <label>TEAM NAME</label>
+                  <input id="team_name_input" class="form-control" value="<%= @okr_team.name %> team" disabled="true"/>
                 </div>
-                <div class="col-lg-7 col-md-7 col-sm-7">
-                  <div class="form-group form-group-default">
-                    <label>TEAM NAME</label>
-                    <input id="team_name_input" class="form-control" value="<%= @okr_team.name %> team" disabled="true"/>
-                  </div>
-                  <div class="form-group form-group-default">
-                    <label>TL / PM / PO</label>
-                    <input id="team_lead_input" class="form-control" value="<%= @team_lead %>" disabled="true"/>
-                  </div>
+                <div class="form-group form-group-default">
+                  <label>TL / PM / PO</label>
+                  <input id="team_lead_input" class="form-control" value="<%= @team_lead %>" disabled="true"/>
                 </div>
               </div>
-              <div class="tab-pane" id="team_members">
-                <% @team_users.each_with_index do |item, index| %>
-                  <% @team_user = User.find(item.id) %> 
-                  <% okr_user_team = OkrUserTeam.find_by(user_id: item.id, okr_team_id: @team_id) %>
-                  <div class="row checkbox">
-                    <div class="col-lg-10 col-md-10 col-sm-10 checkbox-primary">
-                      <span class="thumbnail-wrapper d32 circular inline">
-                        <%= image_tag @team_user.avatar.url %>
-                        <%= @team_user.last_name %>
-                      </span>
-                      <span class="bold m-l-20">
-                        <%= @team_user.last_name %> <%= @team_user.first_name %>
-                      </span>
-                      <% if okr_user_team.status == "PENDING" %>
-                      <span class="m-l-20">
-                        <button class="btn btn-danger btn-rounded btn-xs" disabled=true>
-                          Pending
-                        </button>
-                      </span>
-                      <% end %>
+            </div>
+            <div class="tab-pane" id="team_members">
+              <% @team_users.each_with_index do |item, index| %>
+                <% @team_user = User.find(item.id) %> 
+                <% okr_user_team = OkrUserTeam.find_by(user_id: item.id, okr_team_id: @team_id) %>
+                <div class="row checkbox">
+                  <div class="col-lg-10 col-md-10 col-sm-10 checkbox-primary">
+                    <span class="thumbnail-wrapper d32 circular inline">
+                      <%= image_tag @team_user.avatar.url %>
+                      <%= @team_user.last_name %>
+                    </span>
+                    <span class="bold m-l-20">
+                      <%= @team_user.last_name %> <%= @team_user.first_name %>
+                    </span>
+                    <% if okr_user_team.status == "PENDING" %>
+                    <span class="m-l-20">
+                      <button class="btn btn-danger btn-rounded btn-xs" disabled=true>
+                        Pending
+                      </button>
+                    </span>
+                    <% end %>
+                  </div>
+                  <div class="col-lg-2 col-md-2 col-sm-2">
+                    <div class="pull-right">
+                      <button data-id="<%= okr_user_team.id %>" name="btn_remove_team_user" class="btn btn-accordion no-padding">
+                        <i class="pg-close"></i>
+                      </button>
                     </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2">
-                      <div class="pull-right">
-                        <button data-id="<%= okr_user_team.id %>" name="btn_remove_team_user" class="btn btn-accordion no-padding">
-                          <i class="pg-close"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>  
-                  <hr/>       
+                  </div>
+                </div>  
+                <hr/>       
+              <% end %>
+              <select id="user_invitation_selection" style="width: 100%;">
+                <% @users_not_in_team.each do |item| %>
+                  <% user_info = User.find(item) %>
+                  <option value="<%= user_info.id %>">
+                    <%= user_info.last_name %> <%= user_info.first_name %>
+                  </option>
                 <% end %>
-                <select id="user_invitation_selection" style="width: 100%;">
-                  <% @users_not_in_team.each do |item| %>
-                    <% user_info = User.find(item) %>
-                    <option value="<%= user_info.id %>">
-                      <%= user_info.last_name %> <%= user_info.first_name %>
-                    </option>
-                  <% end %>
-                </select>
-                <hr/>
-                <button id="btn_invite_new_member" class="btn btn-complete btn-rounded btn-cons pull-right" data-id="<%= current_user.id %>">
-                  Invite New Member
-                </button>
-              </div>
+              </select>
+              <hr/>
+              <button id="btn_invite_new_member" class="btn btn-complete btn-rounded btn-cons pull-right" data-id="<%= current_user.id %>">
+                Invite New Member
+              </button>
             </div>
           </div>
         </div>

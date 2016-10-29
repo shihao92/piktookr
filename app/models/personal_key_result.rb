@@ -204,7 +204,10 @@ class PersonalKeyResult < ApplicationRecord
         okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: personal_objective.id)
         company_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
       else
-        company_key_result = CompanyKeyResult.find(okr_team_personal.company_key_result_id)
+        team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
+        team_objective = TeamObjective.find(team_key_result.team_objective_id)
+        okr_company_team = OkrCompanyTeam.find_by(team_objective_id: team_objective.id)
+        company_key_result = CompanyKeyResult.find(okr_company_team.company_key_result_id)
       end
       company_objective = CompanyObjective.find(company_key_result.company_objective_id)
 

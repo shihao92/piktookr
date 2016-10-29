@@ -4,11 +4,11 @@
 
 .graph-background {
   background: $native-white;
-  border: 2px solid $dark-grey-border;
+  border: 1px solid $dark-grey-border;
 }
 
 path { 
-  stroke: $light-blue;
+  stroke: $normal-blue;
   stroke-width: 2;
   fill: $lighter-blue;
 }
@@ -18,13 +18,13 @@ path {
 }
 
 .dot {
-  fill: $light-blue;
+  fill: $normal-blue;
 }
 
 .axis path,
 .axis line {
   fill: none;
-  stroke: $light-grey;
+  stroke: $graph-axis-grey;
   stroke-width: 1.5;
 }
 
@@ -32,4 +32,11 @@ text {
   font-size: $font-12;
   font-weight: 600;
   fill: $darker-grey;
+}
+
+.label-graph {
+  font-family: ProximaNovaSoft;
+  font-size: 12px;
+  font-weight: 600;
+  color: $graph-grey;
 }
