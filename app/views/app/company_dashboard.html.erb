@@ -266,9 +266,9 @@
                       <% remained_completion_days = "" %>
                       <% else %>
                       <% remained_completion_days = item.due_date - Date.today %>
-                      <% end %>
                       <% if remained_completion_days < 1 %>
                       <% remained_completion_days = 0 %>
+                      <% end %>
                       <% end %>
                     <% end %>              
                     <span class="bold"><%= remained_completion_days.to_i %></span>

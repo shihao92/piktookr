@@ -268,9 +268,9 @@
                         <% remained_completion_days = "" %>
                         <% else %>
                         <% remained_completion_days = item.due_date - Date.today %>
-                        <% end %>
-                        <% if remained_completion_days < 1 %>
+                        <% if remained_completion_days.to_i < 1 %>
                         <% remained_completion_days = 0 %>
+                        <% end %>
                         <% end %>
                       <% end %>    
                       <span name="personal_kr_due_date" class="bold" data-end-date="<%= item.due_date %>">          
