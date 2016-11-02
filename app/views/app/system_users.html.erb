@@ -381,12 +381,6 @@
               <%= f.label :avatar %><br />
               <%= f.file_field :avatar, class: "form-control" %>
             </div>
-
-            <% roles_array = OkrRole.all.map { |role| [role.name, role.id] } %>
-            <div class="form-group form-group-default">
-              <%= f.label :role, 'SYSTEM ROLE' %>
-              <%= select("role", "id", roles_array, {include_blank: false}, class: "form-control") %>
-            </div>
             <br/>
 
             <div class="form-group">

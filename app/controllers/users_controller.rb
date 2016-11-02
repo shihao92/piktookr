@@ -26,11 +26,19 @@ class UsersController < ApplicationController
     user_id = params[:id]
     current_user = User.find(user_id)
     is_first_time = 0
+    timeframe_log_id = TimeframeLog.current_timeframe_log_id
+    okr_sign_in = OkrSignIn.find_by(user_id: user_id)
+    sign_in_count = okr_sign_in.sign_in_count
     respond_to do |format|
-      if current_user.sign_in_count == 1
+      if sign_in_count == 0
         is_first_time = 1
+        sign_in_count = sign_in_count + 1
+        OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
+        OkrUserTimeframe.create!(user_id: user_id, timeframe_log_id: timeframe_log_id)
         format.json { render json: is_first_time, status: :ok }
       else
+        sign_in_count = sign_in_count + 1
+        OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
         format.json { render json: is_first_time, status: :ok }
       end
     end
@@ -60,12 +68,8 @@ class UsersController < ApplicationController
   # POST /users.json
   def create_member
     @user = User.new(user_params.merge(status: params[:status][:status_const]))
-    timeframe_log_id = TimeframeLog.current_timeframe_log_id
-
     respond_to do |format|
-      if @user.save      
-        OkrUserRole.create(user_id: @user.id, okr_role_id: params[:role][:id])
-        OkrUserTimeframe.create!(user_id: @user.id, timeframe_log_id: timeframe_log_id)
+      if @user.save
         format.html { redirect_to '/users/:user_created=true', notice: 'User was successfully created.' }
       else
         format.html { redirect_to '/users/:user_created=false', notice: 'Error!' }
@@ -93,6 +97,19 @@ class UsersController < ApplicationController
   def update
     current_user_id = params[:id]
     current_edit_user = User.find(current_user_id)
+    okr_sign_in = OkrSignIn.find_by(user_id: current_user_id)
+    okr_user_role = OkrUserRole.find_by(user_id: current_user_id)
+    okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user_id)
+    current_timeframe_log_id = TimeframeLog.current_timeframe_log_id
+    if okr_sign_in == nil
+      OkrSignIn.create(user_id: current_user_id, sign_in_count: 0)
+    end
+    if okr_user_role == nil
+      OkrUserRole.create(user_id: current_user_id, okr_role_id: params[:role][:id])
+    end
+    if okr_user_timeframe == nil
+      OkrUserTimeframe.create(user_id: current_user_id, timeframe_log_id: current_timeframe_log_id)
+    end
     respond_to do |format|
       if User.where(id: current_user_id).update_all(email: user_params["email"], 
                                                     last_name: user_params["last_name"], 

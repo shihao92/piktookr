@@ -3,9 +3,9 @@
 
 require(['model/team',
 'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal', 'view/controls/input_textbox',
-'view/search_result'], 
+'view/search_result', 'view/controls/page_refresh'], 
 function(teamModel,
-overlay, btnControl, customModal, inputControl, searchResult){
+overlay, btnControl, customModal, inputControl, searchResult, refreshPage){
 
   const container_team_dashboard = '#team_page_container';
   const button_new_team_overlay = '#btn_create_new_team_overlay';
@@ -49,13 +49,14 @@ overlay, btnControl, customModal, inputControl, searchResult){
 
     if(team_name !== '' && team_description !== ''){
       let create_new_team_promise = new teamModel.newTeamPromise(team_name, team_description);
-      create_new_team_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      create_new_team_promise.then(createdNewTeam, customModal.notificationModalToggle);
     } else {
       customModal.notificationModalToggle("Team name or team description cannot be empty!");
     }
   }
 
   function createdNewTeam(message){
+    customModal.notificationModalToggle(message);
     refreshPage.refreshPage();
   }
 
@@ -72,7 +73,11 @@ overlay, btnControl, customModal, inputControl, searchResult){
   function deleteTeam(event){
     let target_team_id = $(event.target).attr('data-id');
     let delete_team_promise = new teamModel.deleteTeamPromise(target_team_id);
-    delete_team_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+    delete_team_promise.then(deletedTeam, customModal.notificationModalToggle);
+  }
+
+  function deletedTeam(event){
+    refreshPage.refreshPage();
   }
 
   function getTeamInfoJSON(value){

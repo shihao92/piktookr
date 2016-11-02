@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161018023441) do
+ActiveRecord::Schema.define(version: 20161102020225) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,6 +173,14 @@ ActiveRecord::Schema.define(version: 20161018023441) do
   create_table "okr_roles", force: :cascade do |t|
     t.string "name"
     t.string "description"
+  end
+
+  create_table "okr_sign_ins", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "sign_in_count"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+    t.index ["user_id"], name: "index_okr_sign_ins_on_user_id", using: :btree
   end
 
   create_table "okr_team_personals", force: :cascade do |t|
@@ -352,6 +360,7 @@ ActiveRecord::Schema.define(version: 20161018023441) do
   add_foreign_key "okr_company_teams", "team_objectives"
   add_foreign_key "okr_role_controls", "controls"
   add_foreign_key "okr_role_controls", "okr_roles"
+  add_foreign_key "okr_sign_ins", "users"
   add_foreign_key "okr_team_personals", "personal_objectives"
   add_foreign_key "okr_team_personals", "team_key_results"
   add_foreign_key "okr_user_favourites", "users"

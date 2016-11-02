@@ -1,0 +1,3 @@
+class OkrSignIn < ApplicationRecord
+
+end
