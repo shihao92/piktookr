@@ -106,6 +106,7 @@ textboxControl, refreshPage, searchResult){
 
     function successAcceptionTeamInvitation(message){
       $(modal_team_invitation).modal('hide');
+      refreshPage.refreshPage();
       customModal.notificationModalToggle(message);
     }
 

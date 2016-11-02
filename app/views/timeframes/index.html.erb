@@ -162,7 +162,7 @@
         <div class="form-group">
           <label>Year</label>
           <select id="year_selection" style="width: 100%">
-            <% if @next_timeframe_logs == nil %>
+            <% if @next_timeframe_logs == [] %>
             <option value="<%= Date.today.year + 1 %>"><%= Date.today.year + 1 %></option>
             <% else %>
             <option value="<%= Date.today.year + 2 %>"><%= Date.today.year + 2 %></option>

@@ -116,7 +116,7 @@ overlay, btnControl, customModal, inputControl, searchResult, refreshPage){
     let selected_user_id = $(select_user_invite_team).val();
     let team_id = $(container_team_dashboard).attr('data-id');
     let team_invitation_promise = new teamModel.inviteToTeamPromise(team_id, sender_id, selected_user_id);
-    team_invitation_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+    team_invitation_promise.then(refreshPage.refreshPage(), customModal.notificationModalToggle);
   }
 
   function searchingTeam(event){
