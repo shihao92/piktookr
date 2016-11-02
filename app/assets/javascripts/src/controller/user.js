@@ -15,6 +15,7 @@ textboxControl, refreshPage, searchResult){
     const button_remove_favourite_user = '#btn_remove_fav_user';
     const button_cancel_user_creation_overlay = '#btn_cancel_user_creation_overlay';
     const overlay_create_new_user = '#overlay_create_new_user';
+    const overlay_user_edit = '#overlay_user_edit';
     const link_delete_user = "a[name=link_delete_user]";
     const link_edit_user = "a[name=link_edit_user]";
     const html_user_deletion_img = "#img_deleting_user";
@@ -166,7 +167,7 @@ textboxControl, refreshPage, searchResult){
       let user_edit_status = document_url.substring(39, document_url.length);
       if(user_edit_status_index !== -1){
         if(user_edit_status === 'true'){
-          overlay.displayUserEditOverlay();
+          overlay.toggleOverlay(overlay_user_edit, 1);
         } else if (user_edit_status === 'false') {
           customModal.notificationModalToggle("System error!");
         }

@@ -10,13 +10,13 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require css/bootstrap 
- *= require css/font-awesome
- *= require css/jquery.scrollbar
- *= require css/select2
- *= require css/switchery.min
- *= require css/pages/pages-icons
- *= require css/pages/pages
+ *= require plugins/bootstrap 
+ *= require plugins/font-awesome
+ *= require plugins/jquery.scrollbar
+ *= require plugins/select2
+ *= require plugins/switchery.min
+ *= require plugins/pages/pages-icons
+ *= require plugins/pages/pages
 
  *= require css_v1/app
 

@@ -25,6 +25,7 @@ class UsersController < ApplicationController
   def check_first_time
     user_id = params[:id]
     current_user = User.find(user_id)
+    employee_role = OkrRole.find_by(name: "Employee")
     is_first_time = 0
     timeframe_log_id = TimeframeLog.current_timeframe_log_id
     okr_sign_in = OkrSignIn.find_by(user_id: user_id)
@@ -33,12 +34,11 @@ class UsersController < ApplicationController
       if sign_in_count == 0
         is_first_time = 1
         sign_in_count = sign_in_count + 1
+        OkrUserRole.create(user_id: user_id, okr_role_id: employee_role.id)
         OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
         OkrUserTimeframe.create!(user_id: user_id, timeframe_log_id: timeframe_log_id)
         format.json { render json: is_first_time, status: :ok }
       else
-        sign_in_count = sign_in_count + 1
-        OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
         format.json { render json: is_first_time, status: :ok }
       end
     end

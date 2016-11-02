@@ -10,20 +10,20 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
- *= require css/bootstrap.min 
- *= require css/font-awesome
- *= require css/jquery.scrollbar
- *= require css/switchery.min
- *= require css/datepicker
- *= require css/datepicker3
- *= require css/ion-slider/ion.rangeSlider
- *= require css/ion-slider/ion.rangeSlider.skinFlat
- *= require css/pages/jquery.nouislider
- *= require css/pages/pages-icons
- *= require css/pages/pages
- *= require css/circle
- *= require css/jquery.nestable
- *= require css/jquery-dynatree/ui.dynatree
+ *= require plugins/bootstrap.min 
+ *= require plugins/font-awesome
+ *= require plugins/jquery.scrollbar
+ *= require plugins/switchery.min
+ *= require plugins/datepicker
+ *= require plugins/datepicker3
+ *= require plugins/ion-slider/ion.rangeSlider
+ *= require plugins/ion-slider/ion.rangeSlider.skinFlat
+ *= require plugins/pages/jquery.nouislider
+ *= require plugins/pages/pages-icons
+ *= require plugins/pages/pages
+ *= require plugins/circle
+ *= require plugins/jquery.nestable
+ *= require plugins/jquery-dynatree/ui.dynatree
 
  *= require css_v1/app
 
