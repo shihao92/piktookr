@@ -29,14 +29,21 @@ class UsersController < ApplicationController
     is_first_time = 0
     timeframe_log_id = TimeframeLog.current_timeframe_log_id
     okr_sign_in = OkrSignIn.find_by(user_id: user_id)
-    sign_in_count = okr_sign_in.sign_in_count
+
+    if okr_sign_in == nil
+      OkrSignIn.create(user_id: user_id, sign_in_count: 0)
+      sign_in_count = 0
+    else
+      sign_in_count = okr_sign_in.sign_in_count
+    end
+    
     respond_to do |format|
       if sign_in_count == 0
         is_first_time = 1
         sign_in_count = sign_in_count + 1
         OkrUserRole.create(user_id: user_id, okr_role_id: employee_role.id)
         OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
-        OkrUserTimeframe.create!(user_id: user_id, timeframe_log_id: timeframe_log_id)
+        OkrUserTimeframe.create(user_id: user_id, timeframe_log_id: timeframe_log_id)
         format.json { render json: is_first_time, status: :ok }
       else
         format.json { render json: is_first_time, status: :ok }

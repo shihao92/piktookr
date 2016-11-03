@@ -139,7 +139,7 @@
       <div class="panel">
         <div class="custom-panel-heading" role="tab">
           <div class="col-lg-11 col-md-11 col-sm-11">
-            <a class="collapsed panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#team_obj_<%= index %>" aria-expanded="false" aria-controls="team_obj_<%= index %>">
+            <a class="panel-heading-a" data-toggle="collapse" data-parent="#accordion" href="#team_obj_<%= index %>" aria-expanded="true" aria-controls="team_obj_<%= index %>">
             <div class="row">
               <div id="team_objective_<%= item.id %>" data-id="<%= @team_id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding">
                 <% @okr_company_team = OkrCompanyTeam.where(team_objective_id: item.id) %>
@@ -232,7 +232,7 @@
             </div>                
           </div>
         </div>
-        <div id="team_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="team_obj_<%= index %> ">
+        <div id="team_obj_<%= index %>" class="panel-collapse in" role="tabpanel" aria-labelledby="team_obj_<%= index %> ">
           <div class="panel-body no-padding">
             <!-- Find out the key result linked to the objective -->
             <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>

@@ -164,7 +164,7 @@ textboxControl, refreshPage, searchResult){
 
     function checkUserEditStatus(){
       let user_edit_status_index = document_url.indexOf(":edit_user=");
-      let user_edit_status = document_url.substring(39, document_url.length);
+      let user_edit_status = document_url.substring(document_url.length - 4, document_url.length);
       if(user_edit_status_index !== -1){
         if(user_edit_status === 'true'){
           overlay.toggleOverlay(overlay_user_edit, 1);
@@ -322,7 +322,7 @@ textboxControl, refreshPage, searchResult){
       btnControl.resolveButtonClick(link_delete_user, deleteUserLinkClick);
       btnControl.resolveButtonClick(button_confirm_delete_user, deleteUser);
 
-      checkUserEditStatus();   
+      btnControl.resolveButtonClick(link_edit_user, checkUserEditStatus());   
 
       // User Profile Section
       btnControl.resolveButtonClick(link_user_profile, displayUserDetailsOverlay); 

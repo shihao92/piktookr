@@ -225,7 +225,7 @@
           </div>                
         </div>
       </div>
-      <div id="company_obj_<%= index %>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="company_obj_<%= index %> ">
+      <div id="company_obj_<%= index %>" class="panel-collapse in" role="tabpanel" aria-labelledby="company_obj_<%= index %> ">
         <div class="panel-body no-padding">
           <!-- Find out the key result linked to the objective -->
           <% @company_key_results = CompanyKeyResult.where(company_objective_id: item.id).order(updated_at: :DESC) %>
