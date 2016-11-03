@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
   end
 
   def pages_initialization
-    @server_url = "http://localhost:3000"
+    @server_url = "http://okr.piktochart.info"
     
     okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
     @system_timeframe_log_id = TimeframeLog.current_timeframe_log_id

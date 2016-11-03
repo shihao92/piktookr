@@ -4,7 +4,8 @@
 define (function () {
 
     // Declarations here
-    const serverURL = "http://localhost:3000";
+    //const serverURL = "http://localhost:3000";
+    const serverURL = "http://okr.piktochart.info";
 
     function server_url()
     {
