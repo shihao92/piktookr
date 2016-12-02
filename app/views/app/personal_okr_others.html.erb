@@ -23,7 +23,7 @@
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
       <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
-        <%= image_tag @other_user.avatar.url %>
+        <%= image_tag @other_user.avatar.url(:thumb) %>
       </div>
       <div class="col-lg-7 col-md-7 col-sm-7">
         <div class="row m-b-10">
@@ -41,6 +41,7 @@
               <i class="fa fa-fw fa-star-o fa-lg"></i>
             </a>
             <% end %>
+            <i id="icon_loading_user_favourite" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
           </span>
         </div>
         <div class="row">
@@ -69,10 +70,8 @@
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p100 green">
-          <span>
-            <span id="okr_aligned_percentage">100%</span> <br/>
-            <p>aligned</p>
-          </span>
+          <span id="okr_aligned_percentage">100%</span>
+          <span class="circle-label">aligned</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -86,12 +85,10 @@
           <% percentage_completed_objective = 0 %>
         <% end %>
         <div class="c100 p<%= percentage_completed_objective.to_i %> orange">
-          <span>
-            <span id="completed_objective_portion">
-              <%= @completed_objective %>/<%= @personal_objective.count %>
-            </span> <br/>
-            <p>objectives</p>
+          <span id="completed_objective_portion">
+            <%= @completed_objective %>/<%= @personal_objective.count %>
           </span>
+          <span class="circle-label">objectives</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -100,12 +97,10 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @total_progress.to_i %>">
-          <span>
-            <span id="overall_okr_progress">
-              <%= @total_progress.to_i %>%
-            </span> <br/>
-            <p>overall progress</p>
+          <span id="overall_okr_progress">
+            <%= @total_progress.to_i %>%
           </span>
+          <span class="circle-label">overall progress</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -114,21 +109,19 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @date_difference.to_i %> red">
-          <span>
-            <span id="last_updated">
-              <% if(@personal_objective.count == 0) %>
-              <%= '-' %>
+          <span id="last_updated">
+            <% if(@personal_objective.count == 0) %>
+            <%= '-' %>
+            <% else %>
+              <% if @date_difference < 1 %>
+                <% @date_difference = "< 1" %>
+                <%= @date_difference %>
               <% else %>
-                <% if @date_difference < 1 %>
-                  <% @date_difference = "< 1" %>
-                  <%= @date_difference %>
-                <% else %>
-                  <%= @date_difference.to_i %>
-                <% end %>                 
-              <% end %>
-            </span>  
-            <p>days ago</p> 
+                <%= @date_difference.to_i %>
+              <% end %>                 
+            <% end %>
           </span>
+          <span class="circle-label">days ago</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>

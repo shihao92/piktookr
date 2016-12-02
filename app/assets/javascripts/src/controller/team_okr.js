@@ -35,6 +35,9 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     const overlay_team_setting = '#teammate_list';
 
+    // From Layout
+    const lists_timeframe_logs = '#lists_timeframe_logs';
+
     let original_team_objective = "";
     let original_team_key_result = "";
     let creation_date = "";
@@ -73,13 +76,13 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
       let team_id = $(container_team_dashboard).attr('data-id');
       company_key_result_id = parseInt(company_key_result_id);
       team_id = parseInt(team_id);
-      if(team_objective != ''){
+      if(team_objective != '' && $(company_key_result_selection).val() != null){
         let create_objective_promise = new teamObjectiveModel.newTeamObjective(
           team_objective, company_key_result_id, team_id
         );
         create_objective_promise.then(createdTeamObjective, customModal.notificationModalToggle);
       } else {
-        customModal.notificationModalToggle("Team objective cannot be empty!");
+        customModal.notificationModalToggle("Team objective cannot be empty and must be aligned to company key result!");
       }
     }
 
@@ -97,27 +100,31 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
       textboxControl.createInputTextboxForEditTeamObjective(team_objective_id, objective);
     }
 
+    let editing_objective_id = 0;
     function editingTeamObjective(event){
       let key = event.which;
       if(key == 13){
         let updated_objective = $(event.target).val();
         let original_objective = original_team_objective;
-        if(updated_objective !== original_objective){
-          let editing_objective_id = $(event.target).attr('data-id');
+        if(updated_objective !== original_objective && updated_objective.length > 5){
+          editing_objective_id = $(event.target).attr('data-id');
           let team_id = $(container_team_dashboard).attr('data-id');
           let edit_objective_promise = new teamObjectiveModel.editTeamObjective(
             editing_objective_id, updated_objective, original_objective, team_id
           );
           edit_objective_promise.then(editedTeamObjective, customModal.notificationModalToggle);
         }
-        else{
-          location.reload();
+        else if(updated_objective === original_objective){
+          refreshPage.refreshPage();
+        }
+        else {
+          customModal.notificationModalToggle('Team Objective must have more than 5 characters!');
         }
       }
     }
 
     function editedTeamObjective(message){
-      customModal.toggleProgressRingModal(0);
+      $('#obj_loading_' + editing_objective_id).css('display', 'block');
       refreshPage.refreshPage();
     }
 
@@ -171,11 +178,12 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     // Team Key Result
     // ---------------
 
+    let team_objective_id = 0;
     function createNewTeamKeyResult(event){
       let key = event.which;
       if(key == 13){
         if($(event.target).val() !== '') {
-          let team_objective_id = $(event.target).attr('data-id');
+          team_objective_id = $(event.target).attr('data-id');
           let temp_team_key_result = $(event.target).val();
           let team_id = $(container_team_dashboard).attr('data-id');
           let create_key_result_promise = new teamKeyResultModel.newTeamKeyResult(
@@ -187,7 +195,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     }  
 
     function createdTeamKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#plus_icon_' + team_objective_id).css('display', 'none');
+      $('#kr_creation_loading_' + team_objective_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -197,30 +206,35 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
       let team_key_result = $('#team_kr_' + team_key_result_id).find('.key-result').text();    
       team_key_result = team_key_result.trim();
       original_team_key_result = team_key_result;
+      btnControl.hideButton(button_edit_team_key_result);
       textboxControl.createInputTextboxForEditTeamKeyResult(team_key_result_id, team_key_result);
     }
 
+    let editing_key_result_id = 0;
     function editingTeamKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
         let original_key_result = original_team_key_result;
         let team_id = $(container_team_dashboard).attr('data-id');
-        if(updated_key_result !== original_key_result){
-          let editing_key_result_id = event.currentTarget.getAttribute('data-id');
+        if(updated_key_result !== original_key_result && updated_key_result.length > 5){
+          editing_key_result_id = event.currentTarget.getAttribute('data-id');
           let edit_key_result_promise = new teamKeyResultModel.editTeamKeyResult(
             editing_key_result_id, updated_key_result, original_key_result
           );
           edit_key_result_promise.then(editedTeamKeyResult, customModal.notificationModalToggle);
         }
-        else{
-          location.reload();
+        else if(updated_key_result === original_key_result) {
+          refreshPage.refreshPage();
+        }
+        else {
+          customModal.notificationModalToggle('Team Key Result must have more than 5 characters!');
         }
       }
     }
 
     function editedTeamKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#kr_loading_' + editing_key_result_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 

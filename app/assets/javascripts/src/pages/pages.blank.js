@@ -602,10 +602,6 @@
             }
         });
 
-        $(document).on('keypress.pg.search', function(e) {
-            _this.keypress(e);
-        });
-
         $(document).on('keyup', function(e) {
             // Dismiss overlay on ESC is pressed
             if (_this.$element.is(':visible') && e.keyCode == 27) {
@@ -614,24 +610,6 @@
         });
 
     }
-
-
-    Search.prototype.keypress = function(e) {
-
-        e = e || event; // to deal with IE
-        var nodeName = e.target.nodeName;
-        if ($('body').hasClass('overlay-disabled') ||
-            $(e.target).hasClass('js-input') ||
-            nodeName == 'INPUT' ||
-            nodeName == 'TEXTAREA') {
-            return;
-        }
-
-        if (e.which !== 0 && e.charCode !== 0 && !e.ctrlKey && !e.metaKey && !e.altKey && e.keyCode != 27) {
-            this.toggleOverlay('show', String.fromCharCode(e.keyCode | e.charCode));
-        }
-    }
-
 
     Search.prototype.toggleOverlay = function(action, key) {
         var _this = this;
@@ -652,15 +630,15 @@
             this.$brand.toggleClass('invisible');
             $(document).off('keypress.pg.search');
         } else {
+            if(this.$element.find('#contribution_sliders').length === 1){
+                $('#contribution_sliders')[0].destroy();
+            }
             this.$element.fadeOut("fast").addClass("closed");
             this.$searchField.val('').blur();
             setTimeout(function() {
                 if ((this.$element).is(':visible')) {
                     this.$brand.toggleClass('invisible');
                 }
-                $(document).on('keypress.pg.search', function(e) {
-                    _this.keypress(e);
-                });
             }.bind(this), 10);
         }
     };

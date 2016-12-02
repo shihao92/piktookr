@@ -46,7 +46,7 @@ function(overlay, personalObjectiveModel){
   function notificationDismissClick(input){
     if(input == 1){
       $('#notification_dismiss_btn').click(function(event) {
-        location.reload();
+        // location.reload();
       });
     }
   }

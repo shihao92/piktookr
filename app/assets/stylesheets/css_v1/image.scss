@@ -1,0 +1,17 @@
+// SCSS File for images styling only.
+
+@import 'declarations';
+
+.session-img {
+  width: 100%;
+}
+
+.company-logo {
+  background: $normal-blue; 
+  padding: 10px; 
+  width: 120px;
+  .logo-definition {
+    width: 100px; 
+    height: 100px;
+  }
+}

@@ -29,3 +29,25 @@
 .list-group.list-group-root > .list-group > .list-group > .list-group-item {
   padding-left: 45px;
 }
+
+.search-result {
+  list-style-type: none;
+
+  li > a {
+    color: $placeholder-grey;
+    .search-title {
+      font-family: OpenSans;
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .search-subtitle {
+      font-family: OpenSans;
+      font-size: 14px;
+    }
+    .search-shortform {
+      color: $native-white; 
+      font-weight: 600; 
+      font-size: 20px;
+    }
+  }
+}

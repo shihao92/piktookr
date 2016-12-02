@@ -12,7 +12,8 @@
       <div class="sidebar-header">
         <span class="brand brand-sidebar">Pikto<span class="bold">OKR</span></span>
         <span class="sidebar-header-controls m-l-20">
-          <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar"><i class="fa fs-12"></i>
+          <button type="button" class="btn btn-link visible-lg-inline" data-toggle-pin="sidebar">
+            <i class="fa fs-12"></i>
           </button>
         </span>
       </div>
@@ -122,7 +123,10 @@
               </span>
             </span>
           </li>
-          <hr />
+          <li class="sidebar-divider">
+            <div id="sidebar-longline" class="detailed divider-longline"></div>
+            <span id="sidebar-shortline" class="icon-thumbnail divider-shortline"></span>
+          </li>
           <% okr_user_favs = OkrUserFavourite.where(user_id: current_user.id) %>
           <% okr_user_favs.each do |item| %>
             <% this_user = User.find(item.favourite_id) %>
@@ -222,7 +226,7 @@
                   <%= image_tag @user.avatar.url %>
                 </span>
               </button>
-              <ul class="dropdown-menu profile-dropdown" role="menu">
+              <ul class="dropdown-menu profile-dropdown profile-menu-dropdown" role="menu">
                 <li>
                   <a id="link_user_profile">
                     <i class="fa fa-user"></i> 
@@ -464,7 +468,7 @@
     <div id="overlay_user_profile" class="overlay hide">
       <div class="overlay-content has-results m-t-20">
         <div class="container-fluid">
-          <a class="close-icon-light overlay-close text-black fs-16">
+          <a class="close-icon-light overlay-close close-button">
             <i class="pg-close"></i>
           </a>
           <div class="col-sm-3 col-md-3 col-lg-3">
@@ -592,7 +596,7 @@
     <!--Overlay for user searching-->
     <div id="user_search_result" class="overlay hide">
       <div class="overlay-content has-results m-t-20">
-        <a class="close-icon-light overlay-close text-black fs-16">
+        <a class="close-icon-light overlay-close close-button">
           <i class="pg-close"></i>
         </a>
         <div class="container-fluid">
@@ -607,13 +611,17 @@
             <div class="row">
               <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <p class="bold">System Users Search Results</p>
-                <div id="div_search_users_results"></div>
+                <ul id="div_search_users_results" class="no-padding search-result m-t-20">
+                  
+                </ul>
               </div>
-              <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+              <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
                 <p class="bold">System Teams Search Results</p>
-                <div id="div_search_teams_results"></div>
+                <ul id="div_search_teams_results" class="no-padding search-result m-t-20">
+                  
+                </ul>
               </div>
-              <div class="col-lg-7 col-md-7 col-sm-7 col-xs-7">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <p class="bold">OKR Search Results</p>
                 <div class="row">
                   <div id="div_search_company_objectives_results"></div>
@@ -637,7 +645,7 @@
     <div id="feedback_form" class="overlay hide">
       <div class="overlay-content has-results m-t-20">
         <div class="container-fluid">
-          <a class="close-icon-light overlay-close text-black fs-16">
+          <a class="close-icon-light overlay-close close-button">
             <i class="pg-close"></i>
           </a>
           <div class="col-sm-3 col-md-3 col-lg-3">

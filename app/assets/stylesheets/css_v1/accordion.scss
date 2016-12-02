@@ -2,6 +2,19 @@
 
 @import "declarations";
 
+.input-accordion {
+  background: transparent;
+  height: 55px;
+}
+
+.panel-title-custom {
+  width: 100%;
+
+  .panel-heading-a {
+    width: 90%;
+  }
+}
+
 .accordion-item {
   border-top: 1px solid $border-grey;
   padding-left: 0px;
@@ -26,22 +39,19 @@
   }
 
   &.add-new-personal-key-result {
-    background: transparent;
-    height: 55px;
+    @extend .input-accordion;
   }
   &.add-new-personal-key-result:hover, .add-new-personal-key-result:active {
     background: transparent;
   }
   &.add-new-team-key-result {
-    background: transparent;
-    height: 55px;
+    @extend .input-accordion;
   }
   &.add-new-team-key-result:hover, .add-new-team-key-result:active {
     background: transparent;
   }
   &.add-new-company-key-result {
-    background: transparent;
-    height: 55px;
+    @extend .input-accordion;
   }
   &.add-new-company-key-result:hover, .add-new-company-key-result:active {
     background: transparent;

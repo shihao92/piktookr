@@ -3,9 +3,9 @@
 
 require(['model/user', 'model/notification', 'model/team',
 'view/controls/overlay', 'view/controls/button', 'view/controls/custom_modal', 
-'view/controls/input_textbox', 'view/controls/page_refresh', 'view/search_result'],
+'view/controls/input_textbox', 'view/controls/sidebar', 'view/controls/page_refresh', 'view/search_result'],
 function(userModel, notificationModel, teamModel, overlay, btnControl, customModal, 
-textboxControl, refreshPage, searchResult){
+textboxControl, sidebar, refreshPage, searchResult){
 
     const document_url = document.URL;
     const button_create_new_user = '#btn_create_new_user_overlay';
@@ -20,6 +20,7 @@ textboxControl, refreshPage, searchResult){
     const link_edit_user = "a[name=link_edit_user]";
     const html_user_deletion_img = "#img_deleting_user";
     const name_user_deletion = "#name_deleting_user";
+    const icon_loading_user_favourite = '#icon_loading_user_favourite';
 
     // Controls at Layout Page
     const link_user_profile = '#link_user_profile';
@@ -52,6 +53,9 @@ textboxControl, refreshPage, searchResult){
 
     // Controls at Team Settings Page
     const button_remove_team_user = 'button[name=btn_remove_team_user]';
+    const remove_team_target_name = '#remove_team_target_name';
+    const button_confirm_member_removal = '#btn_confirm_member_removal';
+    const confirmation_team_member_removal_modal = '#confirmation_team_member_removal_modal';
 
 
     // -------------
@@ -67,9 +71,9 @@ textboxControl, refreshPage, searchResult){
     function checkNotificationReadStatus(reply){
       reply = parseInt(reply);
       if(reply === 0){
-        $(bubble_new_notification).attr('style', 'display:none;');
+        $(bubble_new_notification).css("display", "none");
       } else if (reply === 1) {
-        $(bubble_new_notification).attr('style', 'display:inherit;');
+        $(bubble_new_notification).css("display", "block");
       } 
     }
 
@@ -78,7 +82,7 @@ textboxControl, refreshPage, searchResult){
       let user_id = $(event.target).attr('data-id');
       if(unread_notification_count > 0){
         let counter = 0;
-        $(bubble_new_notification).attr('style', 'display:none');
+        $(bubble_new_notification).css("display", "none");
         while(counter < unread_notification_count){
           let notification_id = $(pending_notification).attr('data-id');
           $('[data-id=' + notification_id + ']').attr('class', 'alert-list READ');
@@ -159,7 +163,12 @@ textboxControl, refreshPage, searchResult){
       let target_user_id = $(event.target).attr('data-id');
       target_user_id = parseInt(target_user_id);
       let delete_user_promise = new userModel.removeUserFromSystem(target_user_id);
-      delete_user_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      delete_user_promise.then(deletedUser, customModal.notificationModalToggle);
+    }
+
+    function deletedUser(message){
+      customModal.notificationModalToggle(message);
+      refreshPage.refreshPage();
     }
 
     function checkUserEditStatus(){
@@ -206,13 +215,30 @@ textboxControl, refreshPage, searchResult){
     function removeUserFromTeam(event){
       let okr_user_team_id = $(event.currentTarget).attr('data-id');
       okr_user_team_id = parseInt(okr_user_team_id);
+      let target_user_name = $(event.currentTarget).attr('data-name');
+      $(remove_team_target_name).text(target_user_name);
+      $(button_confirm_member_removal).attr('data-id', okr_user_team_id);
+      $(confirmation_team_member_removal_modal).modal('show');
+    }
+
+    function confirmRemoveUserFromTeam(event){
+      let okr_user_team_id = $(event.currentTarget).attr('data-id');
       let remove_user_from_team_promise = new userModel.removeUserFromTeam(okr_user_team_id);
-      remove_user_from_team_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      remove_user_from_team_promise.then(removedUserFromTeam, customModal.notificationModalToggle);
+    }
+
+    function removedUserFromTeam(message){
+      customModal.notificationModalToggle(message);
+      refreshPage.refreshPage();
     }
 
     // ---------------------
     // User Favourite Module
     // ---------------------
+
+    function controlSideBarBorder(){
+      sidebar.controlBorderVisibility();
+    }
 
     function addFavouriteUser(event){
       let fav_user_id = $(event.currentTarget).attr('data-id');
@@ -222,7 +248,8 @@ textboxControl, refreshPage, searchResult){
     }
 
     function addingFavouriteUser(message){
-      customModal.toggleProgressRingModal(0);
+      $(button_favourite_user).css('display', 'none');
+      $(icon_loading_user_favourite).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -234,7 +261,8 @@ textboxControl, refreshPage, searchResult){
     }
 
     function removingFavouriteUser(message){
-      customModal.toggleProgressRingModal(0);
+      $(button_remove_favourite_user).css('display', 'none');
+      $(icon_loading_user_favourite).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -305,6 +333,8 @@ textboxControl, refreshPage, searchResult){
 
     $(document).ready(function(){
       
+      controlSideBarBorder();
+
       checkFirstTimeLogin();
       btnControl.resolveButtonClick(button_first_timer_edit_profile, firstTimerEditProfile);
 
@@ -330,6 +360,7 @@ textboxControl, refreshPage, searchResult){
 
       // User removal from team
       btnControl.resolveButtonClick(button_remove_team_user, removeUserFromTeam);
+      btnControl.resolveButtonClick(button_confirm_member_removal, confirmRemoveUserFromTeam);
          
       // Notifications related Section
       getNotificationsReadStatus();  

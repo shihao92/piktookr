@@ -225,11 +225,11 @@
 .c100 {
   position: relative;
   font-size: 130px;
-  width: 1em;
-  height: 1em;
+  width: 130px;
+  height: 130px;
   border-radius: 50%;
   float: left;
-  margin: 0 0.1em 0.1em 0;
+  margin: 0 2px 2px 0;
   background-color: #cccccc;
 }
 .c100 *,
@@ -253,9 +253,8 @@
   position: absolute;
   width: 100%;
   z-index: 1;
-  left: 0;
-  top: 0;
-  width: 5em;
+  left: -3px;
+  top: -7px;
   line-height: 5em;
   font-size: 0.2em;
   font-family: ProximaNovaSoft;
@@ -276,16 +275,43 @@
   -o-transition-timing-function: ease-out;
   transition-timing-function: ease-out;
 }
+.c100 > .circle-label {
+  position: absolute;
+  width: 100%;
+  z-index: 1;
+  left: -1px;
+  top: 48px;
+  line-height: 5em;
+  font-size: 13px;
+  font-family: ProximaNovaSoft;
+  font-weight: 600;
+  color: #90989b;
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+  -webkit-transition-property: all;
+  -moz-transition-property: all;
+  -o-transition-property: all;
+  transition-property: all;
+  -webkit-transition-duration: 0.2s;
+  -moz-transition-duration: 0.2s;
+  -o-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-timing-function: ease-out;
+  -moz-transition-timing-function: ease-out;
+  -o-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
 .c100:after {
   position: absolute;
-  top: 0.08em;
-  left: 0.08em;
+  top: 3px;
+  left: 3px;
   display: block;
   content: " ";
   border-radius: 50%;
   background-color: #f5f5f5;
-  width: 0.84em;
-  height: 0.84em;
+  width: 124px;
+  height: 124px;
   -webkit-transition-property: all;
   -moz-transition-property: all;
   -o-transition-property: all;
@@ -301,8 +327,8 @@
 }
 .c100 .slice {
   position: absolute;
-  width: 1em;
-  height: 1em;
+  width: 130px;
+  height: 130px;
   clip: rect(0em, 1em, 1em, 0.5em);
 }
 .c100.p1 .bar {
@@ -1009,18 +1035,17 @@
   cursor: default;
 }
 .c100:hover > span {
-  width: 3.33em;
-  line-height: 3.33em;
-  font-size: 0.3em;
   color: #039be5;
   font-family: ProximaNovaSoft;
 }
-.c100:hover:after {
-  top: 0.04em;
-  left: 0.04em;
-  width: 0.92em;
-  height: 0.92em;
+.c100:hover > .circle-label {
+  width: 100%;
+  line-height: 5em;
+  font-size: 13px;
+  color: #1e1d26;
+  font-family: ProximaNovaSoft;
 }
+
 .c100.dark {
   background-color: #90989b;
 }
@@ -1044,6 +1069,9 @@
 .c100.green:hover > span {
   color: #1cafa2;
 }
+.c100.green:hover > .circle-label {
+  color: #1e1d26;
+}
 .c100.green.dark .bar,
 .c100.green.dark .fill {
   border-color: #168c81 !important;
@@ -1057,6 +1085,9 @@
 }
 .c100.orange:hover > span {
   color: #ff8f00;
+}
+.c100.orange:hover > .circle-label {
+  color: #1e1d26;
 }
 .c100.orange.dark .bar,
 .c100.orange.dark .fill {
@@ -1072,6 +1103,9 @@
 .c100.red:hover > span {
   color: #f16078;
 }
+.c100.red:hover > .circle-label {
+  color: #1e1d26;
+}
 .c100.red.dark .bar,
 .c100.red.dark .fill {
   border-color: #c04c60 !important;
@@ -1080,11 +1114,4 @@
   color: #c04c60;
 }
 
-.circle-label {
-  position: absolute;
-  bottom: 20px;
-  left: 28%;
-  font-family: ProximaNovaSoft;
-  font-weight: 600;
-  color: #1e1d26;
-}
+

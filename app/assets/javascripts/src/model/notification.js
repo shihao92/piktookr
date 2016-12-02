@@ -11,7 +11,7 @@ define (['model/server_url'], function (urlParam) {
           resolve(this.responseText);
         }
         else if(this.readyState === 0 && this.status !== 200){
-          reject("Error!");
+          reject("Unable to obtain notifications from server!");
         }
       };
       // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it

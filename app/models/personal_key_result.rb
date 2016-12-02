@@ -15,10 +15,11 @@ class PersonalKeyResult < ApplicationRecord
     # Validations
     # -----------
 
-    validates :key_result, presence: true
+    validates :key_result, presence: true, length: { minimum: 5 }
     validates :personal_objective_id, presence: true
     validates :progress, :numericality => {:greater_than_or_equal_to => 0.00, :less_than_or_equal_to => 100.00}, on: :update
     validates :is_completed, inclusion: { in: [ true, false ] }
+    validates :due_date, presence: true
 
 
     def self.new_personal_key_result(key_result, objective_id, user_id)

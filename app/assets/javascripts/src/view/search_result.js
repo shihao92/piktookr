@@ -1,7 +1,8 @@
 // Date: 20 September 2016
 // JS file to generate all search results HTML in the project.
 
-define(['helper/avatar_finder'], function(avatarFinder){
+define(['helper/avatar_finder', 'helper/capital_letter_finder', 'helper/random_color'], 
+function(avatarFinder, capitalFinder, randomColor){
 
   function generateSearchUserResults(results, control_parent){
     let results_json = JSON.parse(results);
@@ -11,19 +12,18 @@ define(['helper/avatar_finder'], function(avatarFinder){
     let temp_html = "";
 
     while(counter < data_count){   
-      temp_html = '<a href="/users/' + results_json[counter].id + '/personal_objectives/view_others_personal_okr" type="button" class="btn btn-default" style="max-width: 200px;">' +
-                    '<div class="row p-t-5" style="padding-left: 50%;">' +
-                      '<div class="thumbnail-wrapper d32 circular text-white">' +
-                        '<img width="50" height="50" src="/system/users/avatars/000/000/' + avatarFinder.processAvatarURL(results_json[counter].id) + '/original/' + results_json[counter].avatar_file_name + '">' +
-                      '</div>' +
-                    '</div>' +
-                    '<span class="m-b-5"><span class="semi-bold result-name">' + results_json[counter].last_name + ' ' + results_json[counter].first_name + '</span></h5>' +
-                    '<p class="hint-text">' + results_json[counter].position + '</p>' +
-                  '</a>';
+      temp_html = '<li class="m-t-20">' +
+                    '<a href="/users/' + results_json[counter].id + '/personal_objectives/view_others_personal_okr" type="button">' +
+                      '<span class="thumbnail-wrapper d48 circular inline m-r-10">' +
+                        '<img src="/system/users/avatars/000/000/' + avatarFinder.processAvatarURL(results_json[counter].id) + '/original/' + results_json[counter].avatar_file_name + '">' +
+                      '</span>' +
+                      '<span class="search-title">' + results_json[counter].last_name + ' ' + results_json[counter].first_name + '</span>' +
+                      '<p class="search-subtitle">' + results_json[counter].position + '</p>' +
+                    '</a>' +
+                  '</li>';
       generated_html = temp_html + generated_html;
       counter = counter + 1;
     }
-    generated_html = '<div class="btn-group">' + generated_html + '</div>';
     $(control_parent).html(generated_html);
   }
 
@@ -34,9 +34,18 @@ define(['helper/avatar_finder'], function(avatarFinder){
     let generated_html = "";
     let temp_html = "";
     while(counter < data_count){
-      temp_html = '<a href="/team/' + results_json[counter].id + '/team_objectives/team_dashboard" type="button" class="btn btn-default">' +
-                    '<h5 class="m-b-5"><span class="semi-bold result-name">' + results_json[counter].name + '</span></h5>' +
-                  '</a>';
+      let team_name = results_json[counter][1];
+      let capital_team_name = capitalFinder.findCapitalLetter(team_name);
+      let gen_random_color = randomColor();
+      temp_html = '<li class="m-t-20">' + 
+                    '<a href="/team/' + results_json[counter][0] + '/team_objectives/team_dashboard" type="button">' + 
+                      '<span class="thumbnail-wrapper d48 circular inline m-r-10 text-center" style="background: ' + gen_random_color + ';">' +
+                        '<span class="search-shortform">' + capital_team_name[0] + '</span>' +
+                      '</span>' +
+                      '<span class="search-title">' + results_json[counter][1] + '</span>' + 
+                      '<p class="search-subtitle">' + results_json[counter][2] + ' members</p>' + 
+                    '</a>' +
+                  '</li>';
       generated_html = temp_html + generated_html;
       counter = counter + 1;
     }

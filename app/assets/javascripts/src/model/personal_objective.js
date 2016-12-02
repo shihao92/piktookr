@@ -11,7 +11,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to create personal objective!");
           }
         };
         xhttp.open(
@@ -36,7 +36,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to create personal objective!");
           }
         };
         xhttp.open(
@@ -61,7 +61,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update personal objective!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -87,7 +87,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to get objective creation date!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -108,7 +108,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to get contribution!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -130,7 +130,7 @@ define(['model/server_url'], function(urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to retrieve any personal objectives!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it

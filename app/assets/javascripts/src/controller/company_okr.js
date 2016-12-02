@@ -20,7 +20,6 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const button_edit_company_key_result = '.edit_company_key_result';
     const button_save_company_kr_due_date = '#btn_save_company_kr_due_date';
     const button_close_create_company_objective = '#btn_close_create_company_objective';
-    const textbox_new_company_objective = '#add-new-company-objective';
     const textbox_new_company_key_result = '.form-new-key-result';
     const new_company_objective = '#new_company_objective';
     const company_objective_textarea = '#company_objective_textarea';
@@ -33,10 +32,14 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     const input_overlay_search_user = '#overlay_search_user_input';
     const div_search_company_objectives_results = '#div_search_company_objectives_results';
     const div_search_company_kr_results = '#div_search_company_kr_results';
+
+    // From Layout
     const lists_timeframe_logs = '#lists_timeframe_logs';
 
     let original_company_objective = "";
     let original_company_key_result = "";
+
+    let created_date = "";
 
     // -----------------
     // Company Objective
@@ -67,10 +70,11 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
 
     function createNewCompanyObjective(event){
       let company_objective = $(company_objective_textarea).val();
-      if(company_objective != ''){
+      if(company_objective !== ''){
         let create_company_objective_promise = new companyObjectiveModel.newCompanyObjective(company_objective);
         create_company_objective_promise.then(createdCompanyObjective, customModal.notificationModalToggle);
-      } else {
+      } 
+      else {
         customModal.notificationModalToggle("Company objective cannot be empty!");
       }
     }
@@ -90,27 +94,31 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
       textboxControl.createInputTextboxForEditCompanyObjective(objective_id, objective);
     }
 
+    let editing_objective_id = 0;
     function editingCompanyObjective(event){
       let key = event.which;
       if(key == 13){
         let updated_objective = $(event.target).val();
         let original_objective = original_company_objective;
-        let editing_objective_id = $(event.target).attr('data-id');
+        editing_objective_id = $(event.target).attr('data-id');
         editing_objective_id = parseInt(editing_objective_id);
-        if(updated_objective != original_objective){
+        if(updated_objective !== original_objective && updated_objective.length > 5){
           let edit_company_objective_promise = new companyObjectiveModel.editCompanyObjective(
             editing_objective_id, updated_objective, original_objective
           );
           edit_company_objective_promise.then(editedCompanyObjective, customModal.notificationModalToggle);
         }
+        else if(updated_objective === original_objective){
+          refreshPage.refreshPage();
+        }
         else{
-          location.reload();
+          customModal.notificationModalToggle("Company Key Result must have more than 5 characters!");
         }
       }
     }
 
     function editedCompanyObjective(message){
-      customModal.toggleProgressRingModal(0);
+      $('#obj_loading_' + editing_objective_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -162,14 +170,14 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     // Company Key Result
     // ------------------
 
+    let current_focus_id = 0;
     function createNewCompanyKeyResult(event){
       let key = event.which;
       if(key == 13){
         if($(this).find(textbox_new_company_key_result).val() != '') {
           // Find out the personal objective id
-          let current_focus_id = $(event.target).attr('data-id');
-          let company_key_result = $(event.target).val();  
-         
+          current_focus_id = $(event.target).attr('data-id');
+          let company_key_result = $(event.target).val();
           let create_company_kr_promise = new companyKeyResultModel.newCompanyKeyResult(
               company_key_result, current_focus_id
           ); 
@@ -179,7 +187,8 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
     }
 
     function createdCompanyKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#plus_icon_' + current_focus_id).css('display', 'none');
+      $('#kr_creation_loading_' + current_focus_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -193,27 +202,31 @@ textboxControl, btnControl, customSelect2, refreshPage, searchResult) {
       btnControl.hideButton(button_edit_company_key_result);
     }
 
+    let editing_key_result_id = 0;
     function editingCompanyKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
         let original_key_result = original_company_key_result;
-        let editing_key_result_id = $(event.target).attr('data-id');   
+        editing_key_result_id = $(event.target).attr('data-id');   
         editing_key_result_id = parseInt(editing_key_result_id);
-        if(updated_key_result !== original_key_result && updated_key_result !== ''){
+        if(updated_key_result !== original_key_result && updated_key_result.length > 5){
           let edit_company_kr_promise = new companyKeyResultModel.editCompanyKeyResult(
             editing_key_result_id, updated_key_result, original_key_result
           );
           edit_company_kr_promise.then(editedCompanyKeyResult, customModal.notificationModalToggle);
         }
+        else if(updated_key_result === original_key_result) {
+          refreshPage.refreshPage();
+        }
         else{
-          location.reload();
+          customModal.notificationModalToggle('Company Key Result must have more than 5 characters!');
         }
       }
     }
 
     function editedCompanyKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#kr_loading_' + editing_key_result_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 

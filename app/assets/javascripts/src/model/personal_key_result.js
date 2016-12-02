@@ -12,7 +12,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Personal Key Result must have more than 5 characters!");
           }
         };
         xhttp.open(
@@ -37,7 +37,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update key result progress contribution!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -65,7 +65,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update personal key result completion status!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -91,7 +91,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update personal key result!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -118,7 +118,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update due date for personal key result!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -188,7 +188,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Unable to get personal key result!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
@@ -213,7 +213,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 0 && this.status !== 200){
-            reject("Error!");
+            reject("Unabled to get linked Company Objective!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it

@@ -1,6 +1,6 @@
 <!-- START JUMBOTRON -->
 <div class="bg-master-lighter" data-pages="parallax">
-  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+  <div class="container-fixed-lg p-l-45 p-r-50">
     <div class="inner">
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
@@ -17,8 +17,8 @@
 </div>
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
-<div id="page_personal_key_result_details" class="bg-light-grey" data-id="<%= @personal_key_result.id %>">
-  <div class="container-fluid container-fixed-lg">
+<div id="page_personal_key_result_details" class="bg-master-lighter" data-id="<%= @personal_key_result.id %>">
+  <div class="container-fluid container-fixed-lg p-l-50">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
         <h3 class="details-page title">
@@ -65,21 +65,21 @@
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4">
         <div class="pull-right padding-body">
-          <div class="c100 p<%= @personal_key_result.progress.to_i %>">
-            <span>
-              <span id="okr_aligned_percentage"><%= @personal_key_result.progress.to_i %>%</span>
-              <p>progress</p>
-            </span>
+        <% if @timeframe_day_difference.to_i == 0 %>
+          <div class="c100 p70 red">
+        <% else %>
+          <div class="c100 p70">
+        <% end %>
+            <span id="okr_aligned_percentage"><%= @timeframe_day_difference.to_i %></span>
+            <span class="circle-label">days-left</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
             </div>
           </div>
-          <div class="c100 p70">
-            <span>
-              <span id="okr_aligned_percentage"><%= @remaining_quarter_days.to_i %></span> <br/>
-              <p>days left</p>
-            </span>
+          <div class="c100 p<%= @personal_key_result.progress.to_i %>">
+            <span id="okr_aligned_percentage"><%= @personal_key_result.progress.to_i %>%</span>
+            <span class="circle-label">progress</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>

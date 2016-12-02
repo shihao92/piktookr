@@ -65,8 +65,11 @@
               <th style="width:10%">
                 ROLE
               </th>
-              <th style="width:25%">
+              <th style="width:20%">
                 EMAIL
+              </th>
+              <th style="width:5%">
+                STATUS
               </th>
               <th style="width:19%">
                 LAST UPDATED
@@ -90,19 +93,20 @@
               </td>
               <td><%= user.okr_role.try(:name) %></td>
               <td><%= user.email %></td>
+              <td><%= user.status %></td>
               <td><%= user.updated_at %></td>
               <td>
                 <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Edit
+                    <i class="fa fa-fw fa-pencil" name="link_edit_user" data-id="<%= user.id %>"></i> Edit
                   </a>
                 </span>
                 <% end %>
                 <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                    <i class="fa fa-fw fa-trash-o" name="link_delete_user" data-id="<%= user.id %>"></i> Delete
                   </a>
                 </span>
                 <% end %>
@@ -128,8 +132,11 @@
               <th style="width:10%">
                 ROLE
               </th>
-              <th style="width:25%">
+              <th style="width:20%">
                 EMAIL
+              </th>
+              <th style="width:5%">
+                STATUS
               </th>
               <th style="width:19%">
                 LAST UPDATED
@@ -154,19 +161,20 @@
               </td>
               <td><%= user.okr_role.try(:name) %></td>
               <td><%= user.email %></td>
+              <td><%= user.status %></td>
               <td><%= user.updated_at %></td>
               <td>
                 <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Edit
+                    <i class="fa fa-fw fa-pencil" name="link_edit_user" data-id="<%= user.id %>"></i> Edit
                   </a>
                 </span>
                 <% end %>
                 <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                    <i class="fa fa-fw fa-trash-o" name="link_delete_user" data-id="<%= user.id %>"></i> Delete
                   </a>
                 </span>
                 <% end %>
@@ -192,8 +200,11 @@
               <th style="width:10%">
                 ROLE
               </th>
-              <th style="width:25%">
+              <th style="width:20%">
                 EMAIL
+              </th>
+              <th style="width:5%">
+                STATUS
               </th>
               <th style="width:19%">
                 LAST UPDATED
@@ -218,19 +229,20 @@
               </td>
               <td><%= user.okr_role.try(:name) %></td>
               <td><%= user.email %></td>
+              <td><%= user.status %></td>
               <td><%= user.updated_at %></td>
               <td>
                 <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Edit
+                    <i class="fa fa-fw fa-pencil" name="link_edit_user" data-id="<%= user.id %>"></i> Edit
                   </a>
                 </span>
                 <% end %>
                 <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                    <i class="fa fa-fw fa-trash-o" name="link_delete_user" data-id="<%= user.id %>"></i> Delete
                   </a>
                 </span>
                 <% end %>
@@ -256,8 +268,11 @@
               <th style="width:10%">
                 ROLE
               </th>
-              <th style="width:25%">
+              <th style="width:20%">
                 EMAIL
+              </th>
+              <th style="width:5%">
+                STATUS
               </th>
               <th style="width:19%">
                 LAST UPDATED
@@ -282,19 +297,20 @@
               </td>
               <td><%= user.okr_role.try(:name) %></td>
               <td><%= user.email %></td>
+              <td><%= user.status %></td>
               <td><%= user.updated_at %></td>
               <td>
                 <% if @controls.include? 'Edit User Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Edit
+                    <i class="fa fa-fw fa-pencil" name="link_edit_user" data-id="<%= user.id %>"></i> Edit
                   </a>
                 </span>
                 <% end %>
                 <% if @controls.include? 'Delete User' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_user" data-id="<%= user.id %>">
-                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                    <i class="fa fa-fw fa-trash-o" name="link_delete_user" data-id="<%= user.id %>"></i> Delete
                   </a>
                 </span>
                 <% end %>
@@ -313,7 +329,7 @@
 <div id="overlay_create_new_user" class="overlay hide">
   <div class="overlay-content has-results">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -374,6 +390,7 @@
 
             <div class="form-group form-group-default">
               <%= f.label :status %>
+              <span class="caret form-caret-dropdown"></span>
               <%= select("status", "status_const", @user_status_selection, {include_blank: false}, class: "form-control") %>
             </div>
 
@@ -402,7 +419,7 @@
 <div id="overlay_user_created_notification" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/users" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/users" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -434,7 +451,7 @@
 <div id="overlay_user_deletion" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/users" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/users" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">
@@ -481,7 +498,7 @@
 <div id="overlay_user_edit" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/users" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/users" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-sm-3 col-md-3 col-lg-3">
@@ -489,7 +506,7 @@
       <div class="col-sm-6 col-md-6 col-lg-6">
         <br/>
         <%= form_for @current_edit_user do |f| %>
-          <div class="text-center">
+          <div class="thumbnail-wrapper d48 circular inline" style="width: 200px; height: 200px;">
             <%= image_tag @current_edit_user.avatar.url %>
           </div>
           <br/>
@@ -516,13 +533,15 @@
             <%= f.label :position %>
             <%= f.text_field :position, autofocus: true, class: "form-control", placeholder: "UI/UX Designer", required: true %>
           </div>
-          <div class="form-group">
-            <%= f.label :status %><br />
+          <div class="form-group form-group-default">
+            <%= f.label :status %>
+            <span class="caret form-caret-dropdown"></span>
             <%= select("status", "status_const", @user_status_selection, {include_blank: false}, class: "form-control") %>
           </div>
           <% roles_array = OkrRole.all.map { |role| [role.name, role.id] } %>
-          <div class="form-group">
-            <%= f.label :role %><br />
+          <div class="form-group form-group-default">
+            <%= f.label :role %>
+            <span class="caret form-caret-dropdown"></span>
             <%= select("role", "id", roles_array, {include_blank: false}, class: "form-control") %>
           </div>
           <br/>

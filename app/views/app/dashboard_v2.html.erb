@@ -49,10 +49,8 @@
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p100 green">
-          <span>
-            <span id="okr_aligned_percentage">100%</span> <br/>
-            <p>aligned</p>
-          </span>
+          <span id="okr_aligned_percentage">100%</span>
+          <span class="circle-label">aligned</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -66,12 +64,10 @@
         <% percentage_completed_objective = 0 %>
         <% end %>
         <div class="c100 p<%= percentage_completed_objective.to_i %> orange">
-          <span>
-            <span id="completed_objective_portion">
-              <%= @completed_objective %>/<%= @personal_objective.count %>
-            </span> <br/>
-            <p>objectives</p>
+          <span id="completed_objective_portion">
+            <%= @completed_objective %>/<%= @personal_objective.count %>
           </span>
+          <span class="circle-label">objectives</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -80,12 +76,10 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @total_progress.to_i %>">
-          <span>
-            <span id="overall_okr_progress">
-              <%= @total_progress.to_i %>%
-            </span> <br/>
-            <p>overall progress</p>
+          <span id="overall_okr_progress">
+            <%= @total_progress.to_i %>%
           </span>
+          <span class="circle-label">overall progress</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -94,21 +88,19 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @date_difference.to_i %> red">
-          <span>
-            <span id="last_updated">
-              <% if(@personal_objective.count == 0) %>
-              <%= '-' %>
+          <span id="last_updated">
+            <% if(@personal_objective.count == 0) %>
+            <%= '-' %>
+            <% else %>
+              <% if @date_difference < 1 %>
+                <% @date_difference = "< 1" %>
+                <%= @date_difference %>
               <% else %>
-                <% if @date_difference < 1 %>
-                  <% @date_difference = "< 1" %>
-                  <%= @date_difference %>
-                <% else %>
-                  <%= @date_difference.to_i %>
-                <% end %>                 
-              <% end %>
-            </span>  
-            <p>days ago</p> 
+                <%= @date_difference.to_i %>
+              <% end %>                 
+            <% end %>
           </span>
+          <span class="circle-label">days ago</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -141,6 +133,7 @@
                   </div>
                 </div>
                 <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
+                  <i id="obj_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
                   <button class="btn btn-accordion edit_personal_objective" data-id="<%= item.id %>">
                     <i class="fa fa-pencil"></i>
                   </button>
@@ -179,7 +172,7 @@
                 <% if @selected_timeframe.id == @system_timeframe_log_id %>        
                 <% if personal_key_result.count == 0 %>
                 <li>
-                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>" class="pointer-link">
                     <i class="fa fa-fw fa-trash-o"></i> 
                     <span> Delete</span>
                   </a>
@@ -206,7 +199,7 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <a class="btn btn-danger btn-rounded" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
+                <a class="btn btn-danger btn-rounded pointer-link" rel="nofollow" data-method="delete" href="/personal_objectives/<%= item.id %>">
                   Delete
                 </a>
                 <button type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</button>
@@ -246,6 +239,7 @@
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1 pull-left">
+                      <i id="kr_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
                       <% if(item.is_completed != true || item.progress != 100.00) %>
                       <button class="btn btn-accordion edit_personal_key_result no-padding" name="personalkr_<%= item.id %>"  data-id="<%= item.id %>">
                         <i class="fa fa-pencil"></i>
@@ -295,12 +289,12 @@
                       <li>
                         <!-- Link to Contribution page -->
                         <% if(item.progress == 100.00 || item.is_completed == true) %>
-                          <a href="/" data-toggle="modal" data-target="#notification_modal" id="keyresultprogress_<%= item.id %>">
+                          <a href="/" data-toggle="modal" data-target="#notification_modal" id="keyresultprogress_<%= item.id %>" class="pointer-link">
                             <i class="pg-plus"></i> 
                              Progress update
                           </a>
                         <% else %>
-                          <a name="link_contribution_overlay" data-id="<%= item.id %>">
+                          <a name="link_contribution_overlay" data-id="<%= item.id %>" class="pointer-link">
                             <i class="pg-plus"></i> 
                              Progress update
                           </a>
@@ -317,7 +311,7 @@
                       <% if @selected_timeframe.id == @system_timeframe_log_id %>
                       <li>
                         <!-- Deletion of key result -->
-                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
+                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>" class="pointer-link">
                           <i class="pg-trash_line"></i> 
                            Delete
                         </a>
@@ -358,10 +352,11 @@
             <!-- New row for the add in of new key results over here -->
             <div class="row accordion-item add-new-personal-key-result">
               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
-                <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+                <span id="kr_creation_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display: none;"></span>
+                <span id="plus_icon_<%= item.id %>" class="fa fa-fw fa-plus fa-lg m-t-5"></span>
               </div>
               <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
-                <input name="new_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Key Result" data-id="<%= item.id %>"/>
+                <input name="new_key_result" type="text" class="form-control form-new-key-result" placeholder="Press enter to create Key Result" data-id="<%= item.id %>"/>
               </div>
             </div>
             <% end %>
@@ -387,11 +382,11 @@
 
     <% if @selected_timeframe.id >= @system_timeframe_log_id %>
     <div class="new-objective-input">
-      <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5">
+      <span class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus m-t-5 text-center">
         <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
       </span>
       <span id="add-new-personal-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-        <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+        <input id="new_personal_objective" type="text" class="form-control form-new-key-result" placeholder="Press enter to create objective"/>
       </span>
     </div>
     <% end %>
@@ -407,7 +402,7 @@
 <div id="contribution_overlay" class="overlay hide" data-pages="search">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -465,7 +460,7 @@
 <div id="new_objective_popup" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -493,29 +488,30 @@
               <div id="selection_team_kr" class="form-group">
                 <label>Select the alignment Team Key Result</label>
                 <!--Load all the key result of the particular team-->
-                <select id="team_key_result_selection" class="full-width">
+                <select id="team_key_result_selection" style="width: 100%;">
                   <% temp_okr_team = "" %>
+                  <% previous_okr_team = "" %>
                   <% @temp_team_key_result.each_with_index do |item, index| %>
                   <% if index == 0 %>
                   <% temp_okr_team = item[2] %>
+                  <% previous_okr_team = item[2] %>
                   <optgroup label="<%= temp_okr_team %>">
                   <% end %>
                   <% if item[2] != temp_okr_team %>
                   <% temp_okr_team = item[2] %>
+                  </optgroup>
                   <optgroup label="<%= temp_okr_team %>">
                   <% end %>
                     <option value="<%= item[1] %>">
                       <%= item[0] %>
                     </option>
-                  <% if item[index + 1] != nil %>
-                  <% if item[index + 1] != temp_okr_team %>
+                  <% end %>
+                  <% if @temp_team_key_result.count != 0 %>
                   </optgroup>
-                  <% end %>
-                  <% end %>
-                  <% end %>                             
+                  <% end %>                          
                 </select>
               </div>
-              <div id="selection_company_kr" class="form-group" style="display: none;">
+              <div id="selection_company_kr" class="form-group">
                 <label>Select the alignment Company Key Result</label>
                 <!--Load all the key result of the particular team-->
                 <select id="company_key_result_selection" style="width: 100%;">
@@ -553,7 +549,7 @@
 <div id="overlay_first_timer" class="overlay hide">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-sm-3 col-md-3 col-lg-3">
@@ -591,9 +587,9 @@
 
 <!--Overlay for the 1st time login to change password-->
 <div id="overlay_first_timer_edit_profile" class="overlay hide">
-  <div class="overlay-content has-results m-t-20">
+  <div class="overlay-content has-results m-t-20 m-b-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-sm-3 col-md-3 col-lg-3">

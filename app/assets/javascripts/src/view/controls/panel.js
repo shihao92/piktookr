@@ -5,9 +5,9 @@ define([], function(){
 
   function togglePanelVisibility(panel_info, input){
     switch(input){
-      case 0: $(panel_info).attr('style','display:none;');
+      case 0: $(panel_info).css("display", "none");
               break;
-      case 1: $(panel_info).attr('style', 'display:inherit;');
+      case 1: $(panel_info).css("display", "inherit");
               break;
     }
   }

@@ -26,7 +26,7 @@ class TeamKeyResultsController < ApplicationController
       if status == 200
         format.json { render json: 'Team Key Result is created successfully!', status: :ok }
       else
-        format.json { render json: 'Fail to create team key result!', status: :unprocessable_entity }
+        format.json { render json: 'Team Key Result must have more than 5 characters!', status: :unprocessable_entity }
       end
     end
   end
@@ -51,15 +51,24 @@ class TeamKeyResultsController < ApplicationController
   def destroy
     team_id = params[:okr_team_id]
     team_objective = TeamObjective.find(@team_key_result.team_objective_id)
-    status = TeamKeyResult.delete_team_key_result(@team_key_result)
+    okr_team_personal = OkrTeamPersonal.find_by(team_key_result_id: @team_key_result.id)
+    if okr_team_personal == nil
+      status = TeamKeyResult.delete_team_key_result(@team_key_result)
+    else 
+      status = 202
+    end
     respond_to do |format|
       if status == 200
         format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
                       notice: 'Team key result was successfully destroyed.' }
         format.json { head :no_content }
+      elsif status == 202
+        format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
+                      notice: 'Failed to destroy team key result.' }
+        format.json { head :no_content }
       else
         format.html { redirect_to "/team/#{team_id}/team_objectives/team_dashboard/", 
-                      notice: 'Failed to destroy team objective' }
+                      notice: 'Failed to destroy team key result.' }
         format.json { head :no_content }
       end
     end
@@ -81,6 +90,18 @@ class TeamKeyResultsController < ApplicationController
 
     @log = LogTeamKeyResult.where(team_key_result_id: @key_result_id).order(id: :DESC)
     @timeframe_log = TimeframeLog.find(@team_objective.timeframe_log_id)
+    if @team_key_result.due_date != nil
+      if @timeframe_log.end_date == @team_key_result.due_date
+        @timeframe_day_difference = @remaining_quarter_days.to_i
+      else
+        @timeframe_day_difference = @team_key_result.due_date - Date.today
+        if @timeframe_day_difference < 0 
+          @timeframe_day_difference = 0
+        end
+      end
+    else
+      @timeframe_day_difference = @remaining_quarter_days.to_i
+    end
 
     @temp_personal_objective = []
     okr_team_personals = OkrTeamPersonal.where(team_key_result_id: @key_result_id)

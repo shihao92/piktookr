@@ -146,6 +146,14 @@ class PersonalKeyResultsController < ApplicationController
     @obj_user_short_str = Shortform.get_string_shortform(@user_info.first_name)
     
     @timeframe_log = TimeframeLog.find(@personal_objective.timeframe_log_id)
+    if @timeframe_log.end_date == @personal_key_result.due_date
+      @timeframe_day_difference = @remaining_quarter_days.to_i
+    else
+      @timeframe_day_difference = @personal_key_result.due_date - Date.today
+      if @timeframe_day_difference < 0 
+        @timeframe_day_difference = 0
+      end
+    end
 
     @log = LogPersonalKeyResult.where(personal_key_result_id: @key_result_id).order(id: :DESC)
 

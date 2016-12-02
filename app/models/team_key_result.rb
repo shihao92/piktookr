@@ -25,11 +25,13 @@ class TeamKeyResult < ApplicationRecord
     def self.new_team_key_result(key_result, team_objective_id, user_id)
       status = 0
       team_objective = TeamObjective.find(team_objective_id)
+      current_quarter_end_date = TimeframeLog.current_quarter_end_date
       new_team_key_result = TeamKeyResult.new(
         progress: 0.0, 
         key_result: key_result , 
         team_objective_id: team_objective_id, 
-        user_id: user_id
+        user_id: user_id,
+        due_date: current_quarter_end_date
       )
       if new_team_key_result.save
         LogTeamKeyResult.log_new_team_key_result(new_team_key_result.id, team_objective.objective, user_id)

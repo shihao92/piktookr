@@ -54,8 +54,13 @@ function(){
       });
     }
 
+    function recreateSlider(target){
+      $(target).html('<div class="bg-master bg-complete-darker" id="contribution_sliders"></div>');
+    }
+
     return {
-        contributionSliderControl: contributionSliderControl
+      contributionSliderControl,
+      recreateSlider
     }
 
 })

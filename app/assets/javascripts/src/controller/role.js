@@ -12,7 +12,7 @@ function(roleParam, btnControl, customModal, refreshPage, overlay, panel){
   const input_new_role_name = '#new_role_name';
   const input_new_role_description = '#new_role_description';
   const input_checked_control_selection = 'input[name=checked_security_checkbox]';
-  const input_uncheck_control_selection = 'input[name=security_checkbox]';
+  const input_check_control_selection = 'input[name=security_checkbox]';
   const radio_button_okr_role = 'label[name=radio_btn_okr_role]';
   const panel_role_control = 'div[name=okr_role_control_panel]';
 
@@ -44,27 +44,27 @@ function(roleParam, btnControl, customModal, refreshPage, overlay, panel){
     panel.togglePanelVisibility(role_panel_id, 1);
   }
 
-  function uncheckSecurityControl(event){
-    let okr_role_control_id = $(event.target).attr('data-id');
-    let remove_role_control_promise = new roleParam.removeRoleControl(okr_role_control_id);
-    remove_role_control_promise.then(uncheckedSecurityControl, customModal.notificationModalToggle);
-  }
-
-  function uncheckedSecurityControl(message){
-    customModal.toggleProgressRingModal(0);
-    refreshPage.refreshPage();
-  }
-
   function checkSecurityControl(event){
     let role_id = $(event.target).parents(panel_role_control).attr('data-id');
     let control_id = $(event.target).attr('data-id');
-    let input_role_control_promise = new roleParam.createRoleControl(role_id, control_id);
-    input_role_control_promise.then(checkedSecurityControl, customModal.notificationModalToggle);
+    if($(event.target).attr('value') === '0'){
+      $(event.target).attr('value', '1');
+      let input_role_control_promise = new roleParam.createRoleControl(role_id, control_id);
+      input_role_control_promise.then(checkedSecurityControl, customModal.notificationModalToggle);
+    } else {
+      $(event.target).attr('value', '0');
+      let remove_role_control_promise = new roleParam.removeRoleControl(role_id, control_id);
+      remove_role_control_promise.then(checkedSecurityControl, customModal.notificationModalToggle);
+    }
   }
 
   function checkedSecurityControl(event){
     customModal.toggleProgressRingModal(0);
-    refreshPage.refreshPage();
+    setTimeout(doneCheckedSecurityControl, 1000);
+  }
+
+  function doneCheckedSecurityControl(event){
+    customModal.toggleProgressRingModal(1);
   }
 
 
@@ -77,8 +77,7 @@ function(roleParam, btnControl, customModal, refreshPage, overlay, panel){
     btnControl.resolveButtonClick(radio_button_okr_role, toggleRoleButtonGroup);
 
     // Role control checkbox checked or unchecked
-    btnControl.resolveButtonClick(input_checked_control_selection, uncheckSecurityControl);
-    btnControl.resolveButtonClick(input_uncheck_control_selection, checkSecurityControl);
+    btnControl.resolveButtonClick(input_check_control_selection, checkSecurityControl);
 
   })
     

@@ -6,3 +6,12 @@
 .dropdown-menu > li > a:focus {
   color: $dark-blue;
 }
+
+.profile-menu-dropdown {
+  top: 102%;
+}
+
+.form-caret-dropdown {
+  position: absolute; 
+  right: 19px;
+}

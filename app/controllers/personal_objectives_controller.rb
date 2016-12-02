@@ -16,11 +16,11 @@ class PersonalObjectivesController < ApplicationController
     objective = params[:objective]
     team_key_result_id = params[:team_key_result_id]
     status = PersonalObjective.new_personal_objective(objective, team_key_result_id, current_user.id)
-    respond_to do |format|
+    respond_to do |format| 
       if status == 200
         format.json { render json: 'Personal Objective is created successfully!', status: :ok }
       else
-        format.json { render json: 'Failed to create personal objective!', status: :ok }
+        format.json { render json: 'Personal Objective must be more than 5 characters!', status: :ok }
       end
     end
   end
@@ -35,7 +35,7 @@ class PersonalObjectivesController < ApplicationController
       if status == 200
         format.json { render json: 'Personal Objective is created successfully!', status: :ok }
       else
-        format.json { render json: 'Failed to create personal objective!', status: :ok }
+        format.json { render json: 'Personal Objective must be more than 5 characters!', status: :ok }
       end
     end
   end

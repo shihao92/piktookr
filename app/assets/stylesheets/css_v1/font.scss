@@ -12,27 +12,32 @@
   font-family: ProximaNovaSoft;
 }
 
+@font-face {
+  font-family: 'OpenSans';
+  src:font-url('/assets/plugins/fonts/open-sans/opensans-regular.ttf') format('truetype');
+}
+
 // Login Page
 .login-brand {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 36px;
   color: $normal-blue;
 }
 .login-subtitle {
   font-size: 15px;
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
 }
 .support-link {
   color: $darker-black;
   font-size: 13px;
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
 }
 .login-image-title {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 30px;
 }
 .login-image-subtitle {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 18px;
 }
 
@@ -40,24 +45,24 @@
 .brand-sidebar {
   color: $native-white;
   background: transparent;
-  font-size: $font-18;
-  font-family: ProximaNovaSoft;
+  font-size: 18px;
+  font-family: OpenSans;
 }
 .brand-header {
   color: $normal-blue;
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 30px;
   margin-left: 24px;
 }
 
 // Default Layout Header
 .user-name {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 16px;
   color: $lighter-black;
 }
 .day-left {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 16px;
   color: $header-grey-light;
   &.number {
@@ -66,12 +71,12 @@
   }
 }
 .notifications-font {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
 }
 
 // Dashboard styling
 .dashboard-title {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 22px;
   font-weight: 600;
   color: $darker-black;
@@ -97,7 +102,7 @@
   font-weight: 600;
 }
 .key-result {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   font-size: 16px;
   font-weight: 500;
   color: $darker-black;
@@ -108,7 +113,7 @@
   font-size: 22px;
   font-weight: 600;
   color: $normal-blue;
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
 
   &.overlay-title-md {
     font-size: 20px;
@@ -120,7 +125,7 @@
   font-weight: 500;
   line-height: 1.2;
   color: $dark-black;
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
 
   &.progress-update {
     color: $lighter-black;
@@ -134,8 +139,9 @@
   color: $dark-blue;
 }
 
+// OKR Details Page
 .details-page {
-  font-family: ProximaNovaSoft;
+  font-family: OpenSans;
   color: $darker-black;
 
   &.title {
@@ -155,9 +161,14 @@
 
 .tree-progress {
   position: relative;
-  font-size: $font-12;
+  font-size: 12px;
   color: $normal-green;
   font-weight: bold;
   text-align: right;
+}
+
+.okr-details-header-info {
+  margin-right: 40px;
+  color: $info-grey;
 }
 

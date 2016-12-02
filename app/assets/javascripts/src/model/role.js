@@ -55,7 +55,7 @@ define (['model/server_url'], function (urlParam) {
       });
     }
 
-    function removeRoleControl(okr_role_control_id)
+    function removeRoleControl(okr_role_id, control_id)
     {
       return new Promise((resolve, reject) => {
         const xhttp = new XMLHttpRequest();
@@ -74,7 +74,8 @@ define (['model/server_url'], function (urlParam) {
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-          okr_role_control_id           : okr_role_control_id
+          okr_role_id           : okr_role_id,
+          control_id            : control_id
         }));
       });
     }

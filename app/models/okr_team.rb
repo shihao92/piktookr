@@ -29,8 +29,13 @@ class OkrTeam < ApplicationRecord
     end
 
     def self.search_team(keyword)
-      okr_teams = OkrTeam.select("id, name").where("name like ?", "%#{keyword}%")
-      return okr_teams
+      custom_sql = "select okr_teams.id, okr_teams.name, count(okr_user_teams.user_id) as team_members_count from okr_teams
+                    full outer join okr_user_teams on okr_user_teams.okr_team_id = okr_teams.id
+                    where LOWER(okr_teams.name) like LOWER('%#{keyword}%')
+                    group by okr_teams.id"
+      okr_teams = ActiveRecord::Base.connection.execute(custom_sql)
+
+      return okr_teams.values
     end
 
 end

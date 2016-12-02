@@ -31,9 +31,6 @@ function(overlayParam, btnControl){
   function addNewPersonalKeyResult(resolve){
     $('input[name=new_key_result]')
     .on({
-      focusout: function(){
-        location.reload();
-      },
       keypress: resolve      
     });
   }
@@ -148,10 +145,7 @@ function(overlayParam, btnControl){
   function addNewTeamKeyResult(resolve){
     $('input[name=new_team_key_result]')
     .on({
-      keypress: resolve,
-      focusout: function(){
-        location.reload();
-      }
+      keypress: resolve
     });
   }
 
@@ -178,10 +172,7 @@ function(overlayParam, btnControl){
   function addNewCompanyKeyResult(resolve){
     $("input[name=new_company_key_result]")
     .on({
-        focusout: function() {
-            location.reload();
-        },
-        keypress: resolve
+      keypress: resolve
     });
   }
 
@@ -199,8 +190,8 @@ function(overlayParam, btnControl){
   function addNewCompanyObjective(resolveFocusOut, resolveKeypress){
     $("#add-new-company-objective")
     .on({
-        focusout: resolveFocusOut,
-        keypress: resolveKeypress
+      focusout: resolveFocusOut,
+      keypress: resolveKeypress
     });
   }
 
@@ -209,7 +200,7 @@ function(overlayParam, btnControl){
     .on({
       keypress: resolve,
       focusout: function() {
-          location.reload();
+        location.reload();
       }
     }, "input[name=edit_company_objective]");
   }

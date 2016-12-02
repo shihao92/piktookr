@@ -12,7 +12,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Team Key Result must have more than 5 characters!");
           }
         };
         xhttp.open(
@@ -37,7 +37,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Failed to update team key result!");
           }
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it

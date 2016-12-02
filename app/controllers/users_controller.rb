@@ -8,9 +8,14 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
-    @employees = OkrUserRole.where(okr_role_id: 9)
-    @team_leads = OkrUserRole.where(okr_role_id: 8)
-    @admins = OkrUserRole.where(okr_role_id: 7)
+
+    employee = OkrRole.find_by(name: "Employee")
+    team_lead = OkrRole.find_by(name: "Team Lead")
+    admin = OkrRole.find_by(name: "Admin")
+
+    @employees = OkrUserRole.where(okr_role_id: employee.id)
+    @team_leads = OkrUserRole.where(okr_role_id: team_lead.id)
+    @admins = OkrUserRole.where(okr_role_id: admin.id)
 
     @user_status_selection = CONST_USER_STATUS
     @current_edit_user = User.find(@@editing_user_id)
@@ -28,6 +33,7 @@ class UsersController < ApplicationController
     employee_role = OkrRole.find_by(name: "Employee")
     is_first_time = 0
     timeframe_log_id = TimeframeLog.current_timeframe_log_id
+
     okr_sign_in = OkrSignIn.find_by(user_id: user_id)
 
     if okr_sign_in == nil
@@ -42,7 +48,6 @@ class UsersController < ApplicationController
         is_first_time = 1
         sign_in_count = sign_in_count + 1
         OkrSignIn.find_by(user_id: user_id).update(sign_in_count: sign_in_count)
-        OkrUserTimeframe.create(user_id: user_id, timeframe_log_id: timeframe_log_id)
         format.json { render json: is_first_time, status: :ok }
       else
         format.json { render json: is_first_time, status: :ok }
@@ -172,9 +177,9 @@ class UsersController < ApplicationController
     status = User.remove_user(user_id)
     respond_to do |format|
       if status == 200
-        format.json { render json: 'User is removed successfully!', status: :ok } 
+        format.json { render json: 'Status update: removed', status: :ok } 
       else
-        format.json { render json: 'Fail to remove user!', status: :unprocessable_entity }
+        format.json { render json: 'Fail to update status!', status: :unprocessable_entity }
       end
     end
   end

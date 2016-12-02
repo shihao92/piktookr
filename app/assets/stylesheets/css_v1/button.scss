@@ -41,3 +41,11 @@
     height: 35px;
   }
 }
+
+.close-button {
+  font-size: 20px; 
+  color: $info-grey;
+}
+.close-button:active, .close-button:focus, .close-button:hover {
+  color: $linked-kr-grey;
+}

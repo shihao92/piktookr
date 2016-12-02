@@ -155,7 +155,7 @@ define (['model/server_url'], function (urlParam) {
           resolve(this.responseText);
         }
         else if(this.readyState === 4 && this.status !== 200){
-          reject("Error!");
+          reject("Unable to search teams!");
         }
       };
       xhttp.open(

@@ -1,6 +1,6 @@
 <!-- START JUMBOTRON -->
 <div class="bg-master-lighter" data-pages="parallax">
-  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+  <div class="container-fixed-lg p-l-45 p-r-50">
     <div class="inner">
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
@@ -17,8 +17,8 @@
 </div>
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
-<div id="page_company_key_result_details" class="bg-light-grey" data-id="<%= @company_key_result.id %>">
-  <div class="container-fluid container-fixed-lg">
+<div id="page_company_key_result_details" class="bg-master-lighter" data-id="<%= @company_key_result.id %>">
+  <div class="container-fluid container-fixed-lg p-l-50">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
         <h3 class="details-page title">
@@ -73,27 +73,25 @@
           </span>
           <% end %>
         </span>
-        <br />
-        <br />
-        <hr />
+        <hr class="m-t-40"/>
       </div>
       <div class="col-lg-4 col-md-4 col-sm-4">
         <div class="pull-right padding-body">
+        <% if @timeframe_day_difference.to_i == 0 %>
+          <div class="c100 p70 red">
+        <% else %>
           <div class="c100 p70">
-            <span>
-              <span id="okr_aligned_percentage"><%= @remaining_quarter_days.to_i %></span> <br/>
-              <p>days left</p>
-            </span>
+        <% end %>
+            <span id="okr_aligned_percentage"><%= @timeframe_day_difference.to_i %></span>
+            <span class="circle-label">days-left</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
             </div>
           </div>
           <div class="c100 p<%= @company_key_result.progress.to_i %>">
-            <span>
-              <span id="okr_aligned_percentage"><%= @company_key_result.progress.to_i %>%</span> <br/>
-              <p>progress</p>
-            </span>
+            <span id="okr_aligned_percentage"><%= @company_key_result.progress.to_i %>%</span>
+            <span class="circle-label">progress</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
@@ -128,11 +126,11 @@
                       </span>
                       <% @time_difference = Time.now - item.created_at %>
                       <% if @time_difference < 86400 %>
-                        <h5><%= @user_info.last_name %> <%= @user_info.first_name %></h5>
+                        <h5><%= log_user_info.last_name %> <%= log_user_info.first_name %></h5>
                         <span class="small">Less than 1 day ago</span>
                       <% else %>
                       <% @day_difference = @time_difference / 86400 %>
-                        <h5><%= @user_info.last_name %> <%= @user_info.first_name %></h5>
+                        <h5><%= log_user_info.last_name %> <%= log_user_info.first_name %></h5>
                         <% if(@day_difference.to_i > 1) %>
                         <span class="small"><%= @day_difference.to_i %> days ago</span>
                         <% else %>
@@ -185,6 +183,19 @@
 
                 <ul>
                   <% @temp_team_objective.each do |item| %>
+                  <% user_info = User.find(item[0][1]) %>
+                  <% user_shortform = Shortform.get_string_shortform(user_info.first_name) %>
+                  <li>
+                    <button class="leaf-point level-3" title="<%= user_info.first_name %>">
+                      <%= user_shortform %>
+                    </button>
+                    <span class="description semi-bold">
+                      <%= item[0][0] %>
+                    </span>
+                  </li>
+                  <% end %>
+                  <!--Personal Objective Linked Here-->
+                  <% @temp_personal_objective.each do |item| %>
                   <% user_info = User.find(item[0][1]) %>
                   <% user_shortform = Shortform.get_string_shortform(user_info.first_name) %>
                   <li>

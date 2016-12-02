@@ -118,6 +118,12 @@ class TeamObjectivesController < ApplicationController
       end
     end
 
+    # Check whether user which navigate into the page belongs to the team or not
+    @presence_in_team = OkrUserTeam.find_by(user_id: current_user.id, okr_team_id: @team_id, status: "APPROVED")
+    if @role.name == "Admin" 
+      @presence_in_team = 1
+    end
+
     render 'app/team_dashboard'
   end
 

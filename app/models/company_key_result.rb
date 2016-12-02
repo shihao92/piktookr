@@ -19,7 +19,7 @@ class CompanyKeyResult < ApplicationRecord
     # Validations
     # -----------
 
-    validates   :key_result, presence: true, length: { minimum: 2 }, uniqueness: true
+    validates   :key_result, presence: true, length: { minimum: 5 }, uniqueness: true
     validates   :progress, presence: true, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
     validates   :company_objective_id, presence: true
     validates   :user_id, presence: true
@@ -28,11 +28,13 @@ class CompanyKeyResult < ApplicationRecord
     def self.new_company_key_result(key_result, company_objective_id, user_id)
       status = 0
       company_objective = CompanyObjective.find(company_objective_id)
+      current_quarter_end_date = TimeframeLog.current_quarter_end_date
       new_company_key_result = CompanyKeyResult.new(
         key_result: key_result,
         progress: 0.0,
         company_objective_id: company_objective_id,
-        user_id: user_id
+        user_id: user_id,
+        due_date: current_quarter_end_date
       )
       if new_company_key_result.save
         LogCompanyKeyResult.log_new_company_key_result(new_company_key_result.id, company_objective.objective, user_id)

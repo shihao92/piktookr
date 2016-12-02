@@ -40,7 +40,18 @@ class CompanyKeyResultsController < ApplicationController
   # DELETE /company_key_results/1
   # DELETE /company_key_results/1.json
   def destroy    
-    status = CompanyKeyResult.delete_company_key_result(@company_key_result)
+    okr_company_personal = OkrCompanyPersonal.find_by(company_key_result_id: @company_key_result.id)
+    okr_company_team = OkrCompanyTeam.find_by(company_key_result_id: @company_key_result.id)
+    if okr_company_personal == nil 
+      if okr_company_team == nil 
+        status = CompanyKeyResult.delete_company_key_result(@company_key_result)
+      else
+        status = 201
+      end
+    else
+      status = 201
+    end
+    
     if status == 200
       flash.alert = 'Company key result was successfully destroyed.'
       redirect_to '/company_objectives/company_dashboard'
@@ -70,9 +81,27 @@ class CompanyKeyResultsController < ApplicationController
       @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.objective, obj.user_id]}
       @temp_team_objective.push(@team_objective)
     end
+
+    @temp_personal_objective = []
+    @okr_company_personals = OkrCompanyPersonal.where(company_key_result_id: @key_result_id)
+    @okr_company_personals.each do |item|
+      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).all.map{|obj| [obj.objective, obj.user_id]}
+      @temp_personal_objective.push(@personal_objective)
+    end
     
     @timeframe_log = TimeframeLog.find(@company_objective.timeframe_log_id)
-
+    if @company_key_result.due_date != nil
+      if @timeframe_log.end_date == @company_key_result.due_date
+        @timeframe_day_difference = @remaining_quarter_days.to_i
+      else
+        @timeframe_day_difference = @company_key_result.due_date - Date.today
+        if @timeframe_day_difference < 0 
+          @timeframe_day_difference = 0
+        end
+      end
+    else
+      @timeframe_day_difference = @remaining_quarter_days.to_i
+    end
 
     render 'app/company_key_result_details'
   end

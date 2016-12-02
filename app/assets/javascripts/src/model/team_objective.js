@@ -12,19 +12,19 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Team Objective must have more than 5 characters!");
           }
         };
         xhttp.open(
-            "POST", 
-            urlParam.server_url() + "/team/" + team_id + "/team_objectives", 
-            true
+          "POST", 
+          urlParam.server_url() + "/team/" + team_id + "/team_objectives", 
+          true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-            objective                : objective,
-            company_key_result_id    : company_key_result_id,
-            team_id                  : team_id
+          objective                : objective,
+          company_key_result_id    : company_key_result_id,
+          team_id                  : team_id
         }));
       });
     }
@@ -43,15 +43,15 @@ define (['model/server_url'], function (urlParam) {
         };
         // WARNING : Decimal is not acceptable in the URL for rails as encoding will not work against it
         xhttp.open(
-            "POST", 
-            urlParam.server_url() + "/team/" + team_id + "/team_objectives/" + objective_id + "/edit_objective", 
-            true
+          "POST", 
+          urlParam.server_url() + "/team/" + team_id + "/team_objectives/" + objective_id + "/edit_objective", 
+          true
         );
         xhttp.setRequestHeader('Content-Type', 'application/json');
         xhttp.send(JSON.stringify({
-            id                       : objective_id,
-            edited_objective         : edited_objective,
-            original_objective       : original_objective
+          id                       : objective_id,
+          edited_objective         : edited_objective,
+          original_objective       : original_objective
         }));           
       });
     }

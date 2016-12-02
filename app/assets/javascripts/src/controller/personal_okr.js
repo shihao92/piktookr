@@ -20,7 +20,6 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const button_update_progress_key_result = '#btn_update_progress';
     const button_edit_personal_key_result = '.edit_personal_key_result';
     const button_save_personal_kr_due_date = '#btn_save_personal_kr_due_date';
-    const textbox_new_personal_key_result = '.form-new-key-result';
     const link_add_due_date_personal_kr = '#link_add_due_date_personal_kr';
     const modal_personal_kr_due_date = '#personal_kr_due_date_modal';
     const modal_checked_personal_kr_confirmation = '#modal_checked_personal_kr_confirmation';
@@ -44,8 +43,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const personal_key_result_contribution = '#personal_key_result_contribution';
     const contribution_sliders = '#contribution_sliders';
     const contribution_textarea = '#contribution_textarea';
+    const aligned_company_objective = '#aligned_company_objective';
 
-    const checked_personal_kr_prompt = '#checked_personal_kr_prompt';
     const button_confirm_checked_kr = '#btn_confirm_checked_kr';
     const button_remove_checked_kr = '#btn_remove_checked_kr';
 
@@ -54,8 +53,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     const div_search_personal_objectives_results = '#div_search_personal_objectives_results';
     const div_search_personal_kr_results = '#div_search_personal_kr_results';
 
-    // From layout page
-    const button_timeframe_dropdown = "#btn_timeframe_dropdown";
+    // From Layout
+    const lists_timeframe_logs = '#lists_timeframe_logs';
 
     let original_personal_objective = "";
     let checkbox_tick_amount = 0;
@@ -70,12 +69,13 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       let key = event.which;
       if($(new_personal_objective).val() !== '') {
         if(key == 13){
-          let temp_personal_objective = "";
-          temp_personal_objective = $(new_personal_objective).val();
+          let temp_personal_objective = $(new_personal_objective).val();
           overlay.loadNewPersonalObjectiveOverlayContent();
           $(textarea_personal_objective).text(temp_personal_objective);
           btnControl.toggleDisabledSaveNewPersonalObjectiveButton(0);
           textboxInput.checkPersonalObjectiveInput(checkPersonalObjectiveTextarea);
+          $(selection_team_kr).css("display", "block");
+          $(selection_company_kr).css("display", "none");
         }
       }   
     }
@@ -100,13 +100,22 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
         if(selected_radio_value === "team_kr"){
           let team_key_result_id = $(selection_team_key_result).val();
           team_key_result_id = parseInt(team_key_result_id);
-          let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
-          create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+          if($(selection_team_key_result).val() != null){
+            let create_personal_objective = new personalObjectiveModel.newPersonalObjective(personal_objective, team_key_result_id);
+            create_personal_objective.then(createdPersonalObjective, customModal.notificationModalToggle);
+          } else {
+            customModal.notificationModalToggle("Must aligned to Team Key Result!");
+          }
         } else {
           let company_key_result_id = $(selection_company_key_result).val();
           company_key_result_id = parseInt(company_key_result_id);
-          let create_personal_objective_link_company = new personalObjectiveModel.newPersonalObjectiveLinkedCompany(personal_objective, company_key_result_id);
-          create_personal_objective_link_company.then(createdPersonalObjective, customModal.notificationModalToggle);
+          if($(selection_company_key_result).val() != null){
+            let create_personal_objective_link_company = new personalObjectiveModel.newPersonalObjectiveLinkedCompany(personal_objective, company_key_result_id);
+            create_personal_objective_link_company.then(createdPersonalObjective, customModal.notificationModalToggle);
+          }
+          else {
+            customModal.notificationModalToggle("Must aligned to Company Key Result!");
+          }
         }
       } else {
         customModal.notificationModalToggle("Personal objective cannot be empty!");
@@ -114,8 +123,12 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     }
 
     function createdPersonalObjective(message){
-      customModal.toggleProgressRingModal(0);
-      refreshPage.refreshPage();
+      if(message == "Personal Objective must be more than 5 characters!"){
+        customModal.notificationModalToggle(message);
+      } else {
+        customModal.toggleProgressRingModal(0);
+        refreshPage.refreshPage();
+      }
     }
 
     function editPersonalObjective(){
@@ -134,26 +147,30 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       original_personal_objective = original_objective;
     }
 
+    let current_editing_personal_objective_id = 0;
     function editingPersonalObjective(event){
       let updated_objective = $(event.target).val();
-      let current_editing_personal_objective_id = $(event.target).attr('data-id');
+      current_editing_personal_objective_id = $(event.target).attr('data-id');
       let key = event.which;
       // When enter key is pressed
       if(key == 13){
-        if(updated_objective !== original_personal_objective){
+        if(updated_objective !== original_personal_objective && updated_objective.length > 5){
           let edit_objective_promise = new personalObjectiveModel.editPersonalObjective(
             current_editing_personal_objective_id, updated_objective, original_personal_objective
           );
           edit_objective_promise.then(editedPersonalObjective, customModal.notificationModalToggle);
         }
-        else{
-          location.reload();
+        else if(updated_objective === original_personal_objective) {
+          refreshPage.refreshPage();
+        }
+        else {
+          customModal.notificationModalToggle('Personal Objective must have more than 5 characters!');
         }
       }
     }
 
     function editedPersonalObjective(message){
-      customModal.toggleProgressRingModal(0);
+      $('#obj_loading_' + current_editing_personal_objective_id).css('display', 'block');
       refreshPage.refreshPage();
     }
 
@@ -187,13 +204,13 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     }
 
     function radioButtonTeamKRSelectionChanged(event){
-      $(selection_team_kr).attr("style", "display: inline-block;");
-      $(selection_company_kr).attr("style", "display: none;");
+      $(selection_team_kr).css("display", "block");
+      $(selection_company_kr).css("display", "none");
     }
 
     function radioButtonCompanyKRSelectionChanged(event){
-      $(selection_team_kr).attr("style", "display: none;");
-      $(selection_company_kr).attr("style", "display: inline-block;");
+      $(selection_team_kr).css("display", "none");
+      $(selection_company_kr).css("display", "block");
     }
 
     function searchPersonalObjective(event){
@@ -215,12 +232,13 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     // Personal Key Result
     // -------------------
 
+    let current_focus_objective_id = 0;
     function createNewPersonalKeyResult(event){
       let key = event.which;
       if($(event.target).val() !== ''){
         if(key == 13){
           // Find out the personal objective id
-          let current_focus_objective_id = $(event.target).attr('data-id');
+          current_focus_objective_id = $(event.target).attr('data-id');
           current_focus_objective_id = parseInt(current_focus_objective_id);
           let temp_personal_key_result = $(event.target).val();  
           if(temp_personal_key_result !== ''){
@@ -234,7 +252,8 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     }
 
     function createdPersonalKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#plus_icon_' + current_focus_objective_id).css('display', 'none');
+      $('#kr_creation_loading_' + current_focus_objective_id).css('display', 'inline-block');
       refreshPage.refreshPage();
     }
 
@@ -257,13 +276,13 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
     }
 
     function getLinkedCompanyObjective(data){
-      $('#aligned_company_objective').text(data);
+      $(aligned_company_objective).text(data);
     }
 
     function closeContributionOverlay(event){
       let parent_target = $(contribution_sliders).parents(".no-padding");
       $(contribution_sliders)[0].destroy();
-      $(parent_target).html('<div class="bg-master bg-complete-darker" id="contribution_sliders"></div>');
+      slider.recreateSlider(parent_target);
       overlay.toggleOverlay(contribution_overlay, 0);
     }
 
@@ -276,15 +295,24 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
 
       // AJAX call to update the personal key result progress
       if(contribution != ''){
-        let update_kr_progress_promise = new personalKeyResultModel.updatePersonalKeyResultProgress(
-          key_result_id, progress, initial_progress, contribution
-        );  
-        update_kr_progress_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
-        btnControl.notificationDismissClick(1);
+        if(progress < parseInt(initial_progress)){
+          customModal.notificationModalToggle("Progress increment cannot be negative!");
+        } else {
+          let update_kr_progress_promise = new personalKeyResultModel.updatePersonalKeyResultProgress(
+            key_result_id, progress, initial_progress, contribution
+          );  
+          update_kr_progress_promise.then(updatedProgress, customModal.notificationModalToggle);
+          btnControl.notificationDismissClick(1);
+        }
       } else {
         customModal.notificationModalToggle("Contribution cannot be empty!");
       }
     } 
+
+    function updatedProgress(message){
+      customModal.notificationModalToggle(message);
+      refreshPage.refreshPage();
+    }
 
     function checkedUncheckedPersonalKeyResult(event){
       // 1 - checked 
@@ -327,26 +355,30 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       btnControl.hideButton(button_edit_personal_key_result);
     }
 
+    let editing_key_result_id = 0;
     function editingPersonalKeyResult(event){
       let key = event.which;
       if(key == 13){
         let updated_key_result = $(event.target).val();
         let original_key_result = original_personal_key_result;
-        let editing_key_result_id = $(event.target).attr('data-id');
-        if(updated_key_result != original_key_result && updated_key_result != ''){
+        editing_key_result_id = $(event.target).attr('data-id');
+        if(updated_key_result !== original_key_result && updated_key_result.length > 5){
           let edit_kr_promise = new personalKeyResultModel.editPersonalKeyResult(
-              editing_key_result_id, updated_key_result, original_key_result
+            editing_key_result_id, updated_key_result, original_key_result
           );
           edit_kr_promise.then(editedPersonalKeyResult, customModal.notificationModalToggle);
         }
-        else{
-          location.reload();
+        else if(updated_key_result === original_key_result){
+          refreshPage.refreshPage();
+        }
+        else {
+          customModal.notificationModalToggle('Personal Key Result must have more than 5 characters!');
         }
       }
     }
 
     function editedPersonalKeyResult(message){
-      customModal.toggleProgressRingModal(0);
+      $('#kr_loading_' + editing_key_result_id).css('display', 'block');
       refreshPage.refreshPage();
     }
 

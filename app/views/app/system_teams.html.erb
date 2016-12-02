@@ -76,14 +76,14 @@
                 <% if @controls.include? 'Edit Team Information' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_edit_team" data-id="<%= team.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Edit
+                    <span class="fa fa-fw fa-pencil" name="link_edit_team" data-id="<%= team.id %>"></span> Edit
                   </a>
                 </span>
                 <% end %>
                 <% if @controls.include? 'Delete Team' %>
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_team" data-id="<%= team.id %>">
-                    <i class="fa fa-fw fa-trash-o"></i> Delete
+                    <span class="fa fa-fw fa-trash-o" name="link_delete_team" data-id="<%= team.id %>"></span> Delete
                   </a>
                 </span>
                 <% end %>
@@ -102,7 +102,7 @@
 <div class="overlay hide" id="overlay_create_new_team">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/team" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -130,7 +130,7 @@
           <br/>
           <div class="form-group">
             <div class="text-right">
-              <a href="/team" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <a href="/team" class="btn btn-cancel btn-rounded btn-cons">Cancel</a>
               <button id="btn_create_new_team" class="btn btn-complete btn-rounded btn-cons">Submit</button>
             </div>
           </div>        
@@ -146,7 +146,7 @@
 <div class="overlay hide" id="overlay_team_deletion">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/team" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/team" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">
@@ -190,7 +190,7 @@
 <div class="overlay hide" id="overlay_team_edit">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a href="/team" class="close-icon-light overlay-close text-black fs-16">
+      <a href="/team" class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">
@@ -216,7 +216,7 @@
           <br/>
           <div class="form-group">
             <div class="text-right">
-              <a href="/team" class="btn btn-default btn-rounded btn-cons">Cancel</a>
+              <a href="/team" class="btn btn-cancel btn-rounded btn-cons">Cancel</a>
               <button id="btn_edit_team" class="btn btn-complete btn-rounded btn-cons">Submit</button>
             </div>
           </div>        

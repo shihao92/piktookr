@@ -83,9 +83,6 @@ OkrRoleControl.create!(okr_role_id: employee_role.id, control_id: view_future_ti
 
 timeframe = Timeframe.create!(year: "2016", timeframe_type: "Quarterly")
 
-TimeframeLog.create!(start_date: "2016-01-01", end_date: "2016-03-31", timeframe_id: timeframe.id, quarter: "Q1 2016")
-TimeframeLog.create!(start_date: "2016-04-01", end_date: "2016-06-30", timeframe_id: timeframe.id, quarter: "Q2 2016")
-TimeframeLog.create!(start_date: "2016-07-01", end_date: "2016-09-30", timeframe_id: timeframe.id, quarter: "Q3 2016")
 TimeframeLog.create!(start_date: "2016-10-01", end_date: "2016-12-31", timeframe_id: timeframe.id, quarter: "Q4 2016")
 
 

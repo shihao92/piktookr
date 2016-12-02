@@ -56,10 +56,8 @@
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p100 green">
-          <span>
-            <span id="okr_aligned_percentage">100%</span> <br/>
-            <p>aligned</p>
-          </span>
+          <span id="okr_aligned_percentage">100%</span>
+          <span class="circle-label">aligned</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -68,17 +66,15 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <% if(@team_objective.count != 0) %>
-        <% @percentage_completed_objective = (@completed_objective.to_f / @team_objective.count.to_f) * 100 %>
+        <% percentage_completed_objective = (@completed_objective.to_f / @team_objective.count.to_f) * 100 %>
         <% else %>
-        <% @percentage_completed_objective = 0 %>
+        <% percentage_completed_objective = 0 %>
         <% end %>
-        <div class="c100 p<%= @percentage_completed_objective.to_i %> orange">
-          <span>
-            <span id="completed_objective_portion">
-              <%= @completed_objective %>/<%= @team_objective.count %>
-            </span> <br/>
-            <p>objectives</p>
+        <div class="c100 p<%= percentage_completed_objective.to_i %> orange">
+          <span id="completed_objective_portion">
+            <%= @completed_objective %>/<%= @team_objective.count %>
           </span>
+          <span class="circle-label">objectives</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -87,13 +83,10 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @total_progress.to_i %>">
-          <span>
-            <span id="overall_okr_progress">
-              <%= @total_progress.to_i %>%
-            </span> 
-            <br/>
-            <p>overall progress</p>
+          <span id="overall_okr_progress">
+            <%= @total_progress.to_i %>%
           </span>
+          <span class="circle-label">overall progress</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -102,21 +95,19 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @date_difference.to_i %> red">
-          <span>
-            <span id="last_updated">
-              <% if(@team_objective.count == 0) %>
-              <%= '-' %>
+          <span id="last_updated">
+            <% if(@team_objective.count == 0) %>
+            <%= '-' %>
+            <% else %>
+              <% if @date_difference < 1 %>
+                <% @date_difference = "< 1" %>
+                <%= @date_difference %>
               <% else %>
-                <% if @date_difference < 1 %>
-                  <% @date_difference = "< 1" %>
-                  <%= @date_difference %>
-                <% else %>
-                  <%= @date_difference.to_i %>
-                <% end %>                 
-              <% end %>
-            </span> 
-            <p>days ago</p> 
+                <%= @date_difference.to_i %>
+              <% end %>                 
+            <% end %>
           </span>
+          <span class="circle-label">days ago</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -131,7 +122,7 @@
     <% if @team_objective.count == 0 %>
       <div class="panel panel-default panel-heading">
         <h4 class="panel-title panel-title-custom bold details-layout m-l-20">
-          No Team Objective is presence for the Company
+          No Team Objective is presence for the Team
         </h4>
       </div>
     <% end %>
@@ -150,15 +141,16 @@
                 </p>
               </div>
               <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
-                <div class="pull-left">
-                  <% if @controls.include? 'Edit Team OKR' %>
-                  <% if(item.progress != 100.00) %>
-                  <button class="btn btn-accordion edit_team_objective" data-id="<%= item.id %>">
-                    <i class="fa fa-pencil"></i>
-                  </button>
-                  <% end %>
-                  <% end %>
-                </div>
+                <% if @controls.include? 'Edit Team OKR' %>
+                <% if item.progress != 100.00 %>
+                <% if @presence_in_team != [] %>
+                <i id="obj_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
+                <button class="btn btn-accordion edit_team_objective no-padding" data-id="<%= item.id %>">
+                  <i class="fa fa-pencil"></i>
+                </button>
+                <% end %>
+                <% end %>
+                <% end %>
               </div>
               <div class="col-lg-2 col-md-2 col-sm-2 no-padding">
                 <div class="text-center">
@@ -192,16 +184,18 @@
                     <span> Go to details</span>
                   </a>
                 </li>
+                <% if @presence_in_team != nil %>
                 <% if @controls.include? 'Delete Team OKR' %>
                 <% @team_key_result = TeamKeyResult.where(team_objective_id: item.id).order(updated_at: :DESC) %>
                 <% @team_key_result = @team_key_result.count %>
                 <% if @team_key_result == 0 %>
                 <li>
-                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                  <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>" class="pointer-link">
                     <i class="fa fa-fw fa-trash-o"></i> 
                     <span> Delete</span>
                   </a>
                 </li>
+                <% end %>
                 <% end %>
                 <% end %>
               </ul>
@@ -253,15 +247,16 @@
                       </div>
                     </div>
                     <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
-                      <div class="pull-left">
-                        <% if @controls.include? 'Edit Team OKR' %>
-                        <% if(item.progress != 100.00) %>
-                        <button class="btn btn-accordion edit_team_key_result no-padding" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
-                          <i class="fa fa-pencil"></i>
-                        </button>
-                        <% end %>
-                        <% end %>
-                      </div>
+                      <% if @presence_in_team != nil %>
+                      <% if @controls.include? 'Edit Team OKR' %>
+                      <% if(item.progress != 100.00) %>
+                      <i id="kr_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
+                      <button class="btn btn-accordion edit_team_key_result no-padding" name="teamkr_<%= item.id %>" data-id="<%= item.id %>">
+                        <i class="fa fa-pencil"></i>
+                      </button>
+                      <% end %>
+                      <% end %>
+                      <% end %>
                     </div>
                     <div class="col-lg-2 col-md-2 col-sm-2">
                       <div class="text-center">
@@ -309,14 +304,19 @@
                            Go to details
                         </a>
                       </li>
+                      <% if @presence_in_team != nil %>
                       <% if @controls.include? 'Delete Team OKR' %>
+                      <% okr_team_personal = OkrTeamPersonal.find_by(team_key_result_id: item.id) %>
+                      <% if okr_team_personal == nil %>
                       <li>
                         <!-- Deletion of key result -->
-                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
+                        <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>" class="pointer-link">
                           <i class="pg-trash_line"></i> 
                            Delete
                         </a>
                       </li>
+                      <% end %>
+                      <% end %>
                       <% end %>
                     </ul>
            	      </div>
@@ -350,16 +350,19 @@
               </div>
             <% end %>
             <!-- New row for the add in of new key results over here -->
+            <% if @presence_in_team != nil %>
             <% if @selected_timeframe.id >= @system_timeframe_log_id %>
             <% if @controls.include? 'Create Team OKR' %>
             <div class="row accordion-item add-new-team-key-result">
               <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
-                <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+                <span id="kr_creation_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display: none;"></span>
+                <span id="plus_icon_<%= item.id %>" class="fa fa-fw fa-plus fa-lg m-t-5"></span>
               </div>
               <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
-                <input name="new_team_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Team Key Result" data-id="<%= item.id %>"/>
+                <input name="new_team_key_result" type="text" class="form-control form-new-key-result" placeholder="Press enter to create Team Key Result" data-id="<%= item.id %>"/>
               </div>
             </div>
+            <% end %>
             <% end %>
             <% end %>
           </div>
@@ -382,6 +385,7 @@
       </div>
     <% end %>
 
+    <% if @presence_in_team != nil %>
     <% if @selected_timeframe.id >= @system_timeframe_log_id %>
     <% if @controls.include? 'Create Team OKR' %>
     <div class="new-objective-input">
@@ -389,9 +393,10 @@
         <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
       </span>
       <span id="add-new-team-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-        <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+        <input id="new_team_objective" type="text" class="form-control form-new-key-result" placeholder="Press enter to create objective"/>
       </span>
     </div>
+    <% end %>
     <% end %>
     <% end %>
   </div>
@@ -403,7 +408,7 @@
 <div class="overlay hide" id="new_objective_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>
@@ -461,7 +466,7 @@
 <div class="overlay hide" id="teammate_list">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
       <div class="col-lg-3 col-md-3 col-sm-3">
@@ -524,7 +529,7 @@
                   </div>
                   <div class="col-lg-2 col-md-2 col-sm-2">
                     <div class="pull-right">
-                      <button data-id="<%= okr_user_team.id %>" name="btn_remove_team_user" class="btn btn-accordion no-padding">
+                      <button data-id="<%= okr_user_team.id %>" data-name="<%= @team_user.last_name %> <%= @team_user.first_name %>" name="btn_remove_team_user" class="btn btn-accordion no-padding">
                         <i class="pg-close"></i>
                       </button>
                     </div>
@@ -549,6 +554,29 @@
         </div>
       </div>
       <div class="col-lg-3 col-md-3 col-sm-3">
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Confirmation modal for team member removal -->
+<div id="confirmation_team_member_removal_modal" class="modal fade stick-up" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-background">
+      <div class="modal-header clearfix text-left">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Remove Team Member</h4>
+      </div>
+      <hr/>
+      <div class="modal-body">
+        <div class="form-group">
+          Do you want to remove <span id="remove_team_target_name"></span> from team? 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a type="button" class="btn btn-cancel btn-rounded" data-dismiss="modal">Close</a>
+        <button id="btn_confirm_member_removal" type="button" class="btn btn-danger btn-rounded">Confirm</button>
       </div>
     </div>
   </div>

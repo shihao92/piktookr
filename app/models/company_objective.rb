@@ -14,7 +14,7 @@ class CompanyObjective < ApplicationRecord
     # Validations
     # -----------
 
-    validates   :objective, presence: true, length: { minimum: 2 }, uniqueness: true
+    validates   :objective, presence: true, length: { minimum: 5 }, uniqueness: true
     validates   :progress, presence: true, :numericality => {:greater_than_or_equal_to => 0, :less_than_or_equal_to => 100}
     validates   :timeframe_log_id, presence: true
     validates   :user_id, presence: true

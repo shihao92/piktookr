@@ -27,13 +27,11 @@
   }
 }
 .description {
-  position: block;
   color: $dark-black;
   font-size: 14px;
-  font-weight: 600;
-  word-wrap: true;
   margin-left: 10px;
   font-family: ProximaNovaSoft;
+  word-wrap: break-word;
 }
 .branch-line {
   position: relative;

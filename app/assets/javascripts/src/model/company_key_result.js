@@ -12,7 +12,7 @@ define (['model/server_url'], function (urlParam) {
             resolve(this.responseText);
           }
           else if(this.readyState === 4 && this.status !== 200){
-            reject("Error!");
+            reject("Company Key Result must have more than 5 characters!");
           }
         };
         xhttp.open(

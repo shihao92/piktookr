@@ -1172,6 +1172,9 @@ body.rtl [class*="col-"] {
   padding-left: 64px;
   overflow: auto;
 }
+.overlay::-webkit-scrollbar { 
+  display: none; 
+}
 .overlay .inline-block {
   display: inline-block;
 }

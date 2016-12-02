@@ -67,10 +67,8 @@
     <div class="col-lg-7 col-md-7 col-sm-7">
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p100 green">
-          <span>
-            <span id="okr_aligned_percentage">100%</span> <br/>
-            <p>aligned</p>
-          </span>
+          <span id="okr_aligned_percentage">100%</span>
+          <span class="circle-label">aligned</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -79,12 +77,10 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @percentage_completed_objective.to_i %> orange">
-          <span>
-            <span id="completed_objective_portion">
-              <%= @completed_objectives %>/<%= @company_objectives.count %>
-            </span> <br/>
-            <p>objectives</p>
+          <span id="completed_objective_portion">
+            <%= @completed_objectives %>/<%= @company_objectives.count %>
           </span>
+          <span class="circle-label">objectives</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -93,12 +89,10 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @total_progress.to_i %>">
-          <span>
-            <span id="overall_okr_progress">
-              <%= @total_progress.to_i %>%
-            </span> <br/>
-            <p>overall progress</p>
+          <span id="overall_okr_progress">
+            <%= @total_progress.to_i %>%
           </span>
+          <span class="circle-label">overall progress</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -107,21 +101,19 @@
       </div>
       <div class="col-md-3 col-sm-3 padding-body">
         <div class="c100 p<%= @date_difference.to_i %> red">
-          <span>
-            <span id="last_updated">
-              <% if(@company_objectives.count == 0) %>
-              <%= '-' %>
+          <span id="last_updated">
+            <% if(@company_objectives.count == 0) %>
+            <%= '-' %>
+            <% else %>
+              <% if @date_difference < 1 %>
+                <% @date_difference = "< 1" %>
+                <%= @date_difference %>
               <% else %>
-                <% if @date_difference < 1 %>
-                  <% @date_difference = "< 1" %>
-                  <%= @date_difference %>
-                <% else %>
-                  <%= @date_difference.to_i %>
-                <% end %>                 
-              <% end %>
-            </span>  
-            <p>days ago</p> 
-          </span>
+                <%= @date_difference.to_i %>
+              <% end %>                 
+            <% end %>
+          </span>  
+          <span class="circle-label">days ago</span>
           <div class="slice">
             <div class="bar"></div>
             <div class="fill"></div>
@@ -151,6 +143,7 @@
             <div class="col-lg-1 col-md-1 col-sm-1 no-padding">
               <% if @controls.include? 'Edit Company OKR' %>
               <% if(item.progress != 100.00) %>
+              <i id="obj_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
               <button class="btn btn-accordion edit_company_objective" data-id="<%= item.id %>">
                 <i class="fa fa-pencil"></i>
               </button>
@@ -190,7 +183,7 @@
               <% if company_key_results.count == 0 %>
               <% if @controls.include? 'Delete Company OKR' %>
               <li>
-                <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>">
+                <a data-toggle="modal" data-target="#confirmation_obj_deletion_modal_<%= item.id %>" class="pointer-link">
                   <i class="fa fa-fw fa-trash-o"></i> 
                   <span> Delete</span>
                 </a>
@@ -241,9 +234,10 @@
                   <div id="company_kr_<%= item.id %>" class="col-lg-6 col-md-6 col-sm-6 no-padding key-result">
                     <%= item.key_result %>
                   </div>
-                  <div class="col-lg-1 col-md-1 col-sm-1 pull-left">
+                  <div class="col-lg-1 col-md-1 col-sm-1">
                     <% if @controls.include? 'Edit Company OKR' %>
                     <% if(item.progress != 100.00) %>
+                    <i id="kr_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display:none;"></i>
                     <button class="btn btn-accordion edit_company_key_result no-padding" data-id="<%= item.id %>">
                       <i class="fa fa-pencil"></i>
                     </button>
@@ -300,7 +294,7 @@
                     <% if okr_company_personal == nil && okr_company_team == nil %>
                     <li>
                       <!-- Deletion of key result -->
-                      <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>">
+                      <a data-toggle="modal" data-target="#confirmation_kr_deletion_modal_<%= item.id %>" class="pointer-link">
                         <i class="pg-trash_line"></i> 
                          Delete
                       </a>
@@ -343,10 +337,11 @@
           <% if @controls.include? 'Create Company OKR' %>
           <div class="row accordion-item add-new-company-key-result">
             <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 icon-plus text-center key-result-input no-padding">
-              <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
+              <span id="kr_creation_loading_<%= item.id %>" class="fa fa-fw fa-circle-o-notch fa-spin fa-2x" style="display: none;"></span>
+              <span id="plus_icon_<%= item.id %>" class="fa fa-fw fa-plus fa-lg m-t-5"></span>
             </div>
             <div class="col-lg-11 col-md-11 col-sm-11 col-xs-11 no-padding p-t-5">
-              <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Add new Company Key Result" data-id="<%= item.id %>"/>
+              <input name="new_company_key_result" type="text" class="form-control form-new-key-result" placeholder="Press enter to create Company Key Result" data-id="<%= item.id %>"/>
             </div>          
           </div>
           <% end %>
@@ -378,7 +373,7 @@
         <span class="fa fa-fw fa-plus fa-lg m-t-5"></span>
       </span>
       <span id="add-new-company-objective" class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
-        <input id="new_company_objective" type="text" class="form-control form-new-key-result" placeholder="Add new objective"/>
+        <input id="new_company_objective" type="text" class="form-control form-new-key-result" placeholder="Press enter to create objective"/>
       </span>
     </div>
     <% end %>
@@ -394,7 +389,7 @@
 <div class="overlay hide" id="new_objective_popup">
   <div class="overlay-content has-results m-t-20">
     <div class="container-fluid">
-      <a class="close-icon-light overlay-close text-black fs-16">
+      <a class="close-icon-light overlay-close close-button">
         <i class="pg-close"></i>
       </a>
     </div>

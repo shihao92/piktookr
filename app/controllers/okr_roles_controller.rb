@@ -34,9 +34,10 @@ class OkrRolesController < ApplicationController
   end
 
   def remove_role_control
-    okr_role_control_id = params[:okr_role_control_id]
+    okr_role_id = params[:okr_role_id]
+    control_id = params[:control_id]
     respond_to do |format|
-      if OkrRoleControl.find(okr_role_control_id).destroy
+      if OkrRoleControl.find_by(okr_role_id: okr_role_id, control_id: control_id).destroy
         format.json { render json: 'Control for role is removed successfully!', status: :ok }
       else
         format.json { render json: 'Fail to remove control!', status: :unprocessable_entity }

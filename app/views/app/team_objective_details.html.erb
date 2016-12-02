@@ -1,6 +1,6 @@
 <!-- START JUMBOTRON -->
 <div class="bg-master-lighter" data-pages="parallax">
-  <div class="container-fluid container-fixed-lg sm-p-l-20 sm-p-r-20">
+  <div class="container-fixed-lg p-l-45 p-r-50">
     <div class="inner">
       <!-- START BREADCRUMB -->
       <ul class="breadcrumb">
@@ -18,7 +18,7 @@
 <!-- END JUMBOTRON -->
 <!-- START CONTAINER FLUID -->
 <div id="page_team_objective_details" class="bg-master-lighter" data-id="<%= @team_objective.id %>" data-team="<%= @team_id %>">
-  <div class="container-fluid container-fixed-lg">
+  <div class="container-fluid container-fixed-lg p-l-50">
     <div class="row">
       <div class="col-lg-8 col-md-8 col-sm-8">
         <h3 class="details-page title">
@@ -42,20 +42,16 @@
       <div class="col-lg-4 col-md-4 col-sm-4">
         <div class="pull-right padding-body">
           <div class="c100 p70">
-            <span>
-              <span id="okr_aligned_percentage"><%= @remaining_quarter_days.to_i %></span> <br/>
-              <p>days left</p>
-            </span>
+            <span id="okr_aligned_percentage"><%= @remaining_quarter_days.to_i %></span>
+            <span class="circle-label">days-left</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
             </div>
           </div>
           <div class="c100 p<%= @team_objective.progress.to_i %>">
-            <span>
-              <span id="okr_aligned_percentage"><%= @team_objective.progress.to_i %>%</span> <br/>
-              <p>progress</p>
-            </span>
+            <span id="okr_aligned_percentage"><%= @team_objective.progress.to_i %>%</span>
+            <span class="circle-label">progress</span>
             <div class="slice">
               <div class="bar"></div>
               <div class="fill"></div>
@@ -92,11 +88,11 @@
                       </span>
                       <% @time_difference = Time.now - item.created_at %>
                       <% if @time_difference < 86400 %>
-                        <h5><%= @user_info.last_name %> <%= @user_info.first_name %></h5>
+                        <h5><%= other_user_info.last_name %> <%= other_user_info.first_name %></h5>
                         <span class="small">Less than 1 day ago</span>
                       <% else %>
                       <% @day_difference = @time_difference / 86400 %>
-                        <h5><%= @user_info.first_name %></h5>
+                        <h5><%= other_user_info.last_name %> <%= other_user_info.first_name %></h5>
                         <% if(@day_difference.to_i > 1) %>
                         <span class="small"><%= @day_difference.to_i %> days ago</span>
                         <% else %>
