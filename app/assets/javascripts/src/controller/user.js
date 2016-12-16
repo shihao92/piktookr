@@ -57,6 +57,9 @@ textboxControl, sidebar, refreshPage, searchResult){
     const button_confirm_member_removal = '#btn_confirm_member_removal';
     const confirmation_team_member_removal_modal = '#confirmation_team_member_removal_modal';
 
+    // User Navigation Module in OKR Details Page
+    const nav_user_details = '.nav_user_details';
+
 
     // -------------
     // Notifications
@@ -330,6 +333,20 @@ textboxControl, sidebar, refreshPage, searchResult){
       delete_feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
     }
 
+    // ------------------------------------------
+    // User Navigation Module in OKR Details Page
+    // ------------------------------------------
+    
+    function navUser(event) {
+      let user_id = $(event.target).attr('data-user');
+      let self_user_id = $(event.target).attr('data-self');
+      if(user_id === self_user_id) {
+        location.href = "/";
+      } else {
+        location.href = "/users/" + user_id + "/personal_objectives/view_others_personal_okr";
+      }
+    }
+
 
     $(document).ready(function(){
       
@@ -384,6 +401,9 @@ textboxControl, sidebar, refreshPage, searchResult){
 
       btnControl.resolveButtonClick(link_remove_feedback, removeFeedback);
       btnControl.resolveButtonClick(button_confirm_delete_feedback, confirmDeleteFeedback);
+
+      // User Navigation Module in OKR Details Page
+      btnControl.resolveButtonClick(nav_user_details, navUser);
 
     });
 

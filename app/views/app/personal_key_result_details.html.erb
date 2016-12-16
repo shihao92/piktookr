@@ -109,7 +109,7 @@
                 </div>
                 <div class="timeline-content">
                   <div class="card share full-width">
-                    <div class="card-header clearfix">
+                    <div class="card-header clearfix nav_user_details" data-user="<%= item.user_id %>" data-self="<%= current_user.id %>">
                       <span class="thumbnail-wrapper d32 circular inline m-r-10">
                         <%= image_tag @user_info.avatar.url %>
                       </span>
@@ -154,7 +154,7 @@
         <h4 class="details-page subtitle m-b-30">Alignment</h4>
         <ul class="treeview">
           <li>
-            <button class="leaf-point" title="<%= @user_info.first_name %>">
+            <button class="leaf-point nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @user_info.id %>" data-self="<%= current_user.id %>">
               <%= @obj_user_short_str %>
             </button>
             <span class="description">
@@ -163,7 +163,7 @@
 
             <ul>
               <li>
-                <button class="leaf-point level-2" title="<%= @user_info.first_name %>">
+                <button class="leaf-point level-2 nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @user_info.id %>" data-self="<%= current_user.id %>">
                   <%= @obj_user_short_str %>
                 </button>
                 <span class="description">

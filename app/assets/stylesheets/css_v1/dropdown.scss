@@ -5,6 +5,7 @@
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   color: $dark-blue;
+  cursor: pointer;
 }
 
 .profile-menu-dropdown {

@@ -460,7 +460,6 @@ btnControl, textboxInput, checkboxControl, refreshPage, d3_engine, searchResult,
       customModal.toggleProgressRingModal(1);
     }
 
-
     customModal.toggleProgressRingModal(0);
 
     $(document).ready(function(){
