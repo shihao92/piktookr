@@ -72,41 +72,6 @@ class User < ActiveRecord::Base
   # Method to remove particular user from the system
   def self.remove_user(user_id)
     status = 0
-    # # Remove from contribution module
-    # log_personal_key_results = LogPersonalKeyResult.where(user_id: user_id)
-    # log_personal_key_results.each do |item|
-      # Contribution.where(log_personal_key_result_id: item.id).destroy_all()
-    # end
-    # # Remove from logs module
-    # LogPersonalKeyResult.where(user_id: user_id).destroy_all()
-    # LogPersonalObjective.where(user_id: user_id).destroy_all()
-    # LogTeamKeyResult.where(user_id: user_id).destroy_all()
-    # LogTeamObjective.where(user_id: user_id).destroy_all()
-    # LogCompanyKeyResult.where(user_id: user_id).destroy_all()
-    # LogCompanyObjective.where(user_id: user_id).destroy_all()
-    # # Remove from OKR Management Module    
-    # personal_objectives = PersonalObjective.where(user_id: user_id)
-    # personal_objectives.each do |item|
-      # OkrTeamPersonal.where(personal_objective_id: item.personal_objective_id)
-      # OkrCompanyPersonal.where(personal_objective_id: item.personal_objective_id)
-    # end
-    # personal_objectives.destroy_all()
-    # TeamKeyResult.where(user_id: user_id).destroy_all()
-    # team_objectives = TeamObjective.where(user_id: user_id)
-    # team_objectives.each do |item|
-      # OkrTeamCompany.where(team_objective_id: item.id).destroy_all()
-    # end
-    # TeamObjective.where(user_id: user_id).destroy_all()
-    # CompanyKeyResult.where(user_id: user_id).destroy_all()
-    # CompanyObjective.where(user_id: user_id).destroy_all()
-    # # Remove from OKR Team Module
-    # OkrUserTeam.where(user_id: user_id).destroy_all()
-    # # Remove from OKR Role Module
-    # OkrUserRole.where(user_id: user_id).destroy_all()
-    # # Remove from timeframe module
-    # OkrUserTimeframe.where(user_id: user_id).destroy_all()
-    # # Remove from user table
-    # User.where(id: user_id).destroy_all()
 
     if User.where(id: user_id).update_all(status: 2)
       status = 200
