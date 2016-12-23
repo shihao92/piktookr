@@ -56,7 +56,7 @@ class CompanyKeyResult < ApplicationRecord
       end
     end
 
-    def self.calculate_and_log_progress_increment(personal_key_result, progress, company_key_result_id, user_id)
+    def self.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, progress, company_key_result_id, user_id)
       # Find out how many team objective is linked with this company key result
       okr_company_personals = OkrCompanyPersonal.where(company_key_result_id: company_key_result_id)
       okr_company_teams = OkrCompanyTeam.where(company_key_result_id: company_key_result_id)
@@ -64,7 +64,7 @@ class CompanyKeyResult < ApplicationRecord
       total_okr_counts = okr_company_teams.count + okr_company_personals.count
 
       progress_increment = OkrCalculation.calculate_progress_contribution(progress, total_okr_counts)
-      log_content = LogCompanyKeyResult.log_update_progress_key_result(personal_key_result, company_key_result_id, progress_increment, user_id)
+      log_content = LogCompanyKeyResult.log_update_progress_key_result(personal_key_result, personal_key_result_id, company_key_result_id, progress_increment, user_id)
       return progress_increment
     end
 

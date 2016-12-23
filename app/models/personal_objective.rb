@@ -97,11 +97,11 @@ class PersonalObjective < ApplicationRecord
       end
     end
 
-    def self.calculate_and_log_progress_increment(personal_key_result, progress, objective_id, user_id)
+    def self.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, progress, objective_id, user_id)
       # Find out how many personal key result is linked with this personal objective
       personal_objectives = PersonalKeyResult.where(personal_objective_id: objective_id)
       progress_increment = OkrCalculation.calculate_progress_contribution(progress, personal_objectives.count)
-      log_content = LogPersonalObjective.log_update_progress_objective(personal_key_result, progress_increment, objective_id, user_id)
+      log_content = LogPersonalObjective.log_update_progress_objective(personal_key_result, personal_key_result_id, progress_increment, objective_id, user_id)
       return progress_increment
     end
 

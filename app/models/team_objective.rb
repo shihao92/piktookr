@@ -59,11 +59,11 @@ class TeamObjective < ApplicationRecord
       end
     end
 
-    def self.calculate_and_log_progress_increment(personal_key_result, progress, objective_id, user_id)
+    def self.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, progress, objective_id, user_id)
       # Find out how many team key result is linked with this team objective
       team_objectives = TeamKeyResult.where(team_objective_id: objective_id)
       progress_increment = OkrCalculation.calculate_progress_contribution(progress, team_objectives.count)
-      log_content = LogTeamObjective.log_update_progress_objective(personal_key_result, progress_increment, objective_id, user_id)
+      log_content = LogTeamObjective.log_update_progress_objective(personal_key_result, personal_key_result_id, progress_increment, objective_id, user_id)
       return progress_increment
     end
 

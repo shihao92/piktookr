@@ -22,8 +22,8 @@ class LogTeamKeyResult < ApplicationRecord
       save_new_log(log_content, key_result_id, user_id)
     end
 
-    def self.log_update_progress_key_result(personal_key_result, key_result_id, progress_difference, user_id)    
-      log_content = 'Contributed <span class="bold">+' + ('%.02f' % progress_difference).to_s + '%</span> via <span class="bold">' + personal_key_result + '</span>'
+    def self.log_update_progress_key_result(personal_key_result, personal_key_result_id, progress_difference, user_id)    
+      log_content = 'Contributed <span class="bold">+' + ('%.02f' % progress_difference).to_s + '%</span> via <a href="/personal_key_results/' + personal_key_result_id.to_s + '/details" class="bold">' + personal_key_result + '</a>'
       save_new_log(log_content, key_result_id, user_id)
     end
 

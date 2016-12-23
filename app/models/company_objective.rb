@@ -42,11 +42,11 @@ class CompanyObjective < ApplicationRecord
       CompanyObjective.where(id: objective_id).update_all(progress: progress)
     end
 
-    def self.calculate_and_log_progress_increment(personal_key_result, progress, company_objective_id, user_id)
+    def self.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, progress, company_objective_id, user_id)
       # Find out how many company objective is linked with this company key result
       company_key_results = CompanyKeyResult.where(company_objective_id: company_objective_id)
       progress_increment = OkrCalculation.calculate_progress_contribution(progress, company_key_results.count)
-      LogCompanyObjective.log_update_progress_objective(personal_key_result, progress_increment, company_objective_id, user_id)
+      LogCompanyObjective.log_update_progress_objective(personal_key_result, personal_key_result_id, progress_increment, company_objective_id, user_id)
     end
 
     def self.rename_company_objective(original_objective, edited_objective, objective_id, user_id)

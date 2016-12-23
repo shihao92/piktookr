@@ -55,7 +55,7 @@ class PersonalKeyResult < ApplicationRecord
         if PersonalKeyResult.where(id: key_result_id).update_all(progress: progress)   
           # Log generated for personal key result       
           generated_personal_key_result_log_id = LogPersonalKeyResult.log_update_progress_key_result(key_result_id, progress_difference, user_id) 
-          increment_okr_progress(personal_key_result.key_result, progress_difference, personal_key_result.personal_objective_id, user_id)
+          increment_okr_progress(personal_key_result.key_result, personal_key_result.id, progress_difference, personal_key_result.personal_objective_id, user_id)
 
           # Save new contribution for this personal key result progress increment
           new_contribution = Contribution.new(
@@ -88,29 +88,29 @@ class PersonalKeyResult < ApplicationRecord
     end
 
     # This route is for logging purpose to allow record of progress increment in all 3 OKR Modules
-    def self.increment_okr_progress(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
+    def self.increment_okr_progress(personal_key_result, personal_key_result_id, progress_contribution_key_result, personal_objective_id, user_id)
       company_key_result_increment = 0.00
       # Personal Objective progress increment
-      personal_objective_increment = PersonalObjective.calculate_and_log_progress_increment(personal_key_result, progress_contribution_key_result, personal_objective_id, user_id)
+      personal_objective_increment = PersonalObjective.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, progress_contribution_key_result, personal_objective_id, user_id)
       # Team Key Result progress increment
       okr_team_personal = OkrTeamPersonal.find_by(personal_objective_id: personal_objective_id)
       if okr_team_personal == nil
         okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: personal_objective_id)
-        company_key_result_increment = CompanyKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_objective_increment, okr_company_personal.company_key_result_id, user_id)
+        company_key_result_increment = CompanyKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, personal_objective_increment, okr_company_personal.company_key_result_id, user_id)
         # Company Objective progress increment
         company_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
       else
-        team_key_result_increment = TeamKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_objective_increment, okr_team_personal.team_key_result_id, user_id)
+        team_key_result_increment = TeamKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, personal_objective_increment, okr_team_personal.team_key_result_id, user_id)
         # Team Objective progress increment
         team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
-        team_objective_increment = TeamObjective.calculate_and_log_progress_increment(personal_key_result, team_key_result_increment, team_key_result.team_objective_id, user_id)
+        team_objective_increment = TeamObjective.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, team_key_result_increment, team_key_result.team_objective_id, user_id)
         # Company Key Result progress increment
         okr_company_team = OkrCompanyTeam.find_by(team_objective_id: team_key_result.team_objective_id)
-        company_key_result_increment = CompanyKeyResult.calculate_and_log_progress_increment(personal_key_result, team_objective_increment, okr_company_team.company_key_result_id, user_id)
+        company_key_result_increment = CompanyKeyResult.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, team_objective_increment, okr_company_team.company_key_result_id, user_id)
         # Company Objective progress increment
         company_key_result = CompanyKeyResult.find(okr_company_team.company_key_result_id)
       end
-      CompanyObjective.calculate_and_log_progress_increment(personal_key_result, company_key_result_increment, company_key_result.company_objective_id, user_id)
+      CompanyObjective.calculate_and_log_progress_increment(personal_key_result, personal_key_result_id, company_key_result_increment, company_key_result.company_objective_id, user_id)
     end
 
     def self.update_status_personal_key_result(key_result_id, objective_id, completed_flag, user_id)
