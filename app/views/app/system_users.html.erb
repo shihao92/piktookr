@@ -47,6 +47,9 @@
       <li>
         <a href="#admins_list_tab" data-toggle="tab" role="tab">Admin (<%= @admins.count %>)</a>
       </li>
+      <li>
+        <a href="#unassign_list_tab" data-toggle="tab" role="tab">Unassigned (<%= @unassign_user_role_amt %>)</a>
+      </li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="all_users_list_tab">
@@ -316,6 +319,76 @@
                 <% end %>
               </td>
             </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane" id="unassign_list_tab">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th style="width:1%" class="text-center">
+                <i class="fa fa-fw fa-image fa-lg"></i>
+              </th>
+              <th style="width:10%">
+                FIRST NAME
+              </th>
+              <th style="width:15%">
+                LAST NAME
+              </th>
+              <th style="width:10%">
+                ROLE
+              </th>
+              <th style="width:20%">
+                EMAIL
+              </th>
+              <th style="width:5%">
+                STATUS
+              </th>
+              <th style="width:19%">
+                LAST UPDATED
+              </th>
+              <th style="width:20%">
+                ACTIONS
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @users.each do |user| %>
+            <% okr_user_role = OkrUserRole.find_by(user_id: user.id) %>
+            <% if okr_user_role == nil %>
+            <tr name="user_listing_<%= user.id %>">
+              <td class="v-align-middle">
+                <span class="thumbnail-wrapper d32 circular inline">
+                <%= image_tag user.avatar.url %>
+                </span>
+              </td>
+              <td name="first_name" class="bold"><%= user.first_name %></td>
+              <td name="last_name" class="bold">
+                <%= user.last_name %>  
+              </td>
+              <td><%= user.okr_role.try(:name) %></td>
+              <td><%= user.email %></td>
+              <td><%= user.status %></td>
+              <td><%= user.updated_at %></td>
+              <td>
+                <% if @controls.include? 'Edit User Information' %>
+                <span class="col-md-6 col-sm-6">
+                  <a href="/users/<%= user.id %>/edit" name="link_edit_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-pencil" name="link_edit_user" data-id="<%= user.id %>"></i> Edit
+                  </a>
+                </span>
+                <% end %>
+                <% if @controls.include? 'Delete User' %>
+                <span class="col-md-6 col-sm-6">
+                  <a name="link_delete_user" data-id="<%= user.id %>">
+                    <i class="fa fa-fw fa-trash-o" name="link_delete_user" data-id="<%= user.id %>"></i> Delete
+                  </a>
+                </span>
+                <% end %>
+              </td>
+            </tr>
+            <% end %>
             <% end %>
           </tbody>
         </table>

@@ -2,8 +2,6 @@ class UsersController < ApplicationController
 
   CONST_USER_STATUS = ["active", "inactive"]
 
-  @@editing_user_id = 1
-
   # GET /users
   # GET /users.json
   def index
@@ -18,11 +16,18 @@ class UsersController < ApplicationController
     @admins = OkrUserRole.where(okr_role_id: admin.id)
 
     @user_status_selection = CONST_USER_STATUS
-    @current_edit_user = User.find(@@editing_user_id)
+    okr_user_edit = OkrUserEdit.find_by(user_id: current_user.id)
+    if okr_user_edit == nil
+      OkrUserEdit.create(user_id: current_user.id, editing_user_id: current_user.id)
+      @current_edit_user = User.find(current_user.id)
+    else 
+      @current_edit_user = User.find(okr_user_edit.editing_user_id)
+    end
 
     pages_initialization
     
     @new_user = User.new
+    @unassign_user_role_amt = check_unassign_role_user
 
     render 'app/system_users'
   end
@@ -68,11 +73,13 @@ class UsersController < ApplicationController
 
   # GET /users/1/edit
   def edit
-    @@editing_user_id = params[:id]
+    editing_user_id = params[:id]
+    okr_user_edit = OkrUserEdit.find_by(user_id: current_user.id)
+    okr_user_edit.update(editing_user_id: editing_user_id)
 
     respond_to do |format|      
       format.html { redirect_to '/users/:edit_user=true', notice: 'User was successfully created.' }
-    end 
+    end
   end
 
   # POST /users
@@ -276,6 +283,19 @@ class UsersController < ApplicationController
         :team,
         :user_update
       )
+    end
+
+    def check_unassign_role_user
+      users = User.all
+      unassign_user_count = 0
+      users.each do |user|
+        okr_user_role = OkrUserRole.find_by(user_id: user.id)
+        if okr_user_role == nil
+          unassign_user_count = unassign_user_count + 1
+        end 
+      end
+
+      return unassign_user_count
     end
 
 end
