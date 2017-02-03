@@ -15,6 +15,44 @@
     <div class="p-l-50 m-l-20 p-r-50 m-r-20 p-t-50 m-t-30 sm-p-l-15 sm-p-r-15 sm-p-t-40">
       <h2 class="login-brand">Pikto<span class="bold">OKR</span></h2>
       <p class="p-t-10 p-b-10 login-subtitle"><span class="bold">Sign In</span> using your Piktochart account</p>
+      <div class="hidden">
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), class: "p-t-15") do |f| %>
+        <div class="form-group form-group-default">
+          <%= f.label :login, 'USER NAME' %>
+          <div class="controls">
+            <%= f.email_field :email, autofocus: true, class: "form-control", required: true, placeholder: "Email" %>
+          </div>
+        </div>    
+
+        <div class="form-group form-group-default">
+          <%= f.label :password %>
+          <div class="controls">
+            <%= f.password_field :password, autocomplete: "off", class: "form-control", required: true, placeholder: "Credentials" %>
+          </div>
+        </div>    
+
+        <div class="row small">
+          <%= flash[:alert] %>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 no-padding">
+            <% if devise_mapping.rememberable? -%>
+              <div class="checkbox check-complete">
+                <% @remember_me = "Keep Me Signed In" %>
+                <%= f.check_box :remember_me %>
+                <%= f.label :remember_me, @remember_me, class: "hint-text" %>
+              </div>
+            <% end %> 
+          </div>
+          <div class="col-md-6 text-right">
+            
+          </div>
+        </div>   
+
+        <%= f.submit "Sign in", class: "btn btn-complete btn-cons btn-rounded m-t-10 login-button" %>
+      <% end %>
+      </div>
       <%= link_to "<span class='fa fa-google m-r-10'></span> Sign in with Google".html_safe, user_google_oauth2_omniauth_authorize_path, class: "btn btn-danger btn-cons btn-rounded m-t-10 login-button p-l-20 p-r-20" %>
     </div>
   </div>
