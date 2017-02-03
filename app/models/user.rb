@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable, :omniauthable, :omniauth_providers => [:google_oauth2]
 
   has_attached_file :avatar, styles: { medium: "300x300>", thumb: "128x128>" }, default_url: "/images/:style/missing.png"
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
@@ -83,6 +83,12 @@ class User < ActiveRecord::Base
     users = User.select("id, avatar_file_name, last_name, first_name, position")
                 .where("(LOWER(last_name) like LOWER(?) or LOWER(first_name) like LOWER(?)) and id != #{current_user_id}", "%#{keyword}%", "%#{keyword}%")
     return users
+  end
+
+  def self.from_omniauth(access_token)
+    data = access_token.info
+    user = User.find_by(email: data["email"], status: 'active')
+    return user
   end
 
 end
