@@ -37,6 +37,9 @@
 #Ignore all the webpack generated files
 /public/dist/*
 
+# Ignore all the custom users avatars file
+/public/system/*
+
 # Ignore all npm generated module
 /node_modules
 
