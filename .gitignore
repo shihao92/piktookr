@@ -15,6 +15,8 @@
 .DS_Store
 .env
 
+Guardfile
+
 /Gemfile
 /Gemfile.lock
 
@@ -39,6 +41,9 @@
 
 # Ignore all the custom users avatars file
 /public/system/*
+
+# Ignore the assets precompile
+/public/assets/*
 
 # Ignore all npm generated module
 /node_modules
