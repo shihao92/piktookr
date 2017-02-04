@@ -102,7 +102,7 @@ class TimeframesController < ApplicationController
   def is_next_year_log_presence
     next_year_timeframe_logs = TimeframeLog.where('extract(year from start_date) = ?', Date.today.year + 1).order(created_at: :ASC)
     respond_to do |format|
-      if next_year_timeframe_logs == nil
+      if next_year_timeframe_logs == []
         format.json { render json: "Please setup the timeframe intervals for next year or system will set it automatically as quarter when the new year arrived.", status: :ok }
       else
         format.json { render json: "Timeframe for next year all set.", status: :ok }

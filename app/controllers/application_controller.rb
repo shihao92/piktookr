@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
     if Rails.env == "production"
       @server_url = "https://okr.piktochart.info"
     else 
-      @server_url = "localhost:3000"
+      @server_url = "http://localhost:3000"
     end
     
     okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
