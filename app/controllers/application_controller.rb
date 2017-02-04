@@ -18,7 +18,11 @@ class ApplicationController < ActionController::Base
   end
 
   def pages_initialization
-    @server_url = "https://okr.piktochart.info"
+    if Rails.env == "production"
+      @server_url = "https://okr.piktochart.info"
+    else 
+      @server_url = "localhost:3000"
+    end
     
     okr_user_timeframe = OkrUserTimeframe.find_by(user_id: current_user.id)
     @system_timeframe_log_id = TimeframeLog.current_timeframe_log_id

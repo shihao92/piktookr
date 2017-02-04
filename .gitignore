@@ -13,6 +13,7 @@
 .settings
 .gitignore
 .DS_Store
+.env
 
 /Gemfile
 /Gemfile.lock
