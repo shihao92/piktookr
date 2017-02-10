@@ -8,7 +8,7 @@
           <a href="/">HOME</a>
         </li>
         <li>
-          <a href="/app/feedback_page" class="active">FEEDBACK</a>
+          <a href="/feedbacks" class="active">FEEDBACK</a>
         </li>
       </ul>
       <!-- END BREADCRUMB -->
@@ -27,16 +27,16 @@
   </div>
   <br/>
 </div>
-<div class="container-fluid container-fixed-lg">
+<div class="container-fluid container-fixed-lg"> 
   <div class="panel">
     <ul class="nav nav-tabs nav-tabs-simple nav-tabs-complete" role="tablist" data-init-reponsive-tabs="collapse">
       <li class="active">
         <a href="#new_feedback_lists" data-toggle="tab" role="tab">Inbox (<%= @new_feedbacks.count %>)</a>
       </li>
-      <!--<li>
+      <li>
         <a href="#seen_feedback_lists" data-toggle="tab" role="tab">Seen (<%= @seen_feedbacks.count %>)</a>
       </li>
-      <li>
+      <!--<li>
         <a href="#replied_feedback_lists" data-toggle="tab" role="tab">Replied (<%= @replied_feedbacks.count %>)</a>
       </li>-->
     </ul>
@@ -73,8 +73,11 @@
                   </a>
                 </span>-->
                 <span class="col-md-12 col-sm-12">
+                  <a name="link_seen_feedback" data-id="<%= item.id %>">
+                    <i class="fa fa-fw fa-eye"></i> Seen
+                  </a>
                   <a name="link_delete_feedback" data-id="<%= item.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Delete
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
               </td>
@@ -116,7 +119,7 @@
                 </span>-->
                 <span class="col-md-6 col-sm-6">
                   <a name="link_delete_feedback" data-id="<%= item.id %>">
-                    <i class="fa fa-fw fa-pencil"></i> Delete
+                    <i class="fa fa-fw fa-trash-o"></i> Delete
                   </a>
                 </span>
               </td>

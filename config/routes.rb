@@ -246,15 +246,23 @@ Rails.application.routes.draw do
 
   end
 
+  # ===============
+  # Feedback Module
+  # ===============
+  resources :feedbacks, only: [:index, :destroy, :update_status] do
+    collection do
+      # Route to update feedback status 
+      post  :update_status
+    end
+  end
+
   # Route for application view pages
-  # Prototype 1
+  # Version 1
   # get 'app/dashboard'
-  # Prototype 2
+  # Version 2 -> To Production
   resources :app, only: :dashboard_v2 do
     collection do
       get   :dashboard_v2
-      get   :feedback_page
-      post  :remove_feedback
     end 
   end
   

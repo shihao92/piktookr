@@ -44,7 +44,11 @@ textboxControl, sidebar, refreshPage, searchResult){
     const button_confirm_delete_feedback = '#btn_confirm_delete_feedback';
     const button_close_feedback_overlay = '#btn_close_feedback_overlay';
     const link_remove_feedback = 'a[name=link_delete_feedback]';
+    const link_seen_feedback = 'a[name=link_seen_feedback]';
     const modal_delete_feedback_confirmation = '#modal_delete_feedback_confirmation';
+
+    // Notification 
+    const button_notification_dismiss = '#notification_dismiss_btn';
 
     // Controls at dashboard page
     const overlay_first_timer = '#overlay_first_timer';
@@ -316,8 +320,10 @@ textboxControl, sidebar, refreshPage, searchResult){
     }
 
     function submittedFeedback(message){
-      refreshPage.refreshPage();
       customModal.notificationModalToggle(message);
+      btnControl.resolveButtonClick(button_notification_dismiss, function(event) {
+        refreshPage.refreshPage();
+      });
     }
 
     let temp_feedback_id = 0;
@@ -331,6 +337,17 @@ textboxControl, sidebar, refreshPage, searchResult){
       $(modal_delete_feedback_confirmation).modal('hide');
       let delete_feedback_promise = new userModel.removeFeedback(temp_feedback_id);
       delete_feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      refreshPage.refreshPage();
+    }
+
+    function seenFeedback(event){
+      let feedback_id = $(event.target).attr('data-id');
+      temp_feedback_id = feedback_id;
+      // seen - 1
+      const seen_feedback = 1;
+      let update_feedback_promise = new userModel.updateStatusFeedback(temp_feedback_id, seen_feedback);
+      update_feedback_promise.then(customModal.notificationModalToggle, customModal.notificationModalToggle);
+      refreshPage.refreshPage();
     }
 
     // ------------------------------------------
@@ -401,6 +418,8 @@ textboxControl, sidebar, refreshPage, searchResult){
 
       btnControl.resolveButtonClick(link_remove_feedback, removeFeedback);
       btnControl.resolveButtonClick(button_confirm_delete_feedback, confirmDeleteFeedback);
+
+      btnControl.resolveButtonClick(link_seen_feedback, seenFeedback);
 
       // User Navigation Module in OKR Details Page
       btnControl.resolveButtonClick(nav_user_details, navUser);

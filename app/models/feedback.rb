@@ -11,6 +11,6 @@ class Feedback < ApplicationRecord
   # -----------
 
   validates   :content, presence: true
-  enum feedback_status: { recent: 0, seen: 1, replied: 2 }
+  enum feedback_status: { recent: 0, seen: 1, replied: 2 } 
 
 end

@@ -179,13 +179,37 @@ define (['model/server_url'], function (urlParam) {
         }
       };
       xhttp.open(
-        "POST", 
-        urlParam.server_url() + "/app/remove_feedback", 
+        "DELETE", 
+        urlParam.server_url() + "/feedbacks/" + feedback_id, 
         true
       );
       xhttp.setRequestHeader('Content-Type', 'application/json');
       xhttp.send(JSON.stringify({
         feedback_id    : feedback_id
+      }));
+    });
+  }
+
+  function updateStatusFeedback(feedback_id, status_id) {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if(this.readyState === 4 && this.status === 200) {
+          resolve(this.responseText);
+        }
+        else if(this.readyState === 4 && this.status !== 200){
+          reject("Error!");
+        }
+      };
+      xhttp.open(
+        "POST", 
+        urlParam.server_url() + "/feedbacks/update_status", 
+        true
+      );
+      xhttp.setRequestHeader('Content-Type', 'application/json');
+      xhttp.send(JSON.stringify({
+        id             : feedback_id,
+        status_id      : status_id
       }));
     });
   }
@@ -198,7 +222,8 @@ define (['model/server_url'], function (urlParam) {
     removeFavouriteUser,
     searchUsersLists,
     insertFeedback,
-    removeFeedback
+    removeFeedback,
+    updateStatusFeedback
   }
 
 })
