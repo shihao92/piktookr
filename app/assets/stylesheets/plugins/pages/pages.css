@@ -3731,6 +3731,8 @@ Misc buttons
   background: transparent;
   position: relative;
   float: right;
+  outline: none;
+  border: none;
 }
 .alert .close:hover {
   opacity: 1;
