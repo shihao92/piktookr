@@ -12,15 +12,27 @@ function(avatarFinder, capitalFinder, randomColor){
     let temp_html = "";
 
     while(counter < data_count){   
-      temp_html = '<li class="m-t-20">' +
-                    '<a href="/users/' + results_json[counter].id + '/personal_objectives/view_others_personal_okr" type="button">' +
-                      '<span class="thumbnail-wrapper d48 circular inline m-r-10">' +
-                        '<img src="/system/users/avatars/000/000/' + avatarFinder.processAvatarURL(results_json[counter].id) + '/original/' + results_json[counter].avatar_file_name + '">' +
-                      '</span>' +
-                      '<span class="search-title">' + results_json[counter].last_name + ' ' + results_json[counter].first_name + '</span>' +
-                      '<p class="search-subtitle">' + results_json[counter].position + '</p>' +
-                    '</a>' +
-                  '</li>';
+      if(results_json[counter].avatar_file_name !== null) {
+        temp_html = '<li class="m-t-20">' +
+                      '<a href="/users/' + results_json[counter].id + '/personal_objectives/view_others_personal_okr" type="button">' +
+                        '<span class="thumbnail-wrapper d48 circular inline m-r-10">' +
+                          '<img src="/system/users/avatars/000/000/' + avatarFinder.processAvatarURL(results_json[counter].id) + '/original/' + results_json[counter].avatar_file_name + '">' +
+                        '</span>' +
+                        '<span class="search-title">' + results_json[counter].last_name + ' ' + results_json[counter].first_name + '</span>' +
+                        '<p class="search-subtitle">' + results_json[counter].position + '</p>' +
+                      '</a>' +
+                    '</li>';
+      } else {
+        temp_html = '<li class="m-t-20">' +
+                      '<a href="/users/' + results_json[counter].id + '/personal_objectives/view_others_personal_okr" type="button">' +
+                        '<span class="thumbnail-wrapper d48 circular inline m-r-10">' +
+                          '<img src="/searching-user.svg">' +
+                        '</span>' +
+                        '<span class="search-title">' + results_json[counter].last_name + ' ' + results_json[counter].first_name + '</span>' +
+                        '<p class="search-subtitle">' + results_json[counter].position + '</p>' +
+                      '</a>' +
+                    '</li>';
+      }
       generated_html = temp_html + generated_html;
       counter = counter + 1;
     }
