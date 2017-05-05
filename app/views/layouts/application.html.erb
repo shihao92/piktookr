@@ -119,7 +119,7 @@
                   <% counter = counter + 1 %>
                   <% end %>
                 <% end %>
-                <%= @user_short_str %>
+                <%= @user_short_str === '' ? @user_short_str = @user.first_name.chars.first : @user_short_str %>
               </span>
             </span>
           </li>

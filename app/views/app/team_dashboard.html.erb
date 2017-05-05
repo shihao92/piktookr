@@ -44,9 +44,9 @@
           <label>TEAM MEMBERS</label>
           <p>
           <% @team_users.each do |item| %>
-          <span title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5 tip" data-placement="bottom" data-toggle="tooltip">
+          <a href="/users/<%= item.id %>/personal_objectives/view_others_personal_okr" title="<%= item.first_name %>" class="thumbnail-wrapper d32 circular inline m-t-5 tip" data-placement="bottom" data-toggle="tooltip">
             <%= image_tag item.avatar.url %>
-          </span>
+          </a>
           <% end %>
           </p>
         </div>

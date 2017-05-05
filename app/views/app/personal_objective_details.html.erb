@@ -129,19 +129,22 @@
         <h4 class="semi-bold">Alignment</h4>
         <ul class="treeview">
           <li>
-            <button class="leaf-point nav_user_details" title="<%= @team_kr_user_info.first_name %>" data-user="<%= @team_kr_user_info.id %>" data-self="<%= current_user.id %>">
-              <%= @tkr_user_short_str %>
+            <button class="leaf-point nav_user_details" title="<%= @kr_user_info.first_name %>" data-user="<%= @kr_user_info.id %>" data-self="<%= current_user.id %>">
+              <%= @kr_user_short_str %>
             </button>
-            <span class="description semi-bold">
-              <%= @team_key_result.key_result %>
-            </span>
+            <% temp_url = @team_key_result === nil ?
+                '/company_key_results/' + @company_key_result.id.to_s + '/details' :
+                '/team/' + @okr_team_info.okr_team_id.to_s + '/team_key_results/' + @team_key_result.id.to_s + '/details' %>
+            <a href="<%= temp_url %>" class="description semi-bold">
+              <%= @team_key_result === nil ? @company_key_result.key_result : @team_key_result.key_result %>
+            </a>
             
             <ul>
               <li>
                 <button class="leaf-point level-2 nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @personal_objective.user_id %>" data-self="<%= current_user.id %>">
                   <%= @obj_user_short_str %>
                 </button>
-                <span class="description semi-bold">
+                <span class="description bold">
                   <%= @personal_objective.objective %>
                 </span>
 
@@ -151,9 +154,9 @@
                     <button class="leaf-point level-3 nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @personal_objective.user_id %>" data-self="<%= current_user.id %>">
                       <%= @obj_user_short_str %>
                     </button>
-                    <span class="description semi-bold">
+                    <a href="/personal_key_results/<%= item.id %>/details" class="description semi-bold">
                       <%= item.key_result %>
-                    </span>
+                    </a>
                   </li>
                   <% end %>
                 </ul>

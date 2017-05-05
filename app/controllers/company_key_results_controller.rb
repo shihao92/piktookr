@@ -78,14 +78,14 @@ class CompanyKeyResultsController < ApplicationController
     @temp_team_objective = []
     @okr_company_teams = OkrCompanyTeam.where(company_key_result_id: @key_result_id)
     @okr_company_teams.each do |item|
-      @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.objective, obj.user_id]}
+      @team_objective = TeamObjective.where(id: item.team_objective_id).all.map{|obj| [obj.id, obj.objective, obj.user_id, obj.okr_team_id]}
       @temp_team_objective.push(@team_objective)
     end
 
     @temp_personal_objective = []
     @okr_company_personals = OkrCompanyPersonal.where(company_key_result_id: @key_result_id)
     @okr_company_personals.each do |item|
-      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).all.map{|obj| [obj.objective, obj.user_id]}
+      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).all.map{|obj| [obj.id, obj.objective, obj.user_id]}
       @temp_personal_objective.push(@personal_objective)
     end
     

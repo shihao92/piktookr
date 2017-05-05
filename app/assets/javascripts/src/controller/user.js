@@ -355,13 +355,17 @@ textboxControl, sidebar, refreshPage, searchResult){
     // ------------------------------------------
     
     function navUser(event) {
-      let user_id = $(event.target).attr('data-user');
-      let self_user_id = $(event.target).attr('data-self');
-      if(user_id === self_user_id) {
-        location.href = "/";
+      let user_id = '';
+      let self_user_id = '';
+      console.log( event.target.nodeName + ' ' + event.target.className );
+      if( event.target.nodeName === 'DIV' && event.target.className.indexOf('nav_user_details') > 0 ){
+        user_id = $(event.target).attr('data-user'); 
+        self_user_id = $(event.target).attr('data-self');
       } else {
-        location.href = "/users/" + user_id + "/personal_objectives/view_others_personal_okr";
+        user_id = $(event.target).parents(nav_user_details).attr('data-user'); 
+        self_user_id = $(event.target).parents(nav_user_details).attr('data-self');
       }
+      user_id === self_user_id ? location.href = "/" : location.href = "/users/" + user_id + "/personal_objectives/view_others_personal_okr";
     }
 
 

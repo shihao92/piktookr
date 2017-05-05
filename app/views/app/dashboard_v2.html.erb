@@ -36,7 +36,7 @@
     <!-- User related information and percentage of OKR aligned -->
     <div class="col-lg-5 col-md-5 col-sm-5 padding-body">
       <div class="col-lg-5 col-md-5 col-sm-5 text-center">
-        <% if @user.avatar.url == '/searching_user.svg' %>
+        <% if @user.avatar.url == '/searching-user.svg' %>
           <%= image_tag @user.avatar.url(:thumb), class: "missing-user-img" %>
         <% else %>
           <%= image_tag @user.avatar.url(:thumb) %>

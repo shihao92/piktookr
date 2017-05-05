@@ -80,14 +80,16 @@ class PersonalObjectivesController < ApplicationController
     
     if okr_team_personal != nil
       @team_key_result = TeamKeyResult.find(okr_team_personal.team_key_result_id)
-      @team_kr_user_info = User.find(@team_key_result.user_id)
+      @kr_user_info = User.find(@team_key_result.user_id)
+      @okr_team_info = @team_key_result.team_objective
     else
       okr_company_personal = OkrCompanyPersonal.find_by(personal_objective_id: objective_id)
-      @team_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
-      @team_kr_user_info = User.find(@team_key_result.user_id)
+      @company_key_result = CompanyKeyResult.find(okr_company_personal.company_key_result_id)
+      @kr_user_info = User.find(@company_key_result.user_id)
     end
+
+    @kr_user_short_str = Shortform.get_string_shortform(@kr_user_info.first_name)
     
-    @tkr_user_short_str = Shortform.get_string_shortform(@team_kr_user_info.first_name)
 
     @user_info = User.find(@personal_objective.user_id)
     @obj_user_short_str = Shortform.get_string_shortform(@user_info.first_name)

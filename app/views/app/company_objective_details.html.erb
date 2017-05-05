@@ -129,7 +129,7 @@
             <button class="leaf-point nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @company_objective.user_id %>" data-self="<%= current_user.id %>">
               <%= @user_shortform %>
             </button>
-            <span class="description semi-bold">
+            <span class="description bold">
               <%= @company_objective.objective %>
             </span>
 
@@ -141,9 +141,9 @@
                 <button class="leaf-point level-2 nav_user_details" title="<%= ckr_user_info.first_name %>" data-user="<%= item.user_id %>" data-self="<%= current_user.id %>">
                   <%= ckr_user_shortform %>
                 </button>
-                <span class="description semi-bold">
+                <a href="/company_key_results/<%= item.id %>/details" class="description semi-bold">
                   <%= item.key_result %>
-                </span>
+                </a>
               </li>
               <% end %>
             </ul>

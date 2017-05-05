@@ -106,7 +106,7 @@ class TeamKeyResultsController < ApplicationController
     @temp_personal_objective = []
     okr_team_personals = OkrTeamPersonal.where(team_key_result_id: @key_result_id)
     okr_team_personals.each do |item|
-      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).map{|obj| [obj.objective, obj.user_id]}
+      @personal_objective = PersonalObjective.where(id: item.personal_objective_id).map{|obj| [obj.id, obj.objective, obj.user_id]}
       @temp_personal_objective.push(@personal_objective)
     end
 

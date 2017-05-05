@@ -162,30 +162,30 @@
             <button class="leaf-point nav_user_details" title="<%= @obj_user_info.first_name %>" data-user="<%= @team_objective.user_id %>" data-self="<%= current_user.id %>">
               <%= @obj_user_short_str %>
             </button>
-            <span class="description semi-bold">
+            <a href="/team/<%= @team_id %>/team_objectives/<%= @team_objective.id %>/details" class="description semi-bold">
               <%= @team_objective.objective %>
-            </span>
+            </a>
 
             <ul>
               <li>
                 <button class="leaf-point level-2 nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @team_key_result.user_id %>" data-self="<%= current_user.id %>">
                   <%= @obj_user_short_str %>
                 </button>
-                <span class="description semi-bold">
+                <span class="description bold">
                   <%= @team_key_result.key_result %>
                 </span>
 
                 <ul>
                 <% @temp_personal_objective.each do |item| %>
-                  <% user_info = User.find(item[0][1]) %>
+                  <% user_info = User.find(item[0][2]) %>
                   <% usr_short_str = Shortform.get_string_shortform(user_info.first_name) %>
                   <li>
                     <button class="leaf-point level-3 nav_user_details" title="<%= user_info.first_name %>" data-user="<%= user_info.id %>" data-self="<%= current_user.id %>">
                       <%= usr_short_str %>
                     </button>
-                    <span class="description semi-bold">
-                      <%= item[0][0] %>
-                    </span>
+                    <a href="/personal_objectives/<%= item[0][0] %>/details" class="description semi-bold">
+                      <%= item[0][1] %>
+                    </a>
                   </li>
                 <% end %>
                 </ul>

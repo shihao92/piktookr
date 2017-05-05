@@ -157,16 +157,16 @@
             <button class="leaf-point nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @user_info.id %>" data-self="<%= current_user.id %>">
               <%= @obj_user_short_str %>
             </button>
-            <span class="description">
+            <a href="/personal_objectives/<%= @personal_objective.id %>/details" class="description semi-bold">
               <%= @personal_objective.objective %>
-            </span>
+            </a>
 
             <ul>
               <li>
                 <button class="leaf-point level-2 nav_user_details" title="<%= @user_info.first_name %>" data-user="<%= @user_info.id %>" data-self="<%= current_user.id %>">
                   <%= @obj_user_short_str %>
                 </button>
-                <span class="description">
+                <span class="description bold">
                   <%= @personal_key_result.key_result %>
                 </span>
               </li>
